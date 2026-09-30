@@ -55,6 +55,12 @@
 <li class="toc__item"><a class="toc__link" href="#c15">Лекция 15. Ассемблер и архитектура компьютеров (MIPS)</a></li>
 <li class="toc__item"><a class="toc__link" href="#c16">Лабораторная 1. Вводное занятие: оборудование лаборатории</a></li>
 <li class="toc__item"><a class="toc__link" href="#c17">Лабораторная 2. Измерение напряжений и токов</a></li>
+<li class="toc__item"><a class="toc__link" href="#c18">Лабораторная 3. Исследование пассивных элементов: импеданс резистора, конденсатора и катушки</a></li>
+<li class="toc__item"><a class="toc__link" href="#c19">Лабораторная 4. Пассивные RC-фильтры: нижних и верхних частот</a></li>
+<li class="toc__item"><a class="toc__link" href="#c20">Лабораторная 5. Диоды и транзисторы: светодиод, проверка транзистора, транзисторный ключ</a></li>
+<li class="toc__item"><a class="toc__link" href="#c21">Лабораторная 6. Операционный усилитель: повторитель, компаратор, неинвертирующий и инвертирующий усилитель</a></li>
+<li class="toc__item"><a class="toc__link" href="#c22">Лабораторная 7. Введение в цифровые схемы: Logisim, таблица истинности, вентили</a></li>
+<li class="toc__item"><a class="toc__link" href="#c23">Лабораторная 8. Минимизация булевых функций: карта Карно, реализация на NAND и NOR</a></li>
 </ol>
 </nav>
 </aside>
@@ -620,6 +626,191 @@
 <li class="list__item">Погрешность округляй до стольких знаков после запятой, сколько у результата.</li>
 <li class="list__item">Наименьший предел, в который результат помещается. «1» = предел слишком мал.</li>
 <li class="list__item">Сопротивление измеряй, отключив элемент от питания.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c18">
+<h2 class="cheat__title"><a class="link" href="labs/03.html">Лабораторная 3. Исследование пассивных элементов: импеданс резистора, конденсатора и катушки</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Схема</h3>
+<p class="article__p">Генератор (синус, 100 кГц) → <strong>исследуемый элемент</strong> → <strong>10 Ом</strong> → масса.  CH1: вход цепи (напряжение).  CH2: на резисторе 10 Ом (ток).</p>
+<p class="article__p">Осциллограф: DUAL, 1 мкс/дел (T = 10 дел), CH1 0,5 В/дел, CH2 50 мВ/дел.</p>
+<h3 class="article__h3">Расчёты</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = дел · В/дел</span> (CH1);   <span class="math">UI<sub class="math__sub">pp</sub> = дел · В/дел</span> (CH2);   <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10</span></span></span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></li>
+<li class="list__item"><span class="math">Z = |Z| e<sup class="math__sup">jφ</sup> = |Z| cos φ + j · |Z| sin φ</span></li>
+</ol>
+<h3 class="article__h3">Чего ожидать</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head table__cell--center">φ</th><th class="table__cell table__cell--head">Z</th><th class="table__cell table__cell--head">На экране</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Резистор</td><td class="table__cell table__cell--center">0°</td><td class="table__cell"><span class="math">R + j0</span></td><td class="table__cell">пик под пиком</td></tr>
+<tr class="table__row"><td class="table__cell">Конденсатор</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell"><span class="math">0 − j<span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">ток раньше (левее)</td></tr>
+<tr class="table__row"><td class="table__cell">Катушка</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell"><span class="math">0 + j2πfL</span></td><td class="table__cell">ток позже (правее)</td></tr>
+</tbody></table></div>
+<p class="article__p">Четверть периода = 90°.  10 нФ на 100 кГц ≈ 159 Ом.  Калькулятор в режиме <strong>DEG</strong>.</p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c19">
+<h2 class="cheat__title"><a class="link" href="labs/04.html">Лабораторная 4. Пассивные RC-фильтры: нижних и верхних частот</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Схемы</h3>
+<ul class="list">
+<li class="list__item"><strong>Нижних частот:</strong> генератор → <strong>R</strong> → выход (CH2) → <strong>C</strong> → масса.</li>
+<li class="list__item"><strong>Верхних частот:</strong> генератор → <strong>C</strong> → выход (CH2) → <strong>R</strong> → масса.</li>
+<li class="list__item">CH1 всегда на входе (у генератора).</li>
+</ul>
+<h3 class="article__h3">Таблица — как считать строку</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">U<sub class="math__sub">IN</sub> = деления<sub class="math__sub">CH1</sub> · чувствительность<sub class="math__sub">CH1</sub></span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">OUT</sub> = деления<sub class="math__sub">CH2</sub> · чувствительность<sub class="math__sub">CH2</sub></span></li>
+<li class="list__item"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span></li>
+<li class="list__item"><span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></li>
+</ol>
+<h3 class="article__h3">Граничная частота</h3>
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>   (1 кОм, 10 нФ → <strong>15,9 кГц</strong>)   ↔   <span class="math">k = 0,707</span>   ↔   <strong>−3 дБ</strong></p>
+<h3 class="article__h3">Быстрый пересчёт</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">k</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">0,707</th><th class="table__cell table__cell--head table__cell--center">0,5</th><th class="table__cell table__cell--head table__cell--center">0,1</th><th class="table__cell table__cell--head table__cell--center">0,033</th><th class="table__cell table__cell--head table__cell--center">0,01</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">дБ</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−3</td><td class="table__cell table__cell--center">−6</td><td class="table__cell table__cell--center">−20</td><td class="table__cell table__cell--center">−29,6</td><td class="table__cell table__cell--center">−40</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Наклон вне полосы пропускания: <strong>20 дБ/декаду</strong>.</li>
+<li class="list__item">График: ось f логарифмическая, точки крестиками, <strong>две прямые</strong>, не ломаная.</li>
+<li class="list__item">Сигнал слишком мал → уменьши В/дел на CH2.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c20">
+<h2 class="cheat__title"><a class="link" href="labs/05.html">Лабораторная 5. Диоды и транзисторы: светодиод, проверка транзистора, транзисторный ключ</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Светодиод</h3>
+<ul class="list">
+<li class="list__item">Длинная ножка = <strong>анод (+)</strong>. Светится, когда анод со стороны плюса.</li>
+<li class="list__item">Всегда с резистором:  <span class="math">R = <span class="math__frac"><span class="math__num">U<sub class="math__sub">пит</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">I</span></span></span>   (красный светодиод ≈ 1,7–2 В)</li>
+<li class="list__item">Проверка диодов: (+) на аноде → прямое напряжение; наоборот → «1» / «.0L».</li>
+</ul>
+<h3 class="article__h3">Проверка транзистора (режим проверки диодов)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head table__cell--center">Проводит, когда на базе</th><th class="table__cell table__cell--head table__cell--center">E–C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NPN</strong></td><td class="table__cell table__cell--center">плюс (B+E−, B+C−)</td><td class="table__cell table__cell--center">не проводит</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>PNP</strong></td><td class="table__cell table__cell--center">минус (B−E+, B−C+)</td><td class="table__cell table__cell--center">не проводит</td></tr>
+</tbody></table></div>
+<p class="article__p">Два проводящих измерения (около 0,5–0,7 В) + четыре запертых = исправен. TO-92 (BC338 / BC327): 1 коллектор, 2 база, 3 эмиттер.</p>
+<h3 class="article__h3">Транзисторный ключ</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">NPN (BC338)</th><th class="table__cell table__cell--head">PNP (BC327)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Эмиттер</td><td class="table__cell">масса</td><td class="table__cell">+VCC</td></tr>
+<tr class="table__row"><td class="table__cell">Светодиод + 1 кОм</td><td class="table__cell">VCC → LED → R → коллектор</td><td class="table__cell">коллектор → LED → R → масса</td></tr>
+<tr class="table__row"><td class="table__cell">База</td><td class="table__cell">через 10 кОм от генератора</td><td class="table__cell">через 10 кОм от генератора</td></tr>
+<tr class="table__row"><td class="table__cell">Горит при уровне</td><td class="table__cell"><strong>высоком</strong></td><td class="table__cell"><strong>низком</strong></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">U<sub class="math__sub">упр</sub> − 0,6</span><span class="math__den">R<sub class="math__sub">B</sub></span></span></span>;   насыщение, когда <span class="math">β · I<sub class="math__sub">B</sub> &gt;</span> тока нагрузки <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.</li>
+<li class="list__item">Генератор примерно на 0,5 Гц, чтобы мигание было видно. Общая масса!</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c21">
+<h2 class="cheat__title"><a class="link" href="labs/06.html">Лабораторная 6. Операционный усилитель: повторитель, компаратор, неинвертирующий и инвертирующий усилитель</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Перемычки</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Схема</th><th class="table__cell table__cell--head table__cell--center">J1</th><th class="table__cell table__cell--head table__cell--center">J2</th><th class="table__cell table__cell--head table__cell--center">J3</th><th class="table__cell table__cell--head table__cell--center">J4</th><th class="table__cell table__cell--head table__cell--center">J5</th><th class="table__cell table__cell--head table__cell--center">Сигнал на</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Повторитель (смещение)</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Компаратор</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">IN+</td></tr>
+<tr class="table__row"><td class="table__cell">Неинвертирующий</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R1</td><td class="table__cell table__cell--center">R2</td><td class="table__cell table__cell--center">IN+</td></tr>
+<tr class="table__row"><td class="table__cell">Инвертирующий</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R1</td><td class="table__cell table__cell--center">замкнута</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R2</td><td class="table__cell table__cell--center">IN−</td></tr>
+</tbody></table></div>
+<p class="article__p">J1: IN+ → (+) · J2: IN− → (−) · J3: (+) → масса · J4: (−) → масса · J5: (−) → выход</p>
+<h3 class="article__h3">Формулы</h3>
+<ul class="list">
+<li class="list__item">Неинвертирующий: <span class="math">k<sub class="math__sub">U</sub> = 1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span></span> — выход в фазе</li>
+<li class="list__item">Инвертирующий: <span class="math">k<sub class="math__sub">U</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span></span> — выход перевёрнут (180°)</li>
+<li class="list__item">Измерение: <span class="math">U<sub class="math__sub">вх</sub> = a · S<sub class="math__sub">a</sub></span>,   <span class="math">U<sub class="math__sub">вых</sub> = b · S<sub class="math__sub">b</sub></span>,   <span class="math">k<sub class="math__sub">U</sub> = <span class="math__frac"><span class="math__num">U<sub class="math__sub">вых</sub></span><span class="math__den">U<sub class="math__sub">вх</sub></span></span></span></li>
+<li class="list__item">Смещение: <span class="math">U = деления · чувствительность</span> (мВ/дел, вход на массе)</li>
+<li class="list__item">Компаратор: <span class="math">V<sub class="math__sub">+</sub> &gt; V<sub class="math__sub">−</sub></span> → <span class="math">+V<sub class="math__sub">c</sub></span>; иначе <span class="math">−V<sub class="math__sub">c</sub></span>. Положительное смещение → дольше высокий уровень.</li>
+</ul>
+<h3 class="article__h3">Помни</h3>
+<ul class="list">
+<li class="list__item">R2 = больший резистор, всегда в J5. Резисторы измерь мультиметром <strong>до</strong> установки.</li>
+<li class="list__item">Генератор: синус 1 кГц, маленькая амплитуда (чтобы не было обрезания при ±12 В).</li>
+<li class="list__item">Проверь питание модуля и общую массу.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c22">
+<h2 class="cheat__title"><a class="link" href="labs/07.html">Лабораторная 7. Введение в цифровые схемы: Logisim, таблица истинности, вентили</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Logisim</h3>
+<ul class="list">
+<li class="list__item">Вход = зелёный квадрат, выход = зелёный кружок, вентили в папке <strong>Gates</strong>.</li>
+<li class="list__item"><strong>Рука</strong> (Poke) меняет вход 0 ↔ 1; <strong>стрелка</strong> (Edit) рисует провода.</li>
+<li class="list__item">Цвета: ярко-зелёный = 1, тёмно-зелёный = 0, <strong>синий = не подключено</strong>, <strong>красный = конфликт</strong>.</li>
+<li class="list__item">Новая схема: <strong>Project → Add Circuit…</strong>; потом ставишь её как вентиль.</li>
+<li class="list__item">Таблица истинности схемы: <strong>Project → Analyze Circuit</strong>. <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span></li>
+</ul>
+<h3 class="article__h3">Путь проектирования</h3>
+<ol class="list list--ordered">
+<li class="list__item">Словесное описание → <strong>таблица истинности</strong> (строки в двоичном порядке: 000, 001, …).</li>
+<li class="list__item">Таблица → <strong>формула</strong>: для каждой единицы произведение переменных (0 → с отрицанием), всё сложить.</li>
+<li class="list__item">Формула → <strong>схема</strong>: сначала NOT, потом AND, в конце OR.</li>
+<li class="list__item"><strong>Тест</strong> всех комбинаций.</li>
+</ol>
+<h3 class="article__h3">Кирпичики из NAND</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Вентиль</th><th class="table__cell table__cell--head">Из NAND</th><th class="table__cell table__cell--head table__cell--center">Штук</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">NOT a</td><td class="table__cell">NAND(a, a)</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell">a AND b</td><td class="table__cell">NOT( NAND(a, b) )</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell">a OR b</td><td class="table__cell">NAND( NOT a, NOT b )</td><td class="table__cell table__cell--center">3</td></tr>
+<tr class="table__row"><td class="table__cell">a XOR b</td><td class="table__cell"><span class="math">n<sub class="math__sub">1</sub></span> = NAND(a,b); y = NAND( NAND(a,<span class="math">n<sub class="math__sub">1</sub></span>), NAND(b,<span class="math">n<sub class="math__sub">1</sub></span>) )</td><td class="table__cell table__cell--center">4</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Законы де Моргана</h3>
+<p class="article__p"><span class="math"><span class="math__bar">a·b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span>       <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span>·<span class="math__bar">b</span></span></p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c23">
+<h2 class="cheat__title"><a class="link" href="labs/08.html">Лабораторная 8. Минимизация булевых функций: карта Карно, реализация на NAND и NOR</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Карта Карно</h3>
+<ul class="list">
+<li class="list__item">Столбцы/строки всегда: <strong>00, 01, 11, 10</strong>.</li>
+<li class="list__item">Группы: 1, 2, 4, 8 клеток; как можно больше; могут перекрываться; края и углы соприкасаются.</li>
+<li class="list__item">Из переменных остаются те, что в группе <strong>постоянны</strong>.</li>
+</ul>
+<p class="article__p"><strong>Номера клеток (строка ab, столбец cd):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NAND и NOR — два зеркальных рецепта</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">На <strong>NAND</strong></th><th class="table__cell table__cell--head">На <strong>NOR</strong></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Что группирую</td><td class="table__cell"><strong>единицы</strong></td><td class="table__cell"><strong>нули</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Постоянная переменная = 0</td><td class="table__cell">с отрицанием</td><td class="table__cell">без отрицания</td></tr>
+<tr class="table__row"><td class="table__cell">Постоянная переменная = 1</td><td class="table__cell">без отрицания</td><td class="table__cell">с отрицанием</td></tr>
+<tr class="table__row"><td class="table__cell">Внутри группы</td><td class="table__cell">произведение (·)</td><td class="table__cell">сумма (+)</td></tr>
+<tr class="table__row"><td class="table__cell">Между группами</td><td class="table__cell">сумма (+)</td><td class="table__cell">произведение (·)</td></tr>
+<tr class="table__row"><td class="table__cell">Замена</td><td class="table__cell">каждый AND и итоговый OR → NAND</td><td class="table__cell">каждый OR и итоговый AND → NOR</td></tr>
+<tr class="table__row"><td class="table__cell">Одиночная переменная</td><td class="table__cell">в последний вентиль <strong>перевёрнутой</strong></td><td class="table__cell">в последний вентиль <strong>перевёрнутой</strong></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Формулы</h3>
+<ul class="list">
+<li class="list__item">Двойное отрицание: <span class="math"><span class="math__bar"><span class="math__bar">Q</span></span> = Q</span></li>
+<li class="list__item">Де Морган: <span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>,   <span class="math"><span class="math__bar">P·Q</span> = <span class="math__bar">P</span> + <span class="math__bar">Q</span></span></li>
+<li class="list__item">Робот (из материалов): <span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span></span>,   <span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span> → RM = a NAND (~b NAND c)</li>
 </ul>
 </div>
 </section>

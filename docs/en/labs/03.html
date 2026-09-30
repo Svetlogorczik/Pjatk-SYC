@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 3. Passive components: the impedance of a resistor, a capacitor and an inductor — SYC</title>
+<meta name="description" content="On the oscilloscope you watch the voltage and the current of a component at the same time. From two sine waves you read two numbers — the amplitude ratio and the shift — and combine them into the impedance as a complex number.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/03.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/03.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/03.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Lectures</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/labs/03.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/labs/03.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/labs/03.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">What you need to know before the class</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The idea of the measurement</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">The measuring circuit</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">What goes into the report</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Task 1 — the resistor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Task 2 — the capacitor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Task 3 — the inductor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">How to tell the sign of the angle</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Practice tasks</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All labs">
+<p class="side-nav__title">All labs</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Getting to know the equipment</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Voltage and current measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/03.html" aria-current="page"><span class="side-nav__num">3</span><span class="side-nav__text">Impedance of R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">RC filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Operational amplifier</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim and gates</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimisation (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Lab 3</p>
+<h1 class="article__title">Passive components: the impedance of a resistor, a capacitor and an inductor</h1>
+<p class="article__lead">On the oscilloscope you watch the voltage and the current of a component at the same time. From two sine waves you read two numbers — the amplitude ratio and the shift — and combine them into the impedance as a complex number.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a>
+<a class="button button--ghost" href="../lectures/02.html">Lecture for this lab: Lecture 2 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">What you need to know before the class</h2>
+<ul class="list">
+<li class="list__item">What impedance, reactance and phase are — <a class="link" href="../lectures/02.html">lecture 2</a> (<strong>Quick summary</strong>).</li>
+<li class="list__item">How to read an amplitude and a period from the oscilloscope — <a class="link" href="../labs/01.html">lab 1</a>.</li>
+<li class="list__item">On your calculator: sine and cosine in <strong>degrees</strong> (DEG mode).</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From lecture 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">"You will try to measure and write down the impedance of a capacitor, an inductor and a resistor as a complex number (…) you will be able to touch that complex number in a way, to see that it is not just a mathematical abstraction."</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">The idea of the measurement</h2>
+<p class="article__p">Impedance is <span class="math">Z = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span>. The oscilloscope shows a voltage directly. But <strong>an oscilloscope does not measure current</strong> — so we use a trick: a small <strong>10 Ω</strong> resistor is put in series with the component under test and we measure the voltage across it. By Ohm's law the current is that voltage divided by 10 Ω.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s11.webp" alt="The goal: the voltage amplitude, the current amplitude and the phase angle" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The goal: the voltage amplitude, the current amplitude and the phase angle <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<p class="article__p">We measure three things:</p>
+<ol class="list list--ordered">
+<li class="list__item">the <strong>voltage amplitude</strong> (channel CH1),</li>
+<li class="list__item">the <strong>current amplitude</strong> (channel CH2 — the voltage across the 10 Ω resistor, divided by 10),</li>
+<li class="list__item">the <strong>time shift</strong> between the two waveforms.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s10.webp" alt="Impedance in polar form: magnitude |Z| and angle θ; the real part is resistance, the imaginary part reactance" width="1400" height="781" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Impedance in polar form: magnitude |Z| and angle θ; the real part is resistance, the imaginary part reactance <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s3">The measuring circuit</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s17.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s17.webp" alt="Diagram and photo of the wiring for the resistor: the component under test and the 10 Ω resistor "in one line"" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Diagram and photo of the wiring for the resistor: the component under test and the 10 Ω resistor "in one line" <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Building the circuit (the same for R, C and L)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">On the breadboard place <strong>in series</strong> ("in one line"): the component under test, followed by the <strong>10 Ω</strong> resistor.</li>
+<li class="steps__item">Connect the generator signal (<strong>DDS</strong>) to the free lead of the component under test.</li>
+<li class="steps__item">Connect <strong>ground (GND)</strong> to the free lead of the 10 Ω resistor.</li>
+<li class="steps__item">Oscilloscope <strong>CH1</strong> — to the point where the generator signal enters (the voltage across the whole circuit).</li>
+<li class="steps__item">Oscilloscope <strong>CH2</strong> — to the point <strong>between</strong> the component under test and the 10 Ω resistor (the voltage across the 10 Ω resistor, i.e. the "current").</li>
+<li class="steps__item">Generator: <strong>sine, 100 kHz</strong>.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Oscilloscope settings (from the lab materials)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>MODE → DUAL</strong> — both channels visible at once.</li>
+<li class="steps__item"><strong>TIME/DIV = 1 µs</strong> — the period of a 100 kHz signal is 10 µs, exactly <strong>10 divisions</strong>.</li>
+<li class="steps__item"><strong>CH1: 0.5 V/div</strong>, <strong>CH2: 50 mV/div (= 0.05 V/div)</strong>.</li>
+<li class="steps__item">Use the POSITION knobs to separate the traces: CH1 in the upper half of the screen, CH2 in the lower.</li>
+<li class="steps__item">Freeze the picture with LEVEL.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">CH1 measures the voltage across the component under test <strong>together</strong> with the 10 Ω resistor. The resistor is small, so this is ignored in the report, but it makes |Z| come out slightly too high (most visible with the resistor).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">What goes into the report</h2>
+<p class="article__p">For each of the three components you fill in the same three parts.</p>
+<p class="article__p"><strong>A. Phase shift</strong></p>
+<div class="formula"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></div>
+<p class="article__p"><span class="math">T</span> — the period in divisions, <span class="math">t<sub class="math__sub">p</sub></span> — the horizontal distance between the voltage peak and the current peak, in divisions.</p>
+<p class="article__p"><strong>B. Magnitude of the impedance</strong></p>
+<div class="formula"><span class="math">U<sub class="math__sub">pp</sub> = divisions · sensitivity<sub class="math__sub">CH1</sub>  UI<sub class="math__sub">pp</sub> = divisions · sensitivity<sub class="math__sub">CH2</sub>  I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10 Ω</span></span>  |Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></div>
+<p class="article__p"><strong>C. The impedance as a complex number</strong></p>
+<div class="formula"><span class="math">Z = |Z| · e<sup class="math__sup">jφ</sup> = R + jX  R = |Z| · cos φ  X = |Z| · sin φ</span></div>
+<h2 class="article__h2" id="s5">Task 1 — the resistor</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s18.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s18.webp" alt="A 100 Ω resistor: both waveforms peak at the same place" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A 100 Ω resistor: both waveforms peak at the same place <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab materials (100 Ω resistor)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Period <span class="math">T = 10</span> divisions, shift <span class="math">t<sub class="math__sub">p</sub> = 0</span> ("peak under peak") → <span class="math">φ = 0°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 3 div · 0.5 V/div = 1.5 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 3 div · 0.05 V/div = 0.15 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">0.15</span><span class="math__den">10</span></span> = 0.015 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">1.5</span><span class="math__den">0.015</span></span> = 100 Ω</span></li>
+<li class="list__item"><span class="math">Z = 100 · e<sup class="math__sup">j0°</sup> = 100 + j · 0 Ω</span> — pure resistance, no reactance.</li>
+</ul>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s19.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s19.webp" alt="Resistor: angle θ = 0°" width="1024" height="888" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Resistor: angle θ = 0° <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s6">Task 2 — the capacitor</h2>
+<p class="article__p">Replace the 100 Ω resistor with a <strong>10 nF</strong> capacitor. The rest of the circuit stays the same.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s23.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s23.webp" alt="A 10 nF capacitor: the current waveform is shifted by a quarter of a period" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A 10 nF capacitor: the current waveform is shifted by a quarter of a period <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab materials (10 nF capacitor)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><span class="math">T = 10</span> divisions, <span class="math">t<sub class="math__sub">p</sub> = 2.5</span> divisions → <span class="math">φ = <span class="math__frac"><span class="math__num">2.5</span><span class="math__den">10</span></span> · 360° = 90°</span>; the current <strong>leads</strong> the voltage, so the impedance angle is <strong>negative</strong>: <span class="math">φ = −90°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 4 div · 0.5 = 2 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 2.5 div · 0.05 = 0.125 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = 0.0125 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2</span><span class="math__den">0.0125</span></span> = 160 Ω</span></li>
+<li class="list__item"><span class="math">Z = 160 · e<sup class="math__sup">−j90°</sup> = 0 − j · 160 Ω</span></li>
+</ul>
+<p class="article__p"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> A check against theory: <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 100 000 · 10 × 10<sup class="math__sup">−9</sup></span></span> = 159 Ω</span> — it matches.</p>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s24.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s24.webp" alt="Capacitor: angle θ = −90°" width="1099" height="883" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Capacitor: angle θ = −90° <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s7">Task 3 — the inductor</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s28.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s28.webp" alt="Inductor: the current lags by a quarter of a period" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Inductor: the current lags by a quarter of a period <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab materials (inductor)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><span class="math">T = 10</span> divisions, <span class="math">t<sub class="math__sub">p</sub> = 2.5</span> divisions → <span class="math">90°</span>; the current <strong>lags</strong> the voltage, so the angle is <strong>positive</strong>: <span class="math">φ = +90°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 4 div · 0.5 = 2 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 3.0 div · 0.05 = 0.15 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = 0.015 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2</span><span class="math__den">0.015</span></span> = 133 Ω</span></li>
+<li class="list__item"><span class="math">Z = 133 · e<sup class="math__sup">+j90°</sup> = 0 + j · 133 Ω</span></li>
+</ul>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s29.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab03-s29.webp" alt="Inductor: angle θ = +90°" width="1109" height="883" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Inductor: angle θ = +90° <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s8">How to tell the sign of the angle</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">What you see on the screen</th><th class="table__cell table__cell--head">Component</th><th class="table__cell table__cell--head table__cell--center">Sign of φ</th><th class="table__cell table__cell--head">Notation</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">peaks at the same place</td><td class="table__cell">resistor</td><td class="table__cell table__cell--center">0</td><td class="table__cell"><span class="math">R + j0</span></td></tr>
+<tr class="table__row"><td class="table__cell">the <strong>current (CH2) peak earlier</strong> — further left</td><td class="table__cell">capacitor</td><td class="table__cell table__cell--center"><strong>−</strong></td><td class="table__cell"><span class="math">R − jX</span></td></tr>
+<tr class="table__row"><td class="table__cell">the <strong>current (CH2) peak later</strong> — further right</td><td class="table__cell">inductor</td><td class="table__cell table__cell--center"><strong>+</strong></td><td class="table__cell"><span class="math">R + jX</span></td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Tip from the site author</p>
+<div class="callout__body">
+<p class="article__p">On the screen time runs to the right, so whatever is <strong>further left happened earlier</strong>. Always compare the peaks nearest to each other. For the drawing in the report, copy both waveforms with T and <span class="math">t<sub class="math__sub">p</sub></span> marked — that is graded too.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Practice tasks</h2>
+<p class="article__p">The data differs from the class (another frequency and other components). In all tasks the current is measured on a 10 Ω resistor.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Component no. 1</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. On the screen: period 8 divisions, both waveforms peak at the same place. CH1: 4.4 divisions at 0.5 V/div. CH2: 4 divisions at 20 mV/div. Find Z. What component is it?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">0</span><span class="math__den">8</span></span> · 360° = 0°</span></p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 4.4 · 0.5 = 2.2 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 4 · 0.02 = 0.08 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0.008 A</span></p>
+<p class="article__p"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2.2</span><span class="math__den">0.008</span></span> = 275 Ω</span>   →   <span class="math">Z = 275 · e<sup class="math__sup">j0°</sup> = 275 + j0 Ω</span></p>
+<p class="article__p">It is a resistor (about 270 Ω; the excess is partly the 10 Ω measuring resistor).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Component no. 2</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. Period 8 divisions; the CH2 peak is 2 divisions to the <strong>left</strong> of the CH1 peak. CH1: 5 divisions at 0.5 V/div. CH2: 3.4 divisions at 50 mV/div. Find Z. What component is it and what is its value?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">2</span><span class="math__den">8</span></span> · 360° = 90°</span>; the current comes before the voltage → <span class="math">φ = −90°</span> → a capacitor.</p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 2.5 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 3.4 · 0.05 = 0.17 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0.017 A</span>;   <span class="math">|Z| = <span class="math__frac"><span class="math__num">2.5</span><span class="math__den">0.017</span></span> = 147 Ω</span></p>
+<p class="article__p"><span class="math">Z = 147 · e<sup class="math__sup">−j90°</sup> = 0 − j147 Ω</span></p>
+<p class="article__p">Capacitance: <span class="math">C = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πf|Z|</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 50 000 · 147</span></span> ≈ 21.7 nF</span> — a 22 nF capacitor.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Component no. 3</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. Period 8 divisions; the CH2 peak is 2 divisions to the <strong>right</strong> of the CH1 peak. CH1: 4 divisions at 0.5 V/div. CH2: 3.8 divisions at 50 mV/div. Find Z and the value of the component.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = +90°</span> (the current comes later) → an inductor.</p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 2.0 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 3.8 · 0.05 = 0.19 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0.019 A</span>;   <span class="math">|Z| = <span class="math__frac"><span class="math__num">2.0</span><span class="math__den">0.019</span></span> = 105 Ω</span></p>
+<p class="article__p"><span class="math">Z = 105 · e<sup class="math__sup">+j90°</sup> = 0 + j105 Ω</span></p>
+<p class="article__p">Inductance: <span class="math">L = <span class="math__frac"><span class="math__num">|Z|</span><span class="math__den">2πf</span></span> = <span class="math__frac"><span class="math__num">105</span><span class="math__den">2π · 50 000</span></span> ≈ 334 µH</span> — an inductor of about 330 µH.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. A real inductor</p>
+<div class="callout__body">
+<p class="article__p">For a certain inductor <span class="math">|Z| = 120 Ω</span> was measured, and the shift was 1.5 divisions with a period of 8 divisions (current later). Write the impedance as <span class="math">R + jX</span>. Why is the angle not 90°?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">1.5</span><span class="math__den">8</span></span> · 360° = 67.5°</span></p>
+<p class="article__p"><span class="math">R = 120 · cos 67.5° = 120 · 0.383 = 46 Ω</span>;    <span class="math">X = 120 · sin 67.5° = 120 · 0.924 = 111 Ω</span></p>
+<p class="article__p"><span class="math">Z = 120 · e<sup class="math__sup">j67.5°</sup> = 46 + j111 Ω</span></p>
+<p class="article__p">A real inductor is a coil of wire that also has ordinary resistance — hence the non-zero real part and an angle smaller than 90°.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>What costs points most often</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Forgetting to divide by 10 Ω (writing a voltage in place of the current).</li>
+<li class="list__item">Mixing up the channel sensitivities: CH2 is in <strong>millivolts</strong> per division (50 mV = 0.05 V).</li>
+<li class="list__item">The calculator in radians instead of degrees.</li>
+<li class="list__item">No sign on the angle for the capacitor.</li>
+<li class="list__item">The VAR knob out of CAL, or measuring "zero to peak" in one channel and "trough to peak" in the other — measure both channels the same way (peak to peak).</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">The circuit</h3>
+<p class="article__p">Generator (sine, 100 kHz) → <strong>component under test</strong> → <strong>10 Ω</strong> → ground.  CH1: the circuit input (voltage).  CH2: across the 10 Ω resistor (current).</p>
+<p class="article__p">Oscilloscope: DUAL, 1 µs/div (T = 10 div), CH1 0.5 V/div, CH2 50 mV/div.</p>
+<h3 class="article__h3">Calculations</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = div · V/div</span> (CH1);   <span class="math">UI<sub class="math__sub">pp</sub> = div · V/div</span> (CH2);   <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10</span></span></span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></li>
+<li class="list__item"><span class="math">Z = |Z| e<sup class="math__sup">jφ</sup> = |Z| cos φ + j · |Z| sin φ</span></li>
+</ol>
+<h3 class="article__h3">What to expect</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Component</th><th class="table__cell table__cell--head table__cell--center">φ</th><th class="table__cell table__cell--head">Z</th><th class="table__cell table__cell--head">On the screen</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Resistor</td><td class="table__cell table__cell--center">0°</td><td class="table__cell"><span class="math">R + j0</span></td><td class="table__cell">peak under peak</td></tr>
+<tr class="table__row"><td class="table__cell">Capacitor</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell"><span class="math">0 − j<span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">current earlier (to the left)</td></tr>
+<tr class="table__row"><td class="table__cell">Inductor</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell"><span class="math">0 + j2πfL</span></td><td class="table__cell">current later (to the right)</td></tr>
+</tbody></table></div>
+<p class="article__p">A quarter of a period = 90°.  10 nF at 100 kHz ≈ 159 Ω.  Calculator in <strong>DEG</strong> mode.</p>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../labs/02.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lab 2: Measuring voltages and currents</span></a>
+<a class="pager__link pager__link--next" href="../labs/04.html"><span class="pager__dir">Next →</span><span class="pager__title">Lab 4: Passive RC filters: low-pass and high-pass</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

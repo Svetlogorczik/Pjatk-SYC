@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 8. Minimalizacja funkcji boolowskich: mapa Karnaugha, realizacja na NAND i NOR — SYC</title>
+<meta name="description" content="Ten sam układ można zbudować z piętnastu bramek albo z czterech. Na tych zajęciach uczysz się robić to drugie: tabela prawdy → mapa Karnaugha → najkrótszy wzór → schemat z samych bramek NAND (albo samych NOR).">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/08.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/08.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/08.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/08.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/08.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/08.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Przepis w pięciu krokach</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Przykład z materiałów: robot</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Zadanie 1 na zajęciach: funkcja czterech zmiennych na NAND</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Zadanie 2 na zajęciach: realizacja na samych NOR</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Impedancja R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Filtry RC</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Wzmacniacz operacyjny</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim i bramki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/08.html" aria-current="page"><span class="side-nav__num">8</span><span class="side-nav__text">Minimalizacja (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 8</p>
+<h1 class="article__title">Minimalizacja funkcji boolowskich: mapa Karnaugha, realizacja na NAND i NOR</h1>
+<p class="article__lead">Ten sam układ można zbudować z piętnastu bramek albo z czterech. Na tych zajęciach uczysz się robić to drugie: tabela prawdy → mapa Karnaugha → najkrótszy wzór → schemat z samych bramek NAND (albo samych NOR).</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/07.html">Wykład do tego ćwiczenia: Wykład 7 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Mapa Karnaugha, kod Graya, reguła sklejania — <a class="link" href="../lectures/07.html">wykład 7</a> (<strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Obsługa Logisima i klocki z NAND — <a class="link" href="../labs/07.html">ćwiczenie 7</a>.</li>
+</ul>
+<p class="article__p">Na zajęciach są dwa zadania (ze slajdu wykładu): <strong>funkcja czterech zmiennych</strong> wskazana przez prowadzącego — postać minimalna na bramkach <strong>NAND</strong>; oraz sterowanie <strong>robota</strong> z poprzednich zajęć — tylko na bramkach <strong>NOR</strong>.</p>
+<h2 class="article__h2" id="s2">Przepis w pięciu krokach</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Tabela prawdy</strong> — wypisz, dla których kombinacji funkcja ma 1.</li>
+<li class="steps__item"><strong>Mapa Karnaugha</strong> — narysuj siatkę, opisz kolumny (i wiersze) w kolejności <strong>00, 01, 11, 10</strong> i wpisz jedynki.</li>
+<li class="steps__item"><strong>Grupy</strong> — obrysuj jedynki prostokątami po <strong>1, 2, 4 lub 8</strong> kratek. Grupy jak największe, jak najmniej grup, mogą się nakładać, mapa „zawija się” na krawędziach.</li>
+<li class="steps__item"><strong>Wzór</strong> — dla każdej grupy zapisz tylko te zmienne, które <strong>się w niej nie zmieniają</strong> (0 → z negacją, 1 → bez). Grupy połącz plusami.</li>
+<li class="steps__item"><strong>Zamiana na NAND</strong> — każdą bramkę AND i końcową OR zamień na NAND. Gotowe.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Najczęstszy błąd</p>
+<div class="callout__body">
+<p class="article__p">Kolumny mapy to <strong>00, 01, 11, 10</strong> — a nie 00, 01, 10, 11. Dwie ostatnie kolumny są „zamienione”, żeby sąsiednie kratki różniły się tylko jednym bitem. Pomyłka tutaj psuje wszystko dalej.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Przykład z materiałów: robot</h2>
+<p class="article__p">Tabela prawdy z <a class="link" href="../labs/07.html">poprzednich zajęć</a> trafia do dwóch map — osobnej dla każdego silnika. Wiersz to czujnik A, kolumny to czujniki B i C.</p>
+<p class="article__p"><strong>Lewy silnik (LM):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">A ↓ / BC →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Prawy silnik (RM):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">A ↓ / BC →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p19.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p19.webp" alt="Grupy na mapach Karnaugha dla obu silników i odpowiadające im składniki wzoru" width="1400" height="698" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Grupy na mapach Karnaugha dla obu silników i odpowiadające im składniki wzoru <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Grupy dla LM</strong> (trzy pary):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Grupa</th><th class="table__cell table__cell--head">Kratki (ABC)</th><th class="table__cell table__cell--head">Co się zmienia</th><th class="table__cell table__cell--head">Co zostaje</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">żółta (pionowa)</td><td class="table__cell">000, 100</td><td class="table__cell">A</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·<span class="math__bar">c</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">fioletowa</td><td class="table__cell">100, 101</td><td class="table__cell">C</td><td class="table__cell"><span class="math">a·<span class="math__bar">b</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">czerwona (<strong>przez krawędź</strong>)</td><td class="table__cell">100, 110</td><td class="table__cell">B</td><td class="table__cell"><span class="math">a·<span class="math__bar">c</span></span></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Grupy dla RM:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Grupa</th><th class="table__cell table__cell--head">Kratki (ABC)</th><th class="table__cell table__cell--head">Co się zmienia</th><th class="table__cell table__cell--head">Co zostaje</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">zielona (cały wiersz)</td><td class="table__cell">000, 001, 011, 010</td><td class="table__cell">B i C</td><td class="table__cell"><span class="math"><span class="math__bar">a</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">niebieska (pionowa)</td><td class="table__cell">001, 101</td><td class="table__cell">A</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·c</span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span>  RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Grupa czerwona łączy pierwszą i ostatnią kolumnę. To nie błąd: wyobraź sobie, że mapa jest naklejona na puszkę — lewa i prawa krawędź stykają się ze sobą.</p>
+</div>
+</div>
+<h3 class="article__h3">Zamiana na bramki NAND</h3>
+<p class="article__p">Dwa narzędzia: <strong>podwójna negacja</strong> (<span class="math">Q = <span class="math__bar"><span class="math__bar">Q</span></span></span> — nic nie zmienia) i <strong>prawo de Morgana</strong> (<span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>).</p>
+<p class="article__p">Dla prawego silnika, krok po kroku:</p>
+<div class="formula"><span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c = <span class="math__bar"><span class="math__bar"><span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span></span> = <span class="math__bar">a · <span class="math__bar"><span class="math__bar">b</span>·c</span></span></span></div>
+<p class="article__p">Czyli: <strong>RM = a NAND (~b NAND c)</strong>. Dla lewego silnika tak samo:</p>
+<div class="formula"><span class="math">LM = <span class="math__bar"> <span class="math__bar"><span class="math__bar">b</span>·<span class="math__bar">c</span></span> · <span class="math__bar">a·<span class="math__bar">c</span></span> · <span class="math__bar">a·<span class="math__bar">b</span></span> </span></span></div>
+<p class="article__p">Czyli: <strong>LM = (~b NAND ~c) NAND (a NAND ~c) NAND (a NAND ~b)</strong> — trzy bramki NAND dwuwejściowe i jedna trzywejściowa.</p>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Skrót, który warto zapamiętać</p>
+<div class="callout__body">
+<p class="article__p">Wzór typu „suma iloczynów” zamieniasz na NAND <strong>bez liczenia</strong>: każdy AND → NAND, końcowy OR → NAND. Jedyna pułapka: składnik, który jest <strong>pojedynczą zmienną</strong> (jak <span class="math"><span class="math__bar">a</span></span> w RM), wchodzi do ostatniej bramki <strong>zanegowany</strong> (czyli jako <span class="math">a</span>).</p>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p23.webp" alt="Układ RM z klocków (7 bramek NAND) — po minimalizacji wystarczą 3" width="1400" height="777" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Układ RM z klocków (7 bramek NAND) — po minimalizacji wystarczą 3 <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s4">Zadanie 1 na zajęciach: funkcja czterech zmiennych na NAND</h2>
+<p class="article__p">Każdy dostaje od prowadzącego własną funkcję. Droga jest zawsze ta sama — poniżej przykład.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Własny przykład: funkcja wybrana przeze mnie, inna niż w materiałach.</p>
+</div>
+</div>
+<p class="article__p"><strong>Funkcja:</strong> <span class="math">f(a,b,c,d) = Σ(1, 3, 4, 5, 9, 11, 12, 14)</span> — czyli f = 1 dla tych numerów wierszy (numer to liczba <code class="inline-code">abcd</code> zapisana dwójkowo).</p>
+<p class="article__p"><strong>Numery kratek</strong> na mapie 4 × 4 (wiersz <code class="inline-code">ab</code>, kolumna <code class="inline-code">cd</code>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Mapa funkcji:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Grupy:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Grupa</th><th class="table__cell table__cell--head">Kratki</th><th class="table__cell table__cell--head">Stałe zmienne</th><th class="table__cell table__cell--head">Składnik</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">czwórka (górny i dolny wiersz — <strong>przez krawędź</strong>)</td><td class="table__cell">1, 3, 9, 11</td><td class="table__cell">b = 0, d = 1</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·d</span></td></tr>
+<tr class="table__row"><td class="table__cell">para</td><td class="table__cell">4, 5</td><td class="table__cell">a = 0, b = 1, c = 0</td><td class="table__cell"><span class="math"><span class="math__bar">a</span>·b·<span class="math__bar">c</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">para (<strong>przez krawędź</strong>)</td><td class="table__cell">12, 14</td><td class="table__cell">a = 1, b = 1, d = 0</td><td class="table__cell"><span class="math">a·b·<span class="math__bar">d</span></span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">f = <span class="math__bar">b</span>·d + <span class="math__bar">a</span>·b·<span class="math__bar">c</span> + a·b·<span class="math__bar">d</span></span></div>
+<p class="article__p"><strong>Na NAND:</strong> f = (~b NAND d) NAND (~a NAND b NAND ~c) NAND (a NAND b NAND ~d).</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">W Logisimie wstaw cztery wejścia <code class="inline-code">a</code>, <code class="inline-code">b</code>, <code class="inline-code">c</code>, <code class="inline-code">d</code> i wyjście <code class="inline-code">f</code>.</li>
+<li class="steps__item">Zrób negacje: cztery bramki NAND ze zwartymi wejściami (albo NOT, jeśli prowadzący pozwala).</li>
+<li class="steps__item">Wstaw trzy bramki NAND „pierwszego piętra” — po jednej na każdą grupę. Ustaw im właściwą liczbę wejść (2, 3, 3).</li>
+<li class="steps__item">Wstaw jedną bramkę NAND „drugiego piętra” z trzema wejściami i podłącz do niej wyjścia trzech poprzednich.</li>
+<li class="steps__item"><strong>Sprawdź wszystkie 16 kombinacji.</strong> Najszybciej: <em>Project → Analyze Circuit</em> i porównaj kolumnę wyników z listą Σ.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--check">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">❓</span>Samokontrola</p>
+<div class="callout__body">
+<p class="article__p">Policz jedynki. Funkcja ma 8 jedynek; grupy mają 4 + 2 + 2 = 8 kratek i żadna się nie powtarza — zgadza się. Jeśli suma kratek w grupach jest <strong>mniejsza</strong> niż liczba jedynek, jakaś jedynka nie jest pokryta.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Zadanie 2 na zajęciach: realizacja na samych NOR</h2>
+<p class="article__p">Dla bramek NOR przepis jest <strong>lustrzany</strong>: grupujemy <strong>zera</strong>, a nie jedynki.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Na mapie obrysuj grupy <strong>zer</strong> (te same zasady: 1, 2, 4, 8 kratek).</li>
+<li class="steps__item">Dla każdej grupy zapisz <strong>sumę</strong> zmiennych, które się nie zmieniają — ale odwrotnie niż dla jedynek: <strong>0 → bez negacji, 1 → z negacją</strong>.</li>
+<li class="steps__item">Sumy <strong>pomnóż</strong> przez siebie. To postać „iloczyn sum”.</li>
+<li class="steps__item">Każdy OR i końcowy AND zamień na <strong>NOR</strong>. Pojedyncza zmienna wchodzi do ostatniej bramki zanegowana.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Robota na NOR robisz sam na zajęciach — to zadanie punktowane. Poniżej ta sama metoda na <strong>innym</strong> układzie, żebyś zobaczył każdy krok.</p>
+</div>
+</div>
+<h3 class="article__h3">Przykład: automatyczna szklarnia</h3>
+<p class="article__p">Trzy czujniki: <strong>S</strong> — gleba sucha (1 = sucho), <strong>T</strong> — za gorąco (1), <strong>R</strong> — pada deszcz (1). Dwa wyjścia: <strong>P</strong> — pompa, <strong>V</strong> — otwarty dach.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">T</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head">Sytuacja</th><th class="table__cell table__cell--head table__cell--center">P</th><th class="table__cell table__cell--head table__cell--center">V</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">wszystko w porządku</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">pada, gleba mokra</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">gorąco → wietrzymy</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">gorąco, ale pada, a gleba mokra → dach zamknięty</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">sucho → pompa</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">sucho; pada, ale jest zimno → dach zamknięty, pompa</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">sucho i gorąco → pompa i wietrzenie</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">sucho, gorąco, pada → otwórz dach, deszcz podleje za darmo</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Mapa P:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S ↓ / TR →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Mapa V:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S ↓ / TR →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Z jedynek (na NAND):</strong></p>
+<ul class="list">
+<li class="list__item">P: pary (100, 101) i (100, 110 — przez krawędź) → <span class="math">P = S·<span class="math__bar">T</span> + S·<span class="math__bar">R</span></span> → <strong>P = (S NAND ~T) NAND (S NAND ~R)</strong></li>
+<li class="list__item">V: pary (010, 110) i (111, 110) → <span class="math">V = T·<span class="math__bar">R</span> + S·T</span> → <strong>V = (T NAND ~R) NAND (S NAND T)</strong></li>
+</ul>
+<p class="article__p"><strong>Z zer (na NOR):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Wyjście</th><th class="table__cell table__cell--head">Grupa zer</th><th class="table__cell table__cell--head">Stałe zmienne</th><th class="table__cell table__cell--head">Czynnik</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">P</td><td class="table__cell">cały górny wiersz</td><td class="table__cell">S = 0</td><td class="table__cell"><span class="math">S</span></td></tr>
+<tr class="table__row"><td class="table__cell">P</td><td class="table__cell">011, 111</td><td class="table__cell">T = 1, R = 1</td><td class="table__cell"><span class="math"><span class="math__bar">T</span> + <span class="math__bar">R</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">V</td><td class="table__cell">kolumny 00 i 01 (cztery kratki)</td><td class="table__cell">T = 0</td><td class="table__cell"><span class="math">T</span></td></tr>
+<tr class="table__row"><td class="table__cell">V</td><td class="table__cell">001, 011</td><td class="table__cell">S = 0, R = 1</td><td class="table__cell"><span class="math">S + <span class="math__bar">R</span></span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">P = S·(<span class="math__bar">T</span> + <span class="math__bar">R</span>)  V = T·(S + <span class="math__bar">R</span>)</span></div>
+<p class="article__p">Zamiana na NOR (OR → NOR, końcowy AND → NOR, pojedyncza zmienna zanegowana):</p>
+<ul class="list">
+<li class="list__item"><strong>P = (~S) NOR (~T NOR ~R)</strong></li>
+<li class="list__item"><strong>V = (~T) NOR (S NOR ~R)</strong></li>
+</ul>
+<div class="callout callout--check">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">❓</span>Sprawdzenie jednego wiersza</p>
+<div class="callout__body">
+<p class="article__p">S = 1, T = 0, R = 1 (powinno być P = 1): ~S = 0; ~T NOR ~R = NOR(1, 0) = 0; NOR(0, 0) = <strong>1</strong> ✓</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Zadania treningowe</h2>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Trzy zmienne</p>
+<div class="callout__body">
+<p class="article__p">Zminimalizuj <span class="math">f(a,b,c) = Σ(0, 2, 4, 5, 6)</span> i zapisz na NAND.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a ↓ / bc →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Czwórka: kolumny 00 i 10 (przez krawędź) → <span class="math"><span class="math__bar">c</span></span>. Para: 100, 101 → <span class="math">a·<span class="math__bar">b</span></span>.</p>
+<p class="article__p"><span class="math">f = <span class="math__bar">c</span> + a·<span class="math__bar">b</span></span> → <strong>f = c NAND (a NAND ~b)</strong> (pojedyncza zmienna <span class="math"><span class="math__bar">c</span></span> wchodzi jako <span class="math">c</span>).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Głosowanie</p>
+<div class="callout__body">
+<p class="article__p">Trzech sędziów głosuje (1 = za). Wynik ma być 1, gdy <strong>co najmniej dwóch</strong> jest za. Znajdź wzór minimalny i wersję na NAND.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Jedynki: 011, 101, 110, 111 → Σ(3, 5, 6, 7).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a ↓ / bc →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Trzy pary, wszystkie przez kratkę 111: <span class="math">f = a·b + a·c + b·c</span>.</p>
+<p class="article__p"><strong>f = (a NAND b) NAND (a NAND c) NAND (b NAND c)</strong> — cztery bramki, żadnych negacji.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Cztery zmienne na NAND</p>
+<div class="callout__body">
+<p class="article__p">Zminimalizuj <span class="math">f(a,b,c,d) = Σ(0, 1, 2, 5, 8, 9, 10)</span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>Cztery rogi</strong> (0, 2, 8, 10) → <span class="math"><span class="math__bar">b</span>·<span class="math__bar">d</span></span></li>
+<li class="list__item">Czwórka 0, 1, 8, 9 → <span class="math"><span class="math__bar">b</span>·<span class="math__bar">c</span></span></li>
+<li class="list__item">Para 1, 5 → <span class="math"><span class="math__bar">a</span>·<span class="math__bar">c</span>·d</span></li>
+</ul>
+<p class="article__p"><span class="math">f = <span class="math__bar">b</span>·<span class="math__bar">d</span> + <span class="math__bar">b</span>·<span class="math__bar">c</span> + <span class="math__bar">a</span>·<span class="math__bar">c</span>·d</span></p>
+<p class="article__p">Na NAND: (~b NAND ~d) NAND (~b NAND ~c) NAND (~a NAND ~c NAND d).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Ta sama funkcja na NOR</p>
+<div class="callout__body">
+<p class="article__p">Dla funkcji z zadania 3 pogrupuj zera i zapisz realizację na NOR.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Zera: 3, 4, 6, 7, 11, 12, 13, 14, 15.</p>
+<ul class="list">
+<li class="list__item">Cały wiersz 11 (12, 13, 15, 14): a = 1, b = 1 → <span class="math">(<span class="math__bar">a</span> + <span class="math__bar">b</span>)</span></li>
+<li class="list__item">Czwórka 4, 6, 12, 14 (przez krawędź): b = 1, d = 0 → <span class="math">(<span class="math__bar">b</span> + d)</span></li>
+<li class="list__item">Cała kolumna 11 (3, 7, 15, 11): c = 1, d = 1 → <span class="math">(<span class="math__bar">c</span> + <span class="math__bar">d</span>)</span></li>
+</ul>
+<p class="article__p"><span class="math">f = (<span class="math__bar">a</span> + <span class="math__bar">b</span>)·(<span class="math__bar">b</span> + d)·(<span class="math__bar">c</span> + <span class="math__bar">d</span>)</span></p>
+<p class="article__p">Na NOR: (~a NOR ~b) NOR (~b NOR d) NOR (~c NOR ~d).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>5. Dlaczego nie trójka?</p>
+<div class="callout__body">
+<p class="article__p">Na mapie są trzy jedynki obok siebie w jednym wierszu. Dlaczego nie wolno zrobić z nich jednej grupy?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Grupa musi mieć 1, 2, 4 lub 8 kratek, bo tylko wtedy zmienna, która się w niej zmienia, przyjmuje <strong>obie</strong> wartości z każdą kombinacją pozostałych — i dzięki temu znika (<span class="math">x + <span class="math__bar">x</span> = 1</span>). Trzy kratki nie dają takiej pary. Rozwiązanie: dwie pary, które się <strong>nakładają</strong> na środkowej kratce.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Kolumny w kolejności 00, 01, 10, 11 zamiast 00, 01, <strong>11, 10</strong>.</li>
+<li class="list__item">Niezauważone grupy „przez krawędź” i cztery rogi.</li>
+<li class="list__item">Za małe grupy (dwie pary zamiast jednej czwórki) — układ działa, ale nie jest minimalny.</li>
+<li class="list__item">Przy NAND: pojedyncza zmienna podana do ostatniej bramki bez odwrócenia.</li>
+<li class="list__item">Przy NOR: grupowanie jedynek zamiast zer albo zapomniana zamiana negacji (0 → bez kreski).</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Mapa Karnaugha</h3>
+<ul class="list">
+<li class="list__item">Kolumny/wiersze zawsze: <strong>00, 01, 11, 10</strong>.</li>
+<li class="list__item">Grupy: 1, 2, 4, 8 kratek; największe możliwe; mogą się nakładać; krawędzie i rogi się stykają.</li>
+<li class="list__item">Ze zmiennych zostają te, które w grupie są <strong>stałe</strong>.</li>
+</ul>
+<p class="article__p"><strong>Numery kratek (wiersz ab, kolumna cd):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NAND i NOR — dwa lustrzane przepisy</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Na <strong>NAND</strong></th><th class="table__cell table__cell--head">Na <strong>NOR</strong></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Co grupuję</td><td class="table__cell"><strong>jedynki</strong></td><td class="table__cell"><strong>zera</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Zmienna stała = 0</td><td class="table__cell">z negacją</td><td class="table__cell">bez negacji</td></tr>
+<tr class="table__row"><td class="table__cell">Zmienna stała = 1</td><td class="table__cell">bez negacji</td><td class="table__cell">z negacją</td></tr>
+<tr class="table__row"><td class="table__cell">W grupie</td><td class="table__cell">iloczyn (·)</td><td class="table__cell">suma (+)</td></tr>
+<tr class="table__row"><td class="table__cell">Między grupami</td><td class="table__cell">suma (+)</td><td class="table__cell">iloczyn (·)</td></tr>
+<tr class="table__row"><td class="table__cell">Zamiana</td><td class="table__cell">każdy AND i końcowy OR → NAND</td><td class="table__cell">każdy OR i końcowy AND → NOR</td></tr>
+<tr class="table__row"><td class="table__cell">Pojedyncza zmienna</td><td class="table__cell">do ostatniej bramki <strong>odwrócona</strong></td><td class="table__cell">do ostatniej bramki <strong>odwrócona</strong></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Wzory</h3>
+<ul class="list">
+<li class="list__item">Podwójna negacja: <span class="math"><span class="math__bar"><span class="math__bar">Q</span></span> = Q</span></li>
+<li class="list__item">De Morgan: <span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>,   <span class="math"><span class="math__bar">P·Q</span> = <span class="math__bar">P</span> + <span class="math__bar">Q</span></span></li>
+<li class="list__item">Robot (z materiałów): <span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span></span>,   <span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span> → RM = a NAND (~b NAND c)</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/07.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 7: Wprowadzenie do układów cyfrowych: Logisim, tabela prawdy, bramki</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

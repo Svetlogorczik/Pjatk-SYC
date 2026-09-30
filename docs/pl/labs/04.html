@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 4. Filtry pasywne RC: dolnoprzepustowy i górnoprzepustowy — SYC</title>
+<meta name="description" content="Budujesz dwa filtry z jednego rezystora i jednego kondensatora, dla ośmiu częstotliwości mierzysz, ile sygnału przechodzi, przeliczasz na decybele i z wykresu odczytujesz częstotliwość graniczną.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/04.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/04.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/04.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/04.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/04.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/04.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">O co chodzi</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Zadanie 1 — filtr dolnoprzepustowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Zadanie 2 — filtr górnoprzepustowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Wykres i częstotliwość graniczna</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Impedancja R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/04.html" aria-current="page"><span class="side-nav__num">4</span><span class="side-nav__text">Filtry RC</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Wzmacniacz operacyjny</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim i bramki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimalizacja (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 4</p>
+<h1 class="article__title">Filtry pasywne RC: dolnoprzepustowy i górnoprzepustowy</h1>
+<p class="article__lead">Budujesz dwa filtry z jednego rezystora i jednego kondensatora, dla ośmiu częstotliwości mierzysz, ile sygnału przechodzi, przeliczasz na decybele i z wykresu odczytujesz częstotliwość graniczną.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/03.html">Wykład do tego ćwiczenia: Wykład 3 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Dzielnik napięcia, filtr RC, decybele, częstotliwość graniczna — <a class="link" href="../lectures/03.html">wykład 3</a> (<strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Pomiar napięcia międzyszczytowego na dwóch kanałach oscyloskopu — <a class="link" href="../labs/03.html">ćwiczenie 3</a>.</li>
+<li class="list__item">Kalkulator z funkcją <strong>log</strong> (logarytm dziesiętny).</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">„Zbudujemy sobie na czwartych ćwiczeniach filtry — dolnoprzepustowe i górnoprzepustowe RC.” Oraz uwaga o wykresach: punktów pomiarowych <strong>nie łączy się łamaną</strong>; charakterystykę filtru trzeba przybliżyć <strong>dwiema liniami prostymi</strong>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">O co chodzi</h2>
+<p class="article__p">Filtr przepuszcza jedne częstotliwości, a tłumi inne. Żeby to zmierzyć, dla każdej częstotliwości porównujesz amplitudę <strong>na wyjściu</strong> z amplitudą <strong>na wejściu</strong>:</p>
+<div class="formula"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span>  k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s15.webp" alt="Charakterystyka filtru dolnoprzepustowego: pasmo przepustowe, częstotliwość graniczna (−3 dB), pasmo zaporowe" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Charakterystyka filtru dolnoprzepustowego: pasmo przepustowe, częstotliwość graniczna (−3 dB), pasmo zaporowe <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Oś pozioma: częstotliwość w skali <strong>logarytmicznej</strong> (10, 100, 1000…).</li>
+<li class="list__item">Oś pionowa: wzmocnienie w <strong>decybelach</strong>.</li>
+<li class="list__item"><strong>Częstotliwość graniczna</strong> <span class="math">f<sub class="math__sub">g</sub></span>: miejsce, gdzie wzmocnienie spada o <strong>3 dB</strong> (amplituda to ok. 70,7% maksymalnej).</li>
+</ul>
+<p class="article__p">Dla obu filtrów z zajęć (<span class="math">R = 1 kΩ</span>, <span class="math">C = 10 nF</span>):</p>
+<div class="formula"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 1000 · 10 × 10<sup class="math__sup">−9</sup></span></span> ≈ 15,9 kHz</span></div>
+<h2 class="article__h2" id="s3">Zadanie 1 — filtr dolnoprzepustowy</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s09.webp" alt="Schemat i zdjęcie połączeń: rezystor 1000 Ω szeregowo, kondensator 10 nF do masy" width="1400" height="748" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat i zdjęcie połączeń: rezystor 1000 Ω szeregowo, kondensator 10 nF do masy <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Budowa układu</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Sygnał z generatora (<strong>DDS</strong>) podłącz do jednej nóżki rezystora <strong>1 kΩ</strong>.</li>
+<li class="steps__item">Drugą nóżkę rezystora połącz z kondensatorem <strong>10 nF</strong> — to jest <strong>wyjście</strong> filtru.</li>
+<li class="steps__item">Drugą nóżkę kondensatora podłącz do <strong>masy (GND)</strong>.</li>
+<li class="steps__item"><strong>CH1</strong> oscyloskopu — na wejście (tam, gdzie generator).</li>
+<li class="steps__item"><strong>CH2</strong> oscyloskopu — na wyjście (punkt między rezystorem a kondensatorem).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Pomiar dla jednej częstotliwości</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Ustaw na generatorze sinus o pierwszej częstotliwości z tabeli (<strong>100 Hz</strong>).</li>
+<li class="steps__item">Oscyloskop: MODE → <strong>DUAL</strong>. Dobierz TIME/DIV tak, żeby widzieć 2–3 okresy (dla 100 Hz będzie to kilka milisekund na działkę).</li>
+<li class="steps__item">Dobierz VOLTS/DIV <strong>osobno dla każdego kanału</strong> — tak, żeby przebieg zajmował kilka działek.</li>
+<li class="steps__item">Policz działki od dołka do szczytu w CH1 i w CH2.</li>
+<li class="steps__item">Wpisz do tabeli: działki i czułość dla wejścia, działki i czułość dla wyjścia.</li>
+<li class="steps__item">Policz <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> i <span class="math">k<sub class="math__sub">dB</sub></span>.</li>
+<li class="steps__item">Przejdź do następnej częstotliwości: 1 kHz, 10 kHz, 20 kHz, 50 kHz, 100 kHz, 500 kHz, 1 MHz.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s11.webp" alt="Niska częstotliwość: wejście i wyjście mają tę samą amplitudę" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Niska częstotliwość: wejście i wyjście mają tę samą amplitudę <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Gdy sygnał na wyjściu „znika”</p>
+<div class="callout__body">
+<p class="article__p">Przy wysokich częstotliwościach filtr dolnoprzepustowy tłumi sygnał tak mocno, że na CH2 widać prawie płaską linię. To nie usterka — trzeba <strong>zwiększyć czułość CH2</strong> (np. z 1 V/dz na 20 mV/dz).</p>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s12.webp" alt="500 kHz, CH2 na 1 V/dz: sygnału wyjściowego prawie nie widać" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">500 kHz, CH2 na 1 V/dz: sygnału wyjściowego prawie nie widać <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s13.webp" alt="To samo po zmianie CH2 na 20 mV/dz: przebieg zajmuje 5 działek" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">To samo po zmianie CH2 na 20 mV/dz: przebieg zajmuje 5 działek <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s14.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s14.webp" alt="Wypełnianie wiersza tabeli dla 500 kHz" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wypełnianie wiersza tabeli dla 500 kHz <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykłady z materiałów do ćwiczeń</p>
+<div class="callout__body">
+<p class="article__p"><strong>Niska częstotliwość:</strong> CH1: 3 dz × 1 V/dz = 3 V; CH2: 3 dz × 1 V/dz = 3 V → <span class="math">k = 3/3 = 1</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 1 = 0 dB</span>.</p>
+<p class="article__p"><strong>500 kHz:</strong> CH1: 3 dz × 1 V/dz = 3 V; CH2: 5 dz × 0,02 V/dz = 0,1 V → <span class="math">k = 0,1/3 = 0,033</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 0,033 = −29,6 dB</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Zadanie 2 — filtr górnoprzepustowy</h2>
+<p class="article__p">Te same dwa elementy, ale <strong>zamienione miejscami</strong>: kondensator szeregowo, rezystor do masy.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s17.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s17.webp" alt="Filtr górnoprzepustowy: kondensator 10 nF szeregowo, rezystor 1000 Ω do masy" width="1400" height="761" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Filtr górnoprzepustowy: kondensator 10 nF szeregowo, rezystor 1000 Ω do masy <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Pomiar wygląda identycznie; inne są tylko częstotliwości w tabeli: 100 Hz, 500 Hz, 1 kHz, 5 kHz, 10 kHz, 50 kHz, 100 kHz, 1 MHz. Tym razem sygnał „znika” przy <strong>niskich</strong> częstotliwościach.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s19.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s19.webp" alt="Niska częstotliwość: wyjście jest mocno stłumione" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Niska częstotliwość: wyjście jest mocno stłumione <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s21.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s21.webp" alt="Wysoka częstotliwość: wyjście równe wejściu" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wysoka częstotliwość: wyjście równe wejściu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykłady z materiałów do ćwiczeń</p>
+<div class="callout__body">
+<p class="article__p"><strong>Niska częstotliwość:</strong> CH1: 3 dz × 1 V/dz = 3 V; CH2: 3,6 dz × 0,05 V/dz = 0,18 V → <span class="math">k = 0,06</span> → <span class="math">k<sub class="math__sub">dB</sub> ≈ −24 dB</span>.</p>
+<p class="article__p"><strong>Wysoka częstotliwość:</strong> CH1: 3 V; CH2: 3 V → <span class="math">k = 1</span> → <span class="math">0 dB</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Wykres i częstotliwość graniczna</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Narysuj osie: poziomo częstotliwość (<strong>skala logarytmiczna</strong> — każda kolejna kratka to 10 razy więcej), pionowo <span class="math">k<sub class="math__sub">dB</sub></span>.</li>
+<li class="steps__item">Nanieś osiem punktów <strong>krzyżykami</strong>.</li>
+<li class="steps__item">Poprowadź <strong>dwie proste</strong>: poziomą (w paśmie przepustowym, na 0 dB) i ukośną (w paśmie zaporowym).</li>
+<li class="steps__item">Znajdź miejsce, w którym charakterystyka przecina poziom <strong>−3 dB</strong>, i odczytaj częstotliwość — to <span class="math">f<sub class="math__sub">g</sub></span> „odczytana”.</li>
+<li class="steps__item">Policz <span class="math">f<sub class="math__sub">g</sub></span> ze wzoru — to <span class="math">f<sub class="math__sub">g</sub></span> „obliczona”. Porównaj obie wartości.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab04-s22.webp" alt="Charakterystyka filtru górnoprzepustowego i odczyt częstotliwości granicznej" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Charakterystyka filtru górnoprzepustowego i odczyt częstotliwości granicznej <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Czego się spodziewać — wartości teoretyczne dla R = 1 kΩ, C = 10 nF</p>
+<div class="callout__body">
+<p class="article__p">Policzyłem je ze wzorów z wykładu 3. Twoje pomiary powinny być podobne (różnice 1–2 dB są normalne).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center">Dolnoprzepustowy <span class="math">k<sub class="math__sub">dB</sub></span></th><th class="table__cell table__cell--head table__cell--center">Górnoprzepustowy <span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">100 Hz</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−44,0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 Hz</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−30,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 kHz</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−24,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell table__cell--center">−0,4</td><td class="table__cell table__cell--center">−10,5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">10 kHz</td><td class="table__cell table__cell--center">−1,5</td><td class="table__cell table__cell--center">−5,5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 kHz</td><td class="table__cell table__cell--center">−4,1</td><td class="table__cell table__cell--center">−2,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell table__cell--center">−10,4</td><td class="table__cell table__cell--center">−0,4</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">100 kHz</td><td class="table__cell table__cell--center">−16,1</td><td class="table__cell table__cell--center">−0,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 kHz</td><td class="table__cell table__cell--center">−30,0</td><td class="table__cell table__cell--center">0,0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 MHz</td><td class="table__cell table__cell--center">−36,0</td><td class="table__cell table__cell--center">0,0</td></tr>
+</tbody></table></div>
+<p class="article__p">Jeśli dla filtru dolnoprzepustowego wychodzi Ci −30 dB przy 100 Hz, to najpewniej zbudowałeś górnoprzepustowy (zamienione elementy) albo pomyliłeś kanały.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Zadania treningowe</h2>
+<p class="article__p">Inny filtr niż na zajęciach: <strong>R = 680 Ω, C = 47 nF</strong>.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Częstotliwość graniczna</p>
+<div class="callout__body">
+<p class="article__p">Oblicz częstotliwość graniczną filtru RC o <span class="math">R = 680 Ω</span> i <span class="math">C = 47 nF</span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 680 · 47 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2,008 × 10<sup class="math__sup">−4</sup></span></span> ≈ 4980 Hz ≈ 5 kHz</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Wypełnij trzy wiersze tabeli (filtr dolnoprzepustowy)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head">CH1 (wejście)</th><th class="table__cell table__cell--head">CH2 (wyjście)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 kHz</td><td class="table__cell">4 dz przy 0,5 V/dz</td><td class="table__cell">3,7 dz przy 0,5 V/dz</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell">4 dz przy 0,5 V/dz</td><td class="table__cell">2,8 dz przy 0,5 V/dz</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell">4 dz przy 0,5 V/dz</td><td class="table__cell">4 dz przy 50 mV/dz</td></tr>
+</tbody></table></div>
+<p class="article__p">Policz <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> i <span class="math">k<sub class="math__sub">dB</sub></span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">IN</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">OUT</sub></span></th><th class="table__cell table__cell--head table__cell--center">k</th><th class="table__cell table__cell--head table__cell--center"><span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 kHz</td><td class="table__cell table__cell--center">2,0 V</td><td class="table__cell table__cell--center">1,85 V</td><td class="table__cell table__cell--center">0,925</td><td class="table__cell table__cell--center">−0,7 dB</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell table__cell--center">2,0 V</td><td class="table__cell table__cell--center">1,40 V</td><td class="table__cell table__cell--center">0,70</td><td class="table__cell table__cell--center">−3,1 dB</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell table__cell--center">2,0 V</td><td class="table__cell table__cell--center">0,20 V</td><td class="table__cell table__cell--center">0,10</td><td class="table__cell table__cell--center">−20,0 dB</td></tr>
+</tbody></table></div>
+<p class="article__p">Przy 5 kHz wychodzi ok. −3 dB — czyli to jest częstotliwość graniczna (zgodnie z zadaniem 1). Przy 50 kHz, czyli dekadę wyżej, jest −20 dB — dokładnie nachylenie 20 dB/dek.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Decybele w obie strony</p>
+<div class="callout__body">
+<p class="article__p">(a) Ile decybeli to <span class="math">k = 0,25</span>?  (b) Jakie <span class="math">k</span> odpowiada −6 dB?  (c) Sygnał wejściowy ma 3 V, filtr tłumi o 40 dB. Ile woltów jest na wyjściu?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">(a) <span class="math">20 · log 0,25 = −12,0 dB</span></p>
+<p class="article__p">(b) <span class="math">k = 10<sup class="math__sup">−6/20</sup> = 10<sup class="math__sup">−0,3</sup> = 0,50</span></p>
+<p class="article__p">(c) −40 dB to <span class="math">k = 0,01</span> → <span class="math">U<sub class="math__sub">OUT</sub> = 3 · 0,01 = 0,03 V = 30 mV</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Filtr górnoprzepustowy</p>
+<div class="callout__body">
+<p class="article__p">Z tych samych elementów (680 Ω, 47 nF) budujemy filtr górnoprzepustowy. Przy jakiej częstotliwości tłumienie wyniesie ok. 20 dB? A ile będzie przy 50 kHz?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Filtr górnoprzepustowy opada 20 dB na dekadę <strong>poniżej</strong> <span class="math">f<sub class="math__sub">g</sub></span>, więc −20 dB jest przy <span class="math">f<sub class="math__sub">g</sub>/10 ≈ 500 Hz</span>.</p>
+<p class="article__p">50 kHz to dekada powyżej <span class="math">f<sub class="math__sub">g</sub></span> — sygnał przechodzi praktycznie bez zmian: ok. 0 dB.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Wpisywanie do tabeli amplitudy z <strong>jednego</strong> kanału przy niezmienionej czułości — a potem <span class="math">k &gt; 1</span> dla filtru pasywnego (to niemożliwe: filtr pasywny nie wzmacnia).</li>
+<li class="list__item">Logarytm naturalny (<code class="inline-code">ln</code>) zamiast dziesiętnego (<code class="inline-code">log</code>).</li>
+<li class="list__item">Zapominanie o minusie: dla <span class="math">k &lt; 1</span> decybele są <strong>ujemne</strong>.</li>
+<li class="list__item">Mylenie „mV/dz” z „V/dz” przy czułości.</li>
+<li class="list__item">Łączenie punktów na wykresie łamaną zamiast dwiema prostymi.</li>
+<li class="list__item">Nieregulowanie TIME/DIV: przy 1 MHz na ustawieniu dla 100 Hz zobaczysz tylko „zamazany pas”.</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Układy</h3>
+<ul class="list">
+<li class="list__item"><strong>Dolnoprzepustowy:</strong> generator → <strong>R</strong> → wyjście (CH2) → <strong>C</strong> → masa.</li>
+<li class="list__item"><strong>Górnoprzepustowy:</strong> generator → <strong>C</strong> → wyjście (CH2) → <strong>R</strong> → masa.</li>
+<li class="list__item">CH1 zawsze na wejściu (przy generatorze).</li>
+</ul>
+<h3 class="article__h3">Tabela — jak liczyć wiersz</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">U<sub class="math__sub">IN</sub> = działki<sub class="math__sub">CH1</sub> · czułość<sub class="math__sub">CH1</sub></span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">OUT</sub> = działki<sub class="math__sub">CH2</sub> · czułość<sub class="math__sub">CH2</sub></span></li>
+<li class="list__item"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span></li>
+<li class="list__item"><span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></li>
+</ol>
+<h3 class="article__h3">Częstotliwość graniczna</h3>
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>   (1 kΩ, 10 nF → <strong>15,9 kHz</strong>)   ↔   <span class="math">k = 0,707</span>   ↔   <strong>−3 dB</strong></p>
+<h3 class="article__h3">Szybkie przeliczenia</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">k</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">0,707</th><th class="table__cell table__cell--head table__cell--center">0,5</th><th class="table__cell table__cell--head table__cell--center">0,1</th><th class="table__cell table__cell--head table__cell--center">0,033</th><th class="table__cell table__cell--head table__cell--center">0,01</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">dB</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−3</td><td class="table__cell table__cell--center">−6</td><td class="table__cell table__cell--center">−20</td><td class="table__cell table__cell--center">−29,6</td><td class="table__cell table__cell--center">−40</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Nachylenie poza pasmem: <strong>20 dB/dekadę</strong>.</li>
+<li class="list__item">Wykres: oś f logarytmiczna, punkty krzyżykami, <strong>dwie proste</strong>, nie łamana.</li>
+<li class="list__item">Sygnał za mały → zmniejsz V/dz na CH2.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/03.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 3: Badanie elementów pasywnych: impedancja rezystora, kondensatora i cewki</span></a>
+<a class="pager__link pager__link--next" href="../labs/05.html"><span class="pager__dir">Następny →</span><span class="pager__title">Ćwiczenie 5: Diody i tranzystory: LED, test tranzystora, klucz tranzystorowy</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -55,6 +55,12 @@
 <li class="toc__item"><a class="toc__link" href="#c15">Lecture 15. Assembly language and computer architecture (MIPS)</a></li>
 <li class="toc__item"><a class="toc__link" href="#c16">Lab 1. Introductory class: the lab equipment</a></li>
 <li class="toc__item"><a class="toc__link" href="#c17">Lab 2. Measuring voltages and currents</a></li>
+<li class="toc__item"><a class="toc__link" href="#c18">Lab 3. Passive components: the impedance of a resistor, a capacitor and an inductor</a></li>
+<li class="toc__item"><a class="toc__link" href="#c19">Lab 4. Passive RC filters: low-pass and high-pass</a></li>
+<li class="toc__item"><a class="toc__link" href="#c20">Lab 5. Diodes and transistors: the LED, testing a transistor, the transistor switch</a></li>
+<li class="toc__item"><a class="toc__link" href="#c21">Lab 6. The operational amplifier: follower, comparator, non-inverting and inverting amplifier</a></li>
+<li class="toc__item"><a class="toc__link" href="#c22">Lab 7. Introduction to digital circuits: Logisim, truth table, gates</a></li>
+<li class="toc__item"><a class="toc__link" href="#c23">Lab 8. Minimising Boolean functions: the Karnaugh map, NAND and NOR implementations</a></li>
 </ol>
 </nav>
 </aside>
@@ -620,6 +626,191 @@
 <li class="list__item">Round the error to as many decimal places as the result has.</li>
 <li class="list__item">The smallest range on which the result fits. "1" = range too small.</li>
 <li class="list__item">Measure resistance with the component disconnected from the supply.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c18">
+<h2 class="cheat__title"><a class="link" href="labs/03.html">Lab 3. Passive components: the impedance of a resistor, a capacitor and an inductor</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">The circuit</h3>
+<p class="article__p">Generator (sine, 100 kHz) → <strong>component under test</strong> → <strong>10 Ω</strong> → ground.  CH1: the circuit input (voltage).  CH2: across the 10 Ω resistor (current).</p>
+<p class="article__p">Oscilloscope: DUAL, 1 µs/div (T = 10 div), CH1 0.5 V/div, CH2 50 mV/div.</p>
+<h3 class="article__h3">Calculations</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = div · V/div</span> (CH1);   <span class="math">UI<sub class="math__sub">pp</sub> = div · V/div</span> (CH2);   <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10</span></span></span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></li>
+<li class="list__item"><span class="math">Z = |Z| e<sup class="math__sup">jφ</sup> = |Z| cos φ + j · |Z| sin φ</span></li>
+</ol>
+<h3 class="article__h3">What to expect</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Component</th><th class="table__cell table__cell--head table__cell--center">φ</th><th class="table__cell table__cell--head">Z</th><th class="table__cell table__cell--head">On the screen</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Resistor</td><td class="table__cell table__cell--center">0°</td><td class="table__cell"><span class="math">R + j0</span></td><td class="table__cell">peak under peak</td></tr>
+<tr class="table__row"><td class="table__cell">Capacitor</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell"><span class="math">0 − j<span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">current earlier (to the left)</td></tr>
+<tr class="table__row"><td class="table__cell">Inductor</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell"><span class="math">0 + j2πfL</span></td><td class="table__cell">current later (to the right)</td></tr>
+</tbody></table></div>
+<p class="article__p">A quarter of a period = 90°.  10 nF at 100 kHz ≈ 159 Ω.  Calculator in <strong>DEG</strong> mode.</p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c19">
+<h2 class="cheat__title"><a class="link" href="labs/04.html">Lab 4. Passive RC filters: low-pass and high-pass</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Circuits</h3>
+<ul class="list">
+<li class="list__item"><strong>Low-pass:</strong> generator → <strong>R</strong> → output (CH2) → <strong>C</strong> → ground.</li>
+<li class="list__item"><strong>High-pass:</strong> generator → <strong>C</strong> → output (CH2) → <strong>R</strong> → ground.</li>
+<li class="list__item">CH1 always at the input (at the generator).</li>
+</ul>
+<h3 class="article__h3">The table — how to compute a row</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">U<sub class="math__sub">IN</sub> = divisions<sub class="math__sub">CH1</sub> · sensitivity<sub class="math__sub">CH1</sub></span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">OUT</sub> = divisions<sub class="math__sub">CH2</sub> · sensitivity<sub class="math__sub">CH2</sub></span></li>
+<li class="list__item"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span></li>
+<li class="list__item"><span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></li>
+</ol>
+<h3 class="article__h3">Cut-off frequency</h3>
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>   (1 kΩ, 10 nF → <strong>15.9 kHz</strong>)   ↔   <span class="math">k = 0.707</span>   ↔   <strong>−3 dB</strong></p>
+<h3 class="article__h3">Quick conversions</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">k</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">0.707</th><th class="table__cell table__cell--head table__cell--center">0.5</th><th class="table__cell table__cell--head table__cell--center">0.1</th><th class="table__cell table__cell--head table__cell--center">0.033</th><th class="table__cell table__cell--head table__cell--center">0.01</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">dB</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−3</td><td class="table__cell table__cell--center">−6</td><td class="table__cell table__cell--center">−20</td><td class="table__cell table__cell--center">−29.6</td><td class="table__cell table__cell--center">−40</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Slope outside the pass band: <strong>20 dB/decade</strong>.</li>
+<li class="list__item">Graph: logarithmic f axis, points as crosses, <strong>two straight lines</strong>, no zig-zag.</li>
+<li class="list__item">Signal too small → reduce V/div on CH2.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c20">
+<h2 class="cheat__title"><a class="link" href="labs/05.html">Lab 5. Diodes and transistors: the LED, testing a transistor, the transistor switch</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">LED</h3>
+<ul class="list">
+<li class="list__item">Longer lead = <strong>anode (+)</strong>. It lights when the anode is on the plus side.</li>
+<li class="list__item">Always with a resistor:  <span class="math">R = <span class="math__frac"><span class="math__num">U<sub class="math__sub">supply</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">I</span></span></span>   (red LED ≈ 1.7–2 V)</li>
+<li class="list__item">Diode test: (+) on the anode → forward voltage; reversed → "1" / ".0L".</li>
+</ul>
+<h3 class="article__h3">Testing a transistor (diode-test mode)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head table__cell--center">Conducts when the base has</th><th class="table__cell table__cell--head table__cell--center">E–C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NPN</strong></td><td class="table__cell table__cell--center">plus (B+E−, B+C−)</td><td class="table__cell table__cell--center">no conduction</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>PNP</strong></td><td class="table__cell table__cell--center">minus (B−E+, B−C+)</td><td class="table__cell table__cell--center">no conduction</td></tr>
+</tbody></table></div>
+<p class="article__p">Two conducting readings (about 0.5–0.7 V) + four blocking = good. TO-92 (BC338 / BC327): 1 collector, 2 base, 3 emitter.</p>
+<h3 class="article__h3">The transistor switch</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">NPN (BC338)</th><th class="table__cell table__cell--head">PNP (BC327)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Emitter</td><td class="table__cell">ground</td><td class="table__cell">+VCC</td></tr>
+<tr class="table__row"><td class="table__cell">LED + 1 kΩ</td><td class="table__cell">VCC → LED → R → collector</td><td class="table__cell">collector → LED → R → ground</td></tr>
+<tr class="table__row"><td class="table__cell">Base</td><td class="table__cell">through 10 kΩ from the generator</td><td class="table__cell">through 10 kΩ from the generator</td></tr>
+<tr class="table__row"><td class="table__cell">Lit at the level</td><td class="table__cell"><strong>high</strong></td><td class="table__cell"><strong>low</strong></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">U<sub class="math__sub">ctrl</sub> − 0.6</span><span class="math__den">R<sub class="math__sub">B</sub></span></span></span>;   saturation when <span class="math">β · I<sub class="math__sub">B</sub> &gt;</span> the load current <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.</li>
+<li class="list__item">Generator at about 0.5 Hz so the blinking is visible. Common ground!</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c21">
+<h2 class="cheat__title"><a class="link" href="labs/06.html">Lab 6. The operational amplifier: follower, comparator, non-inverting and inverting amplifier</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Jumpers</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Circuit</th><th class="table__cell table__cell--head table__cell--center">J1</th><th class="table__cell table__cell--head table__cell--center">J2</th><th class="table__cell table__cell--head table__cell--center">J3</th><th class="table__cell table__cell--head table__cell--center">J4</th><th class="table__cell table__cell--head table__cell--center">J5</th><th class="table__cell table__cell--head table__cell--center">Signal on</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Follower (offset)</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Comparator</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">IN+</td></tr>
+<tr class="table__row"><td class="table__cell">Non-inverting</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R1</td><td class="table__cell table__cell--center">R2</td><td class="table__cell table__cell--center">IN+</td></tr>
+<tr class="table__row"><td class="table__cell">Inverting</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R1</td><td class="table__cell table__cell--center">closed</td><td class="table__cell table__cell--center">—</td><td class="table__cell table__cell--center">R2</td><td class="table__cell table__cell--center">IN−</td></tr>
+</tbody></table></div>
+<p class="article__p">J1: IN+ → (+) · J2: IN− → (−) · J3: (+) → ground · J4: (−) → ground · J5: (−) → output</p>
+<h3 class="article__h3">Formulas</h3>
+<ul class="list">
+<li class="list__item">Non-inverting: <span class="math">k<sub class="math__sub">U</sub> = 1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span></span> — output in phase</li>
+<li class="list__item">Inverting: <span class="math">k<sub class="math__sub">U</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span></span> — output inverted (180°)</li>
+<li class="list__item">Measurement: <span class="math">U<sub class="math__sub">in</sub> = a · S<sub class="math__sub">a</sub></span>,   <span class="math">U<sub class="math__sub">out</sub> = b · S<sub class="math__sub">b</sub></span>,   <span class="math">k<sub class="math__sub">U</sub> = <span class="math__frac"><span class="math__num">U<sub class="math__sub">out</sub></span><span class="math__den">U<sub class="math__sub">in</sub></span></span></span></li>
+<li class="list__item">Offset: <span class="math">U = divisions · sensitivity</span> (mV/div, input grounded)</li>
+<li class="list__item">Comparator: <span class="math">V<sub class="math__sub">+</sub> &gt; V<sub class="math__sub">−</sub></span> → <span class="math">+V<sub class="math__sub">c</sub></span>; otherwise <span class="math">−V<sub class="math__sub">c</sub></span>. Positive offset → high for longer.</li>
+</ul>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item">R2 = the larger resistor, always in J5. Measure the resistors with the multimeter <strong>before</strong> plugging them in.</li>
+<li class="list__item">Generator: 1 kHz sine, small amplitude (to avoid clipping at ±12 V).</li>
+<li class="list__item">Check the module's power and the common ground.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c22">
+<h2 class="cheat__title"><a class="link" href="labs/07.html">Lab 7. Introduction to digital circuits: Logisim, truth table, gates</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Logisim</h3>
+<ul class="list">
+<li class="list__item">Input = green square, output = green circle, gates in the <strong>Gates</strong> folder.</li>
+<li class="list__item">The <strong>hand</strong> (Poke) toggles an input 0 ↔ 1; the <strong>arrow</strong> (Edit) draws wires.</li>
+<li class="list__item">Colours: bright green = 1, dark green = 0, <strong>blue = not connected</strong>, <strong>red = conflict</strong>.</li>
+<li class="list__item">A new circuit: <strong>Project → Add Circuit…</strong>; then you place it like a gate.</li>
+<li class="list__item">Truth table of a circuit: <strong>Project → Analyze Circuit</strong>. <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span></li>
+</ul>
+<h3 class="article__h3">The design path</h3>
+<ol class="list list--ordered">
+<li class="list__item">Verbal description → <strong>truth table</strong> (rows in binary: 000, 001, …).</li>
+<li class="list__item">Table → <strong>formula</strong>: for each one a product of the variables (0 → negated), sum everything.</li>
+<li class="list__item">Formula → <strong>schematic</strong>: NOT first, then AND, OR last.</li>
+<li class="list__item"><strong>Test</strong> all combinations.</li>
+</ol>
+<h3 class="article__h3">Bricks from NAND</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Gate</th><th class="table__cell table__cell--head">From NAND</th><th class="table__cell table__cell--head table__cell--center">Count</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">NOT a</td><td class="table__cell">NAND(a, a)</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell">a AND b</td><td class="table__cell">NOT( NAND(a, b) )</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell">a OR b</td><td class="table__cell">NAND( NOT a, NOT b )</td><td class="table__cell table__cell--center">3</td></tr>
+<tr class="table__row"><td class="table__cell">a XOR b</td><td class="table__cell"><span class="math">n<sub class="math__sub">1</sub></span> = NAND(a,b); y = NAND( NAND(a,<span class="math">n<sub class="math__sub">1</sub></span>), NAND(b,<span class="math">n<sub class="math__sub">1</sub></span>) )</td><td class="table__cell table__cell--center">4</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">De Morgan's laws</h3>
+<p class="article__p"><span class="math"><span class="math__bar">a·b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span>       <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span>·<span class="math__bar">b</span></span></p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c23">
+<h2 class="cheat__title"><a class="link" href="labs/08.html">Lab 8. Minimising Boolean functions: the Karnaugh map, NAND and NOR implementations</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Karnaugh map</h3>
+<ul class="list">
+<li class="list__item">Columns/rows always: <strong>00, 01, 11, 10</strong>.</li>
+<li class="list__item">Groups: 1, 2, 4, 8 cells; as large as possible; may overlap; edges and corners touch.</li>
+<li class="list__item">Keep the variables that are <strong>constant</strong> in the group.</li>
+</ul>
+<p class="article__p"><strong>Cell numbers (row ab, column cd):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NAND and NOR — two mirror recipes</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">On <strong>NAND</strong></th><th class="table__cell table__cell--head">On <strong>NOR</strong></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">What I group</td><td class="table__cell"><strong>ones</strong></td><td class="table__cell"><strong>zeros</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Constant variable = 0</td><td class="table__cell">negated</td><td class="table__cell">plain</td></tr>
+<tr class="table__row"><td class="table__cell">Constant variable = 1</td><td class="table__cell">plain</td><td class="table__cell">negated</td></tr>
+<tr class="table__row"><td class="table__cell">Inside a group</td><td class="table__cell">product (·)</td><td class="table__cell">sum (+)</td></tr>
+<tr class="table__row"><td class="table__cell">Between groups</td><td class="table__cell">sum (+)</td><td class="table__cell">product (·)</td></tr>
+<tr class="table__row"><td class="table__cell">Conversion</td><td class="table__cell">every AND and the final OR → NAND</td><td class="table__cell">every OR and the final AND → NOR</td></tr>
+<tr class="table__row"><td class="table__cell">A single variable</td><td class="table__cell">into the last gate <strong>inverted</strong></td><td class="table__cell">into the last gate <strong>inverted</strong></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Formulas</h3>
+<ul class="list">
+<li class="list__item">Double negation: <span class="math"><span class="math__bar"><span class="math__bar">Q</span></span> = Q</span></li>
+<li class="list__item">De Morgan: <span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>,   <span class="math"><span class="math__bar">P·Q</span> = <span class="math__bar">P</span> + <span class="math__bar">Q</span></span></li>
+<li class="list__item">Robot (from the materials): <span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span></span>,   <span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span> → RM = a NAND (~b NAND c)</li>
 </ul>
 </div>
 </section>

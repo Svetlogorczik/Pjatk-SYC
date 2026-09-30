@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторная 4. Пассивные RC-фильтры: нижних и верхних частот — SYC</title>
+<meta name="description" content="Ты собираешь два фильтра из одного резистора и одного конденсатора, на восьми частотах измеряешь, сколько сигнала проходит, переводишь в децибелы и по графику определяешь граничную частоту.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/04.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/04.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/04.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/labs/04.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/labs/04.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/labs/04.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Что нужно уметь перед занятием</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">В чём суть</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Задание 1 — фильтр нижних частот</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Задание 2 — фильтр верхних частот</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">График и граничная частота</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Тренировочные задания</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лабораторные">
+<p class="side-nav__title">Все лабораторные</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Знакомимся с оборудованием</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Измерение напряжений и токов</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Импеданс R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/04.html" aria-current="page"><span class="side-nav__num">4</span><span class="side-nav__text">RC-фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Операционный усилитель</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim и вентили</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Минимизация (Карно)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Лабораторная 4</p>
+<h1 class="article__title">Пассивные RC-фильтры: нижних и верхних частот</h1>
+<p class="article__lead">Ты собираешь два фильтра из одного резистора и одного конденсатора, на восьми частотах измеряешь, сколько сигнала проходит, переводишь в децибелы и по графику определяешь граничную частоту.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a>
+<a class="button button--ghost" href="../lectures/03.html">Лекция к этой лабораторной: Лекция 3 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Что нужно уметь перед занятием</h2>
+<ul class="list">
+<li class="list__item">Делитель напряжения, RC-фильтр, децибелы, граничная частота — <a class="link" href="../lectures/03.html">лекция 3</a> (<strong>Краткий конспект</strong>).</li>
+<li class="list__item">Измерение размаха на двух каналах осциллографа — <a class="link" href="../labs/03.html">лабораторная 3</a>.</li>
+<li class="list__item">Калькулятор с функцией <strong>log</strong> (десятичный логарифм).</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">«На четвёртом занятии мы соберём фильтры — RC нижних и верхних частот.» И замечание о графиках: точки измерений <strong>не соединяют ломаной</strong>; характеристику фильтра нужно приблизить <strong>двумя прямыми</strong>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">В чём суть</h2>
+<p class="article__p">Фильтр одни частоты пропускает, а другие подавляет. Чтобы это измерить, для каждой частоты сравниваешь амплитуду <strong>на выходе</strong> с амплитудой <strong>на входе</strong>:</p>
+<div class="formula"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span>  k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s15.webp" alt="Характеристика фильтра нижних частот: полоса пропускания, граничная частота (−3 дБ), полоса подавления" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Характеристика фильтра нижних частот: полоса пропускания, граничная частота (−3 дБ), полоса подавления <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Горизонтальная ось: частота в <strong>логарифмическом</strong> масштабе (10, 100, 1000…).</li>
+<li class="list__item">Вертикальная ось: усиление в <strong>децибелах</strong>.</li>
+<li class="list__item"><strong>Граничная частота</strong> <span class="math">f<sub class="math__sub">g</sub></span>: место, где усиление падает на <strong>3 дБ</strong> (амплитуда около 70,7% от максимальной).</li>
+</ul>
+<p class="article__p">Для обоих фильтров с занятий (<span class="math">R = 1 кОм</span>, <span class="math">C = 10 нФ</span>):</p>
+<div class="formula"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 1000 · 10 × 10<sup class="math__sup">−9</sup></span></span> ≈ 15,9 кГц</span></div>
+<h2 class="article__h2" id="s3">Задание 1 — фильтр нижних частот</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s09.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s09.webp" alt="Схема и фото соединений: резистор 1000 Ом последовательно, конденсатор 10 нФ на массу" width="1400" height="748" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Схема и фото соединений: резистор 1000 Ом последовательно, конденсатор 10 нФ на массу <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Сборка схемы</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Сигнал с генератора (<strong>DDS</strong>) подключи к одной ножке резистора <strong>1 кОм</strong>.</li>
+<li class="steps__item">Вторую ножку резистора соедини с конденсатором <strong>10 нФ</strong> — это <strong>выход</strong> фильтра.</li>
+<li class="steps__item">Вторую ножку конденсатора подключи к <strong>массе (GND)</strong>.</li>
+<li class="steps__item"><strong>CH1</strong> осциллографа — на вход (туда, где генератор).</li>
+<li class="steps__item"><strong>CH2</strong> осциллографа — на выход (точка между резистором и конденсатором).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Измерение на одной частоте</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Выставь на генераторе синус первой частоты из таблицы (<strong>100 Гц</strong>).</li>
+<li class="steps__item">Осциллограф: MODE → <strong>DUAL</strong>. Подбери TIME/DIV так, чтобы видеть 2–3 периода (для 100 Гц это несколько миллисекунд на деление).</li>
+<li class="steps__item">Подбери VOLTS/DIV <strong>отдельно для каждого канала</strong> — так, чтобы сигнал занимал несколько делений.</li>
+<li class="steps__item">Посчитай деления от впадины до вершины в CH1 и в CH2.</li>
+<li class="steps__item">Впиши в таблицу: деления и чувствительность для входа, деления и чувствительность для выхода.</li>
+<li class="steps__item">Посчитай <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> и <span class="math">k<sub class="math__sub">dB</sub></span>.</li>
+<li class="steps__item">Переходи к следующей частоте: 1 кГц, 10 кГц, 20 кГц, 50 кГц, 100 кГц, 500 кГц, 1 МГц.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s11.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s11.webp" alt="Низкая частота: у входа и выхода одинаковая амплитуда" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Низкая частота: у входа и выхода одинаковая амплитуда <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Когда сигнал на выходе «пропадает»</p>
+<div class="callout__body">
+<p class="article__p">На высоких частотах фильтр нижних частот подавляет сигнал так сильно, что на CH2 видна почти ровная линия. Это не неисправность — нужно <strong>увеличить чувствительность CH2</strong> (например, с 1 В/дел до 20 мВ/дел).</p>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s12.webp" alt="500 кГц, CH2 на 1 В/дел: выходного сигнала почти не видно" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">500 кГц, CH2 на 1 В/дел: выходного сигнала почти не видно <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s13.webp" alt="То же после переключения CH2 на 20 мВ/дел: сигнал занимает 5 делений" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">То же после переключения CH2 на 20 мВ/дел: сигнал занимает 5 делений <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s14.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s14.webp" alt="Заполнение строки таблицы для 500 кГц" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Заполнение строки таблицы для 500 кГц <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Примеры из материалов к занятиям</p>
+<div class="callout__body">
+<p class="article__p"><strong>Низкая частота:</strong> CH1: 3 дел × 1 В/дел = 3 В; CH2: 3 дел × 1 В/дел = 3 В → <span class="math">k = 3/3 = 1</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 1 = 0 дБ</span>.</p>
+<p class="article__p"><strong>500 кГц:</strong> CH1: 3 дел × 1 В/дел = 3 В; CH2: 5 дел × 0,02 В/дел = 0,1 В → <span class="math">k = 0,1/3 = 0,033</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 0,033 = −29,6 дБ</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Задание 2 — фильтр верхних частот</h2>
+<p class="article__p">Те же два элемента, но <strong>поменянные местами</strong>: конденсатор последовательно, резистор на массу.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s17.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s17.webp" alt="Фильтр верхних частот: конденсатор 10 нФ последовательно, резистор 1000 Ом на массу" width="1400" height="761" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Фильтр верхних частот: конденсатор 10 нФ последовательно, резистор 1000 Ом на массу <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p">Измерение выглядит точно так же; другие только частоты в таблице: 100 Гц, 500 Гц, 1 кГц, 5 кГц, 10 кГц, 50 кГц, 100 кГц, 1 МГц. На этот раз сигнал «пропадает» на <strong>низких</strong> частотах.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s19.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s19.webp" alt="Низкая частота: выход сильно подавлен" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Низкая частота: выход сильно подавлен <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s21.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s21.webp" alt="Высокая частота: выход равен входу" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Высокая частота: выход равен входу <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Примеры из материалов к занятиям</p>
+<div class="callout__body">
+<p class="article__p"><strong>Низкая частота:</strong> CH1: 3 дел × 1 В/дел = 3 В; CH2: 3,6 дел × 0,05 В/дел = 0,18 В → <span class="math">k = 0,06</span> → <span class="math">k<sub class="math__sub">dB</sub> ≈ −24 дБ</span>.</p>
+<p class="article__p"><strong>Высокая частота:</strong> CH1: 3 В; CH2: 3 В → <span class="math">k = 1</span> → <span class="math">0 дБ</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">График и граничная частота</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Нарисуй оси: по горизонтали частота (<strong>логарифмический масштаб</strong> — каждая следующая клетка в 10 раз больше), по вертикали <span class="math">k<sub class="math__sub">dB</sub></span>.</li>
+<li class="steps__item">Нанеси восемь точек <strong>крестиками</strong>.</li>
+<li class="steps__item">Проведи <strong>две прямые</strong>: горизонтальную (в полосе пропускания, на 0 дБ) и наклонную (в полосе подавления).</li>
+<li class="steps__item">Найди место, где характеристика пересекает уровень <strong>−3 дБ</strong>, и считай частоту — это <span class="math">f<sub class="math__sub">g</sub></span> «по графику».</li>
+<li class="steps__item">Посчитай <span class="math">f<sub class="math__sub">g</sub></span> по формуле — это <span class="math">f<sub class="math__sub">g</sub></span> «расчётная». Сравни оба значения.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s22.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab04-s22.webp" alt="Характеристика фильтра верхних частот и определение граничной частоты" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Характеристика фильтра верхних частот и определение граничной частоты <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Чего ожидать — теоретические значения для R = 1 кОм, C = 10 нФ</p>
+<div class="callout__body">
+<p class="article__p">Я посчитал их по формулам из лекции 3. Твои измерения должны быть похожими (расхождения в 1–2 дБ — это нормально).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center">Нижних частот <span class="math">k<sub class="math__sub">dB</sub></span></th><th class="table__cell table__cell--head table__cell--center">Верхних частот <span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">100 Гц</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−44,0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 Гц</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−30,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 кГц</td><td class="table__cell table__cell--center">0,0</td><td class="table__cell table__cell--center">−24,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 кГц</td><td class="table__cell table__cell--center">−0,4</td><td class="table__cell table__cell--center">−10,5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">10 кГц</td><td class="table__cell table__cell--center">−1,5</td><td class="table__cell table__cell--center">−5,5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 кГц</td><td class="table__cell table__cell--center">−4,1</td><td class="table__cell table__cell--center">−2,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 кГц</td><td class="table__cell table__cell--center">−10,4</td><td class="table__cell table__cell--center">−0,4</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">100 кГц</td><td class="table__cell table__cell--center">−16,1</td><td class="table__cell table__cell--center">−0,1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 кГц</td><td class="table__cell table__cell--center">−30,0</td><td class="table__cell table__cell--center">0,0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 МГц</td><td class="table__cell table__cell--center">−36,0</td><td class="table__cell table__cell--center">0,0</td></tr>
+</tbody></table></div>
+<p class="article__p">Если для фильтра нижних частот у тебя получается −30 дБ на 100 Гц, то, скорее всего, ты собрал фильтр верхних частот (элементы перепутаны местами) или перепутал каналы.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Тренировочные задания</h2>
+<p class="article__p">Другой фильтр, не тот, что на занятии: <strong>R = 680 Ом, C = 47 нФ</strong>.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Граничная частота</p>
+<div class="callout__body">
+<p class="article__p">Вычисли граничную частоту RC-фильтра с <span class="math">R = 680 Ом</span> и <span class="math">C = 47 нФ</span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 680 · 47 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2,008 × 10<sup class="math__sup">−4</sup></span></span> ≈ 4980 Гц ≈ 5 кГц</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Заполни три строки таблицы (фильтр нижних частот)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head">CH1 (вход)</th><th class="table__cell table__cell--head">CH2 (выход)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 кГц</td><td class="table__cell">4 дел при 0,5 В/дел</td><td class="table__cell">3,7 дел при 0,5 В/дел</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 кГц</td><td class="table__cell">4 дел при 0,5 В/дел</td><td class="table__cell">2,8 дел при 0,5 В/дел</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 кГц</td><td class="table__cell">4 дел при 0,5 В/дел</td><td class="table__cell">4 дел при 50 мВ/дел</td></tr>
+</tbody></table></div>
+<p class="article__p">Посчитай <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> и <span class="math">k<sub class="math__sub">dB</sub></span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">IN</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">OUT</sub></span></th><th class="table__cell table__cell--head table__cell--center">k</th><th class="table__cell table__cell--head table__cell--center"><span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 кГц</td><td class="table__cell table__cell--center">2,0 В</td><td class="table__cell table__cell--center">1,85 В</td><td class="table__cell table__cell--center">0,925</td><td class="table__cell table__cell--center">−0,7 дБ</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 кГц</td><td class="table__cell table__cell--center">2,0 В</td><td class="table__cell table__cell--center">1,40 В</td><td class="table__cell table__cell--center">0,70</td><td class="table__cell table__cell--center">−3,1 дБ</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 кГц</td><td class="table__cell table__cell--center">2,0 В</td><td class="table__cell table__cell--center">0,20 В</td><td class="table__cell table__cell--center">0,10</td><td class="table__cell table__cell--center">−20,0 дБ</td></tr>
+</tbody></table></div>
+<p class="article__p">На 5 кГц получается около −3 дБ — значит, это и есть граничная частота (как в задании 1). На 50 кГц, то есть на декаду выше, −20 дБ — ровно наклон 20 дБ/дек.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Децибелы в обе стороны</p>
+<div class="callout__body">
+<p class="article__p">(a) Сколько децибел составляет <span class="math">k = 0,25</span>?  (b) Какое <span class="math">k</span> соответствует −6 дБ?  (c) Входной сигнал 3 В, фильтр ослабляет на 40 дБ. Сколько вольт на выходе?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p">(a) <span class="math">20 · log 0,25 = −12,0 дБ</span></p>
+<p class="article__p">(b) <span class="math">k = 10<sup class="math__sup">−6/20</sup> = 10<sup class="math__sup">−0,3</sup> = 0,50</span></p>
+<p class="article__p">(c) −40 дБ — это <span class="math">k = 0,01</span> → <span class="math">U<sub class="math__sub">OUT</sub> = 3 · 0,01 = 0,03 В = 30 мВ</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Фильтр верхних частот</p>
+<div class="callout__body">
+<p class="article__p">Из тех же элементов (680 Ом, 47 нФ) собираем фильтр верхних частот. На какой частоте ослабление составит около 20 дБ? А сколько будет на 50 кГц?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p">Фильтр верхних частот падает на 20 дБ на декаду <strong>ниже</strong> <span class="math">f<sub class="math__sub">g</sub></span>, поэтому −20 дБ будет на <span class="math">f<sub class="math__sub">g</sub>/10 ≈ 500 Гц</span>.</p>
+<p class="article__p">50 кГц — это на декаду выше <span class="math">f<sub class="math__sub">g</sub></span>: сигнал проходит практически без изменений, около 0 дБ.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>На чём чаще всего теряют баллы</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">В таблицу вписывают амплитуду <strong>одного</strong> канала при неизменённой чувствительности — и потом получают <span class="math">k &gt; 1</span> для пассивного фильтра (это невозможно: пассивный фильтр не усиливает).</li>
+<li class="list__item">Натуральный логарифм (<code class="inline-code">ln</code>) вместо десятичного (<code class="inline-code">log</code>).</li>
+<li class="list__item">Забытый минус: при <span class="math">k &lt; 1</span> децибелы <strong>отрицательные</strong>.</li>
+<li class="list__item">Путаница «мВ/дел» и «В/дел» в чувствительности.</li>
+<li class="list__item">Соединение точек на графике ломаной вместо двух прямых.</li>
+<li class="list__item">Не подстроен TIME/DIV: на 1 МГц при настройке для 100 Гц увидишь только «размазанную полосу».</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Схемы</h3>
+<ul class="list">
+<li class="list__item"><strong>Нижних частот:</strong> генератор → <strong>R</strong> → выход (CH2) → <strong>C</strong> → масса.</li>
+<li class="list__item"><strong>Верхних частот:</strong> генератор → <strong>C</strong> → выход (CH2) → <strong>R</strong> → масса.</li>
+<li class="list__item">CH1 всегда на входе (у генератора).</li>
+</ul>
+<h3 class="article__h3">Таблица — как считать строку</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">U<sub class="math__sub">IN</sub> = деления<sub class="math__sub">CH1</sub> · чувствительность<sub class="math__sub">CH1</sub></span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">OUT</sub> = деления<sub class="math__sub">CH2</sub> · чувствительность<sub class="math__sub">CH2</sub></span></li>
+<li class="list__item"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span></li>
+<li class="list__item"><span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></li>
+</ol>
+<h3 class="article__h3">Граничная частота</h3>
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>   (1 кОм, 10 нФ → <strong>15,9 кГц</strong>)   ↔   <span class="math">k = 0,707</span>   ↔   <strong>−3 дБ</strong></p>
+<h3 class="article__h3">Быстрый пересчёт</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">k</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">0,707</th><th class="table__cell table__cell--head table__cell--center">0,5</th><th class="table__cell table__cell--head table__cell--center">0,1</th><th class="table__cell table__cell--head table__cell--center">0,033</th><th class="table__cell table__cell--head table__cell--center">0,01</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">дБ</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−3</td><td class="table__cell table__cell--center">−6</td><td class="table__cell table__cell--center">−20</td><td class="table__cell table__cell--center">−29,6</td><td class="table__cell table__cell--center">−40</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Наклон вне полосы пропускания: <strong>20 дБ/декаду</strong>.</li>
+<li class="list__item">График: ось f логарифмическая, точки крестиками, <strong>две прямые</strong>, не ломаная.</li>
+<li class="list__item">Сигнал слишком мал → уменьши В/дел на CH2.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../labs/03.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лабораторная 3: Исследование пассивных элементов: импеданс резистора, конденсатора и катушки</span></a>
+<a class="pager__link pager__link--next" href="../labs/05.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лабораторная 5: Диоды и транзисторы: светодиод, проверка транзистора, транзисторный ключ</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

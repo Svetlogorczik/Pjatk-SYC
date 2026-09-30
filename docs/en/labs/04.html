@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 4. Passive RC filters: low-pass and high-pass — SYC</title>
+<meta name="description" content="You build two filters from one resistor and one capacitor, measure how much signal gets through at eight frequencies, convert to decibels and read the cut-off frequency from the graph.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/04.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/04.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/04.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Lectures</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/labs/04.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/labs/04.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/labs/04.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">What you need to know before the class</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The idea</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Task 1 — the low-pass filter</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Task 2 — the high-pass filter</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">The graph and the cut-off frequency</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Practice tasks</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All labs">
+<p class="side-nav__title">All labs</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Getting to know the equipment</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Voltage and current measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Impedance of R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/04.html" aria-current="page"><span class="side-nav__num">4</span><span class="side-nav__text">RC filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Operational amplifier</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim and gates</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimisation (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Lab 4</p>
+<h1 class="article__title">Passive RC filters: low-pass and high-pass</h1>
+<p class="article__lead">You build two filters from one resistor and one capacitor, measure how much signal gets through at eight frequencies, convert to decibels and read the cut-off frequency from the graph.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a>
+<a class="button button--ghost" href="../lectures/03.html">Lecture for this lab: Lecture 3 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">What you need to know before the class</h2>
+<ul class="list">
+<li class="list__item">The voltage divider, the RC filter, decibels, the cut-off frequency — <a class="link" href="../lectures/03.html">lecture 3</a> (<strong>Quick summary</strong>).</li>
+<li class="list__item">Measuring a peak-to-peak voltage on two oscilloscope channels — <a class="link" href="../labs/03.html">lab 3</a>.</li>
+<li class="list__item">A calculator with a <strong>log</strong> key (base-10 logarithm).</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From lecture 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">"In the fourth lab we will build filters — RC low-pass and high-pass." And a remark about graphs: measured points are <strong>not connected with a zig-zag</strong>; a filter characteristic has to be approximated by <strong>two straight lines</strong>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">The idea</h2>
+<p class="article__p">A filter passes some frequencies and attenuates others. To measure that, for every frequency you compare the amplitude <strong>at the output</strong> with the amplitude <strong>at the input</strong>:</p>
+<div class="formula"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span>  k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s15.webp" alt="Characteristic of a low-pass filter: pass band, cut-off frequency (−3 dB), stop band" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Characteristic of a low-pass filter: pass band, cut-off frequency (−3 dB), stop band <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Horizontal axis: frequency on a <strong>logarithmic</strong> scale (10, 100, 1000…).</li>
+<li class="list__item">Vertical axis: gain in <strong>decibels</strong>.</li>
+<li class="list__item">The <strong>cut-off frequency</strong> <span class="math">f<sub class="math__sub">g</sub></span>: where the gain drops by <strong>3 dB</strong> (the amplitude is about 70.7% of the maximum).</li>
+</ul>
+<p class="article__p">For both class filters (<span class="math">R = 1 kΩ</span>, <span class="math">C = 10 nF</span>):</p>
+<div class="formula"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 1000 · 10 × 10<sup class="math__sup">−9</sup></span></span> ≈ 15.9 kHz</span></div>
+<h2 class="article__h2" id="s3">Task 1 — the low-pass filter</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s09.webp" alt="Diagram and photo of the wiring: 1000 Ω resistor in series, 10 nF capacitor to ground" width="1400" height="748" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Diagram and photo of the wiring: 1000 Ω resistor in series, 10 nF capacitor to ground <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Building the circuit</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Connect the generator signal (<strong>DDS</strong>) to one lead of the <strong>1 kΩ</strong> resistor.</li>
+<li class="steps__item">Join the other lead of the resistor to the <strong>10 nF</strong> capacitor — this is the filter's <strong>output</strong>.</li>
+<li class="steps__item">Connect the other lead of the capacitor to <strong>ground (GND)</strong>.</li>
+<li class="steps__item">Oscilloscope <strong>CH1</strong> — to the input (where the generator is).</li>
+<li class="steps__item">Oscilloscope <strong>CH2</strong> — to the output (the point between the resistor and the capacitor).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Measuring one frequency</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Set a sine of the first frequency in the table (<strong>100 Hz</strong>) on the generator.</li>
+<li class="steps__item">Oscilloscope: MODE → <strong>DUAL</strong>. Choose TIME/DIV so that you see 2–3 periods (for 100 Hz that is a few milliseconds per division).</li>
+<li class="steps__item">Choose VOLTS/DIV <strong>separately for each channel</strong> — so that the waveform spans several divisions.</li>
+<li class="steps__item">Count the divisions from trough to peak on CH1 and on CH2.</li>
+<li class="steps__item">Enter in the table: divisions and sensitivity for the input, divisions and sensitivity for the output.</li>
+<li class="steps__item">Compute <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> and <span class="math">k<sub class="math__sub">dB</sub></span>.</li>
+<li class="steps__item">Move on to the next frequency: 1 kHz, 10 kHz, 20 kHz, 50 kHz, 100 kHz, 500 kHz, 1 MHz.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s11.webp" alt="Low frequency: input and output have the same amplitude" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Low frequency: input and output have the same amplitude <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>When the output signal "disappears"</p>
+<div class="callout__body">
+<p class="article__p">At high frequencies a low-pass filter attenuates the signal so strongly that CH2 shows an almost flat line. That is not a fault — you have to <strong>increase the sensitivity of CH2</strong> (e.g. from 1 V/div to 20 mV/div).</p>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s12.webp" alt="500 kHz, CH2 at 1 V/div: the output signal is barely visible" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">500 kHz, CH2 at 1 V/div: the output signal is barely visible <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s13.webp" alt="The same after switching CH2 to 20 mV/div: the waveform spans 5 divisions" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The same after switching CH2 to 20 mV/div: the waveform spans 5 divisions <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s14.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s14.webp" alt="Filling in the table row for 500 kHz" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Filling in the table row for 500 kHz <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Examples from the lab materials</p>
+<div class="callout__body">
+<p class="article__p"><strong>Low frequency:</strong> CH1: 3 div × 1 V/div = 3 V; CH2: 3 div × 1 V/div = 3 V → <span class="math">k = 3/3 = 1</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 1 = 0 dB</span>.</p>
+<p class="article__p"><strong>500 kHz:</strong> CH1: 3 div × 1 V/div = 3 V; CH2: 5 div × 0.02 V/div = 0.1 V → <span class="math">k = 0.1/3 = 0.033</span> → <span class="math">k<sub class="math__sub">dB</sub> = 20 · log 0.033 = −29.6 dB</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Task 2 — the high-pass filter</h2>
+<p class="article__p">The same two components, but <strong>swapped</strong>: capacitor in series, resistor to ground.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s17.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s17.webp" alt="High-pass filter: 10 nF capacitor in series, 1000 Ω resistor to ground" width="1400" height="761" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">High-pass filter: 10 nF capacitor in series, 1000 Ω resistor to ground <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<p class="article__p">The measurement is identical; only the frequencies in the table differ: 100 Hz, 500 Hz, 1 kHz, 5 kHz, 10 kHz, 50 kHz, 100 kHz, 1 MHz. This time the signal "disappears" at <strong>low</strong> frequencies.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s19.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s19.webp" alt="Low frequency: the output is strongly attenuated" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Low frequency: the output is strongly attenuated <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab04-s21.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s21.webp" alt="High frequency: the output equals the input" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">High frequency: the output equals the input <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Examples from the lab materials</p>
+<div class="callout__body">
+<p class="article__p"><strong>Low frequency:</strong> CH1: 3 div × 1 V/div = 3 V; CH2: 3.6 div × 0.05 V/div = 0.18 V → <span class="math">k = 0.06</span> → <span class="math">k<sub class="math__sub">dB</sub> ≈ −24 dB</span>.</p>
+<p class="article__p"><strong>High frequency:</strong> CH1: 3 V; CH2: 3 V → <span class="math">k = 1</span> → <span class="math">0 dB</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">The graph and the cut-off frequency</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Draw the axes: frequency horizontally (a <strong>logarithmic scale</strong> — each next grid step is 10 times more), <span class="math">k<sub class="math__sub">dB</sub></span> vertically.</li>
+<li class="steps__item">Plot the eight points with <strong>crosses</strong>.</li>
+<li class="steps__item">Draw <strong>two straight lines</strong>: a horizontal one (in the pass band, at 0 dB) and a sloping one (in the stop band).</li>
+<li class="steps__item">Find where the characteristic crosses the <strong>−3 dB</strong> level and read the frequency — this is the "read" <span class="math">f<sub class="math__sub">g</sub></span>.</li>
+<li class="steps__item">Compute <span class="math">f<sub class="math__sub">g</sub></span> from the formula — the "calculated" <span class="math">f<sub class="math__sub">g</sub></span>. Compare the two.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab04-s22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab04-s22.webp" alt="Characteristic of the high-pass filter and reading the cut-off frequency" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Characteristic of the high-pass filter and reading the cut-off frequency <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>What to expect — theoretical values for R = 1 kΩ, C = 10 nF</p>
+<div class="callout__body">
+<p class="article__p">I computed them from the formulas in lecture 3. Your measurements should be similar (differences of 1–2 dB are normal).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center">Low-pass <span class="math">k<sub class="math__sub">dB</sub></span></th><th class="table__cell table__cell--head table__cell--center">High-pass <span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">100 Hz</td><td class="table__cell table__cell--center">0.0</td><td class="table__cell table__cell--center">−44.0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 Hz</td><td class="table__cell table__cell--center">0.0</td><td class="table__cell table__cell--center">−30.1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 kHz</td><td class="table__cell table__cell--center">0.0</td><td class="table__cell table__cell--center">−24.1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell table__cell--center">−0.4</td><td class="table__cell table__cell--center">−10.5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">10 kHz</td><td class="table__cell table__cell--center">−1.5</td><td class="table__cell table__cell--center">−5.5</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 kHz</td><td class="table__cell table__cell--center">−4.1</td><td class="table__cell table__cell--center">−2.1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell table__cell--center">−10.4</td><td class="table__cell table__cell--center">−0.4</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">100 kHz</td><td class="table__cell table__cell--center">−16.1</td><td class="table__cell table__cell--center">−0.1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">500 kHz</td><td class="table__cell table__cell--center">−30.0</td><td class="table__cell table__cell--center">0.0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">1 MHz</td><td class="table__cell table__cell--center">−36.0</td><td class="table__cell table__cell--center">0.0</td></tr>
+</tbody></table></div>
+<p class="article__p">If your low-pass filter gives −30 dB at 100 Hz, you most likely built a high-pass one (components swapped) or mixed up the channels.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Practice tasks</h2>
+<p class="article__p">A different filter than in class: <strong>R = 680 Ω, C = 47 nF</strong>.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Cut-off frequency</p>
+<div class="callout__body">
+<p class="article__p">Calculate the cut-off frequency of an RC filter with <span class="math">R = 680 Ω</span> and <span class="math">C = 47 nF</span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 680 · 47 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2.008 × 10<sup class="math__sup">−4</sup></span></span> ≈ 4980 Hz ≈ 5 kHz</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Fill in three table rows (low-pass filter)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head">CH1 (input)</th><th class="table__cell table__cell--head">CH2 (output)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 kHz</td><td class="table__cell">4 div at 0.5 V/div</td><td class="table__cell">3.7 div at 0.5 V/div</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell">4 div at 0.5 V/div</td><td class="table__cell">2.8 div at 0.5 V/div</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell">4 div at 0.5 V/div</td><td class="table__cell">4 div at 50 mV/div</td></tr>
+</tbody></table></div>
+<p class="article__p">Compute <span class="math">U<sub class="math__sub">IN</sub></span>, <span class="math">U<sub class="math__sub">OUT</sub></span>, <span class="math">k</span> and <span class="math">k<sub class="math__sub">dB</sub></span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">f</th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">IN</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">U<sub class="math__sub">OUT</sub></span></th><th class="table__cell table__cell--head table__cell--center">k</th><th class="table__cell table__cell--head table__cell--center"><span class="math">k<sub class="math__sub">dB</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 kHz</td><td class="table__cell table__cell--center">2.0 V</td><td class="table__cell table__cell--center">1.85 V</td><td class="table__cell table__cell--center">0.925</td><td class="table__cell table__cell--center">−0.7 dB</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">5 kHz</td><td class="table__cell table__cell--center">2.0 V</td><td class="table__cell table__cell--center">1.40 V</td><td class="table__cell table__cell--center">0.70</td><td class="table__cell table__cell--center">−3.1 dB</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">50 kHz</td><td class="table__cell table__cell--center">2.0 V</td><td class="table__cell table__cell--center">0.20 V</td><td class="table__cell table__cell--center">0.10</td><td class="table__cell table__cell--center">−20.0 dB</td></tr>
+</tbody></table></div>
+<p class="article__p">At 5 kHz we get about −3 dB — so that is the cut-off frequency (as in task 1). At 50 kHz, a decade higher, it is −20 dB — exactly the 20 dB/dec slope.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Decibels both ways</p>
+<div class="callout__body">
+<p class="article__p">(a) How many decibels is <span class="math">k = 0.25</span>?  (b) Which <span class="math">k</span> corresponds to −6 dB?  (c) The input signal is 3 V and the filter attenuates by 40 dB. How many volts are at the output?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p">(a) <span class="math">20 · log 0.25 = −12.0 dB</span></p>
+<p class="article__p">(b) <span class="math">k = 10<sup class="math__sup">−6/20</sup> = 10<sup class="math__sup">−0.3</sup> = 0.50</span></p>
+<p class="article__p">(c) −40 dB is <span class="math">k = 0.01</span> → <span class="math">U<sub class="math__sub">OUT</sub> = 3 · 0.01 = 0.03 V = 30 mV</span></p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. The high-pass filter</p>
+<div class="callout__body">
+<p class="article__p">From the same components (680 Ω, 47 nF) we build a high-pass filter. At what frequency will the attenuation be about 20 dB? And what will it be at 50 kHz?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p">A high-pass filter falls 20 dB per decade <strong>below</strong> <span class="math">f<sub class="math__sub">g</sub></span>, so −20 dB is at <span class="math">f<sub class="math__sub">g</sub>/10 ≈ 500 Hz</span>.</p>
+<p class="article__p">50 kHz is a decade above <span class="math">f<sub class="math__sub">g</sub></span> — the signal passes practically unchanged: about 0 dB.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>What costs points most often</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Entering the amplitude of <strong>one</strong> channel with an unchanged sensitivity — and then getting <span class="math">k &gt; 1</span> for a passive filter (impossible: a passive filter does not amplify).</li>
+<li class="list__item">The natural logarithm (<code class="inline-code">ln</code>) instead of the base-10 one (<code class="inline-code">log</code>).</li>
+<li class="list__item">Forgetting the minus: for <span class="math">k &lt; 1</span> the decibels are <strong>negative</strong>.</li>
+<li class="list__item">Mixing up "mV/div" and "V/div" in the sensitivity.</li>
+<li class="list__item">Connecting the points on the graph with a zig-zag instead of two straight lines.</li>
+<li class="list__item">Not adjusting TIME/DIV: at 1 MHz with the setting for 100 Hz you only see a "blurred band".</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Circuits</h3>
+<ul class="list">
+<li class="list__item"><strong>Low-pass:</strong> generator → <strong>R</strong> → output (CH2) → <strong>C</strong> → ground.</li>
+<li class="list__item"><strong>High-pass:</strong> generator → <strong>C</strong> → output (CH2) → <strong>R</strong> → ground.</li>
+<li class="list__item">CH1 always at the input (at the generator).</li>
+</ul>
+<h3 class="article__h3">The table — how to compute a row</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">U<sub class="math__sub">IN</sub> = divisions<sub class="math__sub">CH1</sub> · sensitivity<sub class="math__sub">CH1</sub></span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">OUT</sub> = divisions<sub class="math__sub">CH2</sub> · sensitivity<sub class="math__sub">CH2</sub></span></li>
+<li class="list__item"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span></li>
+<li class="list__item"><span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></li>
+</ol>
+<h3 class="article__h3">Cut-off frequency</h3>
+<p class="article__p"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>   (1 kΩ, 10 nF → <strong>15.9 kHz</strong>)   ↔   <span class="math">k = 0.707</span>   ↔   <strong>−3 dB</strong></p>
+<h3 class="article__h3">Quick conversions</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">k</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">0.707</th><th class="table__cell table__cell--head table__cell--center">0.5</th><th class="table__cell table__cell--head table__cell--center">0.1</th><th class="table__cell table__cell--head table__cell--center">0.033</th><th class="table__cell table__cell--head table__cell--center">0.01</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">dB</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−3</td><td class="table__cell table__cell--center">−6</td><td class="table__cell table__cell--center">−20</td><td class="table__cell table__cell--center">−29.6</td><td class="table__cell table__cell--center">−40</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Slope outside the pass band: <strong>20 dB/decade</strong>.</li>
+<li class="list__item">Graph: logarithmic f axis, points as crosses, <strong>two straight lines</strong>, no zig-zag.</li>
+<li class="list__item">Signal too small → reduce V/div on CH2.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../labs/03.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lab 3: Passive components: the impedance of a resistor, a capacitor and an inductor</span></a>
+<a class="pager__link pager__link--next" href="../labs/05.html"><span class="pager__dir">Next →</span><span class="pager__title">Lab 5: Diodes and transistors: the LED, testing a transistor, the transistor switch</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

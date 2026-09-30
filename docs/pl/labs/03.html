@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 3. Badanie elementów pasywnych: impedancja rezystora, kondensatora i cewki — SYC</title>
+<meta name="description" content="Na oscyloskopie oglądasz jednocześnie napięcie i prąd elementu. Z dwóch sinusoid odczytujesz dwie liczby — stosunek amplitud i przesunięcie — i składasz z nich impedancję jako liczbę zespoloną.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/03.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/03.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/03.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/03.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/03.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/03.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Pomysł pomiaru</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Układ pomiarowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Co wpisać do sprawozdania</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Zadanie 1 — rezystor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Zadanie 2 — kondensator</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Zadanie 3 — cewka</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Jak rozpoznać znak kąta</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/03.html" aria-current="page"><span class="side-nav__num">3</span><span class="side-nav__text">Impedancja R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Filtry RC</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Wzmacniacz operacyjny</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim i bramki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimalizacja (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 3</p>
+<h1 class="article__title">Badanie elementów pasywnych: impedancja rezystora, kondensatora i cewki</h1>
+<p class="article__lead">Na oscyloskopie oglądasz jednocześnie napięcie i prąd elementu. Z dwóch sinusoid odczytujesz dwie liczby — stosunek amplitud i przesunięcie — i składasz z nich impedancję jako liczbę zespoloną.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/02.html">Wykład do tego ćwiczenia: Wykład 2 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Czym jest impedancja, reaktancja i faza — <a class="link" href="../lectures/02.html">wykład 2</a> (<strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Jak odczytać amplitudę i okres z oscyloskopu — <a class="link" href="../labs/01.html">ćwiczenie 1</a>.</li>
+<li class="list__item">Na kalkulatorze: sinus i cosinus w <strong>stopniach</strong> (tryb DEG).</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">„Spróbujecie zmierzyć i zapisać impedancję kondensatora, cewki i rezystora jako liczbę zespoloną (…) tę liczbę zespoloną będzie można w jakiś sposób dotknąć, zobaczyć, że nie jest to tylko abstrakcja matematyczna.”</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Pomysł pomiaru</h2>
+<p class="article__p">Impedancja to <span class="math">Z = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span>. Napięcie oscyloskop pokaże od razu. Ale <strong>oscyloskop nie mierzy prądu</strong> — więc robimy sztuczkę: w szereg z badanym elementem włączamy mały rezystor <strong>10 Ω</strong> i mierzymy napięcie na nim. Z prawa Ohma prąd to to napięcie podzielone przez 10 Ω.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s11.webp" alt="Cel pomiaru: amplituda napięcia, amplituda prądu i kąt przesunięcia" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Cel pomiaru: amplituda napięcia, amplituda prądu i kąt przesunięcia <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Mierzymy trzy rzeczy:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>amplitudę napięcia</strong> (kanał CH1),</li>
+<li class="list__item"><strong>amplitudę prądu</strong> (kanał CH2 — napięcie na rezystorze 10 Ω, podzielone przez 10),</li>
+<li class="list__item"><strong>przesunięcie w czasie</strong> między jednym a drugim przebiegiem.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s10.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s10.webp" alt="Impedancja w postaci biegunowej: moduł |Z| i kąt θ; część rzeczywista to rezystancja, urojona — reaktancja" width="1400" height="781" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Impedancja w postaci biegunowej: moduł |Z| i kąt θ; część rzeczywista to rezystancja, urojona — reaktancja <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s3">Układ pomiarowy</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s17.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s17.webp" alt="Schemat i zdjęcie połączeń dla rezystora: badany element i rezystor 10 Ω „w jednej linii”" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat i zdjęcie połączeń dla rezystora: badany element i rezystor 10 Ω „w jednej linii” <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Budowa układu (taka sama dla R, C i L)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Na płytce stykowej ustaw <strong>szeregowo</strong> („w jednej linii”): badany element, a za nim rezystor <strong>10 Ω</strong>.</li>
+<li class="steps__item">Sygnał z generatora (<strong>DDS</strong>) podłącz do wolnej nóżki badanego elementu.</li>
+<li class="steps__item"><strong>Masę (GND)</strong> podłącz do wolnej nóżki rezystora 10 Ω.</li>
+<li class="steps__item"><strong>CH1</strong> oscyloskopu — do punktu, w którym wchodzi sygnał z generatora (napięcie na całym układzie).</li>
+<li class="steps__item"><strong>CH2</strong> oscyloskopu — do punktu <strong>między</strong> badanym elementem a rezystorem 10 Ω (napięcie na rezystorze 10 Ω, czyli „prąd”).</li>
+<li class="steps__item">Generator: <strong>sinus, 100 kHz</strong>.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Ustawienia oscyloskopu (z materiałów do ćwiczeń)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>MODE → DUAL</strong> — widać oba kanały naraz.</li>
+<li class="steps__item"><strong>TIME/DIV = 1 µs</strong> — okres sygnału 100 kHz to 10 µs, czyli dokładnie <strong>10 działek</strong>.</li>
+<li class="steps__item"><strong>CH1: 0,5 V/dz</strong>, <strong>CH2: 50 mV/dz (= 0,05 V/dz)</strong>.</li>
+<li class="steps__item">Pokrętłami POSITION rozsuń przebiegi: CH1 w górnej połowie ekranu, CH2 w dolnej.</li>
+<li class="steps__item">Pokrętłem LEVEL zatrzymaj obraz.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">CH1 mierzy napięcie na badanym elemencie <strong>razem</strong> z rezystorem 10 Ω. Rezystor jest mały, więc w sprawozdaniu się to pomija, ale wynik |Z| wychodzi przez to odrobinę zawyżony (najbardziej widać to przy rezystorze).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Co wpisać do sprawozdania</h2>
+<p class="article__p">Dla każdego z trzech elementów wypełniasz te same trzy części.</p>
+<p class="article__p"><strong>A. Przesunięcie fazowe</strong></p>
+<div class="formula"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></div>
+<p class="article__p"><span class="math">T</span> — okres w działkach, <span class="math">t<sub class="math__sub">p</sub></span> — odległość w poziomie między szczytem napięcia a szczytem prądu, w działkach.</p>
+<p class="article__p"><strong>B. Moduł impedancji</strong></p>
+<div class="formula"><span class="math">U<sub class="math__sub">pp</sub> = działki · czułość<sub class="math__sub">CH1</sub>  UI<sub class="math__sub">pp</sub> = działki · czułość<sub class="math__sub">CH2</sub>  I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10 Ω</span></span>  |Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></div>
+<p class="article__p"><strong>C. Impedancja jako liczba zespolona</strong></p>
+<div class="formula"><span class="math">Z = |Z| · e<sup class="math__sup">jφ</sup> = R + jX  R = |Z| · cos φ  X = |Z| · sin φ</span></div>
+<h2 class="article__h2" id="s5">Zadanie 1 — rezystor</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s18.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s18.webp" alt="Rezystor 100 Ω: oba przebiegi mają szczyty w tym samym miejscu" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Rezystor 100 Ω: oba przebiegi mają szczyty w tym samym miejscu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z materiałów do ćwiczeń (rezystor 100 Ω)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Okres <span class="math">T = 10</span> działek, przesunięcie <span class="math">t<sub class="math__sub">p</sub> = 0</span> („szczyt pod szczytem”) → <span class="math">φ = 0°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 3 dz · 0,5 V/dz = 1,5 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 3 dz · 0,05 V/dz = 0,15 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">0,15</span><span class="math__den">10</span></span> = 0,015 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">1,5</span><span class="math__den">0,015</span></span> = 100 Ω</span></li>
+<li class="list__item"><span class="math">Z = 100 · e<sup class="math__sup">j0°</sup> = 100 + j · 0 Ω</span> — sama rezystancja, brak reaktancji.</li>
+</ul>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s19.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s19.webp" alt="Rezystor: kąt θ = 0°" width="1024" height="888" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Rezystor: kąt θ = 0° <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s6">Zadanie 2 — kondensator</h2>
+<p class="article__p">Zamiast rezystora 100 Ω wstawiasz kondensator <strong>10 nF</strong>. Reszta układu bez zmian.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s23.webp" alt="Kondensator 10 nF: przebieg prądu jest przesunięty o ćwierć okresu" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kondensator 10 nF: przebieg prądu jest przesunięty o ćwierć okresu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z materiałów do ćwiczeń (kondensator 10 nF)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><span class="math">T = 10</span> działek, <span class="math">t<sub class="math__sub">p</sub> = 2,5</span> działki → <span class="math">φ = <span class="math__frac"><span class="math__num">2,5</span><span class="math__den">10</span></span> · 360° = 90°</span>; prąd <strong>wyprzedza</strong> napięcie, więc kąt impedancji jest <strong>ujemny</strong>: <span class="math">φ = −90°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 4 dz · 0,5 = 2 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 2,5 dz · 0,05 = 0,125 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = 0,0125 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2</span><span class="math__den">0,0125</span></span> = 160 Ω</span></li>
+<li class="list__item"><span class="math">Z = 160 · e<sup class="math__sup">−j90°</sup> = 0 − j · 160 Ω</span></li>
+</ul>
+<p class="article__p"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Sprawdzenie z teorii: <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 100 000 · 10 × 10<sup class="math__sup">−9</sup></span></span> = 159 Ω</span> — zgadza się.</p>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s24.webp" alt="Kondensator: kąt θ = −90°" width="1099" height="883" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kondensator: kąt θ = −90° <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s7">Zadanie 3 — cewka</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab03-s28.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s28.webp" alt="Cewka: prąd spóźnia się o ćwierć okresu" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Cewka: prąd spóźnia się o ćwierć okresu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z materiałów do ćwiczeń (cewka)</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><span class="math">T = 10</span> działek, <span class="math">t<sub class="math__sub">p</sub> = 2,5</span> działki → <span class="math">90°</span>; prąd <strong>spóźnia się</strong> za napięciem, więc kąt jest <strong>dodatni</strong>: <span class="math">φ = +90°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = 4 dz · 0,5 = 2 V</span></li>
+<li class="list__item"><span class="math">UI<sub class="math__sub">pp</sub> = 3,0 dz · 0,05 = 0,15 V</span> → <span class="math">I<sub class="math__sub">pp</sub> = 0,015 A</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2</span><span class="math__den">0,015</span></span> = 133 Ω</span></li>
+<li class="list__item"><span class="math">Z = 133 · e<sup class="math__sup">+j90°</sup> = 0 + j · 133 Ω</span></li>
+</ul>
+</div>
+</div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s29.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s29.webp" alt="Cewka: kąt θ = +90°" width="1109" height="883" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Cewka: kąt θ = +90° <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s8">Jak rozpoznać znak kąta</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Co widać na ekranie</th><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head table__cell--center">Znak φ</th><th class="table__cell table__cell--head">Zapis</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">szczyty w tym samym miejscu</td><td class="table__cell">rezystor</td><td class="table__cell table__cell--center">0</td><td class="table__cell"><span class="math">R + j0</span></td></tr>
+<tr class="table__row"><td class="table__cell">szczyt <strong>prądu (CH2) wcześniej</strong> — bardziej w lewo</td><td class="table__cell">kondensator</td><td class="table__cell table__cell--center"><strong>−</strong></td><td class="table__cell"><span class="math">R − jX</span></td></tr>
+<tr class="table__row"><td class="table__cell">szczyt <strong>prądu (CH2) później</strong> — bardziej w prawo</td><td class="table__cell">cewka</td><td class="table__cell table__cell--center"><strong>+</strong></td><td class="table__cell"><span class="math">R + jX</span></td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Rada od autora strony</p>
+<div class="callout__body">
+<p class="article__p">Na ekranie czas płynie w prawo, więc to, co jest <strong>bardziej po lewej, zdarzyło się wcześniej</strong>. Porównuj zawsze szczyty leżące najbliżej siebie. Do rysunku w sprawozdaniu przerysuj oba przebiegi z zaznaczonym T i <span class="math">t<sub class="math__sub">p</sub></span> — to też jest oceniane.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Zadania treningowe</h2>
+<p class="article__p">Dane są inne niż na zajęciach (inna częstotliwość i inne elementy). We wszystkich zadaniach prąd mierzony jest na rezystorze 10 Ω.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Element nr 1</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. Na ekranie: okres 8 działek, szczyty obu przebiegów w tym samym miejscu. CH1: 4,4 działki przy 0,5 V/dz. CH2: 4 działki przy 20 mV/dz. Wyznacz Z. Co to za element?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">0</span><span class="math__den">8</span></span> · 360° = 0°</span></p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 4,4 · 0,5 = 2,2 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 4 · 0,02 = 0,08 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0,008 A</span></p>
+<p class="article__p"><span class="math">|Z| = <span class="math__frac"><span class="math__num">2,2</span><span class="math__den">0,008</span></span> = 275 Ω</span>   →   <span class="math">Z = 275 · e<sup class="math__sup">j0°</sup> = 275 + j0 Ω</span></p>
+<p class="article__p">To rezystor (ok. 270 Ω; nadwyżka to m.in. rezystor pomiarowy 10 Ω).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Element nr 2</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. Okres 8 działek; szczyt przebiegu CH2 jest o 2 działki <strong>w lewo</strong> od szczytu CH1. CH1: 5 działek przy 0,5 V/dz. CH2: 3,4 działki przy 50 mV/dz. Wyznacz Z. Co to za element i jaką ma wartość?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">2</span><span class="math__den">8</span></span> · 360° = 90°</span>; prąd wcześniej niż napięcie → <span class="math">φ = −90°</span> → kondensator.</p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 2,5 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 3,4 · 0,05 = 0,17 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0,017 A</span>;   <span class="math">|Z| = <span class="math__frac"><span class="math__num">2,5</span><span class="math__den">0,017</span></span> = 147 Ω</span></p>
+<p class="article__p"><span class="math">Z = 147 · e<sup class="math__sup">−j90°</sup> = 0 − j147 Ω</span></p>
+<p class="article__p">Pojemność: <span class="math">C = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πf|Z|</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 50 000 · 147</span></span> ≈ 21,7 nF</span> — czyli kondensator 22 nF.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Element nr 3</p>
+<div class="callout__body">
+<p class="article__p">Generator: 50 kHz. Okres 8 działek; szczyt CH2 jest o 2 działki <strong>w prawo</strong> od szczytu CH1. CH1: 4 działki przy 0,5 V/dz. CH2: 3,8 działki przy 50 mV/dz. Wyznacz Z i wartość elementu.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = +90°</span> (prąd później) → cewka.</p>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 2,0 V</span>;   <span class="math">UI<sub class="math__sub">pp</sub> = 3,8 · 0,05 = 0,19 V</span>;   <span class="math">I<sub class="math__sub">pp</sub> = 0,019 A</span>;   <span class="math">|Z| = <span class="math__frac"><span class="math__num">2,0</span><span class="math__den">0,019</span></span> = 105 Ω</span></p>
+<p class="article__p"><span class="math">Z = 105 · e<sup class="math__sup">+j90°</sup> = 0 + j105 Ω</span></p>
+<p class="article__p">Indukcyjność: <span class="math">L = <span class="math__frac"><span class="math__num">|Z|</span><span class="math__den">2πf</span></span> = <span class="math__frac"><span class="math__num">105</span><span class="math__den">2π · 50 000</span></span> ≈ 334 µH</span> — czyli cewka ok. 330 µH.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Cewka rzeczywista</p>
+<div class="callout__body">
+<p class="article__p">Dla pewnej cewki zmierzono <span class="math">|Z| = 120 Ω</span>, a przesunięcie wyniosło 1,5 działki przy okresie 8 działek (prąd później). Zapisz impedancję w postaci <span class="math">R + jX</span>. Dlaczego kąt nie wynosi 90°?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">φ = <span class="math__frac"><span class="math__num">1,5</span><span class="math__den">8</span></span> · 360° = 67,5°</span></p>
+<p class="article__p"><span class="math">R = 120 · cos 67,5° = 120 · 0,383 = 46 Ω</span>;    <span class="math">X = 120 · sin 67,5° = 120 · 0,924 = 111 Ω</span></p>
+<p class="article__p"><span class="math">Z = 120 · e<sup class="math__sup">j67,5°</sup> = 46 + j111 Ω</span></p>
+<p class="article__p">Prawdziwa cewka to zwój drutu, który ma też zwykłą rezystancję — stąd niezerowa część rzeczywista i kąt mniejszy niż 90°.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Zapomnienie o dzieleniu przez 10 Ω (wpisanie napięcia zamiast prądu).</li>
+<li class="list__item">Pomylenie czułości kanałów: CH2 jest w <strong>miliwoltach</strong> na działkę (50 mV = 0,05 V).</li>
+<li class="list__item">Kalkulator w radianach zamiast w stopniach.</li>
+<li class="list__item">Brak znaku przy kącie dla kondensatora.</li>
+<li class="list__item">Pokrętło VAR poza pozycją CAL albo pomiar amplitudy „od zera do szczytu” w jednym kanale, a „od dołka do szczytu” w drugim — w obu kanałach mierz tak samo (międzyszczytowo).</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Układ</h3>
+<p class="article__p">Generator (sinus, 100 kHz) → <strong>badany element</strong> → <strong>10 Ω</strong> → masa.  CH1: wejście układu (napięcie).  CH2: na rezystorze 10 Ω (prąd).</p>
+<p class="article__p">Oscyloskop: DUAL, 1 µs/dz (T = 10 dz), CH1 0,5 V/dz, CH2 50 mV/dz.</p>
+<h3 class="article__h3">Obliczenia</h3>
+<ol class="list list--ordered">
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></li>
+<li class="list__item"><span class="math">U<sub class="math__sub">pp</sub> = dz · V/dz</span> (CH1);   <span class="math">UI<sub class="math__sub">pp</sub> = dz · V/dz</span> (CH2);   <span class="math">I<sub class="math__sub">pp</sub> = <span class="math__frac"><span class="math__num">UI<sub class="math__sub">pp</sub></span><span class="math__den">10</span></span></span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span></li>
+<li class="list__item"><span class="math">Z = |Z| e<sup class="math__sup">jφ</sup> = |Z| cos φ + j · |Z| sin φ</span></li>
+</ol>
+<h3 class="article__h3">Czego się spodziewać</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head table__cell--center">φ</th><th class="table__cell table__cell--head">Z</th><th class="table__cell table__cell--head">Na ekranie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Rezystor</td><td class="table__cell table__cell--center">0°</td><td class="table__cell"><span class="math">R + j0</span></td><td class="table__cell">szczyt pod szczytem</td></tr>
+<tr class="table__row"><td class="table__cell">Kondensator</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell"><span class="math">0 − j<span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">prąd wcześniej (w lewo)</td></tr>
+<tr class="table__row"><td class="table__cell">Cewka</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell"><span class="math">0 + j2πfL</span></td><td class="table__cell">prąd później (w prawo)</td></tr>
+</tbody></table></div>
+<p class="article__p">Ćwierć okresu = 90°.  10 nF przy 100 kHz ≈ 159 Ω.  Kalkulator w trybie <strong>DEG</strong>.</p>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/02.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 2: Pomiary napięć i prądów</span></a>
+<a class="pager__link pager__link--next" href="../labs/04.html"><span class="pager__dir">Następny →</span><span class="pager__title">Ćwiczenie 4: Filtry pasywne RC: dolnoprzepustowy i górnoprzepustowy</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

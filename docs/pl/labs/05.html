@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 5. Diody i tranzystory: LED, test tranzystora, klucz tranzystorowy — SYC</title>
+<meta name="description" content="Sprawdzasz, w którą stronę przewodzi dioda, multimetrem rozpoznajesz typ tranzystora i budujesz dwa klucze tranzystorowe — jeden włączany stanem wysokim, drugi niskim.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/05.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/05.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/05.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/05.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/05.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/05.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Zadanie 1 — dioda LED w obwodzie</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Zadanie 2 — pomiar tranzystora miernikiem</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Zadanie 3 — klucz tranzystorowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Impedancja R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Filtry RC</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/05.html" aria-current="page"><span class="side-nav__num">5</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Wzmacniacz operacyjny</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim i bramki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimalizacja (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 5</p>
+<h1 class="article__title">Diody i tranzystory: LED, test tranzystora, klucz tranzystorowy</h1>
+<p class="article__lead">Sprawdzasz, w którą stronę przewodzi dioda, multimetrem rozpoznajesz typ tranzystora i budujesz dwa klucze tranzystorowe — jeden włączany stanem wysokim, drugi niskim.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/04.html">Wykład do tego ćwiczenia: Wykład 4 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Złącze p-n, dioda, tranzystor NPN i PNP — <a class="link" href="../lectures/04.html">wykład 4</a> (<strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Jak działa płytka stykowa i multimetr — <a class="link" href="../labs/01.html">ćwiczenie 1</a>.</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">„Ćwiczenie piąte będzie poświęcone kluczom tranzystorowym. Czasami musimy do mikrokontrolera podłączyć jakieś większe urządzenie, które wymaga większych prądów — takie elementy przełączające są wtedy konieczne.”</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Zadanie 1 — dioda LED w obwodzie</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab05-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p12.webp" alt="Schemat z formularza: zasilanie 5 V, rezystor 1 kΩ i dioda LED" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat z formularza: zasilanie 5 V, rezystor 1 kΩ i dioda LED <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Budujesz najprostszy obwód: <strong>zasilanie 5 V → rezystor 1 kΩ → dioda LED → masa</strong> i sprawdzasz, <strong>przy którym ustawieniu diody świeci</strong>.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Rozpoznaj końcówki diody: <strong>dłuższa nóżka to anoda (+)</strong>, krótsza to katoda (−). Katodę wskazuje też ścięty bok obudowy.</li>
+<li class="steps__item">Na płytce stykowej połącz szeregowo rezystor 1 kΩ i diodę.</li>
+<li class="steps__item">Ustaw na zasilaczu <strong>5 V</strong>. Plus zasilacza — do rezystora, minus (masa) — do diody.</li>
+<li class="steps__item">Włącz zasilanie. Świeci? Zapisz, jak ustawiona jest dioda.</li>
+<li class="steps__item">Wyłącz zasilanie, <strong>obróć diodę</strong>, włącz ponownie. Zapisz, co się zmieniło.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p14.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p14.webp" alt="Zdjęcie układu: zasilacz 5 V, rezystor 1 kΩ i dioda LED na płytce" width="1400" height="874" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Zdjęcie układu: zasilacz 5 V, rezystor 1 kΩ i dioda LED na płytce <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Wynik:</strong> dioda świeci tylko wtedy, gdy <strong>anoda jest po stronie plusa</strong> (kierunek przewodzenia). Odwrócona — nie świeci (kierunek zaporowy).</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Po co ten rezystor</p>
+<div class="callout__body">
+<p class="article__p">Dioda po przekroczeniu napięcia progowego przewodzi „bez ograniczeń” — bez rezystora prąd urósłby tak bardzo, że LED by się spaliła. Rezystor ustala prąd:</p>
+<p class="article__p"><span class="math">I = <span class="math__frac"><span class="math__num">U<sub class="math__sub">zas</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">R</span></span> = <span class="math__frac"><span class="math__num">5 − 1,7</span><span class="math__den">1000</span></span> ≈ 3,3 mA</span></p>
+<p class="article__p">(1,7 V to napięcie przewodzenia czerwonej diody ze zdjęcia poniżej).</p>
+</div>
+</div>
+<h3 class="article__h3">Sprawdzanie diody multimetrem</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p13.webp" alt="Test diody: w kierunku zaporowym „.0L”, w kierunku przewodzenia 1,714 V" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Test diody: w kierunku zaporowym „.0L”, w kierunku przewodzenia 1,714 V <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Ustaw pokrętło multimetru na <strong>test diod</strong> (symbol diody).</li>
+<li class="steps__item">Czerwony przewód (+) do <strong>anody</strong> (dłuższa nóżka), czarny (−) do katody → miernik pokazuje <strong>napięcie przewodzenia</strong> (dla czerwonej LED ok. 1,7 V). Dioda jest sprawna i przewodzi.</li>
+<li class="steps__item">Zamień przewody → miernik pokazuje przekroczenie zakresu („.0L” albo „1”). Dioda nie przewodzi — i tak ma być.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">Jeśli dioda przewodzi w obie strony albo w żadną — jest uszkodzona.</p>
+<h2 class="article__h2" id="s3">Zadanie 2 — pomiar tranzystora miernikiem</h2>
+<p class="article__p">Tranzystor bipolarny to w uproszczeniu <strong>dwie diody</strong> ze wspólną bazą: jedna między bazą a emiterem, druga między bazą a kolektorem. Sprawdzając je testem diod, można ustalić <strong>typ tranzystora</strong> i czy jest sprawny.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p22.webp" alt="Test tranzystora BC327: rozkład nóżek i dwa przykładowe pomiary" width="1400" height="774" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Test tranzystora BC327: rozkład nóżek i dwa przykładowe pomiary <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Na zajęciach są dwa tranzystory w obudowie TO-92: <strong>BC338 (NPN)</strong> i <strong>BC327 (PNP)</strong>. Rozkład wyprowadzeń (z karty katalogowej): <strong>1 — kolektor, 2 — baza, 3 — emiter</strong>.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Multimetr na <strong>test diod</strong>.</li>
+<li class="steps__item">Wykonaj <strong>sześć pomiarów</strong> — każdą parę nóżek w obu kierunkach. „+” to czerwony przewód, „−” to czarny.</li>
+<li class="steps__item">Przy każdym wpisz <strong>P</strong> (przewodzenie — miernik pokazuje ok. 0,5–0,7 V) albo <strong>Z</strong> (zaporowo — „1” / „.0L”).</li>
+<li class="steps__item">Na podstawie tabeli określ typ (n-p-n / p-n-p) i stan tranzystora.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">Tak wygląda wypełniona tabela dla sprawnego tranzystora:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Pomiar</th><th class="table__cell table__cell--head table__cell--center"><strong>NPN</strong> (BC338)</th><th class="table__cell table__cell--head table__cell--center"><strong>PNP</strong> (BC327)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Baza + / Emiter −</td><td class="table__cell table__cell--center"><strong>P</strong></td><td class="table__cell table__cell--center">Z</td></tr>
+<tr class="table__row"><td class="table__cell">Baza − / Emiter +</td><td class="table__cell table__cell--center">Z</td><td class="table__cell table__cell--center"><strong>P</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Baza + / Kolektor −</td><td class="table__cell table__cell--center"><strong>P</strong></td><td class="table__cell table__cell--center">Z</td></tr>
+<tr class="table__row"><td class="table__cell">Baza − / Kolektor +</td><td class="table__cell table__cell--center">Z</td><td class="table__cell table__cell--center"><strong>P</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Emiter + / Kolektor −</td><td class="table__cell table__cell--center">Z</td><td class="table__cell table__cell--center">Z</td></tr>
+<tr class="table__row"><td class="table__cell">Emiter − / Kolektor +</td><td class="table__cell table__cell--center">Z</td><td class="table__cell table__cell--center">Z</td></tr>
+</tbody></table></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">W tranzystorze <strong>NPN</strong> baza jest typu <strong>p</strong> — przewodzi, gdy na bazie jest <strong>plus</strong>. W <strong>PNP</strong> baza jest typu <strong>n</strong> — przewodzi, gdy na bazie jest <strong>minus</strong>. Między emiterem a kolektorem nigdy nie powinno przewodzić.</p>
+</div>
+</div>
+<p class="article__p">Tranzystor jest <strong>niesprawny</strong>, jeśli któreś złącze przewodzi w obie strony, nie przewodzi w żadną, albo jeśli przewodzi między emiterem a kolektorem.</p>
+<h2 class="article__h2" id="s4">Zadanie 3 — klucz tranzystorowy</h2>
+<p class="article__p">Tranzystor ma działać jak <strong>wyłącznik</strong> diody LED, sterowany sygnałem z generatora.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p23.webp" alt="Schematy z formularza: klucz na tranzystorze n-p-n (aktywacja stanem wysokim) i p-n-p (aktywacja stanem niskim)" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schematy z formularza: klucz na tranzystorze n-p-n (aktywacja stanem wysokim) i p-n-p (aktywacja stanem niskim) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h3 class="article__h3">3.1 Tranzystor n-p-n (BC338) — włączany stanem wysokim</h3>
+<p class="article__p">Obwód: <strong>VCC → LED → 1 kΩ → kolektor</strong>; <strong>emiter → masa</strong>; <strong>baza ← rezystor 10 kΩ ← generator</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p25.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p25.webp" alt="Schemat i płytka: BC338, rezystor bazy 10 kΩ, LED z rezystorem 1 kΩ" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat i płytka: BC338, rezystor bazy 10 kΩ, LED z rezystorem 1 kΩ <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Wepnij tranzystor BC338 tak, żeby każda nóżka była w <strong>osobnej</strong> kolumnie płytki.</li>
+<li class="steps__item"><strong>Emiter</strong> połącz z masą (GND).</li>
+<li class="steps__item">Do <strong>kolektora</strong> podłącz rezystor 1 kΩ, do niego katodę diody LED, a anodę diody — do plusa zasilania (VCC).</li>
+<li class="steps__item">Do <strong>bazy</strong> podłącz rezystor 10 kΩ; jego drugi koniec to wejście sterujące.</li>
+<li class="steps__item">Na wejście sterujące podaj sygnał z generatora (<strong>DDS</strong>). Masa generatora — do wspólnej masy.</li>
+<li class="steps__item">Na generatorze ustaw <strong>bardzo małą częstotliwość</strong> (np. 0,5 Hz), żeby gołym okiem było widać mruganie.</li>
+<li class="steps__item">Ten sam sygnał obserwuj na oscyloskopie i zanotuj, <strong>przy jakim poziomie sygnału dioda świeci</strong>.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p24.webp" alt="Całe stanowisko: generator, zasilacz i płytka z tranzystorem NPN" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Całe stanowisko: generator, zasilacz i płytka z tranzystorem NPN <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p26.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p26.webp" alt="Dioda świeci, gdy sygnał sterujący jest na poziomie wysokim (+4 V)" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Dioda świeci, gdy sygnał sterujący jest na poziomie wysokim (+4 V) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Wynik:</strong> dioda świeci, gdy sygnał sterujący jest <strong>wysoki</strong> — prąd wpływa do bazy, tranzystor się nasyca i „zwiera” kolektor z emiterem.</p>
+<h3 class="article__h3">3.2 Tranzystor p-n-p (BC327) — włączany stanem niskim</h3>
+<p class="article__p">Wszystko jest „do góry nogami”: <strong>emiter → VCC</strong>; <strong>kolektor → LED → 1 kΩ → masa</strong>; <strong>baza ← 10 kΩ ← generator</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p28.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p28.webp" alt="Schemat i płytka: BC327, emiter do plusa, obciążenie między kolektorem a masą" width="1400" height="779" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat i płytka: BC327, emiter do plusa, obciążenie między kolektorem a masą <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab05-p29.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab05-p29.webp" alt="Dioda świeci, gdy sygnał sterujący jest na poziomie niskim" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Dioda świeci, gdy sygnał sterujący jest na poziomie niskim <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Wynik:</strong> dioda świeci, gdy sygnał sterujący jest <strong>niski</strong> — wtedy baza ma niższy potencjał niż emiter i prąd bazy może płynąć.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">NPN (BC338)</th><th class="table__cell table__cell--head">PNP (BC327)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Emiter</td><td class="table__cell">do masy</td><td class="table__cell">do plusa zasilania</td></tr>
+<tr class="table__row"><td class="table__cell">Obciążenie (LED + 1 kΩ)</td><td class="table__cell">między plusem a kolektorem</td><td class="table__cell">między kolektorem a masą</td></tr>
+<tr class="table__row"><td class="table__cell">Włącza się, gdy sygnał na bazie jest</td><td class="table__cell"><strong>wysoki</strong></td><td class="table__cell"><strong>niski</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Warunek</td><td class="table__cell"><span class="math">U<sub class="math__sub">B</sub></span> o ok. 0,6 V <strong>wyższe</strong> od <span class="math">U<sub class="math__sub">E</sub></span></td><td class="table__cell"><span class="math">U<sub class="math__sub">B</sub></span> o ok. 0,6 V <strong>niższe</strong> od <span class="math">U<sub class="math__sub">E</sub></span></td></tr>
+</tbody></table></div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Skąd wiadomo, że tranzystor „wystarczy”</p>
+<div class="callout__body">
+<p class="article__p">Dla klucza NPN przy sygnale +4 V: prąd bazy <span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">4 − 0,6</span><span class="math__den">10 000</span></span> = 0,34 mA</span>. Przy wzmocnieniu β ≥ 100 tranzystor mógłby przepuścić nawet 34 mA. Dioda z rezystorem 1 kΩ potrzebuje tylko ok. 3 mA — tranzystor jest więc <strong>mocno nasycony</strong> i zachowuje się jak zwarty wyłącznik. O to chodzi w kluczu: prądu bazy ma być „z zapasem”.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Zadania treningowe</h2>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Dobór rezystora do diody</p>
+<div class="callout__body">
+<p class="article__p">Zasilanie 9 V, zielona dioda LED o napięciu przewodzenia 2,2 V. Chcemy, żeby płynęło ok. 5 mA. Jaki rezystor wybrać z szeregu: 1 kΩ, 1,5 kΩ, 2,2 kΩ? Jaki prąd popłynie?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">R = <span class="math__frac"><span class="math__num">9 − 2,2</span><span class="math__den">0,005</span></span> = 1360 Ω</span>. Najbliższy <strong>większy</strong> z szeregu to <strong>1,5 kΩ</strong> (większy = bezpieczniej).</p>
+<p class="article__p">Prąd: <span class="math">I = <span class="math__frac"><span class="math__num">6,8</span><span class="math__den">1500</span></span> = 4,5 mA</span>.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Rozpoznaj tranzystor</p>
+<div class="callout__body">
+<p class="article__p">Test diod dał wyniki: B+/E−: 0,652 V; B−/E+: „1”; B+/C−: 0,648 V; B−/C+: „1”; E+/C−: „1”; E−/C+: „1”. Jaki to typ i czy tranzystor jest sprawny? A co, jeśli dla innego tranzystora pomiary E+/C− i E−/C+ dają 0,02 V?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Przewodzi, gdy baza ma <strong>plus</strong> → baza typu p → tranzystor <strong>NPN</strong>. Oba złącza przewodzą w jedną stronę, między E i C nie przewodzi → <strong>sprawny</strong>.</p>
+<p class="article__p">Drugi tranzystor: przewodzenie między emiterem a kolektorem w obu kierunkach (prawie zero woltów) oznacza <strong>zwarcie</strong> — tranzystor uszkodzony.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Czy klucz się nasyci?</p>
+<div class="callout__body">
+<p class="article__p">Klucz NPN: sygnał sterujący 5 V, rezystor bazy 22 kΩ, β = 150. Obciążenie: LED (2 V) z rezystorem 470 Ω, zasilane z 5 V. Czy tranzystor jest nasycony? A gdyby rezystor bazy miał 1 MΩ?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">5 − 0,6</span><span class="math__den">22 000</span></span> = 0,2 mA</span> → tranzystor „umie” przepuścić do <span class="math">150 · 0,2 = 30 mA</span>.</p>
+<p class="article__p">Obciążenie potrzebuje <span class="math"><span class="math__frac"><span class="math__num">5 − 2 − 0,2</span><span class="math__den">470</span></span> ≈ 6 mA</span> (0,2 V to napięcie na nasyconym tranzystorze). 30 mA > 6 mA → <strong>nasycony</strong>, dioda świeci pełną jasnością.</p>
+<p class="article__p">Dla 1 MΩ: <span class="math">I<sub class="math__sub">B</sub> = 4,4 µA</span> → najwyżej <span class="math">0,66 mA</span> → to mniej niż 6 mA → tranzystor <strong>nie jest nasycony</strong>, dioda ledwo się żarzy.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Pułapka z kluczem PNP</p>
+<div class="callout__body">
+<p class="article__p">Klucz PNP: emiter na +5 V, rezystor bazy 10 kΩ. Sygnał sterujący zmienia się między 0 V a 4 V. Czy dioda zgaśnie przy 4 V?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Przy 4 V baza jest o 1 V niżej niż emiter — to więcej niż 0,6 V, więc złącze baza–emiter <strong>nadal przewodzi</strong>: <span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">5 − 0,6 − 4</span><span class="math__den">10 000</span></span> = 0,04 mA</span>, co przy β > 100 wystarcza na kilka miliamperów. <strong>Dioda nie zgaśnie.</strong></p>
+<p class="article__p">Żeby wyłączyć klucz PNP, sygnał sterujący musi dojść prawie do napięcia emitera (powyżej ok. 4,4 V) albo zasilanie musi być niższe od stanu wysokiego. Dlatego na zdjęciach z zajęć zasilacz jest ustawiony na ok. 3 V, a sygnał z generatora sięga +4 V.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Dioda wpięta tak, że obie nóżki są w <strong>tej samej</strong> kolumnie płytki (zwarta).</li>
+<li class="list__item">Pomylone nóżki tranzystora — patrz na płaską stronę obudowy i na rysunek z karty katalogowej.</li>
+<li class="list__item">Brak wspólnej masy między generatorem, zasilaczem i płytką.</li>
+<li class="list__item">Za duża częstotliwość generatora: dioda mruga tak szybko, że wygląda, jakby świeciła stale.</li>
+<li class="list__item">Brak rezystora przy diodzie albo w bazie.</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Dioda LED</h3>
+<ul class="list">
+<li class="list__item">Dłuższa nóżka = <strong>anoda (+)</strong>. Świeci, gdy anoda jest od strony plusa.</li>
+<li class="list__item">Zawsze z rezystorem:  <span class="math">R = <span class="math__frac"><span class="math__num">U<sub class="math__sub">zas</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">I</span></span></span>   (czerwona LED ≈ 1,7–2 V)</li>
+<li class="list__item">Test diod: (+) na anodzie → napięcie przewodzenia; odwrotnie → „1” / „.0L”.</li>
+</ul>
+<h3 class="article__h3">Test tranzystora (tryb testu diod)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head table__cell--center">Przewodzi, gdy baza ma</th><th class="table__cell table__cell--head table__cell--center">E–C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NPN</strong></td><td class="table__cell table__cell--center">plus (B+E−, B+C−)</td><td class="table__cell table__cell--center">nie przewodzi</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>PNP</strong></td><td class="table__cell table__cell--center">minus (B−E+, B−C+)</td><td class="table__cell table__cell--center">nie przewodzi</td></tr>
+</tbody></table></div>
+<p class="article__p">Dwa przewodzące pomiary (ok. 0,5–0,7 V) + cztery zaporowe = sprawny. TO-92 (BC338 / BC327): 1 kolektor, 2 baza, 3 emiter.</p>
+<h3 class="article__h3">Klucz tranzystorowy</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">NPN (BC338)</th><th class="table__cell table__cell--head">PNP (BC327)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Emiter</td><td class="table__cell">masa</td><td class="table__cell">+VCC</td></tr>
+<tr class="table__row"><td class="table__cell">LED + 1 kΩ</td><td class="table__cell">VCC → LED → R → kolektor</td><td class="table__cell">kolektor → LED → R → masa</td></tr>
+<tr class="table__row"><td class="table__cell">Baza</td><td class="table__cell">przez 10 kΩ z generatora</td><td class="table__cell">przez 10 kΩ z generatora</td></tr>
+<tr class="table__row"><td class="table__cell">Świeci przy stanie</td><td class="table__cell"><strong>wysokim</strong></td><td class="table__cell"><strong>niskim</strong></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">I<sub class="math__sub">B</sub> = <span class="math__frac"><span class="math__num">U<sub class="math__sub">ster</sub> − 0,6</span><span class="math__den">R<sub class="math__sub">B</sub></span></span></span>;   nasycenie, gdy <span class="math">β · I<sub class="math__sub">B</sub> &gt;</span> prąd obciążenia <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span>.</li>
+<li class="list__item">Generator na ok. 0,5 Hz, żeby było widać mruganie. Wspólna masa!</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/04.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 4: Filtry pasywne RC: dolnoprzepustowy i górnoprzepustowy</span></a>
+<a class="pager__link pager__link--next" href="../labs/06.html"><span class="pager__dir">Następny →</span><span class="pager__title">Ćwiczenie 6: Wzmacniacz operacyjny: wtórnik, komparator, wzmacniacz nieodwracający i odwracający</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

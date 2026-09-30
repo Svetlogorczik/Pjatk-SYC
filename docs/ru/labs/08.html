@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторная 8. Минимизация булевых функций: карта Карно, реализация на NAND и NOR — SYC</title>
+<meta name="description" content="Одну и ту же схему можно собрать из пятнадцати вентилей или из четырёх. На этом занятии ты учишься делать второе: таблица истинности → карта Карно → самая короткая формула → схема из одних вентилей NAND (или одних NOR).">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/08.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/08.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/08.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/labs/08.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/labs/08.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/labs/08.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Что нужно уметь перед занятием</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Рецепт в пять шагов</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Пример из материалов: робот</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Задание 1 на занятии: функция четырёх переменных на NAND</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Задание 2 на занятии: реализация на одних NOR</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Тренировочные задания</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лабораторные">
+<p class="side-nav__title">Все лабораторные</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Знакомимся с оборудованием</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Измерение напряжений и токов</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Импеданс R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">RC-фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Операционный усилитель</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim и вентили</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/08.html" aria-current="page"><span class="side-nav__num">8</span><span class="side-nav__text">Минимизация (Карно)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Лабораторная 8</p>
+<h1 class="article__title">Минимизация булевых функций: карта Карно, реализация на NAND и NOR</h1>
+<p class="article__lead">Одну и ту же схему можно собрать из пятнадцати вентилей или из четырёх. На этом занятии ты учишься делать второе: таблица истинности → карта Карно → самая короткая формула → схема из одних вентилей NAND (или одних NOR).</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a>
+<a class="button button--ghost" href="../lectures/07.html">Лекция к этой лабораторной: Лекция 7 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Что нужно уметь перед занятием</h2>
+<ul class="list">
+<li class="list__item">Карта Карно, код Грея, правило склеивания — <a class="link" href="../lectures/07.html">лекция 7</a> (<strong>Краткий конспект</strong>).</li>
+<li class="list__item">Работа в Logisim и кирпичики из NAND — <a class="link" href="../labs/07.html">лабораторная 7</a>.</li>
+</ul>
+<p class="article__p">На занятии два задания (со слайда лекции): <strong>функция четырёх переменных</strong>, которую назначает преподаватель, — минимальная форма на вентилях <strong>NAND</strong>; и управление <strong>роботом</strong> с прошлого занятия — только на вентилях <strong>NOR</strong>.</p>
+<h2 class="article__h2" id="s2">Рецепт в пять шагов</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Таблица истинности</strong> — выпиши, для каких комбинаций функция равна 1.</li>
+<li class="steps__item"><strong>Карта Карно</strong> — нарисуй сетку, подпиши столбцы (и строки) в порядке <strong>00, 01, 11, 10</strong> и впиши единицы.</li>
+<li class="steps__item"><strong>Группы</strong> — обведи единицы прямоугольниками по <strong>1, 2, 4 или 8</strong> клеток. Группы как можно больше, групп как можно меньше, они могут перекрываться, карта «заворачивается» на краях.</li>
+<li class="steps__item"><strong>Формула</strong> — для каждой группы запиши только те переменные, которые в ней <strong>не меняются</strong> (0 → с отрицанием, 1 → без). Группы соедини плюсами.</li>
+<li class="steps__item"><strong>Перевод на NAND</strong> — каждый вентиль AND и итоговый OR замени на NAND. Готово.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Самая частая ошибка</p>
+<div class="callout__body">
+<p class="article__p">Столбцы карты — это <strong>00, 01, 11, 10</strong>, а не 00, 01, 10, 11. Два последних столбца «переставлены», чтобы соседние клетки отличались только одним битом. Ошибка здесь портит всё дальнейшее.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Пример из материалов: робот</h2>
+<p class="article__p">Таблица истинности с <a class="link" href="../labs/07.html">прошлого занятия</a> попадает в две карты — отдельную для каждого мотора. Строка — датчик A, столбцы — датчики B и C.</p>
+<p class="article__p"><strong>Левый мотор (LM):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">A ↓ / BC →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Правый мотор (RM):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">A ↓ / BC →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p19.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab07-p19.webp" alt="Группы на картах Карно для обоих моторов и соответствующие им слагаемые формулы" width="1400" height="698" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Группы на картах Карно для обоих моторов и соответствующие им слагаемые формулы <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p"><strong>Группы для LM</strong> (три пары):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Группа</th><th class="table__cell table__cell--head">Клетки (ABC)</th><th class="table__cell table__cell--head">Что меняется</th><th class="table__cell table__cell--head">Что остаётся</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">жёлтая (вертикальная)</td><td class="table__cell">000, 100</td><td class="table__cell">A</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·<span class="math__bar">c</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">фиолетовая</td><td class="table__cell">100, 101</td><td class="table__cell">C</td><td class="table__cell"><span class="math">a·<span class="math__bar">b</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">красная (<strong>через край</strong>)</td><td class="table__cell">100, 110</td><td class="table__cell">B</td><td class="table__cell"><span class="math">a·<span class="math__bar">c</span></span></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Группы для RM:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Группа</th><th class="table__cell table__cell--head">Клетки (ABC)</th><th class="table__cell table__cell--head">Что меняется</th><th class="table__cell table__cell--head">Что остаётся</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">зелёная (вся строка)</td><td class="table__cell">000, 001, 011, 010</td><td class="table__cell">B и C</td><td class="table__cell"><span class="math"><span class="math__bar">a</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">синяя (вертикальная)</td><td class="table__cell">001, 101</td><td class="table__cell">A</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·c</span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span>  RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Красная группа соединяет первый и последний столбец. Это не ошибка: представь, что карта наклеена на консервную банку — левый и правый край соприкасаются.</p>
+</div>
+</div>
+<h3 class="article__h3">Перевод на вентили NAND</h3>
+<p class="article__p">Два инструмента: <strong>двойное отрицание</strong> (<span class="math">Q = <span class="math__bar"><span class="math__bar">Q</span></span></span> — ничего не меняет) и <strong>закон де Моргана</strong> (<span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>).</p>
+<p class="article__p">Для правого мотора, шаг за шагом:</p>
+<div class="formula"><span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c = <span class="math__bar"><span class="math__bar"><span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span></span> = <span class="math__bar">a · <span class="math__bar"><span class="math__bar">b</span>·c</span></span></span></div>
+<p class="article__p">То есть: <strong>RM = a NAND (~b NAND c)</strong>. Для левого мотора так же:</p>
+<div class="formula"><span class="math">LM = <span class="math__bar"> <span class="math__bar"><span class="math__bar">b</span>·<span class="math__bar">c</span></span> · <span class="math__bar">a·<span class="math__bar">c</span></span> · <span class="math__bar">a·<span class="math__bar">b</span></span> </span></span></div>
+<p class="article__p">То есть: <strong>LM = (~b NAND ~c) NAND (a NAND ~c) NAND (a NAND ~b)</strong> — три двухвходовых вентиля NAND и один трёхвходовый.</p>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Приём, который стоит запомнить</p>
+<div class="callout__body">
+<p class="article__p">Формулу вида «сумма произведений» переводишь на NAND <strong>без вычислений</strong>: каждый AND → NAND, итоговый OR → NAND. Единственная ловушка: слагаемое, которое является <strong>одиночной переменной</strong> (как <span class="math"><span class="math__bar">a</span></span> в RM), входит в последний вентиль <strong>с отрицанием</strong> (то есть как <span class="math">a</span>).</p>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p23.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab07-p23.webp" alt="Схема RM из кирпичиков (7 вентилей NAND) — после минимизации хватает 3" width="1400" height="777" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Схема RM из кирпичиков (7 вентилей NAND) — после минимизации хватает 3 <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s4">Задание 1 на занятии: функция четырёх переменных на NAND</h2>
+<p class="article__p">Каждый получает от преподавателя свою функцию. Путь всегда один и тот же — ниже пример.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">Собственный пример: функция выбрана мной, она другая, чем в материалах.</p>
+</div>
+</div>
+<p class="article__p"><strong>Функция:</strong> <span class="math">f(a,b,c,d) = Σ(1, 3, 4, 5, 9, 11, 12, 14)</span> — то есть f = 1 для этих номеров строк (номер — это число <code class="inline-code">abcd</code>, записанное в двоичной системе).</p>
+<p class="article__p"><strong>Номера клеток</strong> на карте 4 × 4 (строка <code class="inline-code">ab</code>, столбец <code class="inline-code">cd</code>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Карта функции:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Группы:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Группа</th><th class="table__cell table__cell--head">Клетки</th><th class="table__cell table__cell--head">Постоянные переменные</th><th class="table__cell table__cell--head">Слагаемое</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">четвёрка (верхняя и нижняя строка — <strong>через край</strong>)</td><td class="table__cell">1, 3, 9, 11</td><td class="table__cell">b = 0, d = 1</td><td class="table__cell"><span class="math"><span class="math__bar">b</span>·d</span></td></tr>
+<tr class="table__row"><td class="table__cell">пара</td><td class="table__cell">4, 5</td><td class="table__cell">a = 0, b = 1, c = 0</td><td class="table__cell"><span class="math"><span class="math__bar">a</span>·b·<span class="math__bar">c</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">пара (<strong>через край</strong>)</td><td class="table__cell">12, 14</td><td class="table__cell">a = 1, b = 1, d = 0</td><td class="table__cell"><span class="math">a·b·<span class="math__bar">d</span></span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">f = <span class="math__bar">b</span>·d + <span class="math__bar">a</span>·b·<span class="math__bar">c</span> + a·b·<span class="math__bar">d</span></span></div>
+<p class="article__p"><strong>На NAND:</strong> f = (~b NAND d) NAND (~a NAND b NAND ~c) NAND (a NAND b NAND ~d).</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">В Logisim поставь четыре входа <code class="inline-code">a</code>, <code class="inline-code">b</code>, <code class="inline-code">c</code>, <code class="inline-code">d</code> и выход <code class="inline-code">f</code>.</li>
+<li class="steps__item">Сделай отрицания: четыре вентиля NAND с соединёнными входами (или NOT, если преподаватель разрешает).</li>
+<li class="steps__item">Поставь три вентиля NAND «первого этажа» — по одному на каждую группу. Выставь им нужное число входов (2, 3, 3).</li>
+<li class="steps__item">Поставь один вентиль NAND «второго этажа» с тремя входами и подключи к нему выходы трёх предыдущих.</li>
+<li class="steps__item"><strong>Проверь все 16 комбинаций.</strong> Быстрее всего: <em>Project → Analyze Circuit</em> и сравни столбец результатов со списком Σ.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--check">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">❓</span>Самопроверка</p>
+<div class="callout__body">
+<p class="article__p">Посчитай единицы. У функции 8 единиц; в группах 4 + 2 + 2 = 8 клеток, и ни одна не повторяется — сходится. Если сумма клеток в группах <strong>меньше</strong> числа единиц, какая-то единица не покрыта.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Задание 2 на занятии: реализация на одних NOR</h2>
+<p class="article__p">Для вентилей NOR рецепт <strong>зеркальный</strong>: группируем <strong>нули</strong>, а не единицы.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">На карте обведи группы <strong>нулей</strong> (те же правила: 1, 2, 4, 8 клеток).</li>
+<li class="steps__item">Для каждой группы запиши <strong>сумму</strong> переменных, которые не меняются, — но наоборот, чем для единиц: <strong>0 → без отрицания, 1 → с отрицанием</strong>.</li>
+<li class="steps__item">Суммы <strong>перемножь</strong>. Это форма «произведение сумм».</li>
+<li class="steps__item">Каждый OR и итоговый AND замени на <strong>NOR</strong>. Одиночная переменная входит в последний вентиль с отрицанием.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">Робота на NOR ты делаешь сам на занятии — это задание на баллы. Ниже тот же метод на <strong>другой</strong> схеме, чтобы ты увидел каждый шаг.</p>
+</div>
+</div>
+<h3 class="article__h3">Пример: автоматическая теплица</h3>
+<p class="article__p">Три датчика: <strong>S</strong> — почва сухая (1 = сухо), <strong>T</strong> — слишком жарко (1), <strong>R</strong> — идёт дождь (1). Два выхода: <strong>P</strong> — насос, <strong>V</strong> — крыша открыта.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">T</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head">Ситуация</th><th class="table__cell table__cell--head table__cell--center">P</th><th class="table__cell table__cell--head table__cell--center">V</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">всё в порядке</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">дождь, почва влажная</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">жарко → проветриваем</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">жарко, но идёт дождь, а почва влажная → крыша закрыта</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">сухо → насос</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">сухо; идёт дождь, но холодно → крыша закрыта, насос</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">сухо и жарко → насос и проветривание</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">сухо, жарко, дождь → открыть крышу, дождь польёт бесплатно</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Карта P:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S ↓ / TR →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Карта V:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S ↓ / TR →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>По единицам (на NAND):</strong></p>
+<ul class="list">
+<li class="list__item">P: пары (100, 101) и (100, 110 — через край) → <span class="math">P = S·<span class="math__bar">T</span> + S·<span class="math__bar">R</span></span> → <strong>P = (S NAND ~T) NAND (S NAND ~R)</strong></li>
+<li class="list__item">V: пары (010, 110) и (111, 110) → <span class="math">V = T·<span class="math__bar">R</span> + S·T</span> → <strong>V = (T NAND ~R) NAND (S NAND T)</strong></li>
+</ul>
+<p class="article__p"><strong>По нулям (на NOR):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Выход</th><th class="table__cell table__cell--head">Группа нулей</th><th class="table__cell table__cell--head">Постоянные переменные</th><th class="table__cell table__cell--head">Множитель</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">P</td><td class="table__cell">вся верхняя строка</td><td class="table__cell">S = 0</td><td class="table__cell"><span class="math">S</span></td></tr>
+<tr class="table__row"><td class="table__cell">P</td><td class="table__cell">011, 111</td><td class="table__cell">T = 1, R = 1</td><td class="table__cell"><span class="math"><span class="math__bar">T</span> + <span class="math__bar">R</span></span></td></tr>
+<tr class="table__row"><td class="table__cell">V</td><td class="table__cell">столбцы 00 и 01 (четыре клетки)</td><td class="table__cell">T = 0</td><td class="table__cell"><span class="math">T</span></td></tr>
+<tr class="table__row"><td class="table__cell">V</td><td class="table__cell">001, 011</td><td class="table__cell">S = 0, R = 1</td><td class="table__cell"><span class="math">S + <span class="math__bar">R</span></span></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">P = S·(<span class="math__bar">T</span> + <span class="math__bar">R</span>)  V = T·(S + <span class="math__bar">R</span>)</span></div>
+<p class="article__p">Перевод на NOR (OR → NOR, итоговый AND → NOR, одиночная переменная с отрицанием):</p>
+<ul class="list">
+<li class="list__item"><strong>P = (~S) NOR (~T NOR ~R)</strong></li>
+<li class="list__item"><strong>V = (~T) NOR (S NOR ~R)</strong></li>
+</ul>
+<div class="callout callout--check">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">❓</span>Проверка одной строки</p>
+<div class="callout__body">
+<p class="article__p">S = 1, T = 0, R = 1 (должно быть P = 1): ~S = 0; ~T NOR ~R = NOR(1, 0) = 0; NOR(0, 0) = <strong>1</strong> ✓</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Тренировочные задания</h2>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Три переменные</p>
+<div class="callout__body">
+<p class="article__p">Минимизируй <span class="math">f(a,b,c) = Σ(0, 2, 4, 5, 6)</span> и запиши на NAND.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a ↓ / bc →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Четвёрка: столбцы 00 и 10 (через край) → <span class="math"><span class="math__bar">c</span></span>. Пара: 100, 101 → <span class="math">a·<span class="math__bar">b</span></span>.</p>
+<p class="article__p"><span class="math">f = <span class="math__bar">c</span> + a·<span class="math__bar">b</span></span> → <strong>f = c NAND (a NAND ~b)</strong> (одиночная переменная <span class="math"><span class="math__bar">c</span></span> входит как <span class="math">c</span>).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Голосование</p>
+<div class="callout__body">
+<p class="article__p">Трое судей голосуют (1 = за). Результат должен быть 1, когда <strong>хотя бы двое</strong> за. Найди минимальную формулу и версию на NAND.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p">Единицы: 011, 101, 110, 111 → Σ(3, 5, 6, 7).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a ↓ / bc →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>0</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>1</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Три пары, все через клетку 111: <span class="math">f = a·b + a·c + b·c</span>.</p>
+<p class="article__p"><strong>f = (a NAND b) NAND (a NAND c) NAND (b NAND c)</strong> — четыре вентиля, никаких отрицаний.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Четыре переменные на NAND</p>
+<div class="callout__body">
+<p class="article__p">Минимизируй <span class="math">f(a,b,c,d) = Σ(0, 1, 2, 5, 8, 9, 10)</span>.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>Четыре угла</strong> (0, 2, 8, 10) → <span class="math"><span class="math__bar">b</span>·<span class="math__bar">d</span></span></li>
+<li class="list__item">Четвёрка 0, 1, 8, 9 → <span class="math"><span class="math__bar">b</span>·<span class="math__bar">c</span></span></li>
+<li class="list__item">Пара 1, 5 → <span class="math"><span class="math__bar">a</span>·<span class="math__bar">c</span>·d</span></li>
+</ul>
+<p class="article__p"><span class="math">f = <span class="math__bar">b</span>·<span class="math__bar">d</span> + <span class="math__bar">b</span>·<span class="math__bar">c</span> + <span class="math__bar">a</span>·<span class="math__bar">c</span>·d</span></p>
+<p class="article__p">На NAND: (~b NAND ~d) NAND (~b NAND ~c) NAND (~a NAND ~c NAND d).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Та же функция на NOR</p>
+<div class="callout__body">
+<p class="article__p">Для функции из задания 3 сгруппируй нули и запиши реализацию на NOR.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p">Нули: 3, 4, 6, 7, 11, 12, 13, 14, 15.</p>
+<ul class="list">
+<li class="list__item">Вся строка 11 (12, 13, 15, 14): a = 1, b = 1 → <span class="math">(<span class="math__bar">a</span> + <span class="math__bar">b</span>)</span></li>
+<li class="list__item">Четвёрка 4, 6, 12, 14 (через край): b = 1, d = 0 → <span class="math">(<span class="math__bar">b</span> + d)</span></li>
+<li class="list__item">Весь столбец 11 (3, 7, 15, 11): c = 1, d = 1 → <span class="math">(<span class="math__bar">c</span> + <span class="math__bar">d</span>)</span></li>
+</ul>
+<p class="article__p"><span class="math">f = (<span class="math__bar">a</span> + <span class="math__bar">b</span>)·(<span class="math__bar">b</span> + d)·(<span class="math__bar">c</span> + <span class="math__bar">d</span>)</span></p>
+<p class="article__p">На NOR: (~a NOR ~b) NOR (~b NOR d) NOR (~c NOR ~d).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>5. Почему не тройка?</p>
+<div class="callout__body">
+<p class="article__p">На карте три единицы рядом в одной строке. Почему нельзя сделать из них одну группу?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Показать решение</summary>
+<div class="callout__body">
+<p class="article__p">В группе должно быть 1, 2, 4 или 8 клеток, потому что только тогда переменная, которая в ней меняется, принимает <strong>оба</strong> значения с каждой комбинацией остальных — и благодаря этому исчезает (<span class="math">x + <span class="math__bar">x</span> = 1</span>). Три клетки такой пары не дают. Решение: две пары, которые <strong>перекрываются</strong> на средней клетке.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>На чём чаще всего теряют баллы</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Столбцы в порядке 00, 01, 10, 11 вместо 00, 01, <strong>11, 10</strong>.</li>
+<li class="list__item">Незамеченные группы «через край» и четыре угла.</li>
+<li class="list__item">Слишком маленькие группы (две пары вместо одной четвёрки) — схема работает, но она не минимальная.</li>
+<li class="list__item">С NAND: одиночная переменная подана на последний вентиль без переворота.</li>
+<li class="list__item">С NOR: группировка единиц вместо нулей или забытая смена отрицаний (0 → без черты).</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Карта Карно</h3>
+<ul class="list">
+<li class="list__item">Столбцы/строки всегда: <strong>00, 01, 11, 10</strong>.</li>
+<li class="list__item">Группы: 1, 2, 4, 8 клеток; как можно больше; могут перекрываться; края и углы соприкасаются.</li>
+<li class="list__item">Из переменных остаются те, что в группе <strong>постоянны</strong>.</li>
+</ul>
+<p class="article__p"><strong>Номера клеток (строка ab, столбец cd):</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab ↓ / cd →</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NAND и NOR — два зеркальных рецепта</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">На <strong>NAND</strong></th><th class="table__cell table__cell--head">На <strong>NOR</strong></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Что группирую</td><td class="table__cell"><strong>единицы</strong></td><td class="table__cell"><strong>нули</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Постоянная переменная = 0</td><td class="table__cell">с отрицанием</td><td class="table__cell">без отрицания</td></tr>
+<tr class="table__row"><td class="table__cell">Постоянная переменная = 1</td><td class="table__cell">без отрицания</td><td class="table__cell">с отрицанием</td></tr>
+<tr class="table__row"><td class="table__cell">Внутри группы</td><td class="table__cell">произведение (·)</td><td class="table__cell">сумма (+)</td></tr>
+<tr class="table__row"><td class="table__cell">Между группами</td><td class="table__cell">сумма (+)</td><td class="table__cell">произведение (·)</td></tr>
+<tr class="table__row"><td class="table__cell">Замена</td><td class="table__cell">каждый AND и итоговый OR → NAND</td><td class="table__cell">каждый OR и итоговый AND → NOR</td></tr>
+<tr class="table__row"><td class="table__cell">Одиночная переменная</td><td class="table__cell">в последний вентиль <strong>перевёрнутой</strong></td><td class="table__cell">в последний вентиль <strong>перевёрнутой</strong></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Формулы</h3>
+<ul class="list">
+<li class="list__item">Двойное отрицание: <span class="math"><span class="math__bar"><span class="math__bar">Q</span></span> = Q</span></li>
+<li class="list__item">Де Морган: <span class="math"><span class="math__bar">P + Q</span> = <span class="math__bar">P</span>·<span class="math__bar">Q</span></span>,   <span class="math"><span class="math__bar">P·Q</span> = <span class="math__bar">P</span> + <span class="math__bar">Q</span></span></li>
+<li class="list__item">Робот (из материалов): <span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span></span>,   <span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span> → RM = a NAND (~b NAND c)</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../labs/07.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лабораторная 7: Введение в цифровые схемы: Logisim, таблица истинности, вентили</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 7. Wprowadzenie do układów cyfrowych: Logisim, tabela prawdy, bramki — SYC</title>
+<meta name="description" content="Od tych zajęć nie ma już kabli ani oscyloskopu — układy rysujesz w programie Logisim i od razu widzisz, czy działają. Uczysz się drogi: opis słowny → tabela prawdy → wzór → schemat z bramek, a na koniec budujesz wszystko z samych bramek NAND.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/07.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/07.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/07.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/07.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/07.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/07.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Logisim w pięć minut</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Przykład z materiałów: robot omijający przeszkody</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Bramki NOT, AND, OR z samych NAND</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Przykład rozwiązany od zera</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Impedancja R, C, L</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Filtry RC</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Wzmacniacz operacyjny</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/07.html" aria-current="page"><span class="side-nav__num">7</span><span class="side-nav__text">Logisim i bramki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">Minimalizacja (Karnaugh)</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 7</p>
+<h1 class="article__title">Wprowadzenie do układów cyfrowych: Logisim, tabela prawdy, bramki</h1>
+<p class="article__lead">Od tych zajęć nie ma już kabli ani oscyloskopu — układy rysujesz w programie Logisim i od razu widzisz, czy działają. Uczysz się drogi: opis słowny → tabela prawdy → wzór → schemat z bramek, a na koniec budujesz wszystko z samych bramek NAND.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/06.html">Wykład do tego ćwiczenia: Wykład 6 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Bramki NOT, AND, OR, NAND, NOR, XOR i ich tabele prawdy — <a class="link" href="../lectures/06.html">wykład 6</a> (<strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Jak z tabeli prawdy zapisać wzór (suma iloczynów) i prawa de Morgana — tamże.</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">Ćwiczenia 7–11 odbywają się <strong>w symulatorze Logisim</strong> — nie buduje się już fizycznych układów. Program jest darmowy; warto zainstalować go w domu i poćwiczyć przed zajęciami.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Logisim w pięć minut</h2>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Tego opisu nie ma w materiałach (tam jest tylko „uruchom Logisim”). To moja ściąga z obsługi programu — nazwy podaję po angielsku, tak jak w programie.</p>
+</div>
+</div>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Co chcesz zrobić</th><th class="table__cell table__cell--head">Jak</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Wstawić <strong>wejście</strong></td><td class="table__cell">ikona zielonego <strong>kwadratu</strong> na pasku (<em>Input Pin</em>) → kliknij na planszy</td></tr>
+<tr class="table__row"><td class="table__cell">Wstawić <strong>wyjście</strong></td><td class="table__cell">ikona zielonego <strong>kółka</strong> (<em>Output Pin</em>)</td></tr>
+<tr class="table__row"><td class="table__cell">Wstawić bramkę</td><td class="table__cell">folder <strong>Gates</strong> po lewej (NOT, AND, OR, NAND, NOR, XOR) → kliknij na planszy</td></tr>
+<tr class="table__row"><td class="table__cell">Narysować <strong>przewód</strong></td><td class="table__cell">narzędzie strzałki (<em>Edit</em>), przeciągnij od końcówki do końcówki</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Zmienić wartość wejścia</strong> (0 ↔ 1)</td><td class="table__cell">narzędzie <strong>rączki</strong> (<em>Poke</em>), kliknij wejście</td></tr>
+<tr class="table__row"><td class="table__cell">Podpisać element</td><td class="table__cell">zaznacz go i wpisz nazwę w polu <strong>Label</strong> (tabela po lewej na dole)</td></tr>
+<tr class="table__row"><td class="table__cell">Zmienić liczbę wejść bramki</td><td class="table__cell">zaznacz bramkę → <strong>Number Of Inputs</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Obrócić element</td><td class="table__cell">zaznacz → <strong>Facing</strong> (albo strzałki na klawiaturze)</td></tr>
+<tr class="table__row"><td class="table__cell">Powielić</td><td class="table__cell"><kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">D</kbd></td></tr>
+<tr class="table__row"><td class="table__cell">Nowy obwód w tym samym pliku</td><td class="table__cell">menu <strong>Project → Add Circuit…</strong></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Kolory przewodów mówią, co się dzieje:</strong></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Kolor</th><th class="table__cell table__cell--head">Znaczenie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">jasnozielony</td><td class="table__cell">logiczne <strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell">ciemnozielony</td><td class="table__cell">logiczne <strong>0</strong></td></tr>
+<tr class="table__row"><td class="table__cell">niebieski</td><td class="table__cell">przewód „wisi” — nic nim nie steruje (<strong>to zwykle błąd: coś nie jest podłączone</strong>)</td></tr>
+<tr class="table__row"><td class="table__cell">czerwony</td><td class="table__cell"><strong>konflikt</strong> — dwa wyjścia zwarte ze sobą albo błąd na wejściu bramki</td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Sprawdzanie układu</p>
+<div class="callout__body">
+<p class="article__p">Klikając rączką, przejdź <strong>wszystkie</strong> kombinacje wejść (dla 3 wejść jest ich 8) i porównaj wyjście z tabelą prawdy. Szybciej: menu <strong>Project → Analyze Circuit</strong> — Logisim sam wypisze tabelę prawdy narysowanego układu. <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span></p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Przykład z materiałów: robot omijający przeszkody</h2>
+<p class="article__p">Plik startowy leży na serwerze z materiałami: <code class="inline-code">mmajew/SYC/07 and 08/07 and 08 lab mobile robot.circ</code>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p02.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p02.webp" alt="Robot z trzema czujnikami odległości (A — lewy, B — przedni, C — prawy) i dwoma silnikami (LM, RM)" width="1400" height="714" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Robot z trzema czujnikami odległości (A — lewy, B — przedni, C — prawy) i dwoma silnikami (LM, RM) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Opis słowny.</strong> Robot ma trzy czujniki przeszkód: <strong>A</strong> po lewej, <strong>B</strong> z przodu, <strong>C</strong> po prawej. Czujnik daje <strong>1</strong>, gdy widzi przeszkodę. Napęd to dwa silniki: lewy <strong>LM</strong> i prawy <strong>RM</strong>; silnik pracuje, gdy dostaje <strong>1</strong>. Robot ma jechać bez kolizji, a gdy nie ma dokąd — stanąć.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Robot skręca jak czołg: gdy kręci się <strong>tylko prawy</strong> silnik, robot skręca <strong>w lewo</strong>. Gdy tylko lewy — w prawo. Oba — jedzie prosto. Żaden — stoi.</p>
+</div>
+</div>
+<h3 class="article__h3">Krok 1: tabela prawdy</h3>
+<p class="article__p">Dla każdej z 8 sytuacji decydujemy, co mają zrobić silniki.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">A</th><th class="table__cell table__cell--head table__cell--center">B</th><th class="table__cell table__cell--head table__cell--center">C</th><th class="table__cell table__cell--head">Sytuacja</th><th class="table__cell table__cell--head">Decyzja</th><th class="table__cell table__cell--head table__cell--center">LM</th><th class="table__cell table__cell--head table__cell--center">RM</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">nic nie widać</td><td class="table__cell">prosto</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">przeszkoda z prawej</td><td class="table__cell">w lewo</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">przeszkoda z przodu</td><td class="table__cell">w lewo</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">z przodu i z prawej</td><td class="table__cell">w lewo</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">przeszkoda z lewej</td><td class="table__cell">w prawo</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">z obu boków (korytarz)</td><td class="table__cell">prosto</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">z lewej i z przodu</td><td class="table__cell">w prawo</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">ze wszystkich stron</td><td class="table__cell">stop</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p10.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p10.webp" alt="Ostatni wiersz tabeli: przeszkody z trzech stron — robot staje" width="1187" height="708" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ostatni wiersz tabeli: przeszkody z trzech stron — robot staje <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h3 class="article__h3">Krok 2: wzory</h3>
+<p class="article__p">Z tabeli (po uproszczeniu mapą Karnaugha — to temat <a class="link" href="../labs/08.html">następnych zajęć</a>) wychodzi:</p>
+<div class="formula"><span class="math">LM = <span class="math__bar">b</span>·<span class="math__bar">c</span> + a·<span class="math__bar">c</span> + a·<span class="math__bar">b</span>  RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span></div>
+<h3 class="article__h3">Krok 3: schemat z bramek NOT, AND, OR</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p22.webp" alt="Oba układy w Logisimie: lewy silnik (trzy AND i jeden OR) i prawy silnik (AND i OR)" width="1400" height="789" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Oba układy w Logisimie: lewy silnik (trzy AND i jeden OR) i prawy silnik (AND i OR) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Wstaw trzy <strong>wejścia</strong> i podpisz je <code class="inline-code">a</code>, <code class="inline-code">b</code>, <code class="inline-code">c</code>. Wstaw <strong>wyjście</strong> i podpisz <code class="inline-code">RM</code>.</li>
+<li class="steps__item">Policz, czego potrzebujesz. Dla <span class="math">RM = <span class="math__bar">a</span> + <span class="math__bar">b</span>·c</span>: dwa <strong>NOT</strong> (dla a i b), jeden <strong>AND</strong> (dla <span class="math"><span class="math__bar">b</span>·c</span>), jeden <strong>OR</strong>.</li>
+<li class="steps__item">Wstaw bramki od lewej do prawej, w kolejności wzoru: najpierw negacje, potem iloczyn, na końcu suma.</li>
+<li class="steps__item">Połącz przewodami. <strong>Żaden przewód nie może zostać niebieski.</strong></li>
+<li class="steps__item">Rączką ustaw po kolei wszystkie 8 kombinacji i porównaj <code class="inline-code">RM</code> z tabelą.</li>
+<li class="steps__item">To samo dla <code class="inline-code">LM</code> — w tym samym pliku, obok (wejścia a, b, c mogą być wspólne).</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Dobry nawyk</p>
+<div class="callout__body">
+<p class="article__p">Każdej bramce nadaj etykietę z tym, co liczy (na zdjęciu: <code class="inline-code">a*-c</code>, <code class="inline-code">-b*c</code>). Gdy wynik się nie zgadza, od razu widać, który kawałek wzoru jest zły.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Bramki NOT, AND, OR z samych NAND</h2>
+<p class="article__p">Bramka NAND jest <strong>uniwersalna</strong>: da się z niej zbudować każdą inną. Na zajęciach budujesz trzy „klocki” — każdy w osobnym obwodzie (<em>Project → Add Circuit</em>).</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab07-p23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab07-p23.webp" alt="Zamiana NOT, AND i OR na bramki NAND oraz układ RM zbudowany z takich klocków" width="1400" height="777" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Zamiana NOT, AND i OR na bramki NAND oraz układ RM zbudowany z takich klocków <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Klocek</th><th class="table__cell table__cell--head">Jak zbudować</th><th class="table__cell table__cell--head table__cell--center">Ile NAND</th><th class="table__cell table__cell--head">Dlaczego działa</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NOT</strong></td><td class="table__cell">oba wejścia NAND zwarte razem</td><td class="table__cell table__cell--center">1</td><td class="table__cell"><span class="math"><span class="math__bar">a·a</span> = <span class="math__bar">a</span></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>AND</strong></td><td class="table__cell">NAND, a za nim NOT</td><td class="table__cell table__cell--center">2</td><td class="table__cell">podwójna negacja: <span class="math"><span class="math__bar"><span class="math__bar">a·b</span></span> = a·b</span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>OR</strong></td><td class="table__cell">NOT na każdym wejściu, potem NAND</td><td class="table__cell table__cell--center">3</td><td class="table__cell">de Morgan: <span class="math"><span class="math__bar"><span class="math__bar">a</span>·<span class="math__bar">b</span></span> = a + b</span></td></tr>
+</tbody></table></div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Project → Add Circuit…</strong>, nazwa np. <code class="inline-code">NOT_nand</code>. Wstaw wejście, jedną bramkę NAND, wyjście. Oba wejścia NAND połącz z tym samym wejściem. Sprawdź: 0 → 1, 1 → 0.</li>
+<li class="steps__item">Nowy obwód <code class="inline-code">AND_nand</code>: dwa wejścia → NAND → drugi NAND ze zwartymi wejściami → wyjście. Sprawdź 4 kombinacje.</li>
+<li class="steps__item">Nowy obwód <code class="inline-code">OR_nand</code>: każde wejście przez „NOT z NAND”, potem NAND. Sprawdź 4 kombinacje.</li>
+<li class="steps__item">Wróć do obwodu <code class="inline-code">main</code>. Twoje obwody są teraz na liście po lewej — <strong>klikasz je i wstawiasz jak zwykłe bramki</strong>.</li>
+<li class="steps__item">Narysuj funkcję jeszcze raz, ale zamiast NOT/AND/OR wstaw swoje klocki — <strong>w tym samym układzie co wzór</strong>.</li>
+<li class="steps__item">Sprawdź wszystkie kombinacje: wynik musi być identyczny jak w wersji ze zwykłymi bramkami.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">Układ z klocków działa, ale jest duży (na zdjęciu: 7 bramek NAND dla RM). Jak go zmniejszyć — na <a class="link" href="../labs/08.html">następnych zajęciach</a>.</p>
+<h2 class="article__h2" id="s5">Przykład rozwiązany od zera</h2>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Własny przykład — inna funkcja niż na slajdzie z wykładu, ale ta sama droga. Zrób go w domu, a zadanie na zajęciach pójdzie automatycznie.</p>
+</div>
+</div>
+<p class="article__p"><strong>Funkcja:</strong> <span class="math">y = <span class="math__bar">a</span>·b + (b ⊕ c)</span></p>
+<p class="article__p"><strong>1. Tabela prawdy.</strong> Liczymy osobno każdy składnik, potem sumę.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">c</th><th class="table__cell table__cell--head table__cell--center"><span class="math"><span class="math__bar">a</span>·b</span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">b ⊕ c</span></th><th class="table__cell table__cell--head table__cell--center">y</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>0</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>0</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><strong>1</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><strong>0</strong></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>2. Bramki:</strong> jeden NOT (dla a), jeden AND, jeden XOR, jeden OR. Wejście <code class="inline-code">b</code> rozgałęzia się do AND i do XOR.</p>
+<p class="article__p"><strong>3. Z klocków NAND.</strong> XOR nie ma gotowego klocka, więc rozpisujemy go: <span class="math">b ⊕ c = b·<span class="math__bar">c</span> + <span class="math__bar">b</span>·c</span> — to 2 × NOT, 2 × AND, 1 × OR.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Część wzoru</th><th class="table__cell table__cell--head">Klocki</th><th class="table__cell table__cell--head table__cell--center">NAND</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><span class="math"><span class="math__bar">a</span></span></td><td class="table__cell">NOT</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell"><span class="math"><span class="math__bar">a</span>·b</span></td><td class="table__cell">AND</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell"><span class="math">b ⊕ c</span></td><td class="table__cell">2 NOT + 2 AND + OR</td><td class="table__cell table__cell--center">2 + 4 + 3 = 9</td></tr>
+<tr class="table__row"><td class="table__cell">suma końcowa</td><td class="table__cell">OR</td><td class="table__cell table__cell--center">3</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>razem</strong></td><td class="table__cell"></td><td class="table__cell table__cell--center"><strong>15</strong></td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s6">Zadania treningowe</h2>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Od opisu do tabeli</p>
+<div class="callout__body">
+<p class="article__p">Wentylator łazienkowy ma się włączyć (F = 1), gdy jest za ciepło (T = 1) <strong>albo</strong> gdy jest wilgotno (H = 1) i okno jest zamknięte (W = 0). Zapisz wzór i tabelę prawdy.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">F = T + H·<span class="math__bar">W</span></span></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">T</th><th class="table__cell table__cell--head table__cell--center">H</th><th class="table__cell table__cell--head table__cell--center">W</th><th class="table__cell table__cell--head table__cell--center">F</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Bramki: 1 NOT, 1 AND, 1 OR.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Od tabeli do wzoru</p>
+<div class="callout__body">
+<p class="article__p">Funkcja trzech zmiennych jest równa 1 tylko dla <code class="inline-code">abc = 001</code> i <code class="inline-code">abc = 110</code>. Zapisz jej wzór i policz bramki.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Dla każdej jedynki piszemy iloczyn wszystkich zmiennych — zmienna z zerem dostaje negację:</p>
+<p class="article__p"><span class="math">y = <span class="math__bar">a</span>·<span class="math__bar">b</span>·c + a·b·<span class="math__bar">c</span></span></p>
+<p class="article__p">Bramki: 3 NOT, 2 AND (trzywejściowe), 1 OR.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. XOR z czterech NAND</p>
+<div class="callout__body">
+<p class="article__p">Rozpisany z klocków XOR kosztuje 9 bramek NAND. Da się to zrobić czterema. Sprawdź tabelą prawdy, że układ: <span class="math">n<sub class="math__sub">1</sub> = <span class="math__bar">a·b</span></span>, <span class="math">n<sub class="math__sub">2</sub> = <span class="math__bar">a·n<sub class="math__sub">1</sub></span></span>, <span class="math">n<sub class="math__sub">3</sub> = <span class="math__bar">b·n<sub class="math__sub">1</sub></span></span>, <span class="math">y = <span class="math__bar">n<sub class="math__sub">2</sub>·n<sub class="math__sub">3</sub></span></span> to XOR.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center"><span class="math">n<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">n<sub class="math__sub">2</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">n<sub class="math__sub">3</sub></span></th><th class="table__cell table__cell--head table__cell--center">y</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<p class="article__p">Kolumna y to dokładnie XOR. Wniosek: budowanie „klocek po klocku” zawsze działa, ale rzadko jest najkrótsze.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Ile bramek NAND?</p>
+<div class="callout__body">
+<p class="article__p">Funkcja <span class="math">y = a·b + c</span>. Ile bramek NAND potrzeba metodą klocków? A ile po uproszczeniu?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">Klocki: AND (2) + OR (3) = <strong>5</strong> bramek.</p>
+<p class="article__p">Uproszczenie: <span class="math">y = <span class="math__bar"><span class="math__bar">a·b + c</span></span> = <span class="math__bar"><span class="math__bar">a·b</span>·<span class="math__bar">c</span></span></span> — czyli NAND z dwóch sygnałów: <span class="math"><span class="math__bar">a·b</span></span> (jeden NAND) i <span class="math"><span class="math__bar">c</span></span> (jeden NAND ze zwartymi wejściami). Razem <strong>3</strong> bramki.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>5. Zbuduj w Logisimie</p>
+<div class="callout__body">
+<p class="article__p">Narysuj funkcję z przykładu (<span class="math">y = <span class="math__bar">a</span>·b + (b ⊕ c)</span>) na zwykłych bramkach, potem obok — z klocków NAND, używając dla XOR wersji z zadania 3. Ile bramek NAND wyszło?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p">NOT (1) + AND (2) + XOR (4) + OR (3) = <strong>10</strong> bramek zamiast 15. Oba układy muszą dać kolumnę y: 0, 1, 1, 1, 0, 1, 1, 0.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><strong>Niebieski przewód</strong> — niepodłączone wejście bramki. Bramka w Logisimie ma domyślnie 5 wejść; nieużywane są ignorowane, ale lepiej ustawić <em>Number Of Inputs</em> na tyle, ile trzeba.</li>
+<li class="list__item">Przewód, który <strong>wygląda</strong> na połączony, a nie jest (brak kropki na skrzyżowaniu).</li>
+<li class="list__item">Sprawdzenie tylko 2–3 kombinacji zamiast wszystkich.</li>
+<li class="list__item">Zła kolejność wierszy w tabeli prawdy — zawsze licz binarnie: 000, 001, 010, 011…</li>
+<li class="list__item">Klocek NAND sprawdzony „na oko”, a z błędem — każdy klocek przetestuj osobno, zanim go użyjesz.</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Logisim</h3>
+<ul class="list">
+<li class="list__item">Wejście = zielony kwadrat, wyjście = zielone kółko, bramki w folderze <strong>Gates</strong>.</li>
+<li class="list__item"><strong>Rączka</strong> (Poke) zmienia wejście 0 ↔ 1; <strong>strzałka</strong> (Edit) rysuje przewody.</li>
+<li class="list__item">Kolory: jasnozielony = 1, ciemnozielony = 0, <strong>niebieski = niepodłączone</strong>, <strong>czerwony = konflikt</strong>.</li>
+<li class="list__item">Nowy obwód: <strong>Project → Add Circuit…</strong>; potem wstawiasz go jak bramkę.</li>
+<li class="list__item">Tabela prawdy układu: <strong>Project → Analyze Circuit</strong>. <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span></li>
+</ul>
+<h3 class="article__h3">Droga projektowania</h3>
+<ol class="list list--ordered">
+<li class="list__item">Opis słowny → <strong>tabela prawdy</strong> (wiersze binarnie: 000, 001, …).</li>
+<li class="list__item">Tabela → <strong>wzór</strong>: dla każdej jedynki iloczyn zmiennych (0 → z negacją), wszystko zsumować.</li>
+<li class="list__item">Wzór → <strong>schemat</strong>: najpierw NOT, potem AND, na końcu OR.</li>
+<li class="list__item"><strong>Test</strong> wszystkich kombinacji.</li>
+</ol>
+<h3 class="article__h3">Klocki z NAND</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Bramka</th><th class="table__cell table__cell--head">Z NAND</th><th class="table__cell table__cell--head table__cell--center">Sztuk</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">NOT a</td><td class="table__cell">NAND(a, a)</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell">a AND b</td><td class="table__cell">NOT( NAND(a, b) )</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell">a OR b</td><td class="table__cell">NAND( NOT a, NOT b )</td><td class="table__cell table__cell--center">3</td></tr>
+<tr class="table__row"><td class="table__cell">a XOR b</td><td class="table__cell"><span class="math">n<sub class="math__sub">1</sub></span> = NAND(a,b); y = NAND( NAND(a,<span class="math">n<sub class="math__sub">1</sub></span>), NAND(b,<span class="math">n<sub class="math__sub">1</sub></span>) )</td><td class="table__cell table__cell--center">4</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Prawa de Morgana</h3>
+<p class="article__p"><span class="math"><span class="math__bar">a·b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span>       <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span>·<span class="math__bar">b</span></span></p>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/06.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 6: Wzmacniacz operacyjny: wtórnik, komparator, wzmacniacz nieodwracający i odwracający</span></a>
+<a class="pager__link pager__link--next" href="../labs/08.html"><span class="pager__dir">Następny →</span><span class="pager__title">Ćwiczenie 8: Minimalizacja funkcji boolowskich: mapa Karnaugha, realizacja na NAND i NOR</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>
