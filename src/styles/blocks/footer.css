@@ -1,0 +1,28 @@
+/* footer — page footer */
+.footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.footer__inner {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+}
+
+.footer__text {
+  margin: 0;
+  font-size: var(--size-small);
+  line-height: 1.5;
+}
+
+.footer__text--muted {
+  margin-top: 0.3rem;
+  color: var(--color-muted);
+}
+
+@media print {
+  .footer {
+    display: none;
+  }
+}

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYC — Цифровые системы и основы электроники</title>
+<meta name="description" content="Все лекции объяснены простым языком, лабораторные расписаны по шагам, к каждой теме есть краткий конспект. На польском, английском и русском.">
+<link rel="alternate" hreflang="pl" href="../pl/index.html">
+<link rel="alternate" hreflang="en" href="../en/index.html">
+<link rel="alternate" hreflang="ru" href="../ru/index.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link nav__link--active" href="index.html" aria-current="page">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../pl/index.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/index.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/index.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Как пользоваться сайтом</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Главное о предмете</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">План семестра</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Лекции</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Лабораторные</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Программы, которые пригодятся</a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--page">
+<header class="article__header">
+
+<h1 class="article__title">SYC — Цифровые системы и основы электроники</h1>
+<p class="article__lead">Все лекции объяснены простым языком, лабораторные расписаны по шагам, к каждой теме есть краткий конспект. На польском, английском и русском.</p>
+
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Как пользоваться сайтом</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Три шага перед каждым занятием</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Прочитай лекцию</strong> этой недели — каждая тема написана обычным текстом, с примерами и рисунками со слайдов.</li>
+<li class="steps__item"><strong>Открой «Краткий конспект»</strong> (кнопка 📋 вверху каждой лекции и в правом нижнем углу) — это шпаргалка с формулами и правилами, которые нужны на лабораторных.</li>
+<li class="steps__item"><strong>Пройди лабораторную</strong> по шагам и сделай тренировочные задания. На занятии будет другой вариант, но метод тот же.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--info">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">ℹ️</span>Что означают цветные рамки</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">🧒 <strong>По-простому</strong> — то же самое, но максимально просто.</li>
+<li class="list__item">🎓 <strong>Из лекции</strong> — то, что лектор сказал вживую (запись лекции 1, зимний семестр 2026/27).</li>
+<li class="list__item">✚ <strong>От автора сайта</strong> — мои пояснения, собственные примеры и советы. Этого <strong>нет</strong> ни в слайдах, ни в записи, поэтому считай это помощью, а не «официальным» материалом.</li>
+<li class="list__item">📝 <strong>Тренировочное задание</strong> — задания <strong>собственные</strong>: логика та же, что на занятиях, но данные другие. Решение спрятано под кнопкой.</li>
+</ul>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Главное о предмете</h2>
+<ul class="list">
+<li class="list__item"><strong>15 недель:</strong> 15 лекций и 15 лабораторных. Лабораторные идут <strong>на неделю позже лекций</strong>.</li>
+<li class="list__item"><strong>Оценка только за лабораторные:</strong> 14 оцениваемых занятий × 5 баллов = <strong>70 баллов</strong>. Зачёт — <strong>больше 35 баллов</strong>. Экзамена и коллоквиумов нет.</li>
+<li class="list__item"><strong>Всё делается на занятиях</strong> — домой ничего не задают (кроме подготовки).</li>
+<li class="list__item">Лабораторные 1–6: лабораторное оборудование (в парах). Лабораторные 7–11: симулятор Logisim. Лабораторные 12–15: Arduino.</li>
+</ul>
+<p class="article__p">Подробности, таблица оценок и то, что актуально в этом году: <a class="link" href="grading.html">Как сдать</a>.</p>
+<h2 class="article__h2" id="s3">План семестра</h2>
+<div class="schedule" data-schedule data-locale="ru">
+<div class="schedule__controls">
+<label class="schedule__field"><span class="schedule__label">Дата первой лекции</span><input class="schedule__input" type="date" data-start="lecture"></label>
+<label class="schedule__field"><span class="schedule__label">Дата первой лабораторной</span><input class="schedule__input" type="date" data-start="lab"></label>
+<button class="button button--ghost" type="button" data-schedule-clear>Сбросить</button>
+</div>
+<p class="schedule__hint">Введите даты из расписания — таблица сама посчитает следующие недели (каждые 7 дней, без учёта праздников; данные остаются только в вашем браузере).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Неделя</th><th class="table__cell table__cell--head">Лекция</th><th class="table__cell table__cell--head">Лабораторная</th><th class="table__cell table__cell--head">Баллы</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row">
+<td class="table__cell table__cell--center">1</td>
+<td class="table__cell"><a class="link" href="lectures/01.html">Введение, физические основы электроники и измерения</a><span class="schedule__date" data-date="lecture" data-week="1"></span></td>
+<td class="table__cell"><a class="link" href="labs/01.html">Вводное занятие: оборудование лаборатории</a><span class="schedule__date" data-date="lab" data-week="1"></span></td>
+<td class="table__cell table__cell--center">— (без баллов)</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">2</td>
+<td class="table__cell"><a class="link" href="lectures/02.html">Пассивные элементы: резистор, конденсатор, катушка и импеданс</a><span class="schedule__date" data-date="lecture" data-week="2"></span></td>
+<td class="table__cell"><a class="link" href="labs/02.html">Измерение напряжений и токов</a><span class="schedule__date" data-date="lab" data-week="2"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">3</td>
+<td class="table__cell"><a class="link" href="lectures/03.html">Пассивные электронные цепи: делители и RC-фильтры</a><span class="schedule__date" data-date="lecture" data-week="3"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="3"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">4</td>
+<td class="table__cell"><a class="link" href="lectures/04.html">Полупроводники: диоды и транзисторы</a><span class="schedule__date" data-date="lecture" data-week="4"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="4"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">5</td>
+<td class="table__cell"><a class="link" href="lectures/05.html">Операционные усилители</a><span class="schedule__date" data-date="lecture" data-week="5"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="5"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">6</td>
+<td class="table__cell"><a class="link" href="lectures/06.html">Цифровые схемы — введение: сигналы, вентили, булева алгебра</a><span class="schedule__date" data-date="lecture" data-week="6"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="6"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">7</td>
+<td class="table__cell"><a class="link" href="lectures/07.html">Минимизация булевых функций: карты Карно</a><span class="schedule__date" data-date="lecture" data-week="7"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="7"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">8</td>
+<td class="table__cell"><a class="link" href="lectures/08.html">Комбинационные функциональные блоки: мультиплексор, дополнительный код, сумматор, АЛУ</a><span class="schedule__date" data-date="lecture" data-week="8"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="8"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">9</td>
+<td class="table__cell"><a class="link" href="lectures/09.html">Последовательностные схемы: триггеры, регистры, счётчики</a><span class="schedule__date" data-date="lecture" data-week="9"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="9"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">10</td>
+<td class="table__cell"><a class="link" href="lectures/10.html">Проектирование синхронных последовательностных схем</a><span class="schedule__date" data-date="lecture" data-week="10"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="10"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">11</td>
+<td class="table__cell"><a class="link" href="lectures/11.html">Компьютерные системы, микропроцессоры и микроконтроллеры</a><span class="schedule__date" data-date="lecture" data-week="11"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="11"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">12</td>
+<td class="table__cell"><a class="link" href="lectures/12.html">Способы связи: порты, UART, SPI, I²C</a><span class="schedule__date" data-date="lecture" data-week="12"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="12"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">13</td>
+<td class="table__cell"><a class="link" href="lectures/13.html">Периферия микроконтроллеров и обработка событий</a><span class="schedule__date" data-date="lecture" data-week="13"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="13"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">14</td>
+<td class="table__cell"><a class="link" href="lectures/14.html">Архитектура компьютеров: процессор MIPS изнутри</a><span class="schedule__date" data-date="lecture" data-week="14"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="14"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">15</td>
+<td class="table__cell"><a class="link" href="lectures/15.html">Ассемблер и архитектура компьютеров (MIPS)</a><span class="schedule__date" data-date="lecture" data-week="15"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="15"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+</tbody></table></div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">В материалах нет календарных дат — только номера недель. Калькулятор дат выше — моё дополнение: он прибавляет по 7 дней и <strong>не знает</strong> о праздниках и выходных, поэтому сверь результат с расписанием.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Лекции</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="lectures/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Лекция 1</span><span class="card__title">Введение, физические основы электроники и измерения</span><span class="card__text">Напряжение, ток, закон Ома, законы Кирхгофа — а потом главное для первых лабораторных: как измерять и как посчитать, насколько мы могли ошибиться.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Лекция 2</span><span class="card__title">Пассивные элементы: резистор, конденсатор, катушка и импеданс</span><span class="card__text">Три базовых «кирпичика» электроники и одно понятие, которое их объединяет, — импеданс, то есть сопротивление, записанное комплексным числом.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/03.html">
+<span class="card__num">3</span>
+<span class="card__body"><span class="card__kicker">Лекция 3</span><span class="card__title">Пассивные электронные цепи: делители и RC-фильтры</span><span class="card__text">Из двух элементов делаем делитель напряжения, а из делителя — фильтр. Плюс децибелы, граничная частота и последовательное и параллельное соединение элементов.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/04.html">
+<span class="card__num">4</span>
+<span class="card__body"><span class="card__kicker">Лекция 4</span><span class="card__title">Полупроводники: диоды и транзисторы</span><span class="card__text">Откуда в кремнии берутся «дырки», почему диод проводит только в одну сторону и как маленький ток базы управляет большим током коллектора.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/05.html">
+<span class="card__num">5</span>
+<span class="card__body"><span class="card__kicker">Лекция 5</span><span class="card__title">Операционные усилители</span><span class="card__text">Один треугольник на схеме, два резистора — и получается усилитель ровно с тем усилением, которое нам нужно. Плюс повторитель, компаратор, сумматор и активные фильтры.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/06.html">
+<span class="card__num">6</span>
+<span class="card__body"><span class="card__kicker">Лекция 6</span><span class="card__title">Цифровые схемы — введение: сигналы, вентили, булева алгебра</span><span class="card__text">От напряжения к нулям и единицам. Что такое логическое состояние, какие бывают вентили, как записать логическую функцию и почему из одних вентилей NAND можно построить всё.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/07.html">
+<span class="card__num">7</span>
+<span class="card__body"><span class="card__kicker">Лекция 7</span><span class="card__title">Минимизация булевых функций: карты Карно</span><span class="card__text">Одна и та же функция может требовать десять вентилей или три. Карта Карно — способ найти короткий вариант без угадывания, а потом собрать его из одних NAND или NOR.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/08.html">
+<span class="card__num">8</span>
+<span class="card__body"><span class="card__kicker">Лекция 8</span><span class="card__title">Комбинационные функциональные блоки: мультиплексор, дополнительный код, сумматор, АЛУ</span><span class="card__text">Готовые «кирпичики» крупнее вентиля. Мультиплексор как переключатель и как универсальная логическая функция, запись отрицательных чисел в дополнительном коде (U2), сумматор и арифметико-логическое устройство.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/09.html">
+<span class="card__num">9</span>
+<span class="card__body"><span class="card__kicker">Лекция 9</span><span class="card__title">Последовательностные схемы: триггеры, регистры, счётчики</span><span class="card__text">Схема, которая помнит. Откуда берётся память, чем отличаются триггеры RS, D, JK и T, зачем нужен тактовый сигнал и как из нескольких триггеров сделать сдвиговый регистр или счётчик.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/10.html">
+<span class="card__num">10</span>
+<span class="card__body"><span class="card__kicker">Лекция 10</span><span class="card__title">Проектирование синхронных последовательностных схем</span><span class="card__text">От описания словами («должен гореть красный, потом жёлтый…») до готовой схемы из триггеров и вентилей. Четыре шага: граф, кодирование состояний, функции возбуждения, функции выходов.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/11.html">
+<span class="card__num">11</span>
+<span class="card__body"><span class="card__kicker">Лекция 11</span><span class="card__title">Компьютерные системы, микропроцессоры и микроконтроллеры</span><span class="card__text">Из чего состоит компьютер, как процессор выполняет команду и что такое микроконтроллер — на примере ATmega328, «сердца» платы Arduino UNO.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/12.html">
+<span class="card__num">12</span>
+<span class="card__body"><span class="card__kicker">Лекция 12</span><span class="card__title">Способы связи: порты, UART, SPI, I²C</span><span class="card__text">Как микроконтроллер общается с миром. Последовательно или параллельно, с тактовым сигналом или без, кто начинает разговор — и три интерфейса, с которыми ты встретишься на занятиях с Arduino.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/13.html">
+<span class="card__num">13</span>
+<span class="card__body"><span class="card__kicker">Лекция 13</span><span class="card__title">Периферия микроконтроллеров и обработка событий</span><span class="card__text">Как микроконтроллер управляет чем-то большим, чем он сам (ШИМ, транзистор как ключ, H-мост), как превращает напряжение в число и обратно — и два способа реагировать на события: опрос и прерывания.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/14.html">
+<span class="card__num">14</span>
+<span class="card__body"><span class="card__kicker">Лекция 14</span><span class="card__title">Архитектура компьютеров: процессор MIPS изнутри</span><span class="card__text">Собираем процессор из кирпичиков, которые уже знаем: регистров, памяти, мультиплексоров и АЛУ. Сначала однотактный вариант, потом многотактный и конвейерный.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/15.html">
+<span class="card__num">15</span>
+<span class="card__body"><span class="card__kicker">Лекция 15</span><span class="card__title">Ассемблер и архитектура компьютеров (MIPS)</span><span class="card__text">Язык, на котором на самом деле «говорит» процессор. Команды, регистры, память, переходы и циклы на ассемблере MIPS — и как такая команда выглядит в виде 32 нулей и единиц.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s5">Лабораторные</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="labs/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Лабораторная 1</span><span class="card__title">Вводное занятие: оборудование лаборатории</span><span class="card__text">Первое занятие — без баллов. Ты знакомишься с блоком питания, мультиметром, генератором и осциллографом — четырьмя приборами, с которыми проведёшь следующие пять недель.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="labs/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Лабораторная 2</span><span class="card__title">Измерение напряжений и токов</span><span class="card__text">Первое занятие с баллами (5 баллов). Ты измеряешь напряжение, сопротивление и ток — цифровым прибором, осциллографом и стрелочным амперметром — и для каждого результата считаешь погрешность.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s6">Программы, которые пригодятся</h2>
+<ul class="list">
+<li class="list__item"><strong>Logisim 2.7.1</strong> — симулятор цифровых схем для лабораторных 7–11 (файл <code class="inline-code">logisim-generic-2.7.1.jar</code>, нужна Java). На лекции 2026/27 было сказано, что Logisim работает и <strong>в браузере</strong>, а также что есть более новая версия <em>Logisim Evolution</em> (в том числе для macOS) — «очень похожая, только чуть сложнее».</li>
+<li class="list__item"><strong>Arduino IDE</strong> — для лабораторных 12–15 (плата Arduino UNO R3).</li>
+<li class="list__item"><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Файлы <code class="inline-code">.circ</code> с занятий открываются в Logisim 2.7.1; в Logisim Evolution обычно тоже, но сохранённый там файл может уже не открыться в старой версии — на оценку работай в той версии, которая стоит в аудитории.</li>
+</ul>
+</div>
+
+
+</article>
+
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

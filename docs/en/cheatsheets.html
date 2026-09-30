@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cheat sheets — SYC</title>
+<meta name="description" content="Lectures, lab classes and cheat sheets for the SYC course (PJATK) — explained simply, in three languages.">
+<link rel="alternate" hreflang="pl" href="../pl/cheatsheets.html">
+<link rel="alternate" hreflang="en" href="../en/cheatsheets.html">
+<link rel="alternate" hreflang="ru" href="../ru/cheatsheets.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link" href="lectures/index.html">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="cheatsheets.html" aria-current="page">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../pl/cheatsheets.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/cheatsheets.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../ru/cheatsheets.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#c1">Lecture 1. Introduction, physical basics of electronics and measurements</a></li>
+<li class="toc__item"><a class="toc__link" href="#c2">Lecture 2. Passive components: resistor, capacitor, inductor and impedance</a></li>
+<li class="toc__item"><a class="toc__link" href="#c3">Lecture 3. Passive electronic circuits: dividers and RC filters</a></li>
+<li class="toc__item"><a class="toc__link" href="#c4">Lecture 4. Semiconductors: diodes and transistors</a></li>
+<li class="toc__item"><a class="toc__link" href="#c5">Lecture 5. Operational amplifiers</a></li>
+<li class="toc__item"><a class="toc__link" href="#c6">Lecture 6. Digital circuits — introduction: signals, gates, Boolean algebra</a></li>
+<li class="toc__item"><a class="toc__link" href="#c7">Lecture 7. Minimisation of Boolean functions: Karnaugh maps</a></li>
+<li class="toc__item"><a class="toc__link" href="#c8">Lecture 8. Combinational functional blocks: multiplexer, two's complement, adder, ALU</a></li>
+<li class="toc__item"><a class="toc__link" href="#c9">Lecture 9. Sequential circuits: flip-flops, registers, counters</a></li>
+<li class="toc__item"><a class="toc__link" href="#c10">Lecture 10. Designing synchronous sequential circuits</a></li>
+<li class="toc__item"><a class="toc__link" href="#c11">Lecture 11. Computer systems, microprocessors and microcontrollers</a></li>
+<li class="toc__item"><a class="toc__link" href="#c12">Lecture 12. Communication methods: ports, UART, SPI, I²C</a></li>
+<li class="toc__item"><a class="toc__link" href="#c13">Lecture 13. Microcontroller peripherals and event handling</a></li>
+<li class="toc__item"><a class="toc__link" href="#c14">Lecture 14. Computer architecture: the MIPS processor from the inside</a></li>
+<li class="toc__item"><a class="toc__link" href="#c15">Lecture 15. Assembly language and computer architecture (MIPS)</a></li>
+<li class="toc__item"><a class="toc__link" href="#c16">Lab 1. Introductory class: the lab equipment</a></li>
+<li class="toc__item"><a class="toc__link" href="#c17">Lab 2. Measuring voltages and currents</a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--cheats">
+<header class="article__header">
+<h1 class="article__title">Cheat sheets</h1>
+<p class="article__lead">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="article__actions"><button class="button button--primary" type="button" data-print>🖨️ Print all cheat sheets</button></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<section class="cheat cheat--inline" id="c1">
+<h2 class="cheat__title"><a class="link" href="lectures/01.html">Lecture 1. Introduction, physical basics of electronics and measurements</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Formulas</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">What</th><th class="table__cell table__cell--head">Formula</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Ohm's law</td><td class="table__cell"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span></span>,   <span class="math">U = I·R</span>,   <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Voltage</td><td class="table__cell"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub></span> (always between two points)</td></tr>
+<tr class="table__row"><td class="table__cell">Kirchhoff I</td><td class="table__cell">currents into a node = currents out of it</td></tr>
+<tr class="table__row"><td class="table__cell">Kirchhoff II</td><td class="table__cell">voltages around a closed loop add up to 0</td></tr>
+<tr class="table__row"><td class="table__cell">Absolute error</td><td class="table__cell"><span class="math">Δx = x − x<sub class="math__sub">0</sub></span> (same unit as the measurement)</td></tr>
+<tr class="table__row"><td class="table__cell">Relative error</td><td class="table__cell"><span class="math">δ = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x|</span></span> · 100%</span></td></tr>
+<tr class="table__row"><td class="table__cell">Analog instrument</td><td class="table__cell"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span>  + reading error (e.g. 0.1 division)</td></tr>
+<tr class="table__row"><td class="table__cell">Digital instrument</td><td class="table__cell"><span class="math">Δ = a% · X + n · Δr</span></td></tr>
+<tr class="table__row"><td class="table__cell">Indirect measurement</td><td class="table__cell"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,  <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,  <span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>+I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span>,  <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Rules</h3>
+<ul class="list">
+<li class="list__item"><strong>Ground (GND)</strong> = agreed 0 V, usually the supply minus.</li>
+<li class="list__item">By convention current flows from "+" to "−".</li>
+<li class="list__item"><strong>Range:</strong> the smallest one on which the result fits; measure near the end of the range.</li>
+<li class="list__item"><strong>Resolution Δr</strong> = the value of the last digit on the display (it depends on the range!).</li>
+<li class="list__item">Error → max 2 significant digits; result → same decimal place; write <strong>x ± Δx</strong>.</li>
+<li class="list__item">Graph: crosses + a smooth line, never a zig-zag.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c2">
+<h2 class="cheat__title"><a class="link" href="lectures/02.html">Lecture 2. Passive components: resistor, capacitor, inductor and impedance</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Prefixes</h3>
+<p class="article__p">G = 10⁹, M = 10⁶, k = 10³, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹, p = 10⁻¹²</p>
+<h3 class="article__h3">The three components</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Resistor</th><th class="table__cell table__cell--head">Capacitor</th><th class="table__cell table__cell--head">Inductor</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Quantity</td><td class="table__cell">R [Ω]</td><td class="table__cell">C [F]</td><td class="table__cell">L [H]</td></tr>
+<tr class="table__row"><td class="table__cell">Definition</td><td class="table__cell"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td><td class="table__cell"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span></span></td><td class="table__cell"><span class="math">E = −L<span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Impedance</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math">jωL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Magnitude</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell"><span class="math">2πfL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Phase of Z</td><td class="table__cell">0°</td><td class="table__cell">−90°</td><td class="table__cell">+90°</td></tr>
+<tr class="table__row"><td class="table__cell">DC (f = 0)</td><td class="table__cell">R</td><td class="table__cell">open (∞)</td><td class="table__cell">short (0)</td></tr>
+<tr class="table__row"><td class="table__cell">f → ∞</td><td class="table__cell">R</td><td class="table__cell">short (0)</td><td class="table__cell">open (∞)</td></tr>
+<tr class="table__row"><td class="table__cell">f rises</td><td class="table__cell">no change</td><td class="table__cell">opposition falls</td><td class="table__cell">opposition rises</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Formulas</h3>
+<ul class="list">
+<li class="list__item"><span class="math">ω = 2πf</span>,   <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span>,   <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span></li>
+<li class="list__item"><span class="math">Z = R + jX = |Z| · e<sup class="math__sup">jφ</sup></span>;   <span class="math">R = |Z| cos φ</span>,   <span class="math">X = |Z| sin φ</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span> (voltage amplitude over current amplitude)</li>
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span> (shift and period in divisions)</li>
+<li class="list__item">Laplace: derivative → <span class="math">·s</span>, integral → <span class="math">·<span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span>, sine wave → <span class="math">s = jω</span></li>
+<li class="list__item">X negative → capacitive character; X positive → inductive</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c3">
+<h2 class="cheat__title"><a class="link" href="lectures/03.html">Lecture 3. Passive electronic circuits: dividers and RC filters</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Formulas</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">What</th><th class="table__cell table__cell--head">Formula</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Transfer function</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">Y(s)</span><span class="math__den">X(s)</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Voltage divider</td><td class="table__cell"><span class="math">U<sub class="math__sub">OUT</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub>+R<sub class="math__sub">2</sub></span></span> · U<sub class="math__sub">IN</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell">Impedance divider</td><td class="table__cell"><span class="math">U<sub class="math__sub">OUT</sub> = <span class="math__frac"><span class="math__num">Z<sub class="math__sub">2</sub></span><span class="math__den">Z<sub class="math__sub">1</sub>+Z<sub class="math__sub">2</sub></span></span> · U<sub class="math__sub">IN</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell">Time constant</td><td class="table__cell"><span class="math">T = R · C</span> [s]; after time T: 63.2%</td></tr>
+<tr class="table__row"><td class="table__cell">Gain</td><td class="table__cell"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span>,   <span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></td></tr>
+<tr class="table__row"><td class="table__cell">Cut-off frequency</td><td class="table__cell"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>  ↔  <span class="math">k = 0.707</span>  ↔  −3 dB</td></tr>
+<tr class="table__row"><td class="table__cell">Low-pass filter</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">1+sRC</span></span></span>;   <span class="math">k = <span class="math__frac"><span class="math__num">1</span><span class="math__den"><span class="math__sqrt">√<span class="math__bar">1+(f/f<sub class="math__sub">g</sub>)<sup class="math__sup">2</sup></span></span></span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">High-pass filter</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">sRC</span><span class="math__den">1+sRC</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item"><strong>Low-pass:</strong> R in series, C to ground — passes low f.</li>
+<li class="list__item"><strong>High-pass:</strong> C in series, R to ground — passes high f.</li>
+<li class="list__item">Outside the pass band: <strong>20 dB/decade</strong> (×10 frequency = ÷10 amplitude); two filters: 40 dB/dec.</li>
+<li class="list__item">0 dB = ×1; −3 dB = ×0.707; −20 dB = ×0.1; −40 dB = ×0.01.</li>
+<li class="list__item">Series: R and L add, C — reciprocals. Parallel: C add, R and L — reciprocals.</li>
+<li class="list__item">Linear system: sine in → sine of the same frequency out.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c4">
+<h2 class="cheat__title"><a class="link" href="lectures/04.html">Lecture 4. Semiconductors: diodes and transistors</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Semiconductors</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">n-type</th><th class="table__cell table__cell--head">p-type</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Dopant</td><td class="table__cell">donor, group V (P, As)</td><td class="table__cell">acceptor, group III (B, Al)</td></tr>
+<tr class="table__row"><td class="table__cell">Majority carriers</td><td class="table__cell">electrons</td><td class="table__cell">holes</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">p-n junction: diffusion → recombination → depletion region → potential barrier.</li>
+<li class="list__item"><strong>Forward:</strong> "+" on p (anode), "−" on n (cathode). <strong>Reverse:</strong> the other way round — no current.</li>
+</ul>
+<h3 class="article__h3">Diode</h3>
+<ul class="list">
+<li class="list__item">Conducts from anode to cathode once the voltage exceeds the threshold: silicon ≈ <strong>0.6 V</strong>; red LED ≈ 2 V <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.</li>
+<li class="list__item">LED: longer lead = anode (+). Always with a resistor: <span class="math">R = <span class="math__frac"><span class="math__num">U<sub class="math__sub">supply</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">I</span></span></span> <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.</li>
+</ul>
+<h3 class="article__h3">Bipolar transistor</h3>
+<ul class="list">
+<li class="list__item">Terminals: <strong>E</strong>mitter, <strong>B</strong>ase, <strong>C</strong>ollector. The arrow = emitter. NPN: arrow out, PNP: arrow in.</li>
+<li class="list__item">A small base current controls a large collector current: <span class="math">I<sub class="math__sub">C</sub> = β · I<sub class="math__sub">B</sub></span>, β > 100.</li>
+<li class="list__item">It turns on when <span class="math">U<sub class="math__sub">BE</sub> ≈ 0.6 V</span> (B–E junction forward biased).</li>
+<li class="list__item">Characteristics: input <span class="math">I<sub class="math__sub">B</sub>(U<sub class="math__sub">BE</sub>)</span>, output <span class="math">I<sub class="math__sub">C</sub>(U<sub class="math__sub">CE</sub>)</span>, transfer <span class="math">I<sub class="math__sub">C</sub>(I<sub class="math__sub">B</sub>)</span> — linear.</li>
+<li class="list__item">As a switch <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>: no base current → <strong>cut off</strong> (off); large base current → <strong>saturated</strong> (on).</li>
+</ul>
+<h3 class="article__h3">Field-effect transistors</h3>
+<ul class="list">
+<li class="list__item">Terminals: <strong>S</strong> (source), <strong>D</strong> (drain), <strong>G</strong> (gate). Controlled by the gate <strong>voltage</strong>, gate current ≈ 0.</li>
+<li class="list__item">JFET: the gate narrows the channel. <span class="math">g<sub class="math__sub">m</sub> = <span class="math__frac"><span class="math__num">dI<sub class="math__sub">DS</sub></span><span class="math__den">dV<sub class="math__sub">GS</sub></span></span></span>.</li>
+<li class="list__item">MOSFET: gate insulated by oxide; the basis of digital circuits (CMOS).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c5">
+<h2 class="cheat__title"><a class="link" href="lectures/05.html">Lecture 5. Operational amplifiers</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">The op-amp</h3>
+<ul class="list">
+<li class="list__item">Amplifies the difference: <span class="math">V<sub class="math__sub">out</sub> = k · (V<sub class="math__sub">+</sub> − V<sub class="math__sub">−</sub>)</span>, <span class="math">k</span> huge (10⁵…10⁷).</li>
+<li class="list__item">Ideal: <span class="math">k = ∞</span>, <span class="math">Z<sub class="math__sub">in</sub> = ∞</span>, <span class="math">Z<sub class="math__sub">out</sub> = 0</span>, input current 0, offset 0.</li>
+<li class="list__item">The output cannot exceed the supply (<strong>saturation</strong>). Bandwidth × gain = const.</li>
+<li class="list__item"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> With negative feedback: no current into the inputs, and <span class="math">V<sub class="math__sub">+</sub> = V<sub class="math__sub">−</sub></span>.</li>
+</ul>
+<h3 class="article__h3">Circuits</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Circuit</th><th class="table__cell table__cell--head">Formula</th><th class="table__cell table__cell--head">Notes</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Inverting</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> V<sub class="math__sub">in</sub></span></td><td class="table__cell">phase inverted by 180°; <span class="math">Z<sub class="math__sub">in</sub> = R<sub class="math__sub">1</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Non-inverting</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = (1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>) V<sub class="math__sub">in</sub></span></td><td class="table__cell">k > 1; <span class="math">Z<sub class="math__sub">in</sub> ≈ ∞</span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Follower</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = V<sub class="math__sub">in</sub></span></td><td class="table__cell">isolates circuits (large <span class="math">Z<sub class="math__sub">in</sub></span>, small <span class="math">Z<sub class="math__sub">out</sub></span>)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Comparator</strong></td><td class="table__cell"><span class="math">+V<sub class="math__sub">c</sub></span> when <span class="math">V<sub class="math__sub">+</sub> &gt; V<sub class="math__sub">−</sub></span>, else <span class="math">−V<sub class="math__sub">c</sub></span></td><td class="table__cell">no feedback</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Differential</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">f</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>(V<sub class="math__sub">2</sub> − V<sub class="math__sub">1</sub>)</span></td><td class="table__cell">when <span class="math">R<sub class="math__sub">1</sub>=R<sub class="math__sub">2</sub></span>, <span class="math">R<sub class="math__sub">f</sub>=R<sub class="math__sub">g</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Summing</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −R<sub class="math__sub">f</sub>(<span class="math__frac"><span class="math__num">V<sub class="math__sub">1</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> + <span class="math__frac"><span class="math__num">V<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">2</sub></span></span> + …)</span></td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Integrator</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">1</span><span class="math__den">RC</span></span> ∫ V<sub class="math__sub">in</sub> dt</span></td><td class="table__cell">C in the feedback</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Differentiator</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −RC <span class="math__frac"><span class="math__num">dV<sub class="math__sub">in</sub></span><span class="math__den">dt</span></span></span></td><td class="table__cell">C at the input</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Feedback</h3>
+<ul class="list">
+<li class="list__item">Negative — stabilises (used in amplifiers). Positive — destabilises.</li>
+<li class="list__item">Closed loop: <span class="math">T = <span class="math__frac"><span class="math__num">K</span><span class="math__den">1 − Kβ</span></span></span>.</li>
+<li class="list__item">R₂ is always the resistor <strong>in the feedback</strong> (between the output and the "−" input).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c6">
+<h2 class="cheat__title"><a class="link" href="lectures/06.html">Lecture 6. Digital circuits — introduction: signals, gates, Boolean algebra</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Logic levels</h3>
+<ul class="list">
+<li class="list__item"><strong>TTL</strong> (5 V, bipolar transistors): 0 → 0–0.8 V; 1 → 2–5 V; in between — undefined.</li>
+<li class="list__item"><strong>CMOS</strong> (3–18 V, MOS pairs): 0 → 0–30% of supply; 1 → 70–100%; power only when switching.</li>
+<li class="list__item"><strong>Hi-Z</strong> — the third state (nothing connected); fixed with a pull-up resistor.</li>
+</ul>
+<h3 class="article__h3">Gates</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">AND</th><th class="table__cell table__cell--head table__cell--center">OR</th><th class="table__cell table__cell--head table__cell--center">XOR</th><th class="table__cell table__cell--head table__cell--center">NAND</th><th class="table__cell table__cell--head table__cell--center">NOR</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Boolean algebra</h3>
+<ul class="list">
+<li class="list__item"><span class="math">a + <span class="math__bar">a</span> = 1</span>,  <span class="math">a · <span class="math__bar">a</span> = 0</span>,  <span class="math">a + ab = a</span>,  <span class="math">a(a+b) = a</span></li>
+<li class="list__item"><span class="math">a(b+c) = ab + ac</span>,  <span class="math">a + bc = (a+b)(a+c)</span></li>
+<li class="list__item"><strong>De Morgan:</strong> <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span></span>,   <span class="math"><span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span></li>
+<li class="list__item"><strong>Combining:</strong> <span class="math">a<span class="math__bar">b</span> + ab = a</span></li>
+</ul>
+<h3 class="article__h3">Canonical forms</h3>
+<ul class="list">
+<li class="list__item"><strong>Sum form (DNF), Σ:</strong> from rows with <strong>1</strong>; a product of variables, <strong>0 → negated</strong>; products joined by "+".</li>
+<li class="list__item"><strong>Product form (CNF), Π:</strong> from rows with <strong>0</strong>; a sum of variables, <strong>1 → negated</strong>; sums joined by "·".</li>
+<li class="list__item">Row number = decimal value of the input bits.</li>
+</ul>
+<h3 class="article__h3">From NAND only</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a·a</span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a·b</span></span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>·<span class="math__bar">b</span></span></span></p>
+<h3 class="article__h3">From NOR only</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a+a</span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a+b</span></span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>+<span class="math__bar">b</span></span></span></p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c7">
+<h2 class="cheat__title"><a class="link" href="lectures/07.html">Lecture 7. Minimisation of Boolean functions: Karnaugh maps</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Karnaugh map — the procedure</h3>
+<ol class="list list--ordered">
+<li class="list__item">Draw the map; columns and rows in <strong>Gray code: 00, 01, 11, 10</strong>.</li>
+<li class="list__item">Fill in the values from the truth table (mind the column order!).</li>
+<li class="list__item">Mark the groups: rectangles of <strong>1, 2, 4, 8</strong> cells; as large as possible, as few as possible; they may overlap; edges and corners touch <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.</li>
+<li class="list__item">For each group: <strong>drop the variables that change</strong>, write down the constant ones.</li>
+</ol>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head table__cell--center">You group</th><th class="table__cell table__cell--head table__cell--center">A group gives</th><th class="table__cell table__cell--head table__cell--center">Variable = 0</th><th class="table__cell table__cell--head table__cell--center">Variable = 1</th><th class="table__cell table__cell--head table__cell--center">Joined by</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Sum form</strong></td><td class="table__cell table__cell--center">ones</td><td class="table__cell table__cell--center">a product</td><td class="table__cell table__cell--center">negated</td><td class="table__cell table__cell--center">plain</td><td class="table__cell table__cell--center">sum (+)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Product form</strong></td><td class="table__cell table__cell--center">zeros</td><td class="table__cell table__cell--center">a sum</td><td class="table__cell table__cell--center">plain</td><td class="table__cell table__cell--center">negated</td><td class="table__cell table__cell--center">product (·)</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Cell numbering (4 variables, row ab, column cd)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab \ cd</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">With NAND / NOR</h3>
+<ul class="list">
+<li class="list__item"><strong>NAND:</strong> sum form → double negation → De Morgan:  <span class="math">ab + cd = <span class="math__bar"><span class="math__bar">ab</span> · <span class="math__bar">cd</span></span></span></li>
+<li class="list__item"><strong>NOR:</strong> product form → double negation → De Morgan:  <span class="math">(a+b)(c+d) = <span class="math__bar"><span class="math__bar">a+b</span> + <span class="math__bar">c+d</span></span></span></li>
+<li class="list__item">Combining: <span class="math">a·f + <span class="math__bar">a</span>·f = f</span>.   Gray code (3 bits): 000, 001, 011, 010, 110, 111, 101, 100.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c8">
+<h2 class="cheat__title"><a class="link" href="lectures/08.html">Lecture 8. Combinational functional blocks: multiplexer, two's complement, adder, ALU</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Multiplexer</h3>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> address inputs → <span class="math">2<sup class="math__sup">n</sup></span> data inputs; output = the data input whose number is on the address.</li>
+<li class="list__item"><strong>Function on a 16:1 MUX:</strong> feed 1 to the inputs listed in Σ, 0 to the rest.</li>
+<li class="list__item"><strong>Function on an 8:1 MUX:</strong> 3 variables to the address, the fourth "free" one <span class="math">x</span>. For each address compare y at x = 0 and x = 1:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">y(x=0), y(x=1)</th><th class="table__cell table__cell--head table__cell--center">0, 0</th><th class="table__cell table__cell--head table__cell--center">1, 1</th><th class="table__cell table__cell--head table__cell--center">0, 1</th><th class="table__cell table__cell--head table__cell--center">1, 0</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">feed the input</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">x</span></td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Free <span class="math">x<sub class="math__sub">3</sub></span>: row pairs <span class="math">(k, k+8)</span>. Free <span class="math">x<sub class="math__sub">0</sub></span>: pairs <span class="math">(2k, 2k+1)</span>.</li>
+<li class="list__item">DMUX: one input → the output indicated by the address. Decoder: binary → 1 of N.</li>
+</ul>
+<h3 class="article__h3">Two's complement (N bits)</h3>
+<ul class="list">
+<li class="list__item">Weight of the top bit: <span class="math">−2<sup class="math__sup">N−1</sup></span>. Range: <span class="math">−2<sup class="math__sup">N−1</sup> … 2<sup class="math__sup">N−1</sup>−1</span> (4 bits: −8…7; 8 bits: −128…127).</li>
+<li class="list__item"><strong>Opposite number:</strong> invert the bits, add 1.</li>
+<li class="list__item">Add as in plain binary; ignore the carry out of the MSB. Subtraction: <span class="math">a + (−b)</span>.</li>
+<li class="list__item"><strong>Overflow</strong> = <span class="math">C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span> of the top bit (positive + positive = negative, or vice versa).</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">4-bit U2</th><th class="table__cell table__cell--head table__cell--center">0111</th><th class="table__cell table__cell--head table__cell--center">0001</th><th class="table__cell table__cell--head table__cell--center">0000</th><th class="table__cell table__cell--head table__cell--center">1111</th><th class="table__cell table__cell--head table__cell--center">1110</th><th class="table__cell table__cell--head table__cell--center">1001</th><th class="table__cell table__cell--head table__cell--center">1000</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">value</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−1</td><td class="table__cell table__cell--center">−2</td><td class="table__cell table__cell--center">−7</td><td class="table__cell table__cell--center">−8</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Adder and ALU</h3>
+<ul class="list">
+<li class="list__item">Full adder: <span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub></span>,   <span class="math">c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span>. An n-bit adder = a cascade.</li>
+<li class="list__item">Half adder (no carry in) <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>: <span class="math">s = a ⊕ b</span>, <span class="math">c = ab</span>.</li>
+<li class="list__item">ALU: A, B — data; F — operation code; R — result; D — flags. All operations computed at once, a MUX picks the result.</li>
+<li class="list__item">Other codes: BCD (digit → 4 bits), ZM (sign bit + magnitude), U1 (bits inverted), Gray, 1 of N.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c9">
+<h2 class="cheat__title"><a class="link" href="lectures/09.html">Lecture 9. Sequential circuits: flip-flops, registers, counters</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Flip-flops</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Type</th><th class="table__cell table__cell--head">Equation</th><th class="table__cell table__cell--head">Table</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS (NAND)</strong>, active low</td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub>·R + <span class="math__bar">S</span></span></td><td class="table__cell">S=0 → 1; R=0 → 0; 11 → hold; 00 forbidden</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Clocked RS</strong> (latch)</td><td class="table__cell">—</td><td class="table__cell">C=1: 00 hold, 01 → 0, 10 → 1, 11 forbidden; C=0: nothing</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>D</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = D</span></td><td class="table__cell">at the clock edge Q := D</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>JK</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = J<span class="math__bar">Q</span> + <span class="math__bar">K</span>Q</span></td><td class="table__cell">00 hold, 01 → 0, 10 → 1, 11 → toggle</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>T</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = T ⊕ Q</span></td><td class="table__cell">T=1 → toggle, T=0 → hold</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>SET / CLR</strong> — asynchronous (immediately, no clock): Q = 1 / Q = 0.</li>
+<li class="list__item">D with <span class="math"><span class="math__bar">Q</span></span> on the D input (or JK with J=K=1) = a <strong>divide-by-2</strong> stage.</li>
+<li class="list__item">Moore: output = f(state). Mealy: output = f(state, input).</li>
+</ul>
+<h3 class="article__h3">Registers (4 D flip-flops, common clock)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Circuit</th><th class="table__cell table__cell--head">Input of the first D</th><th class="table__cell table__cell--head">Sequence</th><th class="table__cell table__cell--head table__cell--center">States</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Shift register</td><td class="table__cell">external signal</td><td class="table__cell">0000 → 1000 → 1100 → 1110 → 1111 (for "1")</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Ring counter</td><td class="table__cell">Q of the last</td><td class="table__cell">1000 → 0100 → 0010 → 0001</td><td class="table__cell table__cell--center">4</td></tr>
+<tr class="table__row"><td class="table__cell">Johnson counter</td><td class="table__cell"><span class="math"><span class="math__bar">Q</span></span> of the last</td><td class="table__cell">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000</td><td class="table__cell table__cell--center">8</td></tr>
+<tr class="table__row"><td class="table__cell">PRBS</td><td class="table__cell">XOR of two outputs (3 and 4) <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span></td><td class="table__cell">pseudo-random, start ≠ 0000</td><td class="table__cell table__cell--center">15 <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Counters</h3>
+<ul class="list">
+<li class="list__item"><strong>Asynchronous binary:</strong> each flip-flop is a divide-by-2 stage clocked by the output of the previous one.</li>
+<li class="list__item"><strong>Mod N:</strong> detect state N with a gate → CLR all. (mod 10: 1010; mod 9: 1001; mod 6: 0110)</li>
+<li class="list__item"><strong>From X to Y:</strong> detect state Y+1 → SET where X has ones, CLR where it has zeros.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c10">
+<h2 class="cheat__title"><a class="link" href="lectures/10.html">Lecture 10. Designing synchronous sequential circuits</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">The procedure (Moore machine, D flip-flops)</h3>
+<ol class="list list--ordered">
+<li class="list__item"><strong>States and outputs</strong> — write down what the outputs should be in each state.</li>
+<li class="list__item"><strong>Graph / transition table</strong> — for every state and <strong>every</strong> combination of inputs: the next state.</li>
+<li class="list__item"><strong>Coding</strong> — <span class="math">n</span> flip-flops, <span class="math">2<sup class="math__sup">n</sup> ≥</span> number of states; codes best in Gray order (00, 01, 11, 10).</li>
+<li class="list__item"><strong>Coded table</strong> — replace state names with codes.</li>
+<li class="list__item"><strong>Excitation functions</strong> — for a D flip-flop: <span class="math">D<sub class="math__sub">i</sub></span> = the i-th bit of the <strong>next</strong> state. Karnaugh map over: state bits + inputs.</li>
+<li class="list__item"><strong>Output functions</strong> — Karnaugh map over the state variables only (Moore).</li>
+<li class="list__item"><strong>Circuit</strong> — flip-flops on a common clock + gates.</li>
+</ol>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item">Moore: output = f(state) — values in the circles. Mealy: output = f(state, input) — values at the arrows.</li>
+<li class="list__item">Every state needs an arrow for every combination of inputs.</li>
+<li class="list__item"><strong>Coding — codes differing in 1 bit for:</strong> (1) states with the same next state, (2) next states of the same state, (3) states with the same outputs.</li>
+<li class="list__item"><strong>Equivalent states:</strong> same outputs + next states the same or equivalent → merge into one.</li>
+<li class="list__item"><strong>Don't-care cells</strong> (spare codes, impossible inputs) — fill in whatever is convenient.</li>
+<li class="list__item">Handy: XOR <span class="math">= <span class="math__bar">a</span>b + a<span class="math__bar">b</span></span>; the formulas often simplify to XOR/AND/NOT.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c11">
+<h2 class="cheat__title"><a class="link" href="lectures/11.html">Lecture 11. Computer systems, microprocessors and microcontrollers</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">The computer</h3>
+<ul class="list">
+<li class="list__item"><strong>Von Neumann:</strong> processor (with ALU) + memory (data <strong>and</strong> program together) + input/output; instructions executed one after another.</li>
+<li class="list__item"><strong>Harvard:</strong> separate program and data memory (microcontrollers: Flash + RAM).</li>
+<li class="list__item"><strong>Instruction cycle:</strong> fetch → decode → execute.</li>
+<li class="list__item"><strong>Registers:</strong> PC (address of the next instruction), instruction register, accumulator, SP (stack), flag register.</li>
+<li class="list__item"><strong>Buses:</strong> address, data, control.</li>
+<li class="list__item"><strong>CISC:</strong> many complex instructions, variable time. <strong>RISC:</strong> few simple instructions, one cycle, pipelining.</li>
+</ul>
+<h3 class="article__h3">The microcontroller</h3>
+<p class="article__p">µC = processor + RAM + program memory + I/O ports + peripherals (UART, SPI, I²C, ADC, timers, watchdog) in one chip.</p>
+<p class="article__p">Programming: high-voltage programmer / ISP / <strong>bootloader</strong> (Arduino).</p>
+<h3 class="article__h3">ATmega328 (Arduino UNO)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Core</td><td class="table__cell">8-bit RISC, 131 instructions, 32 registers</td></tr>
+<tr class="table__row"><td class="table__cell">Flash</td><td class="table__cell">32 kB (program; application + bootloader)</td></tr>
+<tr class="table__row"><td class="table__cell">SRAM</td><td class="table__cell">2 kB (data, lost at power-off)</td></tr>
+<tr class="table__row"><td class="table__cell">EEPROM</td><td class="table__cell">1 kB (persistent data)</td></tr>
+<tr class="table__row"><td class="table__cell">ADC</td><td class="table__cell">10 bits → 0…1023, 8 channels</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">up to 16 MHz</td></tr>
+<tr class="table__row"><td class="table__cell">Interfaces</td><td class="table__cell">USART, SPI, I²C (TWI)</td></tr>
+<tr class="table__row"><td class="table__cell">Ports</td><td class="table__cell">B, C (analog), D</td></tr>
+<tr class="table__row"><td class="table__cell">Reset</td><td class="table__cell">power-on, external, watchdog, brown-out</td></tr>
+</tbody></table></div>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c12">
+<h2 class="cheat__title"><a class="link" href="lectures/12.html">Lecture 12. Communication methods: ports, UART, SPI, I²C</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Terms</h3>
+<ul class="list">
+<li class="list__item"><strong>Serial</strong> (bit by bit) / <strong>parallel</strong> (a byte at once).</li>
+<li class="list__item"><strong>Synchronous</strong> (common clock) / <strong>asynchronous</strong> (START + STOP, agreed speed).</li>
+<li class="list__item"><strong>Simplex</strong> (one way) / <strong>half duplex</strong> (taking turns) / <strong>full duplex</strong> (at the same time).</li>
+</ul>
+<h3 class="article__h3">Interfaces</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART / RS-232</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Lines</td><td class="table__cell">TxD, RxD, ground</td><td class="table__cell">MOSI, MISO, SCLK, SS/CS</td><td class="table__cell">SDA, SCL (with pull-ups)</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">no</td><td class="table__cell">yes (master)</td><td class="table__cell">yes (master)</td></tr>
+<tr class="table__row"><td class="table__cell">Device selection</td><td class="table__cell">—</td><td class="table__cell">CS line</td><td class="table__cell">7-bit address + R/W bit</td></tr>
+<tr class="table__row"><td class="table__cell">Acknowledge</td><td class="table__cell">—</td><td class="table__cell">—</td><td class="table__cell">ACK after every byte</td></tr>
+<tr class="table__row"><td class="table__cell">Duplex</td><td class="table__cell">full</td><td class="table__cell">full</td><td class="table__cell">half</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>RS-232:</strong> negative logic, "1" = −3…−15 V, "0" = +3…+15 V → to TTL only through a MAX232.</li>
+<li class="list__item"><strong>I²C:</strong> START = SDA↓ while SCL = 1; STOP = SDA↑ while SCL = 1; R/W: 0 = write, 1 = read; lower address = higher priority; 100 kb/s / 400 kb/s / 3.4 Mb/s.</li>
+<li class="list__item"><strong>USB 2.0:</strong> D+ / D− (differential), half duplex, +5 V, up to 127 devices.</li>
+</ul>
+<h3 class="article__h3">The lab module — pins</h3>
+<p class="article__p">A0 potentiometer · A1–A3 buttons · 10–13 LEDs · 3 buzzer · 4 LATCH · 7 CLK · 8 DATA · A4/A5 I²C</p>
+<h3 class="article__h3">Code</h3>
+<ul class="list">
+<li class="list__item">Display: <code class="inline-code">digitalWrite(LATCH, LOW); shiftOut(DATA, CLK, MSBFIRST, segments); shiftOut(DATA, CLK, MSBFIRST, position); digitalWrite(LATCH, HIGH);</code></li>
+<li class="list__item">I²C read: <code class="inline-code">beginTransmission(address); write(register); endTransmission(); requestFrom(address, 1); read();</code></li>
+<li class="list__item">DS3231: address <strong>0x68</strong>, temperature: register <strong>0x11</strong> (integer part), <strong>0x12</strong> (fraction).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c13">
+<h2 class="cheat__title"><a class="link" href="lectures/13.html">Lecture 13. Microcontroller peripherals and event handling</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Pins and PWM</h3>
+<ul class="list">
+<li class="list__item"><code class="inline-code">pinMode(pin, OUTPUT / INPUT / INPUT_PULLUP)</code>; max <strong>40 mA</strong> per pin; never short an output to ground or supply.</li>
+<li class="list__item"><strong>PWM:</strong> duty cycle <span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span>; average voltage = duty × 5 V. Arduino: <code class="inline-code">analogWrite(pin, 0…255)</code>, about 490 Hz.</li>
+<li class="list__item"><strong>Servo:</strong> a pulse every 20 ms (50 Hz); 1.5 ms = neutral position (90°).</li>
+<li class="list__item"><strong>ADC:</strong> 10 bits → 0…1023;   <span class="math">U = <span class="math__frac"><span class="math__num">reading · 5</span><span class="math__den">1023</span></span></span> <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.  "Analog" output = PWM + filter.</li>
+</ul>
+<h3 class="article__h3">The transistor as a switch</h3>
+<ul class="list">
+<li class="list__item"><strong>Cut-off</strong> (no base current) = off; <strong>saturation</strong> (large base current) = on.</li>
+<li class="list__item"><strong>H-bridge:</strong> S1+S4 → one direction, S2+S3 → the other; speed — PWM.</li>
+</ul>
+<h3 class="article__h3">Converters</h3>
+<ul class="list">
+<li class="list__item"><strong>DAC</strong> with weighted resistors: an op-amp as a current summer.</li>
+<li class="list__item"><strong>Flash ADC:</strong> <span class="math">2<sup class="math__sup">n</sup> − 1</span> comparators, very fast, few bits.</li>
+<li class="list__item"><strong>Successive-approximation ADC:</strong> <span class="math">n</span> comparisons for <span class="math">n</span> bits (first with half the range).</li>
+</ul>
+<h3 class="article__h3">Events</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Polling</th><th class="table__cell table__cell--head">Interrupt</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">the program checks in a loop</td><td class="table__cell">hardware signals, the program is suspended</td></tr>
+<tr class="table__row"><td class="table__cell">simple but wastes time</td><td class="table__cell">fast but harder</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Interrupts: hardware (external, timer, exceptions) and software; maskable / non-maskable (reset).</li>
+<li class="list__item">Interrupt vector = the handler's address; PC goes onto the <strong>stack</strong>.</li>
+<li class="list__item">Handling: identify → clear the cause → disable → push registers → <strong>handle</strong> → pop registers → enable → return.</li>
+<li class="list__item">AVR: no priorities (a flat system).</li>
+<li class="list__item">Arduino: <code class="inline-code">attachInterrupt(digitalPinToInterrupt(2), function, CHANGE | RISING | FALLING);</code> shared variables: <code class="inline-code">volatile</code>.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c14">
+<h2 class="cheat__title"><a class="link" href="lectures/14.html">Lecture 14. Computer architecture: the MIPS processor from the inside</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Terms</h3>
+<ul class="list">
+<li class="list__item"><strong>Architecture</strong> = instruction set + state (registers, memory). <strong>Microarchitecture</strong> = how the hardware implements it.</li>
+<li class="list__item"><strong>Datapath</strong> (PC, memories, register file, ALU, multiplexers) + <strong>control unit</strong> (signals for the datapath).</li>
+<li class="list__item">Program time = number of instructions × cycles/instruction × seconds/cycle.</li>
+</ul>
+<h3 class="article__h3">Three microarchitectures</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Cycle</th><th class="table__cell table__cell--head">Control</th><th class="table__cell table__cell--head">Notes</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Single-cycle</strong></td><td class="table__cell">1 long cycle per instruction</td><td class="table__cell"><strong>combinational</strong></td><td class="table__cell">cycle sized for the slowest (<code class="inline-code">lw</code>); 3 adders; separate memories</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Multicycle</strong></td><td class="table__cell">several short steps</td><td class="table__cell"><strong>sequential</strong> (FSM: Fetch → Decode → …)</td><td class="table__cell">one ALU, one memory, extra registers (IR, A, B, ALUOut, Data)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Pipelined</strong></td><td class="table__cell">stages: Fetch, Decode, Execute, Memory, Writeback</td><td class="table__cell">—</td><td class="table__cell">several instructions at once in different stages</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Control signals (single-cycle)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Signal</th><th class="table__cell table__cell--head">0</th><th class="table__cell table__cell--head">1</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RegWrite</strong></td><td class="table__cell">—</td><td class="table__cell">write to the register file</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RegDst</strong></td><td class="table__cell">destination register = <code class="inline-code">rt</code></td><td class="table__cell">destination register = <code class="inline-code">rd</code></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ALUSrc</strong></td><td class="table__cell">ALU's second operand from a register</td><td class="table__cell">from the extended constant</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemWrite</strong></td><td class="table__cell">—</td><td class="table__cell">write to data memory</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemtoReg</strong></td><td class="table__cell">ALU result to the register</td><td class="table__cell">memory data to the register</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Branch</strong></td><td class="table__cell">—</td><td class="table__cell">a <code class="inline-code">beq</code> instruction; branch when Zero = 1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">ALUOp: 00 → add (<code class="inline-code">lw</code>, <code class="inline-code">sw</code>); 01 → subtract (<code class="inline-code">beq</code>); 10 → look at funct (R-type).</li>
+<li class="list__item">Next instruction: <strong>PC + 4</strong>; branch: PC + 4 + SignImm × 4.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c15">
+<h2 class="cheat__title"><a class="link" href="lectures/15.html">Lecture 15. Assembly language and computer architecture (MIPS)</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">MIPS registers</h3>
+<p class="article__p"><code class="inline-code">$0</code> = zero · <code class="inline-code">$t0–$t7</code> temporary (8–15) · <code class="inline-code">$s0–$s7</code> variables (16–23) · <code class="inline-code">$a0–$a3</code> arguments · <code class="inline-code">$v0</code> result · <code class="inline-code">$sp</code> stack · <code class="inline-code">$ra</code> return address</p>
+<h3 class="article__h3">Instructions</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Instruction</th><th class="table__cell table__cell--head">Meaning</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">add rd, rs, rt</code> / <code class="inline-code">sub</code></td><td class="table__cell">rd = rs ± rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">addi rt, rs, imm</code></td><td class="table__cell">rt = rs + constant</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code>, <code class="inline-code">andi</code>, <code class="inline-code">ori</code></td><td class="table__cell">logic, bit by bit</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sll</code>, <code class="inline-code">srl</code>, <code class="inline-code">sra</code></td><td class="table__cell">shifts (× or ÷ by 2ⁿ)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw rt, imm(rs)</code></td><td class="table__cell">rt = memory[rs + imm]</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw rt, imm(rs)</code></td><td class="table__cell">memory[rs + imm] = rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, L</code> / <code class="inline-code">bne</code></td><td class="table__cell">branch when equal / not equal</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j L</code>, <code class="inline-code">jal L</code>, <code class="inline-code">jr $ra</code></td><td class="table__cell">jump, function call, return</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Formats (32 bits)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Fields</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong></td><td class="table__cell">op(6)=0 · rs(5) · rt(5) · rd(5) · shamt(5) · funct(6)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong></td><td class="table__cell">op(6) · rs(5) · rt(5) · imm(16)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong></td><td class="table__cell">op(6) · addr(26)</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">funct: add = 32, sub = 34, and = 36, or = 37, slt = 42. op: addi = 8, lw = 35, sw = 43, beq = 4.</li>
+<li class="list__item">Decoding: hex → binary → the first 6 bits (opcode) → split into fields.</li>
+</ul>
+<h3 class="article__h3">Memory</h3>
+<ul class="list">
+<li class="list__item"><strong>Byte</strong> addressing; word = 4 bytes → word addresses: 0, 4, 8… <code class="inline-code">array[i]</code> = base + 4·i.</li>
+<li class="list__item">Stack: LIFO, <code class="inline-code">$sp</code>, grows downward. Function: arguments <code class="inline-code">$a0–$a3</code>, result <code class="inline-code">$v0</code>, <code class="inline-code">jal</code> / <code class="inline-code">jr $ra</code>.</li>
+<li class="list__item">Compiler → assembler → linker → loader.</li>
+<li class="list__item">MIPS = RISC (simple, 3 operands, 4 bytes); x86 = CISC (2 operands, variable length).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c16">
+<h2 class="cheat__title"><a class="link" href="labs/01.html">Lab 1. Introductory class: the lab equipment</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Multimeter</h3>
+<ul class="list">
+<li class="list__item">The black lead always in <strong>COM</strong>. Red: <strong>VΩ</strong> (voltage, resistance) or <strong>mA / 20A</strong> (current).</li>
+<li class="list__item"><strong>Voltage — in parallel. Current — in series. Resistance — with the power off.</strong></li>
+<li class="list__item">"1" on the display = range too small. Unknown value → start from the highest range.</li>
+</ul>
+<h3 class="article__h3">Oscilloscope</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">I want…</th><th class="table__cell table__cell--head">I turn / switch</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">a bigger / smaller picture vertically</td><td class="table__cell">VOLTS/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">more / fewer periods</td><td class="table__cell">TIME/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">to freeze a drifting picture</td><td class="table__cell">LEVEL (trigger)</td></tr>
+<tr class="table__row"><td class="table__cell">to see where 0 V is</td><td class="table__cell">the switch to GND</td></tr>
+<tr class="table__row"><td class="table__cell">to measure a DC voltage</td><td class="table__cell">the switch to DC</td></tr>
+<tr class="table__row"><td class="table__cell">to see both channels</td><td class="table__cell">MODE → DUAL</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">U = divisions × VOLTS/DIV</span>;   <span class="math">T = divisions × TIME/DIV</span>;   <span class="math">f = 1/T</span></li>
+<li class="list__item">The VAR knobs must be in the <strong>CAL</strong> position.</li>
+</ul>
+<h3 class="article__h3">Power supply and generator</h3>
+<ul class="list">
+<li class="list__item">Supply: red (+), black (−) = ground; 5 V / 15 V switch; the needle shows the current.</li>
+<li class="list__item">Generator (DDS): WAVE — shape; ◀ ▶ + ADJ — frequency; AMPL — amplitude; OFFS — DC component; output <strong>OUT</strong>.</li>
+<li class="list__item">The grounds of the generator and the oscilloscope must go to the same point of the circuit.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c17">
+<h2 class="cheat__title"><a class="link" href="labs/02.html">Lab 2. Measuring voltages and currents</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">DT9208A multimeter</h3>
+<p class="article__p"><span class="math">Δ = a% · reading + n · resolution</span></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Ranges</th><th class="table__cell table__cell--head">Accuracy</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">DC voltage</td><td class="table__cell">2 V (0.001) · 20 V (0.01) · 200 V (0.1)</td><td class="table__cell">0.8% + 2d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 mV (0.1 mV)</td><td class="table__cell">0.5% + 3d</td></tr>
+<tr class="table__row"><td class="table__cell">Resistance</td><td class="table__cell">200 Ω (0.1 Ω)</td><td class="table__cell">1% + 10d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 k (0.001) · 20 k (0.01) · 200 k (0.1) · 2 M (0.001)</td><td class="table__cell">1% + 4d</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Analog instruments</h3>
+<ul class="list">
+<li class="list__item">Oscilloscope (class 2, 8 divisions):  <span class="math">U = div · sensitivity</span>;  range <span class="math">= 8 · sensitivity</span>;  <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · range</span><span class="math__den">100</span></span> + 0.1 · sensitivity</span></li>
+<li class="list__item">Supply ammeter (class 2.5; 2 A):  <span class="math">ΔI = 0.05 + 0.025 = 0.075 A</span></li>
+</ul>
+<h3 class="article__h3">The max–min method</h3>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,   <span class="math">I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub>+I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span></span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></p>
+<h3 class="article__h3">Alternating signal</h3>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = div<sub class="math__sub">vert</sub> · V/div</span>,   <span class="math">T = div<sub class="math__sub">horiz</sub> · s/div</span>,   <span class="math">f = 1/T</span>   (1 kHz → T = 1 ms; 1 MHz → T = 1 µs)</p>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item">Relative error: <span class="math">δ = <span class="math__frac"><span class="math__num">Δ</span><span class="math__den">reading</span></span> · 100%</span>. Write the result as <strong>x ± Δ</strong> with its unit.</li>
+<li class="list__item">Round the error to as many decimal places as the result has.</li>
+<li class="list__item">The smallest range on which the result fits. "1" = range too small.</li>
+<li class="list__item">Measure resistance with the component disconnected from the supply.</li>
+</ul>
+</div>
+</section>
+</div>
+</article>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

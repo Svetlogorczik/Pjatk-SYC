@@ -1,0 +1,42 @@
+/* fab — floating "quick summary" button, always reachable */
+.fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+.fab--visible {
+  display: inline-flex;
+}
+
+.fab:hover {
+  filter: brightness(1.08);
+}
+
+@media (max-width: 40rem) {
+  .fab__label {
+    display: none;
+  }
+
+  .fab {
+    padding: 0.8rem;
+  }
+}
+
+@media print {
+  .fab {
+    display: none;
+  }
+}

@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 2. Measuring voltages and currents — SYC</title>
+<meta name="description" content="The first graded class (5 pts). You measure voltage, resistance and current — with a digital meter, an oscilloscope and a needle ammeter — and work out the error of every result.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/02.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/02.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/02.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Lectures</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/labs/02.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/labs/02.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/labs/02.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">What you need to know before the class</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Instrument data</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Task 1.1 — DC voltage, digital meter</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Task 1.2 — DC voltage, oscilloscope</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Task 2 — resistance</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Task 3.1 — DC current, direct method (analog instrument)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Task 3.2 — DC current, indirect method (digital instrument)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Task 4 — parameters of an alternating signal</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Practice tasks</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All labs">
+<p class="side-nav__title">All labs</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Getting to know the equipment</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/02.html" aria-current="page"><span class="side-nav__num">2</span><span class="side-nav__text">Voltage and current measurements</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Lab 2</p>
+<h1 class="article__title">Measuring voltages and currents</h1>
+<p class="article__lead">The first graded class (5 pts). You measure voltage, resistance and current — with a digital meter, an oscilloscope and a needle ammeter — and work out the error of every result.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a>
+<a class="button button--ghost" href="../lectures/01.html">Lecture for this lab: Lecture 1 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">What you need to know before the class</h2>
+<ul class="list">
+<li class="list__item">The error formulas for digital and analog instruments and the max–min method — <a class="link" href="../lectures/01.html">lecture 1</a> (open its <strong>Quick summary</strong>).</li>
+<li class="list__item">How to use the multimeter and the oscilloscope — <a class="link" href="../labs/01.html">lab 1</a>.</li>
+<li class="list__item">Bring a <strong>calculator</strong>.</li>
+</ul>
+<p class="article__p">In class you get a two-page report form with four tasks. You fill it in on the spot, in pairs.</p>
+<h2 class="article__h2" id="s2">Instrument data</h2>
+<p class="article__p">Without these numbers you cannot calculate any error. In class they are in the meter's manual and on the form.</p>
+<h3 class="article__h3">The DT9208A digital multimeter</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-dmm-spec.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-dmm-spec.webp" alt="Part of the manual: accuracy of the DT92xx series (DT9208A is the "08A" column)" width="1300" height="918" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Part of the manual: accuracy of the DT92xx series (DT9208A is the "08A" column) <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Quantity</th><th class="table__cell table__cell--head">Range</th><th class="table__cell table__cell--head">Resolution (1 digit)</th><th class="table__cell table__cell--head">Accuracy</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">DC voltage</td><td class="table__cell">200 mV</td><td class="table__cell">0.1 mV</td><td class="table__cell">±(0.5% + 3d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 V</td><td class="table__cell">0.001 V</td><td class="table__cell">±(0.8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">20 V</td><td class="table__cell">0.01 V</td><td class="table__cell">±(0.8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 V</td><td class="table__cell">0.1 V</td><td class="table__cell">±(0.8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">1000 V</td><td class="table__cell">1 V</td><td class="table__cell">±(1.0% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell">Resistance</td><td class="table__cell">200 Ω</td><td class="table__cell">0.1 Ω</td><td class="table__cell">±(1.0% + 10d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 kΩ</td><td class="table__cell">0.001 kΩ</td><td class="table__cell">±(1.0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">20 kΩ</td><td class="table__cell">0.01 kΩ</td><td class="table__cell">±(1.0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 kΩ</td><td class="table__cell">0.1 kΩ</td><td class="table__cell">±(1.0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 MΩ</td><td class="table__cell">0.001 MΩ</td><td class="table__cell">±(1.0% + 4d)</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> I added the "resolution" column myself: the meter has a 3½-digit display (maximum reading 1999), so the last digit on the 2 V range is 0.001 V, on the 20 V range 0.01 V, and so on. <strong>Always check on your own meter where the decimal point is.</strong></p>
+<h3 class="article__h3">Analog instruments</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Instrument</th><th class="table__cell table__cell--head table__cell--center">Class</th><th class="table__cell table__cell--head">Range</th><th class="table__cell table__cell--head">Reading error</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Oscilloscope</td><td class="table__cell table__cell--center">2</td><td class="table__cell">sensitivity × <strong>8 divisions</strong></td><td class="table__cell">not more than 0.1 division</td></tr>
+<tr class="table__row"><td class="table__cell">Ammeter in the power supply</td><td class="table__cell table__cell--center">2.5</td><td class="table__cell">2 A</td><td class="table__cell">in the class example: 0.025 A</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s3">Task 1.1 — DC voltage, digital meter</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">The meter's black lead into <strong>COM</strong>, the red one into <strong>VΩ</strong>.</li>
+<li class="steps__item">Dial to DC voltage (V⎓), to begin with the <strong>20 V</strong> range.</li>
+<li class="steps__item">Set the first voltage on the power supply (in class: 5 V, then 15 V).</li>
+<li class="steps__item">Touch the probes to the supply terminals: red to (+), black to (−).</li>
+<li class="steps__item">If the result would fit on a lower range — <strong>switch down</strong> (e.g. measure 1.1 V on the 2 V range). If "1" appears — go back up.</li>
+<li class="steps__item">Write down the <strong>voltage and the range</strong>, then compute the absolute and relative error.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t11a.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t11a.webp" alt="Supply set to 1.0 V; the meter on the 2 V range shows 1.110 V" width="1300" height="1167" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Supply set to 1.0 V; the meter on the 2 V range shows 1.110 V <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t11b.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t11b.webp" alt="Supply set to 10.0 V; the meter on the 20 V range shows 9.90 V" width="1300" height="1277" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Supply set to 10.0 V; the meter on the 20 V range shows 9.90 V <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example — the values from the photos above</p>
+<div class="callout__body">
+<p class="article__p"><strong>1.110 V on the 2 V range</strong> (resolution 0.001 V, accuracy 0.8% + 2d):</p>
+<p class="article__p"><span class="math">ΔU = 0.8% · 1.110 + 2 · 0.001 = 0.0089 + 0.002 = 0.0109 ≈ 0.011 V</span></p>
+<p class="article__p"><span class="math">δ = <span class="math__frac"><span class="math__num">0.0109</span><span class="math__den">1.110</span></span> · 100% = 0.98%</span>   →   <strong>U = 1.110 ± 0.011 V</strong></p>
+<p class="article__p"><strong>9.90 V on the 20 V range</strong> (resolution 0.01 V):</p>
+<p class="article__p"><span class="math">ΔU = 0.8% · 9.90 + 2 · 0.01 = 0.079 + 0.02 = 0.099 ≈ 0.10 V</span></p>
+<p class="article__p"><span class="math">δ = <span class="math__frac"><span class="math__num">0.099</span><span class="math__den">9.90</span></span> · 100% = 1.0%</span>   →   <strong>U = 9.90 ± 0.10 V</strong></p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>How to round (from lecture 1)</p>
+<div class="callout__body">
+<p class="article__p">Round the error to <strong>as many decimal places as the measured result has</strong> — the digits beyond that are just "chaos". Round, do not truncate.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Task 1.2 — DC voltage, oscilloscope</h2>
+<p class="article__p">Here the oscilloscope is treated like a needle voltmeter: a DC voltage moves the horizontal line up.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Connect the cable from CH1 of the oscilloscope to the power supply (ground to "−").</li>
+<li class="steps__item">Input switch to <strong>GND</strong> — use POSITION to put the line on the bottom (or centre) graticule line. This is 0 V.</li>
+<li class="steps__item">Switch to <strong>DC</strong>. The line jumps up.</li>
+<li class="steps__item">Choose <strong>VOLTS/DIV</strong> so that the line is as high as possible but still on the screen.</li>
+<li class="steps__item">Count by how many divisions the line rose (to 0.1 of a division).</li>
+<li class="steps__item">Write down the <strong>number of divisions and the sensitivity</strong>, then compute the voltage, the range and the errors.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t12a.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t12a.webp" alt="Step 2: the zero line set at the bottom of the screen (input on GND)" width="1300" height="796" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Step 2: the zero line set at the bottom of the screen (input on GND) <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t12b.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t12b.webp" alt="Steps 3–5: after switching to DC the line rose by 5 divisions" width="1300" height="1217" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Steps 3–5: after switching to DC the line rose by 5 divisions <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-p15.webp" alt="Slide from the class: which knobs and switches are needed" width="1400" height="832" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slide from the class: which knobs and switches are needed <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<p class="article__p">Formulas for the oscilloscope:</p>
+<div class="formula"><span class="math">U = divisions · sensitivity  range = 8 · sensitivity</span></div>
+<div class="formula"><span class="math">ΔU = <span class="math__frac"><span class="math__num">class · range</span><span class="math__den">100</span></span> + 0.1 · sensitivity</span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab materials</p>
+<div class="callout__body">
+<p class="article__p">Sensitivity 0.5 V/div → range <span class="math">0.5 · 8 = 4 V</span>. Base error: <span class="math"><span class="math__frac"><span class="math__num">2 · 4</span><span class="math__den">100</span></span> = 0.08 V</span>. Reading error: <span class="math">0.1 · 0.5 = 0.05 V</span>. Total error: <span class="math">0.08 + 0.05 = 0.13 V</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Task 2 — resistance</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Take the resistor out of the circuit</strong> (it is measured "loose").</li>
+<li class="steps__item">Red lead in <strong>VΩ</strong>, dial on Ω.</li>
+<li class="steps__item">Touch the probes to the resistor's leads (direction does not matter).</li>
+<li class="steps__item">Choose the <strong>smallest range on which "1" does not appear</strong>.</li>
+<li class="steps__item">Write down the value and the range; compute ΔR and δ. Repeat for R1–R4.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p17.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-p17.webp" alt="Slide from the class: 10 Ω and 1 kΩ resistors, the meter shows 11.2 Ω and 1.310 kΩ" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slide from the class: 10 Ω and 1 kΩ resistors, the meter shows 11.2 Ω and 1.310 kΩ <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example — the values from the slide</p>
+<div class="callout__body">
+<p class="article__p"><strong>11.2 Ω on the 200 Ω range</strong> (resolution 0.1 Ω, accuracy 1% + 10d):</p>
+<p class="article__p"><span class="math">ΔR = 1% · 11.2 + 10 · 0.1 = 0.112 + 1.0 ≈ 1.1 Ω</span>,   <span class="math">δ = 9.9%</span></p>
+<p class="article__p"><strong>1.310 kΩ on the 2 kΩ range</strong> (resolution 0.001 kΩ, accuracy 1% + 4d):</p>
+<p class="article__p"><span class="math">ΔR = 1% · 1.310 + 4 · 0.001 = 0.0131 + 0.004 ≈ 0.017 kΩ</span>,   <span class="math">δ = 1.3%</span></p>
+<p class="article__p">You can see that on the 200 Ω range the "10 digits" term (a whole 1 Ω) spoils the accuracy for small resistances.</p>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>The resistor colour code</p>
+<div class="callout__body">
+<p class="article__p">The slide shows the resistors' colour bands. The first two bands are digits, the third is the multiplier (number of zeros), the last is the tolerance (gold = 5%).</p>
+<p class="article__p">black 0 · brown 1 · red 2 · orange 3 · yellow 4 · green 5 · blue 6 · violet 7 · grey 8 · white 9</p>
+<p class="article__p">Brown–black–black = 10 Ω; brown–black–red = 10 and two zeros = 1 kΩ. The measured value may differ from the nominal one by the tolerance — that is normal.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Task 3.1 — DC current, direct method (analog instrument)</h2>
+<p class="article__p">A 4 Ω power resistor is connected to the supply. You read the current from the supply's <strong>needle indicator</strong>.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Connect the 4 Ω resistor to the supply terminals.</li>
+<li class="steps__item">Set the voltage to <strong>2 V</strong>.</li>
+<li class="steps__item">Read the needle position on the 0–2 A scale (look straight on, not from the side).</li>
+<li class="steps__item">Compute the error: class 2.5, range 2 A, plus the reading error.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p19.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-p19.webp" alt="Slide from the class: the 4 Ω resistor on the supply, the needle shows about 0.475 A" width="1360" height="900" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slide from the class: the 4 Ω resistor on the supply, the needle shows about 0.475 A <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab materials</p>
+<div class="callout__body">
+<p class="article__p">Base error: <span class="math"><span class="math__frac"><span class="math__num">2.5 · 2.0</span><span class="math__den">100</span></span> = 0.05 A</span>. Reading error: <span class="math">0.025 A</span>. Total: <span class="math">ΔI = 0.075 A</span>.</p>
+<p class="article__p">For a reading of 0.475 A: <span class="math">δ = <span class="math__frac"><span class="math__num">0.075</span><span class="math__den">0.475</span></span> · 100% ≈ 16%</span>. The error is large because the needle is at the beginning of the scale — from Ohm's law we expect <span class="math">2 V / 4 Ω = 0.5 A</span>, a quarter of the range.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Task 3.2 — DC current, indirect method (digital instrument)</h2>
+<p class="article__p">The same current, but calculated from Ohm's law: you measure <strong>U</strong> and <strong>R</strong> with the digital meter and find the error with the max–min method.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">With the resistor connected, measure the <strong>voltage</strong> at the supply terminals. Write down U and the range, compute ΔU.</li>
+<li class="steps__item"><strong>Disconnect the resistor from the supply</strong> and measure its <strong>resistance</strong>. Write down R and the range, compute ΔR.</li>
+<li class="steps__item">Compute <span class="math">I<sub class="math__sub">min</sub></span>, <span class="math">I<sub class="math__sub">max</sub></span>, and from them <span class="math">I</span> and <span class="math">ΔI</span>.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t32a.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t32a.webp" alt="Voltage measurement: 2.00 V on the 20 V range" width="900" height="912" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Voltage measurement: 2.00 V on the 20 V range <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t32b.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t32b.webp" alt="Resistance of the disconnected resistor: 3.9 Ω on the 200 Ω range" width="900" height="1950" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Resistance of the disconnected resistor: 3.9 Ω on the 200 Ω range <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U − ΔU</span><span class="math__den">R + ΔR</span></span>  I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U + ΔU</span><span class="math__den">R − ΔR</span></span>  I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub> + I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span>  ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> − I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example — the values from the photos</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">U = 2.00 V</span> (20 V range):  <span class="math">ΔU = 0.8% · 2.00 + 2 · 0.01 = 0.036 V</span></p>
+<p class="article__p"><span class="math">R = 3.9 Ω</span> (200 Ω range):  <span class="math">ΔR = 1% · 3.9 + 10 · 0.1 = 1.04 ≈ 1.0 Ω</span></p>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">2.00 − 0.036</span><span class="math__den">3.9 + 1.0</span></span> = 0.401 A</span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">2.00 + 0.036</span><span class="math__den">3.9 − 1.0</span></span> = 0.702 A</span></p>
+<p class="article__p"><span class="math">I = <span class="math__frac"><span class="math__num">0.401 + 0.702</span><span class="math__den">2</span></span> = 0.55 A</span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">0.702 − 0.401</span><span class="math__den">2</span></span> = 0.15 A</span></p>
+<p class="article__p"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> Conclusion: the indirect method came out <strong>worse</strong> than the direct one, because 3.9 Ω measured on the 200 Ω range has an error of a whole 1 Ω. That is a good sentence for the report.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s8">Task 4 — parameters of an alternating signal</h2>
+<p class="article__p">You feed a sine from the generator and measure the <strong>period</strong> and the <strong>peak-to-peak voltage</strong> with the oscilloscope — for 1 kHz and for 1 MHz.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Connect the generator's <strong>OUT</strong> to the oscilloscope's <strong>CH1</strong> with a BNC cable.</li>
+<li class="steps__item">On the generator set a <strong>sine</strong> and <strong>1 kHz</strong>.</li>
+<li class="steps__item">Oscilloscope: switch to GND — centre the line; then to AC or DC.</li>
+<li class="steps__item">Choose <strong>VOLTS/DIV</strong> (the waveform should fill most of the screen) and <strong>TIME/DIV</strong> (1–3 periods on the screen). Adjust <strong>LEVEL</strong> so the picture stands still.</li>
+<li class="steps__item">Count the divisions <strong>vertically</strong> from trough to peak → the peak-to-peak voltage.</li>
+<li class="steps__item">Count the divisions <strong>horizontally</strong> for one full period → the period T, then <span class="math">f = 1/T</span>.</li>
+<li class="steps__item">Repeat for <strong>1 MHz</strong> (TIME/DIV must be reduced a thousand times — to fractions of a microsecond).</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t4b.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t4b.webp" alt="Generator set to 1 kHz, sine" width="1300" height="942" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Generator set to 1 kHz, sine <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t4c.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/labs/lab02-t4c.webp" alt="The sine on the oscilloscope screen" width="1300" height="938" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The sine on the oscilloscope screen <span class="figure__source">Source: lab materials</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">U<sub class="math__sub">pp</sub> = divisions<sub class="math__sub">vert</sub> · sensitivity  T = divisions<sub class="math__sub">horiz</sub> · time base  f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">T</span></span></span></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Tip from the site author</p>
+<div class="callout__body">
+<p class="article__p">Measure the period between two identical points, e.g. from peak to peak or between two "upward" zero crossings. Use POSITION to move a peak onto a vertical graticule line — counting gets easier. The calculated frequency should come out close to the generator's; if it is off by an order of magnitude, you mixed up the unit (ms / µs).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Practice tasks</h2>
+<p class="article__p">The data is <strong>different from the class</strong> — the point is to practise the method.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Digital voltmeter</p>
+<div class="callout__body">
+<p class="article__p">A DT9208A showed <strong>3.28 V</strong> and <strong>12.06 V</strong> (both on the 20 V range) and <strong>1.571 V</strong> (on the 2 V range). Compute the absolute and relative error of each measurement.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">3.28 V:  <span class="math">ΔU = 0.008 · 3.28 + 2 · 0.01 = 0.0262 + 0.02 = 0.046 ≈ 0.05 V</span>;   <span class="math">δ = 0.046/3.28 = 1.4%</span>   →   3.28 ± 0.05 V</li>
+<li class="list__item">12.06 V:  <span class="math">ΔU = 0.008 · 12.06 + 0.02 = 0.116 ≈ 0.12 V</span>;   <span class="math">δ = 0.97%</span>   →   12.06 ± 0.12 V</li>
+<li class="list__item">1.571 V:  <span class="math">ΔU = 0.008 · 1.571 + 2 · 0.001 = 0.0146 ≈ 0.015 V</span>;   <span class="math">δ = 0.93%</span>   →   1.571 ± 0.015 V</li>
+</ul>
+<p class="article__p">The closer to the end of the range, the smaller the relative error.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. The oscilloscope as a voltmeter</p>
+<div class="callout__body">
+<p class="article__p">You measure 3.3 V with the oscilloscope (class 2, 8 divisions, reading error 0.1 division). Compute the error for a sensitivity of <strong>0.5 V/div</strong> and of <strong>1 V/div</strong>. Which one should you choose?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">0.5 V/div: line at 6.6 divisions; range 4 V; <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · 4</span><span class="math__den">100</span></span> + 0.1 · 0.5 = 0.08 + 0.05 = 0.13 V</span>;   <span class="math">δ = 3.9%</span></li>
+<li class="list__item">1 V/div: line at 3.3 divisions; range 8 V; <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · 8</span><span class="math__den">100</span></span> + 0.1 · 1 = 0.16 + 0.1 = 0.26 V</span>;   <span class="math">δ = 7.9%</span></li>
+</ul>
+<p class="article__p">Choose 0.5 V/div — the smallest sensitivity at which the line still fits on the screen. The error is half as large.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Ohmmeter</p>
+<div class="callout__body">
+<p class="article__p">The meter showed: <strong>46.8 Ω</strong> (200 Ω range), <strong>0.993 kΩ</strong> (2 kΩ range), <strong>2.17 kΩ</strong> (20 kΩ range), <strong>47.3 kΩ</strong> (200 kΩ range). Compute ΔR and δ. Why was 2.17 kΩ not measured on the 2 kΩ range?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">46.8 Ω:  <span class="math">ΔR = 0.468 + 10 · 0.1 = 1.47 ≈ 1.5 Ω</span>;   <span class="math">δ = 3.1%</span></li>
+<li class="list__item">0.993 kΩ:  <span class="math">ΔR = 0.00993 + 4 · 0.001 = 0.014 kΩ</span>;   <span class="math">δ = 1.4%</span></li>
+<li class="list__item">2.17 kΩ:  <span class="math">ΔR = 0.0217 + 4 · 0.01 = 0.062 ≈ 0.06 kΩ</span>;   <span class="math">δ = 2.8%</span></li>
+<li class="list__item">47.3 kΩ:  <span class="math">ΔR = 0.473 + 4 · 0.1 = 0.87 ≈ 0.9 kΩ</span>;   <span class="math">δ = 1.8%</span></li>
+</ul>
+<p class="article__p">2.17 kΩ is larger than 1.999 kΩ — on the 2 kΩ range the meter would show "1" (over-range).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Needle ammeter</p>
+<div class="callout__body">
+<p class="article__p">A class 2.5 ammeter with a 2 A range shows <strong>0.70 A</strong>. Take the reading error as 0.025 A. Compute ΔI and δ. What would the relative error be for a reading of 1.8 A?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">ΔI = <span class="math__frac"><span class="math__num">2.5 · 2</span><span class="math__den">100</span></span> + 0.025 = 0.075 A</span> — the same for any reading.</p>
+<ul class="list">
+<li class="list__item">0.70 A:  <span class="math">δ = 0.075/0.70 = 10.7%</span></li>
+<li class="list__item">1.8 A:  <span class="math">δ = 0.075/1.8 = 4.2%</span></li>
+</ul>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>5. Current by the indirect method</p>
+<div class="callout__body">
+<p class="article__p">Measured: <span class="math">U = 3.02 V</span> (20 V range) and <span class="math">R = 8.2 Ω</span> (200 Ω range). Find the current and its error with the max–min method.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">ΔU = 0.008 · 3.02 + 0.02 = 0.044 ≈ 0.04 V</span>;    <span class="math">ΔR = 0.082 + 1.0 = 1.08 ≈ 1.1 Ω</span></p>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">3.02 − 0.04</span><span class="math__den">8.2 + 1.1</span></span> = <span class="math__frac"><span class="math__num">2.98</span><span class="math__den">9.3</span></span> = 0.320 A</span>;    <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">3.02 + 0.04</span><span class="math__den">8.2 − 1.1</span></span> = <span class="math__frac"><span class="math__num">3.06</span><span class="math__den">7.1</span></span> = 0.431 A</span></p>
+<p class="article__p"><span class="math">I = <span class="math__frac"><span class="math__num">0.320 + 0.431</span><span class="math__den">2</span></span> = 0.376 A</span>;    <span class="math">ΔI = <span class="math__frac"><span class="math__num">0.431 − 0.320</span><span class="math__den">2</span></span> = 0.055 A</span></p>
+<p class="article__p"><strong>I = 0.376 ± 0.055 A</strong> (about 15%)</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>6. An alternating signal</p>
+<div class="callout__body">
+<p class="article__p">On the screen a sine spans 5.6 divisions from trough to peak at 0.5 V/div, and one period takes 8 divisions at 50 µs/div. Give <span class="math">U<sub class="math__sub">pp</sub></span>, T and f. Which time base should you set for a 1 MHz signal so that one period takes 5 divisions?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Show solution</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 5.6 · 0.5 = 2.8 V</span>;   <span class="math">T = 8 · 50 µs = 400 µs = 0.4 ms</span>;   <span class="math">f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">0.0004</span></span> = 2500 Hz = 2.5 kHz</span></p>
+<p class="article__p">For 1 MHz: <span class="math">T = 1 µs</span>; 5 divisions → <span class="math"><span class="math__frac"><span class="math__num">1 µs</span><span class="math__den">5</span></span> = 0.2 µs/div</span>.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>What costs points most often</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">The wrong range (measuring 1.1 V on the 20 V range instead of 2 V).</li>
+<li class="list__item">Mixing up the resolution: on the 20 V range one digit is 0.01 V, not 0.001 V.</li>
+<li class="list__item">No units in the table and unrounded errors (0.010888 V).</li>
+<li class="list__item">Measuring the resistance of a resistor still connected to the supply.</li>
+<li class="list__item">The oscilloscope's VAR knob out of the CAL position — then every reading is wrong.</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">DT9208A multimeter</h3>
+<p class="article__p"><span class="math">Δ = a% · reading + n · resolution</span></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Ranges</th><th class="table__cell table__cell--head">Accuracy</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">DC voltage</td><td class="table__cell">2 V (0.001) · 20 V (0.01) · 200 V (0.1)</td><td class="table__cell">0.8% + 2d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 mV (0.1 mV)</td><td class="table__cell">0.5% + 3d</td></tr>
+<tr class="table__row"><td class="table__cell">Resistance</td><td class="table__cell">200 Ω (0.1 Ω)</td><td class="table__cell">1% + 10d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 k (0.001) · 20 k (0.01) · 200 k (0.1) · 2 M (0.001)</td><td class="table__cell">1% + 4d</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Analog instruments</h3>
+<ul class="list">
+<li class="list__item">Oscilloscope (class 2, 8 divisions):  <span class="math">U = div · sensitivity</span>;  range <span class="math">= 8 · sensitivity</span>;  <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · range</span><span class="math__den">100</span></span> + 0.1 · sensitivity</span></li>
+<li class="list__item">Supply ammeter (class 2.5; 2 A):  <span class="math">ΔI = 0.05 + 0.025 = 0.075 A</span></li>
+</ul>
+<h3 class="article__h3">The max–min method</h3>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,   <span class="math">I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub>+I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span></span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></p>
+<h3 class="article__h3">Alternating signal</h3>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = div<sub class="math__sub">vert</sub> · V/div</span>,   <span class="math">T = div<sub class="math__sub">horiz</sub> · s/div</span>,   <span class="math">f = 1/T</span>   (1 kHz → T = 1 ms; 1 MHz → T = 1 µs)</p>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item">Relative error: <span class="math">δ = <span class="math__frac"><span class="math__num">Δ</span><span class="math__den">reading</span></span> · 100%</span>. Write the result as <strong>x ± Δ</strong> with its unit.</li>
+<li class="list__item">Round the error to as many decimal places as the result has.</li>
+<li class="list__item">The smallest range on which the result fits. "1" = range too small.</li>
+<li class="list__item">Measure resistance with the component disconnected from the supply.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../labs/01.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lab 1: Introductory class: the lab equipment</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

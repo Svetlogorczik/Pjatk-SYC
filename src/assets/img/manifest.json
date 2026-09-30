@@ -1,0 +1,1614 @@
+{
+"labs/lab01-bnc.webp": [
+1300,
+731
+],
+"labs/lab01-generator.webp": [
+1300,
+480
+],
+"labs/lab01-multimeter.webp": [
+900,
+1965
+],
+"labs/lab01-oscilloscope.webp": [
+1300,
+731
+],
+"labs/lab01-p38.webp": [
+1399,
+776
+],
+"labs/lab01-p39.webp": [
+1319,
+809
+],
+"labs/lab01-p54.webp": [
+1400,
+772
+],
+"labs/lab01-p58.webp": [
+1400,
+832
+],
+"labs/lab01-p63.webp": [
+1400,
+983
+],
+"labs/lab01-p64.webp": [
+1400,
+628
+],
+"labs/lab01-p67.webp": [
+1400,
+1057
+],
+"labs/lab01-p68.webp": [
+1400,
+1164
+],
+"labs/lab01-p69.webp": [
+1400,
+1170
+],
+"labs/lab01-p70.webp": [
+1400,
+1170
+],
+"labs/lab01-p71.webp": [
+1400,
+1170
+],
+"labs/lab01-p72.webp": [
+1400,
+749
+],
+"labs/lab01-p73.webp": [
+1400,
+1170
+],
+"labs/lab01-parts.webp": [
+900,
+1600
+],
+"labs/lab01-psu-back.webp": [
+900,
+1298
+],
+"labs/lab01-psu-front.webp": [
+900,
+1267
+],
+"labs/lab01-scope-panel.webp": [
+1300,
+1083
+],
+"labs/lab02-dmm-spec.webp": [
+1300,
+918
+],
+"labs/lab02-p15.webp": [
+1400,
+832
+],
+"labs/lab02-p16.webp": [
+1400,
+788
+],
+"labs/lab02-p17.webp": [
+1400,
+788
+],
+"labs/lab02-p19.webp": [
+1360,
+900
+],
+"labs/lab02-p20.webp": [
+1344,
+900
+],
+"labs/lab02-p22.webp": [
+1400,
+788
+],
+"labs/lab02-p23.webp": [
+1400,
+788
+],
+"labs/lab02-t11a.webp": [
+1300,
+1167
+],
+"labs/lab02-t11b.webp": [
+1300,
+1277
+],
+"labs/lab02-t12a.webp": [
+1300,
+796
+],
+"labs/lab02-t12b.webp": [
+1300,
+1217
+],
+"labs/lab02-t12c.webp": [
+1300,
+1237
+],
+"labs/lab02-t2a.webp": [
+900,
+1333
+],
+"labs/lab02-t2b.webp": [
+900,
+1278
+],
+"labs/lab02-t31.webp": [
+900,
+1483
+],
+"labs/lab02-t32a.webp": [
+900,
+912
+],
+"labs/lab02-t32b.webp": [
+900,
+1950
+],
+"labs/lab02-t4a.webp": [
+1300,
+647
+],
+"labs/lab02-t4b.webp": [
+1300,
+942
+],
+"labs/lab02-t4c.webp": [
+1300,
+938
+],
+"labs/lab03-s10.webp": [
+1400,
+781
+],
+"labs/lab03-s11.webp": [
+1400,
+788
+],
+"labs/lab03-s16.webp": [
+1400,
+712
+],
+"labs/lab03-s17.webp": [
+1400,
+788
+],
+"labs/lab03-s18.webp": [
+1400,
+788
+],
+"labs/lab03-s19.webp": [
+1024,
+888
+],
+"labs/lab03-s22.webp": [
+1400,
+788
+],
+"labs/lab03-s23.webp": [
+1400,
+788
+],
+"labs/lab03-s24.webp": [
+1099,
+883
+],
+"labs/lab03-s27.webp": [
+1400,
+788
+],
+"labs/lab03-s28.webp": [
+1400,
+788
+],
+"labs/lab03-s29.webp": [
+1109,
+883
+],
+"labs/lab04-s08.webp": [
+1400,
+603
+],
+"labs/lab04-s09.webp": [
+1400,
+748
+],
+"labs/lab04-s10.webp": [
+1400,
+788
+],
+"labs/lab04-s11.webp": [
+1400,
+788
+],
+"labs/lab04-s12.webp": [
+1400,
+788
+],
+"labs/lab04-s13.webp": [
+1400,
+788
+],
+"labs/lab04-s14.webp": [
+1400,
+788
+],
+"labs/lab04-s15.webp": [
+1400,
+788
+],
+"labs/lab04-s16.webp": [
+1400,
+778
+],
+"labs/lab04-s17.webp": [
+1400,
+761
+],
+"labs/lab04-s18.webp": [
+1400,
+788
+],
+"labs/lab04-s19.webp": [
+1400,
+788
+],
+"labs/lab04-s20.webp": [
+1400,
+788
+],
+"labs/lab04-s21.webp": [
+1400,
+788
+],
+"labs/lab04-s22.webp": [
+1400,
+788
+],
+"labs/lab05-p12.webp": [
+1400,
+788
+],
+"labs/lab05-p13.webp": [
+1400,
+788
+],
+"labs/lab05-p14.webp": [
+1400,
+874
+],
+"labs/lab05-p22.webp": [
+1400,
+774
+],
+"labs/lab05-p23.webp": [
+1400,
+788
+],
+"labs/lab05-p24.webp": [
+1400,
+788
+],
+"labs/lab05-p25.webp": [
+1400,
+788
+],
+"labs/lab05-p26.webp": [
+1400,
+788
+],
+"labs/lab05-p27.webp": [
+1400,
+788
+],
+"labs/lab05-p28.webp": [
+1400,
+779
+],
+"labs/lab05-p29.webp": [
+1400,
+788
+],
+"labs/lab06-p03.webp": [
+1395,
+861
+],
+"labs/lab06-p08.webp": [
+1400,
+785
+],
+"labs/lab06-p11.webp": [
+1400,
+788
+],
+"labs/lab06-p12.webp": [
+1400,
+775
+],
+"labs/lab06-p13.webp": [
+1400,
+788
+],
+"labs/lab06-p16.webp": [
+1400,
+788
+],
+"labs/lab06-p17.webp": [
+1400,
+788
+],
+"labs/lab06-p20.webp": [
+1400,
+788
+],
+"labs/lab06-p21.webp": [
+1400,
+788
+],
+"labs/lab07-p02.webp": [
+1400,
+714
+],
+"labs/lab07-p10.webp": [
+1187,
+708
+],
+"labs/lab07-p19.webp": [
+1400,
+698
+],
+"labs/lab07-p22.webp": [
+1400,
+789
+],
+"labs/lab07-p23.webp": [
+1400,
+777
+],
+"labs/lab09-p03.webp": [
+1400,
+871
+],
+"labs/lab09-p08.webp": [
+1400,
+898
+],
+"labs/lab09-p11.webp": [
+1358,
+900
+],
+"labs/lab09-p14.webp": [
+1138,
+733
+],
+"labs/lab09-p21.webp": [
+1350,
+900
+],
+"labs/lab09-p22.webp": [
+1342,
+900
+],
+"labs/lab09-p25.webp": [
+1337,
+900
+],
+"labs/lab10-p05.webp": [
+1400,
+769
+],
+"labs/lab10-p10.webp": [
+1400,
+785
+],
+"labs/lab11-p14.webp": [
+1400,
+774
+],
+"labs/lab11-p19.webp": [
+1187,
+699
+],
+"labs/lab11-p24.webp": [
+1275,
+683
+],
+"labs/lab11-p28.webp": [
+1318,
+806
+],
+"labs/lab11-p33.webp": [
+1157,
+740
+],
+"labs/lab11-p37.webp": [
+1400,
+835
+],
+"labs/lab12-p11.webp": [
+1400,
+627
+],
+"labs/lab12-p13.webp": [
+1400,
+1018
+],
+"labs/lab13-p13.webp": [
+1400,
+872
+],
+"labs/lab13-p15.webp": [
+1400,
+830
+],
+"labs/lab13-p16.webp": [
+1400,
+848
+],
+"labs/lab13-p18.webp": [
+1400,
+827
+],
+"labs/lab13-p22.webp": [
+1400,
+741
+],
+"labs/lab13-p23.webp": [
+1400,
+633
+],
+"labs/lab14-p02.webp": [
+1400,
+848
+],
+"labs/lab14-p04.webp": [
+1400,
+807
+],
+"lectures/w01-p05.webp": [
+757,
+544
+],
+"lectures/w01-p10.webp": [
+1100,
+999
+],
+"lectures/w01-p11.webp": [
+989,
+812
+],
+"lectures/w01-p12.webp": [
+737,
+757
+],
+"lectures/w01-p22.webp": [
+667,
+352
+],
+"lectures/w02-p03.webp": [
+1100,
+725
+],
+"lectures/w02-p07.webp": [
+1100,
+325
+],
+"lectures/w02-p09.webp": [
+1100,
+483
+],
+"lectures/w02-p10.webp": [
+795,
+550
+],
+"lectures/w02-p12.webp": [
+1100,
+484
+],
+"lectures/w02-p13.webp": [
+1100,
+553
+],
+"lectures/w02-p15.webp": [
+1100,
+1030
+],
+"lectures/w02-p22.webp": [
+1100,
+141
+],
+"lectures/w02-p23.webp": [
+1100,
+142
+],
+"lectures/w02-p32.webp": [
+1100,
+387
+],
+"lectures/w02-p33.webp": [
+1100,
+835
+],
+"lectures/w03-p04.webp": [
+1100,
+123
+],
+"lectures/w03-p05.webp": [
+1100,
+374
+],
+"lectures/w03-p06.webp": [
+907,
+859
+],
+"lectures/w03-p07.webp": [
+907,
+860
+],
+"lectures/w03-p08.webp": [
+1100,
+735
+],
+"lectures/w03-p09.webp": [
+1100,
+448
+],
+"lectures/w03-p10.webp": [
+1100,
+832
+],
+"lectures/w03-p12.webp": [
+1100,
+964
+],
+"lectures/w03-p14.webp": [
+1100,
+831
+],
+"lectures/w03-p15.webp": [
+1100,
+797
+],
+"lectures/w03-p17.webp": [
+1100,
+465
+],
+"lectures/w03-p18.webp": [
+1100,
+513
+],
+"lectures/w03-p19.webp": [
+1100,
+831
+],
+"lectures/w03-p20.webp": [
+1100,
+227
+],
+"lectures/w03-p21.webp": [
+1100,
+793
+],
+"lectures/w03-p22.webp": [
+1100,
+795
+],
+"lectures/w03-p23.webp": [
+1100,
+134
+],
+"lectures/w03-p24.webp": [
+857,
+1057
+],
+"lectures/w03-p25.webp": [
+937,
+464
+],
+"lectures/w03-p26.webp": [
+837,
+672
+],
+"lectures/w03-p27.webp": [
+1100,
+582
+],
+"lectures/w04-p04.webp": [
+990,
+715
+],
+"lectures/w04-p09.webp": [
+686,
+678
+],
+"lectures/w04-p10.webp": [
+688,
+678
+],
+"lectures/w04-p11.webp": [
+1100,
+339
+],
+"lectures/w04-p13.webp": [
+1100,
+832
+],
+"lectures/w04-p14.webp": [
+1100,
+487
+],
+"lectures/w04-p15.webp": [
+1100,
+486
+],
+"lectures/w04-p16.webp": [
+757,
+245
+],
+"lectures/w04-p17.webp": [
+1100,
+782
+],
+"lectures/w04-p18.webp": [
+1100,
+429
+],
+"lectures/w04-p19.webp": [
+1100,
+476
+],
+"lectures/w04-p20.webp": [
+344,
+373
+],
+"lectures/w04-p21.webp": [
+344,
+373
+],
+"lectures/w04-p22.webp": [
+948,
+933
+],
+"lectures/w04-p23.webp": [
+1048,
+534
+],
+"lectures/w04-p24.webp": [
+1100,
+840
+],
+"lectures/w04-p25.webp": [
+1100,
+840
+],
+"lectures/w04-p28.webp": [
+901,
+590
+],
+"lectures/w04-p29.webp": [
+1100,
+462
+],
+"lectures/w04-p30.webp": [
+917,
+342
+],
+"lectures/w04-p31.webp": [
+1100,
+713
+],
+"lectures/w04-p32.webp": [
+1100,
+686
+],
+"lectures/w05-p03.webp": [
+1100,
+374
+],
+"lectures/w05-p05.webp": [
+1100,
+560
+],
+"lectures/w05-p06.webp": [
+1100,
+589
+],
+"lectures/w05-p07.webp": [
+782,
+690
+],
+"lectures/w05-p12.webp": [
+1100,
+139
+],
+"lectures/w05-p16.webp": [
+1100,
+368
+],
+"lectures/w05-p17.webp": [
+1002,
+749
+],
+"lectures/w05-p18.webp": [
+1002,
+619
+],
+"lectures/w05-p19.webp": [
+1060,
+556
+],
+"lectures/w05-p20.webp": [
+1058,
+439
+],
+"lectures/w05-p21.webp": [
+1002,
+368
+],
+"lectures/w05-p22.webp": [
+1100,
+641
+],
+"lectures/w05-p23.webp": [
+1100,
+642
+],
+"lectures/w05-p24.webp": [
+1100,
+625
+],
+"lectures/w05-p25.webp": [
+1016,
+975
+],
+"lectures/w05-p26.webp": [
+1100,
+616
+],
+"lectures/w05-p27.webp": [
+1100,
+783
+],
+"lectures/w06-p03.webp": [
+1100,
+774
+],
+"lectures/w06-p04.webp": [
+706,
+899
+],
+"lectures/w06-p05.webp": [
+1100,
+627
+],
+"lectures/w06-p07.webp": [
+831,
+1319
+],
+"lectures/w06-p09.webp": [
+1100,
+789
+],
+"lectures/w06-p11.webp": [
+1100,
+316
+],
+"lectures/w06-p13.webp": [
+1032,
+654
+],
+"lectures/w06-p14.webp": [
+651,
+1294
+],
+"lectures/w06-p15.webp": [
+651,
+723
+],
+"lectures/w06-p16.webp": [
+651,
+722
+],
+"lectures/w06-p17.webp": [
+651,
+723
+],
+"lectures/w06-p18.webp": [
+1100,
+642
+],
+"lectures/w06-p20.webp": [
+1100,
+706
+],
+"lectures/w06-p21.webp": [
+1100,
+709
+],
+"lectures/w06-p22.webp": [
+1100,
+656
+],
+"lectures/w07-p03.webp": [
+1032,
+654
+],
+"lectures/w07-p04.webp": [
+651,
+1294
+],
+"lectures/w07-p05.webp": [
+651,
+723
+],
+"lectures/w07-p06.webp": [
+651,
+722
+],
+"lectures/w07-p07.webp": [
+651,
+723
+],
+"lectures/w07-p08.webp": [
+1100,
+642
+],
+"lectures/w07-p09.webp": [
+877,
+724
+],
+"lectures/w07-p10.webp": [
+1100,
+611
+],
+"lectures/w07-p12.webp": [
+1100,
+300
+],
+"lectures/w07-p15.webp": [
+1100,
+706
+],
+"lectures/w07-p16.webp": [
+1100,
+709
+],
+"lectures/w07-p17.webp": [
+1100,
+656
+],
+"lectures/w07-p18.webp": [
+260,
+1102
+],
+"lectures/w07-p19.webp": [
+414,
+634
+],
+"lectures/w07-p20.webp": [
+1100,
+498
+],
+"lectures/w07-p21.webp": [
+1100,
+750
+],
+"lectures/w07-p22.webp": [
+1100,
+652
+],
+"lectures/w07-p23.webp": [
+1100,
+655
+],
+"lectures/w07-p24.webp": [
+1100,
+656
+],
+"lectures/w07-p26.webp": [
+1100,
+740
+],
+"lectures/w07-p27.webp": [
+1100,
+847
+],
+"lectures/w08-p03.webp": [
+1100,
+400
+],
+"lectures/w08-p05.webp": [
+957,
+874
+],
+"lectures/w08-p06.webp": [
+720,
+888
+],
+"lectures/w08-p07.webp": [
+1100,
+834
+],
+"lectures/w08-p08.webp": [
+965,
+874
+],
+"lectures/w08-p09.webp": [
+869,
+877
+],
+"lectures/w08-p10.webp": [
+1100,
+727
+],
+"lectures/w08-p11.webp": [
+980,
+1002
+],
+"lectures/w08-p12.webp": [
+1100,
+648
+],
+"lectures/w08-p13.webp": [
+1100,
+648
+],
+"lectures/w08-p14.webp": [
+1100,
+666
+],
+"lectures/w08-p15.webp": [
+1100,
+672
+],
+"lectures/w08-p16.webp": [
+1100,
+612
+],
+"lectures/w08-p20.webp": [
+1100,
+866
+],
+"lectures/w08-p21.webp": [
+1100,
+838
+],
+"lectures/w08-p32.webp": [
+1100,
+647
+],
+"lectures/w08-p37.webp": [
+907,
+189
+],
+"lectures/w08-p38.webp": [
+680,
+637
+],
+"lectures/w08-p41.webp": [
+562,
+527
+],
+"lectures/w08-p42.webp": [
+916,
+995
+],
+"lectures/w08-p43.webp": [
+1100,
+792
+],
+"lectures/w08-p44.webp": [
+1100,
+652
+],
+"lectures/w08-p45.webp": [
+1042,
+908
+],
+"lectures/w08-p46.webp": [
+1100,
+783
+],
+"lectures/w09-p03.webp": [
+1100,
+538
+],
+"lectures/w09-p04.webp": [
+1100,
+670
+],
+"lectures/w09-p05.webp": [
+1100,
+614
+],
+"lectures/w09-p06.webp": [
+1100,
+605
+],
+"lectures/w09-p08.webp": [
+776,
+1005
+],
+"lectures/w09-p09.webp": [
+1100,
+496
+],
+"lectures/w09-p10.webp": [
+923,
+681
+],
+"lectures/w09-p11.webp": [
+1100,
+396
+],
+"lectures/w09-p12.webp": [
+1100,
+582
+],
+"lectures/w09-p13.webp": [
+1100,
+528
+],
+"lectures/w09-p14.webp": [
+1100,
+508
+],
+"lectures/w09-p15.webp": [
+1100,
+537
+],
+"lectures/w09-p16.webp": [
+1100,
+531
+],
+"lectures/w09-p17.webp": [
+1100,
+701
+],
+"lectures/w09-p18.webp": [
+1100,
+652
+],
+"lectures/w09-p19.webp": [
+1100,
+434
+],
+"lectures/w09-p20.webp": [
+1100,
+433
+],
+"lectures/w09-p21.webp": [
+1100,
+302
+],
+"lectures/w09-p22.webp": [
+1100,
+386
+],
+"lectures/w09-p23.webp": [
+1100,
+507
+],
+"lectures/w09-p24.webp": [
+1100,
+692
+],
+"lectures/w10-p03.webp": [
+1100,
+536
+],
+"lectures/w10-p05.webp": [
+901,
+813
+],
+"lectures/w10-p06.webp": [
+1100,
+634
+],
+"lectures/w10-p07.webp": [
+776,
+851
+],
+"lectures/w10-p08.webp": [
+923,
+682
+],
+"lectures/w10-p12.webp": [
+1100,
+566
+],
+"lectures/w10-p13.webp": [
+1100,
+674
+],
+"lectures/w10-p14.webp": [
+1100,
+1112
+],
+"lectures/w10-p15.webp": [
+1100,
+755
+],
+"lectures/w10-p16.webp": [
+1100,
+824
+],
+"lectures/w10-p17.webp": [
+1100,
+879
+],
+"lectures/w10-p20.webp": [
+1100,
+544
+],
+"lectures/w10-p21.webp": [
+1100,
+725
+],
+"lectures/w10-p22.webp": [
+1100,
+833
+],
+"lectures/w11-p07.webp": [
+1060,
+450
+],
+"lectures/w11-p09.webp": [
+872,
+1060
+],
+"lectures/w11-p10.webp": [
+1100,
+813
+],
+"lectures/w11-p11.webp": [
+676,
+686
+],
+"lectures/w11-p13.webp": [
+1100,
+871
+],
+"lectures/w11-p14.webp": [
+1100,
+332
+],
+"lectures/w11-p20.webp": [
+1100,
+565
+],
+"lectures/w11-p27.webp": [
+1100,
+859
+],
+"lectures/w11-p28.webp": [
+1032,
+623
+],
+"lectures/w11-p30.webp": [
+523,
+867
+],
+"lectures/w11-p31.webp": [
+438,
+738
+],
+"lectures/w11-p34.webp": [
+1100,
+404
+],
+"lectures/w11-p35.webp": [
+658,
+1396
+],
+"lectures/w11-p39.webp": [
+1100,
+640
+],
+"lectures/w11-p40.webp": [
+1100,
+821
+],
+"lectures/w11-p41.webp": [
+1100,
+519
+],
+"lectures/w12-p03.webp": [
+1097,
+1306
+],
+"lectures/w12-p04.webp": [
+1100,
+890
+],
+"lectures/w12-p05.webp": [
+1100,
+580
+],
+"lectures/w12-p10.webp": [
+1100,
+849
+],
+"lectures/w12-p11.webp": [
+930,
+900
+],
+"lectures/w12-p13.webp": [
+912,
+656
+],
+"lectures/w12-p15.webp": [
+697,
+636
+],
+"lectures/w12-p19.webp": [
+1100,
+822
+],
+"lectures/w12-p20.webp": [
+995,
+523
+],
+"lectures/w12-p21.webp": [
+1100,
+348
+],
+"lectures/w12-p23.webp": [
+1100,
+785
+],
+"lectures/w12-p24.webp": [
+1100,
+664
+],
+"lectures/w12-p25.webp": [
+1100,
+658
+],
+"lectures/w12-p26.webp": [
+1100,
+1076
+],
+"lectures/w12-p28.webp": [
+1100,
+514
+],
+"lectures/w12-p30.webp": [
+861,
+643
+],
+"lectures/w12-p33.webp": [
+898,
+1145
+],
+"lectures/w12-p34.webp": [
+1100,
+570
+],
+"lectures/w12-p35.webp": [
+1100,
+657
+],
+"lectures/w12-p36.webp": [
+1100,
+313
+],
+"lectures/w12-p37.webp": [
+1017,
+1452
+],
+"lectures/w12-p38.webp": [
+1100,
+549
+],
+"lectures/w12-p39.webp": [
+1100,
+656
+],
+"lectures/w12-p40.webp": [
+1100,
+629
+],
+"lectures/w13-p03.webp": [
+1100,
+193
+],
+"lectures/w13-p04.webp": [
+1100,
+849
+],
+"lectures/w13-p07.webp": [
+748,
+728
+],
+"lectures/w13-p08.webp": [
+583,
+640
+],
+"lectures/w13-p10.webp": [
+1100,
+773
+],
+"lectures/w13-p11.webp": [
+1100,
+711
+],
+"lectures/w13-p12.webp": [
+1100,
+824
+],
+"lectures/w13-p13.webp": [
+1100,
+952
+],
+"lectures/w13-p14.webp": [
+1100,
+816
+],
+"lectures/w13-p15.webp": [
+1100,
+514
+],
+"lectures/w13-p16.webp": [
+1100,
+806
+],
+"lectures/w13-p17.webp": [
+785,
+781
+],
+"lectures/w13-p19.webp": [
+1100,
+808
+],
+"lectures/w13-p21.webp": [
+936,
+758
+],
+"lectures/w13-p22.webp": [
+1100,
+424
+],
+"lectures/w13-p24.webp": [
+1100,
+217
+],
+"lectures/w13-p29.webp": [
+1100,
+747
+],
+"lectures/w13-p35.webp": [
+1100,
+439
+],
+"lectures/w13-p36.webp": [
+1100,
+575
+],
+"lectures/w13-p37.webp": [
+1100,
+612
+],
+"lectures/w13-p41.webp": [
+1100,
+437
+],
+"lectures/w14-p04.webp": [
+1100,
+297
+],
+"lectures/w14-p08.webp": [
+1100,
+905
+],
+"lectures/w14-p09.webp": [
+1100,
+788
+],
+"lectures/w14-p10.webp": [
+1100,
+483
+],
+"lectures/w14-p11.webp": [
+1100,
+469
+],
+"lectures/w14-p12.webp": [
+1100,
+484
+],
+"lectures/w14-p13.webp": [
+1100,
+451
+],
+"lectures/w14-p15.webp": [
+1100,
+479
+],
+"lectures/w14-p16.webp": [
+1100,
+589
+],
+"lectures/w14-p18.webp": [
+1100,
+233
+],
+"lectures/w14-p19.webp": [
+1100,
+599
+],
+"lectures/w14-p21.webp": [
+1100,
+646
+],
+"lectures/w14-p24.webp": [
+1100,
+396
+],
+"lectures/w14-p25.webp": [
+1100,
+454
+],
+"lectures/w14-p26.webp": [
+1100,
+418
+],
+"lectures/w14-p27.webp": [
+1100,
+566
+],
+"lectures/w14-p28.webp": [
+1100,
+368
+],
+"lectures/w14-p29.webp": [
+1100,
+355
+],
+"lectures/w14-p30.webp": [
+1100,
+381
+],
+"lectures/w14-p31.webp": [
+1100,
+394
+],
+"lectures/w14-p32.webp": [
+1100,
+395
+],
+"lectures/w14-p33.webp": [
+1100,
+393
+],
+"lectures/w14-p34.webp": [
+1100,
+421
+],
+"lectures/w14-p36.webp": [
+890,
+890
+],
+"lectures/w14-p37.webp": [
+1100,
+1075
+],
+"lectures/w14-p38.webp": [
+1100,
+498
+],
+"lectures/w15-p03.webp": [
+1100,
+121
+],
+"lectures/w15-p04.webp": [
+1100,
+185
+],
+"lectures/w15-p05.webp": [
+1100,
+193
+],
+"lectures/w15-p06.webp": [
+1100,
+589
+],
+"lectures/w15-p07.webp": [
+1100,
+795
+],
+"lectures/w15-p08.webp": [
+1100,
+299
+],
+"lectures/w15-p09.webp": [
+1024,
+738
+],
+"lectures/w15-p10.webp": [
+1100,
+177
+],
+"lectures/w15-p12.webp": [
+1100,
+243
+],
+"lectures/w15-p13.webp": [
+1100,
+137
+],
+"lectures/w15-p14.webp": [
+1100,
+240
+],
+"lectures/w15-p15.webp": [
+1100,
+135
+],
+"lectures/w15-p16.webp": [
+1100,
+256
+],
+"lectures/w15-p17.webp": [
+1100,
+312
+],
+"lectures/w15-p18.webp": [
+1100,
+479
+],
+"lectures/w15-p20.webp": [
+1100,
+406
+],
+"lectures/w15-p21.webp": [
+1100,
+348
+],
+"lectures/w15-p22.webp": [
+1100,
+204
+],
+"lectures/w15-p23.webp": [
+1100,
+278
+],
+"lectures/w15-p24.webp": [
+1100,
+432
+],
+"lectures/w15-p25.webp": [
+1100,
+803
+],
+"lectures/w15-p26.webp": [
+1100,
+271
+],
+"lectures/w15-p27.webp": [
+1100,
+224
+],
+"lectures/w15-p28.webp": [
+1100,
+442
+],
+"lectures/w15-p32.webp": [
+688,
+1155
+],
+"lectures/w15-p34.webp": [
+1100,
+367
+]
+}

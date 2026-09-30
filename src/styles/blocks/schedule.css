@@ -1,0 +1,54 @@
+/* schedule — semester plan with an optional date calculator */
+.schedule {
+  margin: 1.25rem 0;
+}
+
+.schedule__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.schedule__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.schedule__label {
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  font-weight: 600;
+}
+
+.schedule__input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+}
+
+.schedule__hint {
+  margin: 0.5rem 0 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+}
+
+.schedule__date {
+  display: block;
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.schedule__date:empty {
+  display: none;
+}
+
+@media print {
+  .schedule__controls,
+  .schedule__hint {
+    display: none;
+  }
+}

@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторная 1. Вводное занятие: оборудование лаборатории — SYC</title>
+<meta name="description" content="Первое занятие — без баллов. Ты знакомишься с блоком питания, мультиметром, генератором и осциллографом — четырьмя приборами, с которыми проведёшь следующие пять недель.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/01.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/01.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/01.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/labs/01.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/labs/01.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/labs/01.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Что происходит на этом занятии</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Лабораторный блок питания (W.E.P. 1502USB)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Мультиметр (DT9208A)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Функциональный генератор (FY2100S)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Осциллограф (Twintex TOS-2020CF)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Кабели, разъёмы и макетная плата</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Стоит посмотреть (ссылки из материалов к занятиям)</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лабораторные">
+<p class="side-nav__title">Все лабораторные</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/01.html" aria-current="page"><span class="side-nav__num">1</span><span class="side-nav__text">Знакомимся с оборудованием</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Измерение напряжений и токов</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Лабораторная 1</p>
+<h1 class="article__title">Вводное занятие: оборудование лаборатории</h1>
+<p class="article__lead">Первое занятие — без баллов. Ты знакомишься с блоком питания, мультиметром, генератором и осциллографом — четырьмя приборами, с которыми проведёшь следующие пять недель.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a>
+<a class="button button--ghost" href="../lectures/01.html">Лекция к этой лабораторной: Лекция 1 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Что происходит на этом занятии</h2>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">«Первое занятие будет вводным: знакомство с лабораторным оборудованием, правилами техники безопасности, использованием кабелей — как они выглядят — и обсуждение, что такое составляющая AC, DC. Такие вещи лучше показывать на оборудовании.» За это занятие <strong>баллов нет</strong>.</p>
+</div>
+</div>
+<ul class="list">
+<li class="list__item">Работаешь <strong>в паре</strong>; на столе один блок питания, один мультиметр, один генератор и один осциллограф.</li>
+<li class="list__item">Стоит уйти с этого занятия, умея три вещи: <strong>измерить напряжение мультиметром</strong>, <strong>выставить сигнал на генераторе</strong> и <strong>увидеть его неподвижным на осциллографе</strong>. От этого зависят баллы на занятиях 2–6.</li>
+</ul>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Безопасность</p>
+<div class="callout__body">
+<p class="article__p">Напряжения в лаборатории низкие (до 15 В), но инструкция осциллографа предупреждает: будь осторожен при напряжениях выше <strong>30 В AC (действующее), 42 В AC (пиковое) и 60 В DC</strong> — они могут ударить током. Не замыкай клеммы блока питания, а схему меняй при выключенном питании.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Лабораторный блок питания (W.E.P. 1502USB)</h2>
+<p class="article__p">Блок питания даёт <strong>постоянное напряжение, величину которого ты задаёшь сам</strong> — от 0 до 15 В, ток до 2 А.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-p38.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p38.webp" alt="Передняя панель блока питания с обозначениями" width="1399" height="776" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Передняя панель блока питания с обозначениями <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">№</th><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head">Для чего</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">3</td><td class="table__cell">клемма напряжения <strong>(+)</strong>, красная</td><td class="table__cell">сюда подключается «плюсовой» провод</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">4</td><td class="table__cell">клемма массы <strong>(−)</strong>, чёрная</td><td class="table__cell">сюда подключается «минусовой» провод (масса)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">5</td><td class="table__cell">переключатель <strong>5 V / 15 V</strong></td><td class="table__cell">диапазон: 0–5 В или 0–15 В</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">6</td><td class="table__cell">выключатель питания</td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">7</td><td class="table__cell">ручка регулировки напряжения</td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">8</td><td class="table__cell">светодиодный дисплей</td><td class="table__cell">показывает выставленное напряжение (с точностью 0,1 В)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">9</td><td class="table__cell">стрелочный индикатор</td><td class="table__cell">показывает потребляемый <strong>ток</strong> (0–2 А)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">2</td><td class="table__cell">выход USB 5 В</td><td class="table__cell">от него питается генератор</td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p39.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p39.webp" alt="Задняя панель: предохранитель, силовой транзистор, сетевой шнур" width="1319" height="809" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Задняя панель: предохранитель, силовой транзистор, сетевой шнур <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">У блока есть <strong>защита от короткого замыкания</strong>: при замыкании (ток выше 2 А) он пищит и отключает выход, а после устранения замыкания сам возвращается к работе.</li>
+<li class="list__item">Дисплей показывает напряжение только с точностью до 0,1 В — поэтому точное значение измеряют мультиметром.</li>
+</ul>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Как выставить напряжение</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Поверни ручку (7) влево до нуля.</li>
+<li class="steps__item">Выбери диапазон переключателем (5): до 5 В или до 15 В.</li>
+<li class="steps__item">Включи блок питания (6).</li>
+<li class="steps__item">Крути ручку, глядя на дисплей, пока не увидишь нужное значение.</li>
+<li class="steps__item">Только теперь подключай схему — красный провод к (+), чёрный к (−).</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Мультиметр (DT9208A)</h2>
+<p class="article__p">Наряду с осциллографом — самый важный прибор. Измеряет напряжение, ток, сопротивление, а также ёмкость, частоту и усиление транзистора.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-multimeter.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-multimeter.webp" alt="Мультиметр DT9208A" width="900" height="1965" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Мультиметр DT9208A <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p">Гнёзда внизу: <strong>COM</strong> (всегда чёрный провод), <strong>VΩ</strong> (красный — напряжение и сопротивление), <strong>mA</strong> (красный — ток до 200 мА), <strong>20A</strong> (красный — большие токи).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Что измеряешь</th><th class="table__cell table__cell--head">Красный провод</th><th class="table__cell table__cell--head">Переключатель</th><th class="table__cell table__cell--head">Как подключать</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Постоянное напряжение</strong></td><td class="table__cell">VΩ</td><td class="table__cell">V⎓ (DC)</td><td class="table__cell"><strong>параллельно</strong> — к двум точкам, между которыми измеряешь</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Переменное напряжение</strong></td><td class="table__cell">VΩ</td><td class="table__cell">V~ (AC)</td><td class="table__cell">параллельно</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Ток</strong></td><td class="table__cell">mA (до 200 мА) или 20A</td><td class="table__cell">A⎓ или A~</td><td class="table__cell"><strong>последовательно</strong> — нужно разорвать цепь и включить прибор в разрыв</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Сопротивление</strong></td><td class="table__cell">VΩ</td><td class="table__cell">Ω</td><td class="table__cell">к выводам элемента, <strong>при выключенном питании</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Прозвонка / диод</strong></td><td class="table__cell">VΩ</td><td class="table__cell">символ диода</td><td class="table__cell">пищит, когда сопротивление меньше примерно 70 Ом; для диода показывает прямое напряжение</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Ёмкость</strong></td><td class="table__cell">гнёзда Cx</td><td class="table__cell">F</td><td class="table__cell">конденсатор должен быть разряжен</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Транзистор</strong></td><td class="table__cell">гнездо hFE</td><td class="table__cell">hFE</td><td class="table__cell">вставь ножки транзистора по обозначениям E, B, C</td></tr>
+</tbody></table></div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Перед каждым измерением (из инструкции прибора)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Включи прибор. Если символ батареи <strong>не</strong> появился — он исправен.</li>
+<li class="steps__item">Убедись, что измеряемая величина не превысит возможностей прибора.</li>
+<li class="steps__item">Установи переключатель на нужную величину и предел <strong>до того</strong>, как коснёшься схемы.</li>
+<li class="steps__item">Не знаешь, какое значение ожидать? Начни с <strong>самого большого</strong> предела и спускайся вниз.</li>
+<li class="steps__item">Одна цифра <strong>«1»</strong> слева на дисплее означает <strong>превышение предела</strong> — переключись на больший.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Три классические ошибки</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><strong>Измерение тока параллельно</strong> (как напряжения) — у амперметра почти нулевое сопротивление, поэтому получается короткое замыкание и сгорает предохранитель на 200 мА. На пределе 20 А предохранителя <strong>нет</strong>.</li>
+<li class="list__item"><strong>Измерение сопротивления в схеме под напряжением</strong> — результат бессмысленный, а прибор может выйти из строя.</li>
+<li class="list__item"><strong>Красный провод, оставленный в гнезде mA</strong> после измерения тока, и затем попытка измерить напряжение.</li>
+</ul>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Функциональный генератор (FY2100S)</h2>
+<p class="article__p">Генератор создаёт <strong>переменный сигнал выбранной формы, частоты и амплитуды</strong>. На занятиях его обозначают сокращением <strong>DDS</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-p54.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p54.webp" alt="Функциональный генератор: элементы передней панели" width="1400" height="772" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Функциональный генератор: элементы передней панели <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head">Для чего</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">ЖК-дисплей</td><td class="table__cell">показывает частоту (<code class="inline-code">F=…</code>) и форму (<code class="inline-code">WAVE=SINE</code>)</td></tr>
+<tr class="table__row"><td class="table__cell">кнопки ◀ ▶</td><td class="table__cell">выбор цифры, которую меняешь</td></tr>
+<tr class="table__row"><td class="table__cell">ручка <strong>ADJ</strong> (синяя)</td><td class="table__cell">изменение значения выбранной цифры</td></tr>
+<tr class="table__row"><td class="table__cell">кнопка <strong>WAVE</strong></td><td class="table__cell">форма: синус, прямоугольник, треугольник</td></tr>
+<tr class="table__row"><td class="table__cell">ручка <strong>AMPL</strong></td><td class="table__cell">амплитуда сигнала</td></tr>
+<tr class="table__row"><td class="table__cell">ручка <strong>OFFS</strong></td><td class="table__cell">постоянная составляющая (сдвиг сигнала вверх / вниз)</td></tr>
+<tr class="table__row"><td class="table__cell">кнопка −20 dB</td><td class="table__cell">аттенюатор: уменьшает амплитуду в 10 раз</td></tr>
+<tr class="table__row"><td class="table__cell">гнездо <strong>OUT</strong> (BNC)</td><td class="table__cell">выход сигнала — отсюда идёт кабель к схеме</td></tr>
+<tr class="table__row"><td class="table__cell">гнездо <strong>TTL</strong></td><td class="table__cell">выход прямоугольника 0/5 В</td></tr>
+<tr class="table__row"><td class="table__cell">гнездо <strong>EXT IN</strong></td><td class="table__cell">вход счётчика / частотомера</td></tr>
+</tbody></table></div>
+<p class="article__p">Генератор питается от 5 В через USB (из гнезда на блоке питания).</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Постоянная и переменная составляющая — о чём речь</p>
+<div class="callout__body">
+<p class="article__p">Любой сигнал можно разложить на две части: <strong>постоянную составляющую (DC)</strong> — его среднее значение — и <strong>переменную составляющую (AC)</strong> — то, что «колеблется» вокруг этого среднего. Синус амплитудой 1 В, «ездящий» между 2 В и 4 В, имеет постоянную составляющую 3 В и переменную ±1 В. Ручка <strong>OFFS</strong> меняет только постоянную составляющую.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Осциллограф (Twintex TOS-2020CF)</h2>
+<p class="article__p">Осциллограф <strong>рисует график напряжения в зависимости от времени</strong>. Он позволяет увидеть сигналы, слишком быстрые для глаза, — и измерить их амплитуду, период и сдвиг. Эта модель — <strong>аналоговая</strong>, у неё <strong>2 канала</strong> и полоса <strong>20 МГц</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-oscilloscope.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-oscilloscope.webp" alt="Осциллограф в лаборатории" width="1300" height="731" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Осциллограф в лаборатории <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<h3 class="article__h3">Как он работает</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p63.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p63.webp" alt="Структурная схема осциллографа" width="1400" height="983" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Структурная схема осциллографа <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p">Четыре блока:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Экран</strong> — трубка, в которой электронный луч рисует след.</li>
+<li class="list__item"><strong>Канал вертикального отклонения</strong> (каналы CH1 и CH2) — чем больше напряжение, тем выше точка.</li>
+<li class="list__item"><strong>Канал горизонтального отклонения</strong> (развёртка, <em>podstawa czasu</em>) — равномерно ведёт точку слева направо.</li>
+<li class="list__item"><strong>Схема запуска</strong> (синхронизация, <em>trigger</em>) — следит, чтобы каждая новая «перерисовка» начиналась в одном и том же месте сигнала; благодаря этому картинка стоит, а не плывёт.</li>
+</ol>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p64.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p64.webp" alt="Электронно-лучевая трубка: электронная пушка, отклоняющие пластины, экран" width="1400" height="628" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Электронно-лучевая трубка: электронная пушка, отклоняющие пластины, экран <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<h3 class="article__h3">Панель управления</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-scope-panel.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-scope-panel.webp" alt="Передняя панель: секции HORIZONTAL, TRIGGER и VERTICAL" width="1300" height="1083" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Передняя панель: секции HORIZONTAL, TRIGGER и VERTICAL <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Ручка / переключатель</th><th class="table__cell table__cell--head">Что делает</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>VOLTS/DIV</strong> (отдельно для CH1 и CH2)</td><td class="table__cell">вертикальный масштаб: сколько вольт на одно деление</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>TIME/DIV</strong></td><td class="table__cell">горизонтальный масштаб: сколько времени на одно деление</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>POSITION ▲▼</strong></td><td class="table__cell">сдвигает сигнал вверх / вниз</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>◀ POSITION ▶</strong></td><td class="table__cell">сдвигает сигнал влево / вправо</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>LEVEL</strong> (TRIGGER)</td><td class="table__cell">уровень запуска — им «останавливают» плывущую картинку</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MODE</strong> (VERTICAL)</td><td class="table__cell">что показывать: CH1, CH2, <strong>DUAL</strong> (оба), ADD (сумма)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>AC / GND / DC</strong></td><td class="table__cell">способ подключения входа (см. ниже)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>X10 MAG</strong></td><td class="table__cell">растягивает картинку по горизонтали в 10 раз</td></tr>
+<tr class="table__row"><td class="table__cell">маленькая ручка <strong>VAR / CAL</strong></td><td class="table__cell">плавная регулировка; для измерений <strong>должна стоять в положении CAL</strong></td></tr>
+</tbody></table></div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p68.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p68.webp" alt="VOLTS/DIV — чувствительность канала" width="1400" height="1164" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">VOLTS/DIV — чувствительность канала <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p70.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p70.webp" alt="TIME/DIV — развёртка" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">TIME/DIV — развёртка <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p71.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p71.webp" alt="LEVEL — уровень запуска" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">LEVEL — уровень запуска <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p73.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p73.webp" alt="POSITION — сдвиг сигнала" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">POSITION — сдвиг сигнала <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+</div>
+<p class="article__p"><strong>AC / GND / DC:</strong></p>
+<ul class="list">
+<li class="list__item"><strong>DC</strong> — видишь весь сигнал вместе с постоянной составляющей. Так измеряют постоянное напряжение.</li>
+<li class="list__item"><strong>AC</strong> — постоянная составляющая отсекается; видишь только переменную часть, расположенную вокруг нуля.</li>
+<li class="list__item"><strong>GND</strong> — вход замкнут на массу: на экране ровная линия, показывающая, <strong>где находится 0 В</strong>. Поставь её ручкой POSITION на выбранную линию сетки до начала измерений.</li>
+</ul>
+<h3 class="article__h3">Зачем нужна синхронизация</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p72.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-p72.webp" alt="Устойчивое и неустойчивое изображение в зависимости от синхронизации развёртки с сигналом" width="1400" height="749" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Устойчивое и неустойчивое изображение в зависимости от синхронизации развёртки с сигналом <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p">Если период развёртки не согласован с периодом сигнала, каждая перерисовка начинается в другом месте и картинка «убегает». Ручка <strong>LEVEL</strong> задаёт напряжение, с которого должно начинаться рисование, — картинка останавливается.</p>
+<h3 class="article__h3">Как прочитать результат</h3>
+<div class="formula"><span class="math">U = (делений по вертикали) × (VOLTS/DIV)  T = (делений по горизонтали) × (TIME/DIV)  f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">T</span></span></span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Собственный пример</p>
+<div class="callout__body">
+<p class="article__p">Синус занимает по вертикали 4,6 деления от впадины до вершины, VOLTS/DIV = 0,5 В → размах <span class="math">U<sub class="math__sub">pp</sub> = 4,6 × 0,5 = 2,3 В</span>.</p>
+<p class="article__p">Один полный период занимает 5 делений по горизонтали, TIME/DIV = 0,2 мс → <span class="math">T = 5 × 0,2 = 1 мс</span>, то есть <span class="math">f = 1 кГц</span>.</p>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Первые пять минут с осциллографом (мой чек-лист)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Включи осциллограф и подожди, пока появится линия. Линии нет? Поверни INTEN (яркость) и обе ручки POSITION в среднее положение, MODE синхронизации поставь на <strong>AUTO</strong>.</li>
+<li class="steps__item">Переключатель входа поставь на <strong>GND</strong> и ручкой POSITION поставь линию на центральную линию сетки — это твои 0 В.</li>
+<li class="steps__item">Проверь, что маленькие ручки VAR стоят в положении <strong>CAL</strong> (иначе масштаб врёт).</li>
+<li class="steps__item">Подключи сигнал к CH1 и переключи на <strong>DC</strong>.</li>
+<li class="steps__item">Крути <strong>VOLTS/DIV</strong>, пока сигнал не займёт большую часть экрана по вертикали (но помещается).</li>
+<li class="steps__item">Крути <strong>TIME/DIV</strong>, пока не увидишь 1–3 периода.</li>
+<li class="steps__item">Картинка плывёт? Крути <strong>LEVEL</strong>, пока не остановится.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Кабели, разъёмы и макетная плата</h2>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-bnc.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-bnc.webp" alt="Разъёмы BNC и тройник" width="1300" height="731" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Разъёмы BNC и тройник <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-parts.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab01-parts.webp" alt="Элементы, используемые на занятиях: резисторы, транзисторы, диоды" width="900" height="1600" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Элементы, используемые на занятиях: резисторы, транзисторы, диоды <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item">Генератор и осциллограф соединяют кабелями с разъёмом <strong>BNC</strong>. В кабеле есть центральная жила (сигнал) и экран — металлический корпус разъёма является <strong>массой</strong>.</li>
+<li class="list__item">Из лекции: металлические части приборов и экраны кабелей BNC обычно соединены с массой, а через заземляющий контакт розетки — с землёй. Практический вывод: <strong>массы генератора и осциллографа соединены между собой</strong>, поэтому их «чёрные» концы должны приходить в одну и ту же точку схемы.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/labs/lab03-s16.webp" alt="Макетная плата: как соединены отверстия" width="1400" height="712" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Макетная плата: как соединены отверстия <span class="figure__source">Источник: материалы к занятиям</span></figcaption>
+</figure>
+<p class="article__p"><strong>Макетная плата</strong> (<em>breadboard</em>, <em>płytka stykowa</em>) позволяет собирать схемы без пайки. В средней части отверстия соединены <strong>короткими столбиками по 5</strong>; длинные шины вдоль краёв служат для питания и массы. Две ножки, вставленные в один столбик, соединены между собой.</p>
+<h2 class="article__h2" id="s7">Стоит посмотреть (ссылки из материалов к занятиям)</h2>
+<ul class="list">
+<li class="list__item">Veritasium: <a class="link link--external" href="https://www.youtube.com/watch?v=oI_X2cMHNe0" target="_blank" rel="noopener">The Big Misconception About Electricity</a> и <a class="link link--external" href="https://www.youtube.com/watch?v=bHIhgxav9LY" target="_blank" rel="noopener">How Electricity Actually Works</a> — что такое ток на самом деле.</li>
+<li class="list__item"><a class="link link--external" href="https://www.youtube.com/watch?v=X_crwFuPht4" target="_blank" rel="noopener">Водяная аналогия закона Ома</a>.</li>
+<li class="list__item">Канал RS Elektronika (на польском): <a class="link link--external" href="https://www.youtube.com/watch?v=3YdOdJMfkww" target="_blank" rel="noopener">работа с оборудованием</a>.</li>
+<li class="list__item">UNSW ELEC1111: <a class="link link--external" href="https://www.youtube.com/playlist?list=PLHSIfioizVW2xQQmJ_JnuMRyQRUgb7TqG" target="_blank" rel="noopener">Lab Guidance</a> — короткие видео о мультиметре, осциллографе и макетной плате.</li>
+</ul>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Мультиметр</h3>
+<ul class="list">
+<li class="list__item">Чёрный провод всегда в <strong>COM</strong>. Красный: <strong>VΩ</strong> (напряжение, сопротивление) или <strong>mA / 20A</strong> (ток).</li>
+<li class="list__item"><strong>Напряжение — параллельно. Ток — последовательно. Сопротивление — без питания.</strong></li>
+<li class="list__item">«1» на дисплее = предел слишком мал. Неизвестное значение → начинай с наибольшего предела.</li>
+</ul>
+<h3 class="article__h3">Осциллограф</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Хочу…</th><th class="table__cell table__cell--head">Кручу / переключаю</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">картинку больше / меньше по вертикали</td><td class="table__cell">VOLTS/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">больше / меньше периодов</td><td class="table__cell">TIME/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">остановить плывущую картинку</td><td class="table__cell">LEVEL (trigger)</td></tr>
+<tr class="table__row"><td class="table__cell">увидеть, где 0 В</td><td class="table__cell">переключатель на GND</td></tr>
+<tr class="table__row"><td class="table__cell">измерить постоянное напряжение</td><td class="table__cell">переключатель на DC</td></tr>
+<tr class="table__row"><td class="table__cell">видеть оба канала</td><td class="table__cell">MODE → DUAL</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">U = деления × VOLTS/DIV</span>;   <span class="math">T = деления × TIME/DIV</span>;   <span class="math">f = 1/T</span></li>
+<li class="list__item">Ручки VAR должны стоять в положении <strong>CAL</strong>.</li>
+</ul>
+<h3 class="article__h3">Блок питания и генератор</h3>
+<ul class="list">
+<li class="list__item">Блок питания: красная (+), чёрная (−) = масса; переключатель 5 V / 15 V; стрелка показывает ток.</li>
+<li class="list__item">Генератор (DDS): WAVE — форма; ◀ ▶ + ADJ — частота; AMPL — амплитуда; OFFS — постоянная составляющая; выход <strong>OUT</strong>.</li>
+<li class="list__item">Массы генератора и осциллографа должны приходить в одну точку схемы.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<span class="pager__link pager__link--empty"></span>
+<a class="pager__link pager__link--next" href="../labs/02.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лабораторная 2: Измерение напряжений и токов</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

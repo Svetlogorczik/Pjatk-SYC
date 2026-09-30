@@ -1,0 +1,51 @@
+/* steps — numbered step-by-step procedure with a vertical line */
+.steps {
+  margin: 0.5rem 0 0.25rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps__item {
+  position: relative;
+  margin: 0;
+  padding: 0 0 1.1rem 2.9rem;
+  counter-increment: step;
+}
+
+.steps__item::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--callout-hue, var(--color-accent));
+  color: var(--color-surface);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.steps__item::after {
+  content: "";
+  position: absolute;
+  left: calc(1rem - 1px);
+  top: 2.2rem;
+  bottom: 0.2rem;
+  border-left: 2px solid color-mix(in srgb, var(--callout-hue, var(--color-accent)) 35%, transparent);
+}
+
+.steps__item:last-child {
+  padding-bottom: 0;
+}
+
+.steps__item:last-child::after {
+  display: none;
+}
+
+.steps__item > :last-child {
+  margin-bottom: 0;
+}

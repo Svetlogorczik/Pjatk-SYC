@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 12. Metody komunikacji: porty, UART, SPI, I²C — SYC</title>
+<meta name="description" content="Jak mikrokontroler rozmawia ze światem. Szeregowo czy równolegle, z zegarem czy bez, kto zaczyna rozmowę — oraz trzy interfejsy, które spotkasz na ćwiczeniach z Arduino.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/12.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/12.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/12.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/12.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/12.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/12.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Modele warstwowe</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Porty mikrokontrolera</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Trzy sposoby podziału transmisji</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Przegląd interfejsów szeregowych</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">UART / USART i RS-232</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">SPI</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">USB 2.0</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">I²C (Two-Wire)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Moduł ćwiczeniowy (Multi-function Shield)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">I²C w kodzie Arduino</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/12.html" aria-current="page"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 12</p>
+<h1 class="article__title">Metody komunikacji: porty, UART, SPI, I²C</h1>
+<p class="article__lead">Jak mikrokontroler rozmawia ze światem. Szeregowo czy równolegle, z zegarem czy bez, kto zaczyna rozmowę — oraz trzy interfejsy, które spotkasz na ćwiczeniach z Arduino.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Modele warstwowe</h2>
+<p class="article__p">Komunikacja w sieci jest podzielona na <strong>warstwy</strong>. Zestaw mechanizmów jednej warstwy to <strong>protokół</strong>; protokół działa tylko w swojej warstwie.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w12-p03.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p03.webp" alt="Model OSI (7 warstw) i model TCP/IP (4 warstwy)" width="1097" height="1306" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Model OSI (7 warstw) i model TCP/IP (4 warstwy) <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong>Kapsułkowanie</strong> (<em>encapsulation</em>): wiadomość warstwy wyższej jest wkładana do środka wiadomości warstwy niższej — każda warstwa dokleja swój nagłówek.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p05.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p05.webp" alt="Kapsułkowanie: każda warstwa dodaje swój nagłówek" width="1100" height="580" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kapsułkowanie: każda warstwa dodaje swój nagłówek <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">List w kopercie, koperta w worku pocztowym, worek w ciężarówce. Każda „warstwa” zna tylko swoje opakowanie i nie zagląda do środka.</p>
+</div>
+</div>
+<p class="article__p">Dla nas ważne są dwie najniższe warstwy: <strong>fizyczna</strong> (jakie napięcia, jakie przewody) i <strong>łącza danych</strong> (jak ułożone są bity w ramce). Tyle właśnie określają standardy I²C czy RS-232.</p>
+<h2 class="article__h2" id="s2">Porty mikrokontrolera</h2>
+<p class="article__p"><strong>Port</strong> to interfejs między komputerem a innym komputerem lub urządzeniem. <strong>Port sprzętowy</strong> to fizyczne wyprowadzenia; <strong>port programowy</strong> to połączenie logiczne (np. porty TCP/UDP).</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p10.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p10.webp" alt="Budowa pojedynczego pinu: bufory wejścia i wyjścia oraz rezystor podciągający" width="1100" height="849" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Budowa pojedynczego pinu: bufory wejścia i wyjścia oraz rezystor podciągający <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Piny wejścia/wyjścia mikrokontrolera:</p>
+<ul class="list">
+<li class="list__item">przesyłają sygnały cyfrowe w standardzie TTL/CMOS,</li>
+<li class="list__item">są zorganizowane <strong>bajtami</strong> (porty B, C, D), ale można ustawiać i czytać <strong>pojedyncze bity</strong>,</li>
+<li class="list__item">po resecie są w stanie <strong>wysokiej impedancji</strong>,</li>
+<li class="list__item">mogą pełnić <strong>funkcje alternatywne</strong> (np. pin portu jako linia UART albo wejście przetwornika),</li>
+<li class="list__item">mają włączany programowo <strong>rezystor podciągający</strong> (<em>pull-up</em>).</li>
+</ul>
+<h2 class="article__h2" id="s3">Trzy sposoby podziału transmisji</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Podział</th><th class="table__cell table__cell--head">Rodzaje</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Jak idą bity</strong></td><td class="table__cell"><strong>szeregowa</strong> — bity po kolei, jednym przewodem; <strong>równoległa</strong> — kilka bitów (zwykle bajt) naraz, każdy własnym przewodem</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Synchronizacja</strong></td><td class="table__cell"><strong>synchroniczna</strong> — jest wspólny sygnał zegara wyznaczający chwile przesyłu; <strong>asynchroniczna</strong> — bez zegara, transmisja może zacząć się w dowolnej chwili</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Kierunek</strong></td><td class="table__cell"><strong>simplex</strong> — tylko w jedną stronę; <strong>half duplex</strong> — w obie, ale nie jednocześnie; <strong>full duplex</strong> — w obie jednocześnie</td></tr>
+</tbody></table></div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w12-p11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p11.webp" alt="Transmisja równoległa i szeregowa" width="930" height="900" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Transmisja równoległa i szeregowa <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w12-p13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p13.webp" alt="Simplex, half duplex, full duplex" width="912" height="656" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Simplex, half duplex, full duplex <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Simplex to radio (tylko słuchasz). Half duplex to krótkofalówka („odbiór!” — mówi tylko jeden naraz). Full duplex to telefon (obaj mówią i słuchają jednocześnie).</p>
+</div>
+</div>
+<p class="article__p">Przykład łącza równoległego: port <strong>LPT</strong> (IEEE 1284, 25 pinów, standard TTL, 1984 r.) do drukarek i skanerów.</p>
+<h2 class="article__h2" id="s4">Przegląd interfejsów szeregowych</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Interfejs</th><th class="table__cell table__cell--head">Krótko</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS-232</strong></td><td class="table__cell">klasyczne łącze szeregowe (pierwotnie do modemów); wymaga konwersji poziomów napięć</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I²C</strong></td><td class="table__cell">„między układami scalonymi”; dwa przewody, adresowanie urządzeń</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SPI</strong></td><td class="table__cell">podobne zastosowania co I²C, ale szybsze (kilka Mb/s)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>CAN</strong></td><td class="table__cell">magistrala z przemysłu samochodowego (Bosch, lata 80.)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>USB</strong></td><td class="table__cell">zaawansowany interfejs „plug and play”, do 127 urządzeń</td></tr>
+<tr class="table__row"><td class="table__cell">D²B, FireWire (IEEE 1394)</td><td class="table__cell">inne, rzadziej spotykane</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s5">UART / USART i RS-232</h2>
+<p class="article__p"><strong>USART</strong> w mikrokontrolerze: transmisja synchroniczna lub asynchroniczna, full duplex, 5–9 bitów danych, 1 lub 2 bity stopu, sprzętowy bit parzystości i wykrywanie błędów. To właśnie przez niego działa <code class="inline-code">Serial.print()</code> w Arduino.</p>
+<h3 class="article__h3">Ramka asynchroniczna</h3>
+<p class="article__p">W trybie asynchronicznym nadajnik i odbiornik mają <strong>osobne zegary</strong>, więc muszą się umówić co do prędkości. Do każdego słowa danych dodaje się bit <strong>START</strong> i bit(y) <strong>STOP</strong>, żeby odbiornik wiedział, kiedy słowo się zaczyna i kończy.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p24.webp" alt="Ramka: bit startu, bity danych, bit parzystości, bit stopu" width="1100" height="664" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ramka: bit startu, bity danych, bit parzystości, bit stopu <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">„9600 bodów” w <code class="inline-code">Serial.begin(9600)</code> to właśnie ta umówiona prędkość: 9600 bitów na sekundę. Jeśli w monitorze portu szeregowego ustawisz inną prędkość niż w programie, zobaczysz „krzaki”.</p>
+</div>
+</div>
+<h3 class="article__h3">RS-232</h3>
+<p class="article__p">Standard łączący <strong>DTE</strong> (<em>Data Terminal Equipment</em>, np. komputer) z <strong>DCE</strong> (<em>Data Communication Equipment</em>, np. modem). Złącza DB9 i DB25.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Sygnał</th><th class="table__cell table__cell--head">Znaczenie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>TxD</strong></td><td class="table__cell">dane nadawane</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RxD</strong></td><td class="table__cell">dane odbierane</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SG</strong></td><td class="table__cell">masa sygnałowa — wspólny potencjał odniesienia</td></tr>
+<tr class="table__row"><td class="table__cell">DSR, DTR, RTS, CTS, DCD, RI</td><td class="table__cell">sygnały sterujące (gotowość, żądanie nadawania…)</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Poziomy napięć</strong> — na liniach danych obowiązuje <strong>logika ujemna</strong>:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Stan logiczny (linie danych)</th><th class="table__cell table__cell--head table__cell--center">Napięcie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">od −15 V do −3 V</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">od +3 V do +15 V</td></tr>
+</tbody></table></div>
+<p class="article__p">Przedział od −3 V do +3 V jest nieokreślony.</p>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Uwaga</p>
+<div class="callout__body">
+<p class="article__p">Linii RS-232 <strong>nie wolno łączyć bezpośrednio</strong> z pinami TTL mikrokontrolera (0…5 V) — napięcia ±15 V go uszkodzą. Poziomy dopasowuje specjalny układ, np. <strong>MAX232</strong>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">SPI</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p25.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p25.webp" alt="SPI: rejestry przesuwne mastera i slave'a połączone w pętlę" width="1100" height="658" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">SPI: rejestry przesuwne mastera i slave'a połączone w pętlę <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><em>Serial Peripheral Interface</em> — <strong>synchroniczny</strong>, <strong>full duplex</strong>, bardzo szybki. Jedno urządzenie jest <strong>masterem</strong> (generuje zegar), pozostałe to <strong>slave'y</strong>.</p>
+<p class="article__p">Linie (nazwy z materiałów do ćwiczeń):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Linia</th><th class="table__cell table__cell--head">Znaczenie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>MOSI</strong> (<em>Master Out, Slave In</em>)</td><td class="table__cell">dane od mastera do slave'a</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MISO</strong> (<em>Master In, Slave Out</em>)</td><td class="table__cell">dane od slave'a do mastera</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SCLK</strong></td><td class="table__cell">zegar — generuje go master</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SS / CS</strong> (<em>Slave/Chip Select</em>)</td><td class="table__cell">wybór urządzenia, z którym master rozmawia</td></tr>
+</tbody></table></div>
+<p class="article__p">W SPI nie ma adresów: każde urządzenie ma własną linię wyboru. W istocie to dwa rejestry przesuwne połączone w pierścień — z każdym taktem zegara jeden bit wychodzi i jeden wchodzi.</p>
+<h2 class="article__h2" id="s7">USB 2.0</h2>
+<ul class="list">
+<li class="list__item">Sygnał idzie <strong>dwiema liniami D+ i D−</strong>; na D− jest zanegowany sygnał D+ (transmisja różnicowa — podwaja amplitudę i tłumi zakłócenia).</li>
+<li class="list__item">Transmisja <strong>half duplex</strong>, pakietowa (pakiety: token, dane, potwierdzenie, początek ramki…).</li>
+<li class="list__item">Kabel ma cztery żyły: <strong>+5 V</strong> (czerwona), <strong>D−</strong> (biała), <strong>D+</strong> (zielona), <strong>masa</strong> (czarna).</li>
+<li class="list__item">Do 127 urządzeń; 1,5 Mb/s (low speed) i 12 Mb/s (full speed).</li>
+</ul>
+<h2 class="article__h2" id="s8">I²C (Two-Wire)</h2>
+<p class="article__p"><em>Inter-Integrated Circuit</em> — magistrala do łączenia układów scalonych <strong>dwoma przewodami</strong>.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p28.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p28.webp" alt="Magistrala I²C: wszystkie urządzenia na dwóch liniach, podciągniętych rezystorami do zasilania" width="1100" height="514" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Magistrala I²C: wszystkie urządzenia na dwóch liniach, podciągniętych rezystorami do zasilania <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">Warstwa fizyczna</h3>
+<ul class="list">
+<li class="list__item">Dwie dwukierunkowe linie: <strong>SDA</strong> (dane) i <strong>SCL</strong> (zegar).</li>
+<li class="list__item">Obie są na stałe <strong>podciągnięte do zasilania rezystorami</strong> (<em>pull-up</em>); wszystkie nadajniki są typu <strong>otwarty kolektor</strong> — urządzenie może linię tylko „ściągnąć” do zera albo ją puścić.</li>
+<li class="list__item">Logika dodatnia: stan niski = 0, wysoki = 1. Gdy nikt nie nadaje, obie linie są w stanie wysokim.</li>
+<li class="list__item">Dane na SDA mogą się zmieniać <strong>tylko wtedy, gdy SCL jest w stanie niskim</strong>.</li>
+<li class="list__item"><strong>START:</strong> SDA przechodzi z 1 na 0, gdy SCL jest wysokie. <strong>STOP:</strong> SDA przechodzi z 0 na 1, gdy SCL jest wysokie.</li>
+<li class="list__item">Długość linii ogranicza jej pojemność (maks. 400 pF).</li>
+</ul>
+<h3 class="article__h3">Warstwa łącza danych</h3>
+<ul class="list">
+<li class="list__item">Transmisję zawsze zaczyna <strong>master</strong>. Magistrala jest <strong>bajtowa</strong>: bity idą po 8, <strong>od najstarszego</strong>.</li>
+<li class="list__item">Po każdych 8 bitach odbiorca odpowiada bitem potwierdzenia <strong>ACK</strong> (ściąga SDA do zera).</li>
+<li class="list__item"><strong>Pierwszy bajt</strong> to <strong>7-bitowy adres</strong> urządzenia slave + <strong>bit kierunku</strong>: 0 = zapis (master → slave), 1 = odczyt (slave → master).</li>
+<li class="list__item">7 bitów daje 128 adresów (w praktyce 112); adres 0 to <em>general call</em> — do wszystkich.</li>
+<li class="list__item">Możliwa praca <em>multi-master</em>: przy jednoczesnym nadawaniu wygrywa urządzenie nadające <strong>niższy adres</strong>.</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Wersja</th><th class="table__cell table__cell--head">Prędkość</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">standard (lata 80.)</td><td class="table__cell">100 kb/s, adres 7-bitowy</td></tr>
+<tr class="table__row"><td class="table__cell">1.0 (1992), <em>Fast Mode</em></td><td class="table__cell">400 kb/s, możliwy adres 10-bitowy</td></tr>
+<tr class="table__row"><td class="table__cell">2.0 (1998), <em>High Speed</em></td><td class="table__cell">3,4 Mb/s</td></tr>
+</tbody></table></div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Przebieg transmisji I²C (z materiałów do ćwiczeń)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Master wysyła <strong>START</strong>.</li>
+<li class="steps__item">Master wysyła <strong>adres</strong> slave'a (7 bitów) i bit <strong>odczyt/zapis</strong>.</li>
+<li class="steps__item">Każdy slave porównuje adres ze swoim; ten, którego adres się zgadza, odpowiada <strong>ACK</strong>.</li>
+<li class="steps__item">Master wysyła albo odbiera <strong>bajt danych</strong>.</li>
+<li class="steps__item">Po każdym bajcie odbiorca odpowiada <strong>ACK</strong>.</li>
+<li class="steps__item">Master kończy transmisję sygnałem <strong>STOP</strong>.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Porównanie trzech interfejsów z ćwiczeń</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Przewody (bez masy)</td><td class="table__cell">2 (TX, RX)</td><td class="table__cell">3 + po jednym CS na urządzenie</td><td class="table__cell">2 (SDA, SCL)</td></tr>
+<tr class="table__row"><td class="table__cell">Zegar</td><td class="table__cell">brak (asynchroniczny)</td><td class="table__cell">jest</td><td class="table__cell">jest</td></tr>
+<tr class="table__row"><td class="table__cell">Ile urządzeń</td><td class="table__cell">2</td><td class="table__cell">kilka (osobne CS)</td><td class="table__cell">do 112 (adresy)</td></tr>
+<tr class="table__row"><td class="table__cell">Kierunek</td><td class="table__cell">full duplex</td><td class="table__cell">full duplex</td><td class="table__cell">half duplex</td></tr>
+<tr class="table__row"><td class="table__cell">Na Arduino</td><td class="table__cell"><code class="inline-code">Serial</code></td><td class="table__cell"><code class="inline-code">shiftOut()</code> / biblioteka SPI</td><td class="table__cell">biblioteka <code class="inline-code">Wire</code></td></tr>
+</tbody></table></div>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Moduł ćwiczeniowy (Multi-function Shield)</h2>
+<p class="article__p">Na ćwiczeniach na Arduino nakłada się płytkę z gotowymi elementami:</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w12-p33.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p33.webp" alt="Wielofunkcyjny moduł ćwiczeniowy" width="898" height="1145" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wielofunkcyjny moduł ćwiczeniowy <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Pin Arduino</th><th class="table__cell table__cell--head">Co jest podłączone</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>A0</strong></td><td class="table__cell">potencjometr (wejście analogowe)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>A1, A2, A3</strong></td><td class="table__cell">przyciski (z rezystorami podciągającymi)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>10, 11, 12, 13</strong></td><td class="table__cell">diody LED</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>A4, A5</strong></td><td class="table__cell">magistrala I²C (SDA, SCL)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>3</strong></td><td class="table__cell">buzzer</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>4</strong></td><td class="table__cell">LATCH rejestru przesuwnego</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>7</strong></td><td class="table__cell">CLK rejestru przesuwnego</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>8</strong></td><td class="table__cell">DIO (dane) rejestru przesuwnego</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>2</strong></td><td class="table__cell">wejście przerwania INT0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Wyświetlacz LED</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p35.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w12-p35.webp" alt="Wyświetlacz 4 × 7 segmentów sterowany dwoma rejestrami przesuwnymi" width="1100" height="657" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wyświetlacz 4 × 7 segmentów sterowany dwoma rejestrami przesuwnymi <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Wyświetlacz jest sterowany <strong>dwoma rejestrami przesuwnymi</strong>, do których dane wpycha się szeregowo (jak w SPI):</p>
+<ul class="list">
+<li class="list__item">jeden rejestr decyduje, <strong>jakie segmenty</strong> się świecą (kształt znaku),</li>
+<li class="list__item">drugi — <strong>która z czterech pozycji</strong> jest aktywna.</li>
+</ul>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Zapis cyfry na wyświetlacz (z wykładu)</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--meta">#define</span> LATCH_DIO <span class="code__tok code__tok--number">4</span>
+<span class="code__tok code__tok--meta">#define</span> CLK_DIO   <span class="code__tok code__tok--number">7</span>
+<span class="code__tok code__tok--meta">#define</span> DATA_DIO  <span class="code__tok code__tok--number">8</span>
+
+<span class="code__tok code__tok--comment">// wzory segmentów dla cyfr 0-9 / segment patterns for digits 0-9</span>
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> SEGMENT_MAP[] = {<span class="code__tok code__tok--number">0xC0</span>, <span class="code__tok code__tok--number">0xF9</span>, <span class="code__tok code__tok--number">0xA4</span>, <span class="code__tok code__tok--number">0xB0</span>, <span class="code__tok code__tok--number">0x99</span>, <span class="code__tok code__tok--number">0x92</span>, <span class="code__tok code__tok--number">0x82</span>, <span class="code__tok code__tok--number">0xF8</span>, <span class="code__tok code__tok--number">0x80</span>, <span class="code__tok code__tok--number">0x90</span>};
+<span class="code__tok code__tok--comment">// wybór pozycji 1-4 / selects position 1-4</span>
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> SEGMENT_SELECT[] = {<span class="code__tok code__tok--number">0xF1</span>, <span class="code__tok code__tok--number">0xF2</span>, <span class="code__tok code__tok--number">0xF4</span>, <span class="code__tok code__tok--number">0xF8</span>};
+
+<span class="code__tok code__tok--keyword">void</span> WriteNumberToSegment(<span class="code__tok code__tok--keyword">byte</span> Segment, <span class="code__tok code__tok--keyword">byte</span> Value) {
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(LATCH_DIO, <span class="code__tok code__tok--keyword">LOW</span>);
+  <span class="code__tok code__tok--builtin">shiftOut</span>(DATA_DIO, CLK_DIO, <span class="code__tok code__tok--keyword">MSBFIRST</span>, SEGMENT_MAP[Value]);
+  <span class="code__tok code__tok--builtin">shiftOut</span>(DATA_DIO, CLK_DIO, <span class="code__tok code__tok--keyword">MSBFIRST</span>, SEGMENT_SELECT[Segment]);
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(LATCH_DIO, <span class="code__tok code__tok--keyword">HIGH</span>);
+}</code></pre>
+</figure>
+<p class="article__p">Kolejność: LATCH w dół → wysłanie bajtu z segmentami → wysłanie bajtu z numerem pozycji → LATCH w górę (dane „zatrzaskują się” i pojawiają na wyświetlaczu).</p>
+<h2 class="article__h2" id="s10">I²C w kodzie Arduino</h2>
+<p class="article__p">Biblioteka <code class="inline-code">Wire</code> robi za nas START, adres, ACK i STOP.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Zapis bajtu do pamięci EEPROM I²C</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(deviceaddress);
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &gt;&gt; <span class="code__tok code__tok--number">8</span>);    <span class="code__tok code__tok--comment">// MSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &amp; <span class="code__tok code__tok--number">0xFF</span>);  <span class="code__tok code__tok--comment">// LSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(data);
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();</code></pre>
+</figure>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Odczyt bajtu z pamięci (Random Read)</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(deviceaddress);  <span class="code__tok code__tok--comment">// dummy write</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &gt;&gt; <span class="code__tok code__tok--number">8</span>);    <span class="code__tok code__tok--comment">// MSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &amp; <span class="code__tok code__tok--number">0xFF</span>);  <span class="code__tok code__tok--comment">// LSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();
+
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">requestFrom</span>(deviceaddress, <span class="code__tok code__tok--number">1</span>);
+<span class="code__tok code__tok--keyword">if</span> (<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">available</span>()) <span class="code__tok code__tok--keyword">byte</span> rdata = <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">read</span>();</code></pre>
+</figure>
+<p class="article__p">Wzorzec odczytu jest zawsze taki sam: <strong>najpierw „udawany zapis”</strong> — wysyłasz adres rejestru, który chcesz przeczytać — a potem <code class="inline-code">requestFrom()</code> i <code class="inline-code">read()</code>.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Odczyt temperatury z układu DS3231 (adres 0x68, rejestr 0x11)</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--keyword">byte</span> displayTemperature() {
+  <span class="code__tok code__tok--keyword">byte</span> data = <span class="code__tok code__tok--number">0xFF</span>;
+
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(<span class="code__tok code__tok--number">0x68</span>);
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(<span class="code__tok code__tok--number">0x11</span>);              <span class="code__tok code__tok--comment">// the integer portion</span>
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();
+
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">requestFrom</span>(<span class="code__tok code__tok--number">0x68</span>, <span class="code__tok code__tok--number">1</span>);
+  <span class="code__tok code__tok--keyword">if</span> (<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">available</span>()) { data = <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">read</span>(); }
+
+  <span class="code__tok code__tok--keyword">return</span> data;
+}</code></pre>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Zadania na ćwiczenia (ze slajdu)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">SPI (rejestr przesuwny): wyświetlić na wyświetlaczu napis „HELP”.</li>
+<li class="list__item">I²C: odczytać z termometru (adres 0x68, rejestr 0x11) całkowitą wartość temperatury i pokazać ją na wyświetlaczu.</li>
+<li class="list__item">I²C: odczytać temperaturę z częścią ułamkową (rejestr 0x12) i wyświetlić z kropką dziesiętną.</li>
+</ol>
+<p class="article__p">Krok po kroku: <a class="link" href="../labs/13.html">Ćwiczenie 13</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Pojęcia</h3>
+<ul class="list">
+<li class="list__item"><strong>Szeregowa</strong> (bit po bicie) / <strong>równoległa</strong> (bajt naraz).</li>
+<li class="list__item"><strong>Synchroniczna</strong> (wspólny zegar) / <strong>asynchroniczna</strong> (START + STOP, umówiona prędkość).</li>
+<li class="list__item"><strong>Simplex</strong> (jedna strona) / <strong>half duplex</strong> (na zmianę) / <strong>full duplex</strong> (jednocześnie).</li>
+</ul>
+<h3 class="article__h3">Interfejsy</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART / RS-232</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Linie</td><td class="table__cell">TxD, RxD, masa</td><td class="table__cell">MOSI, MISO, SCLK, SS/CS</td><td class="table__cell">SDA, SCL (z pull-up)</td></tr>
+<tr class="table__row"><td class="table__cell">Zegar</td><td class="table__cell">nie</td><td class="table__cell">tak (master)</td><td class="table__cell">tak (master)</td></tr>
+<tr class="table__row"><td class="table__cell">Wybór urządzenia</td><td class="table__cell">—</td><td class="table__cell">linia CS</td><td class="table__cell">7-bitowy adres + bit R/W</td></tr>
+<tr class="table__row"><td class="table__cell">Potwierdzenie</td><td class="table__cell">—</td><td class="table__cell">—</td><td class="table__cell">ACK po każdym bajcie</td></tr>
+<tr class="table__row"><td class="table__cell">Duplex</td><td class="table__cell">full</td><td class="table__cell">full</td><td class="table__cell">half</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>RS-232:</strong> logika ujemna, „1” = −3…−15 V, „0” = +3…+15 V → do TTL tylko przez MAX232.</li>
+<li class="list__item"><strong>I²C:</strong> START = SDA↓ przy SCL = 1; STOP = SDA↑ przy SCL = 1; R/W: 0 = zapis, 1 = odczyt; niższy adres = wyższy priorytet; 100 kb/s / 400 kb/s / 3,4 Mb/s.</li>
+<li class="list__item"><strong>USB 2.0:</strong> D+ / D− (różnicowo), half duplex, +5 V, do 127 urządzeń.</li>
+</ul>
+<h3 class="article__h3">Moduł ćwiczeniowy — piny</h3>
+<p class="article__p">A0 potencjometr · A1–A3 przyciski · 10–13 diody · 3 buzzer · 4 LATCH · 7 CLK · 8 DATA · A4/A5 I²C</p>
+<h3 class="article__h3">Kod</h3>
+<ul class="list">
+<li class="list__item">Wyświetlacz: <code class="inline-code">digitalWrite(LATCH, LOW); shiftOut(DATA, CLK, MSBFIRST, segmenty); shiftOut(DATA, CLK, MSBFIRST, pozycja); digitalWrite(LATCH, HIGH);</code></li>
+<li class="list__item">I²C odczyt: <code class="inline-code">beginTransmission(adres); write(rejestr); endTransmission(); requestFrom(adres, 1); read();</code></li>
+<li class="list__item">DS3231: adres <strong>0x68</strong>, temperatura: rejestr <strong>0x11</strong> (część całkowita), <strong>0x12</strong> (ułamek).</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/11.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 11: Systemy komputerowe, mikroprocesory i mikrokontrolery</span></a>
+<a class="pager__link pager__link--next" href="../lectures/13.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 13: Peryferia mikrokontrolerów i obsługa zdarzeń</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

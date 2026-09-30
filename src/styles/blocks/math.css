@@ -1,0 +1,43 @@
+/* math — inline formulas built from plain HTML (fractions, overlines, indices) */
+.math {
+  font-family: var(--font-math);
+  font-size: 1.1em;
+  white-space: nowrap;
+}
+
+.math__frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0.15em;
+  vertical-align: middle;
+  line-height: 1.25;
+}
+
+.math__num {
+  padding: 0 0.3em 0.08em;
+  border-bottom: 1.5px solid currentColor;
+}
+
+.math__den {
+  padding: 0.08em 0.3em 0;
+}
+
+/* overline (negation); nested bars stack one above another */
+.math__bar {
+  display: inline-block;
+  margin-top: 0.1em;
+  padding-top: 0.08em;
+  border-top: 1.5px solid currentColor;
+  line-height: 1.1;
+}
+
+.math__sqrt {
+  white-space: nowrap;
+}
+
+.math__sub,
+.math__sup {
+  font-size: 0.72em;
+  line-height: 0;
+}

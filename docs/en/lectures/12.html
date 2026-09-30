@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 12. Communication methods: ports, UART, SPI, I²C — SYC</title>
+<meta name="description" content="How a microcontroller talks to the world. Serial or parallel, with a clock or without, who starts the conversation — and the three interfaces you will meet in the Arduino labs.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/12.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/12.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/12.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/12.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/12.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/12.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Layered models</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Microcontroller ports</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Three ways to classify transmission</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Overview of serial interfaces</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">UART / USART and RS-232</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">SPI</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">USB 2.0</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">I²C (Two-Wire)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">The lab module (Multi-function Shield)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">I²C in Arduino code</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/12.html" aria-current="page"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 12</p>
+<h1 class="article__title">Communication methods: ports, UART, SPI, I²C</h1>
+<p class="article__lead">How a microcontroller talks to the world. Serial or parallel, with a clock or without, who starts the conversation — and the three interfaces you will meet in the Arduino labs.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Layered models</h2>
+<p class="article__p">Network communication is divided into <strong>layers</strong>. The set of mechanisms of one layer is a <strong>protocol</strong>; a protocol works only within its layer.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w12-p03.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p03.webp" alt="The OSI model (7 layers) and the TCP/IP model (4 layers)" width="1097" height="1306" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The OSI model (7 layers) and the TCP/IP model (4 layers) <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p"><strong>Encapsulation:</strong> a message of a higher layer is put inside a message of the lower layer — each layer adds its own header.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p05.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p05.webp" alt="Encapsulation: every layer adds its header" width="1100" height="580" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Encapsulation: every layer adds its header <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A letter in an envelope, the envelope in a mail bag, the bag in a lorry. Each "layer" knows only its own packaging and does not look inside.</p>
+</div>
+</div>
+<p class="article__p">For us the two lowest layers matter: the <strong>physical</strong> layer (which voltages, which wires) and the <strong>data link</strong> layer (how the bits are arranged in a frame). That is exactly what standards such as I²C or RS-232 define.</p>
+<h2 class="article__h2" id="s2">Microcontroller ports</h2>
+<p class="article__p">A <strong>port</strong> is an interface between a computer and another computer or device. A <strong>hardware port</strong> is physical pins; a <strong>software port</strong> is a logical connection (e.g. TCP/UDP ports).</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p10.webp" alt="Structure of a single pin: input and output buffers and the pull-up resistor" width="1100" height="849" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Structure of a single pin: input and output buffers and the pull-up resistor <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A microcontroller's input/output pins:</p>
+<ul class="list">
+<li class="list__item">carry digital signals in the TTL/CMOS standard,</li>
+<li class="list__item">are organised in <strong>bytes</strong> (ports B, C, D), but <strong>single bits</strong> can be set and read,</li>
+<li class="list__item">are in the <strong>high-impedance</strong> state after reset,</li>
+<li class="list__item">can have <strong>alternate functions</strong> (e.g. a port pin as a UART line or a converter input),</li>
+<li class="list__item">have a software-enabled <strong>pull-up resistor</strong>.</li>
+</ul>
+<h2 class="article__h2" id="s3">Three ways to classify transmission</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Criterion</th><th class="table__cell table__cell--head">Kinds</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>How the bits travel</strong></td><td class="table__cell"><strong>serial</strong> — bits one after another on one wire; <strong>parallel</strong> — several bits (usually a byte) at once, each on its own wire</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Synchronisation</strong></td><td class="table__cell"><strong>synchronous</strong> — a common clock signal marks the transfer moments; <strong>asynchronous</strong> — no clock, transmission may start at any time</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Direction</strong></td><td class="table__cell"><strong>simplex</strong> — one way only; <strong>half duplex</strong> — both ways but not at once; <strong>full duplex</strong> — both ways at once</td></tr>
+</tbody></table></div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w12-p11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p11.webp" alt="Parallel and serial transmission" width="930" height="900" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Parallel and serial transmission <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w12-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p13.webp" alt="Simplex, half duplex, full duplex" width="912" height="656" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Simplex, half duplex, full duplex <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Simplex is a radio (you only listen). Half duplex is a walkie-talkie ("over!" — only one speaks at a time). Full duplex is a telephone (both speak and listen at once).</p>
+</div>
+</div>
+<p class="article__p">An example of a parallel link: the <strong>LPT</strong> port (IEEE 1284, 25 pins, TTL standard, 1984) for printers and scanners.</p>
+<h2 class="article__h2" id="s4">Overview of serial interfaces</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Interface</th><th class="table__cell table__cell--head">In short</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS-232</strong></td><td class="table__cell">the classic serial link (originally for modems); needs voltage-level conversion</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I²C</strong></td><td class="table__cell">"between integrated circuits"; two wires, device addressing</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SPI</strong></td><td class="table__cell">similar uses to I²C but faster (several Mb/s)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>CAN</strong></td><td class="table__cell">a bus from the car industry (Bosch, 1980s)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>USB</strong></td><td class="table__cell">an advanced "plug and play" interface, up to 127 devices</td></tr>
+<tr class="table__row"><td class="table__cell">D²B, FireWire (IEEE 1394)</td><td class="table__cell">others, less common</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s5">UART / USART and RS-232</h2>
+<p class="article__p">The <strong>USART</strong> in a microcontroller: synchronous or asynchronous transmission, full duplex, 5–9 data bits, 1 or 2 stop bits, a hardware parity bit and error detection. It is what <code class="inline-code">Serial.print()</code> in Arduino goes through.</p>
+<h3 class="article__h3">The asynchronous frame</h3>
+<p class="article__p">In asynchronous mode the transmitter and the receiver have <strong>separate clocks</strong>, so they must agree on the speed. A <strong>START</strong> bit and <strong>STOP</strong> bit(s) are added to every data word so the receiver knows where the word begins and ends.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p24.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p24.webp" alt="Frame: start bit, data bits, parity bit, stop bit" width="1100" height="664" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Frame: start bit, data bits, parity bit, stop bit <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">"9600 baud" in <code class="inline-code">Serial.begin(9600)</code> is that agreed speed: 9600 bits per second. If the serial monitor is set to a different speed than the program, you will see garbage.</p>
+</div>
+</div>
+<h3 class="article__h3">RS-232</h3>
+<p class="article__p">A standard connecting <strong>DTE</strong> (<em>Data Terminal Equipment</em>, e.g. a computer) with <strong>DCE</strong> (<em>Data Communication Equipment</em>, e.g. a modem). DB9 and DB25 connectors.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Signal</th><th class="table__cell table__cell--head">Meaning</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>TxD</strong></td><td class="table__cell">transmitted data</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RxD</strong></td><td class="table__cell">received data</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SG</strong></td><td class="table__cell">signal ground — the common reference potential</td></tr>
+<tr class="table__row"><td class="table__cell">DSR, DTR, RTS, CTS, DCD, RI</td><td class="table__cell">control signals (ready, request to send…)</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Voltage levels</strong> — the data lines use <strong>negative logic</strong>:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Logic state (data lines)</th><th class="table__cell table__cell--head table__cell--center">Voltage</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">from −15 V to −3 V</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">from +3 V to +15 V</td></tr>
+</tbody></table></div>
+<p class="article__p">The range from −3 V to +3 V is undefined.</p>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Watch out</p>
+<div class="callout__body">
+<p class="article__p">RS-232 lines <strong>must not be connected directly</strong> to the TTL pins of a microcontroller (0…5 V) — ±15 V will damage it. The levels are matched by a special chip such as the <strong>MAX232</strong>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">SPI</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p25.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p25.webp" alt="SPI: the shift registers of master and slave connected in a loop" width="1100" height="658" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">SPI: the shift registers of master and slave connected in a loop <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p"><em>Serial Peripheral Interface</em> — <strong>synchronous</strong>, <strong>full duplex</strong>, very fast. One device is the <strong>master</strong> (it generates the clock), the others are <strong>slaves</strong>.</p>
+<p class="article__p">The lines (names from the lab materials):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Line</th><th class="table__cell table__cell--head">Meaning</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>MOSI</strong> (<em>Master Out, Slave In</em>)</td><td class="table__cell">data from master to slave</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MISO</strong> (<em>Master In, Slave Out</em>)</td><td class="table__cell">data from slave to master</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SCLK</strong></td><td class="table__cell">the clock — generated by the master</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>SS / CS</strong> (<em>Slave/Chip Select</em>)</td><td class="table__cell">selects the device the master talks to</td></tr>
+</tbody></table></div>
+<p class="article__p">SPI has no addresses: every device has its own select line. In essence it is two shift registers connected in a ring — with every clock tick one bit goes out and one comes in.</p>
+<h2 class="article__h2" id="s7">USB 2.0</h2>
+<ul class="list">
+<li class="list__item">The signal travels on <strong>two lines, D+ and D−</strong>; D− carries the negated D+ signal (differential transmission — it doubles the amplitude and rejects interference).</li>
+<li class="list__item"><strong>Half-duplex</strong>, packet-based transmission (packets: token, data, handshake, start of frame…).</li>
+<li class="list__item">The cable has four wires: <strong>+5 V</strong> (red), <strong>D−</strong> (white), <strong>D+</strong> (green), <strong>ground</strong> (black).</li>
+<li class="list__item">Up to 127 devices; 1.5 Mb/s (low speed) and 12 Mb/s (full speed).</li>
+</ul>
+<h2 class="article__h2" id="s8">I²C (Two-Wire)</h2>
+<p class="article__p"><em>Inter-Integrated Circuit</em> — a bus for connecting chips with <strong>two wires</strong>.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p28.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p28.webp" alt="The I²C bus: all devices on two lines pulled up to the supply by resistors" width="1100" height="514" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The I²C bus: all devices on two lines pulled up to the supply by resistors <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">Physical layer</h3>
+<ul class="list">
+<li class="list__item">Two bidirectional lines: <strong>SDA</strong> (data) and <strong>SCL</strong> (clock).</li>
+<li class="list__item">Both are permanently <strong>pulled up to the supply by resistors</strong>; all transmitters are <strong>open collector</strong> — a device can only "pull" the line to zero or release it.</li>
+<li class="list__item">Positive logic: low = 0, high = 1. When nobody transmits, both lines are high.</li>
+<li class="list__item">Data on SDA may change <strong>only while SCL is low</strong>.</li>
+<li class="list__item"><strong>START:</strong> SDA goes from 1 to 0 while SCL is high. <strong>STOP:</strong> SDA goes from 0 to 1 while SCL is high.</li>
+<li class="list__item">The line length is limited by its capacitance (max. 400 pF).</li>
+</ul>
+<h3 class="article__h3">Data link layer</h3>
+<ul class="list">
+<li class="list__item">A transmission is always started by the <strong>master</strong>. The bus is <strong>byte-oriented</strong>: bits go in groups of 8, <strong>most significant first</strong>.</li>
+<li class="list__item">After every 8 bits the receiver answers with an acknowledge bit <strong>ACK</strong> (it pulls SDA to zero).</li>
+<li class="list__item">The <strong>first byte</strong> is the <strong>7-bit address</strong> of the slave + a <strong>direction bit</strong>: 0 = write (master → slave), 1 = read (slave → master).</li>
+<li class="list__item">7 bits give 128 addresses (112 in practice); address 0 is the <em>general call</em> — to everyone.</li>
+<li class="list__item"><em>Multi-master</em> operation is possible: when two transmit at once, the one sending the <strong>lower address</strong> wins.</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Version</th><th class="table__cell table__cell--head">Speed</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">standard (1980s)</td><td class="table__cell">100 kb/s, 7-bit address</td></tr>
+<tr class="table__row"><td class="table__cell">1.0 (1992), <em>Fast Mode</em></td><td class="table__cell">400 kb/s, 10-bit address possible</td></tr>
+<tr class="table__row"><td class="table__cell">2.0 (1998), <em>High Speed</em></td><td class="table__cell">3.4 Mb/s</td></tr>
+</tbody></table></div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>An I²C transmission (from the lab materials)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">The master sends <strong>START</strong>.</li>
+<li class="steps__item">The master sends the slave's <strong>address</strong> (7 bits) and the <strong>read/write</strong> bit.</li>
+<li class="steps__item">Every slave compares the address with its own; the one that matches answers <strong>ACK</strong>.</li>
+<li class="steps__item">The master sends or receives a <strong>data byte</strong>.</li>
+<li class="steps__item">After every byte the receiver answers <strong>ACK</strong>.</li>
+<li class="steps__item">The master ends the transmission with <strong>STOP</strong>.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>The three lab interfaces compared</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Wires (without ground)</td><td class="table__cell">2 (TX, RX)</td><td class="table__cell">3 + one CS per device</td><td class="table__cell">2 (SDA, SCL)</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">none (asynchronous)</td><td class="table__cell">yes</td><td class="table__cell">yes</td></tr>
+<tr class="table__row"><td class="table__cell">How many devices</td><td class="table__cell">2</td><td class="table__cell">a few (separate CS)</td><td class="table__cell">up to 112 (addresses)</td></tr>
+<tr class="table__row"><td class="table__cell">Direction</td><td class="table__cell">full duplex</td><td class="table__cell">full duplex</td><td class="table__cell">half duplex</td></tr>
+<tr class="table__row"><td class="table__cell">On Arduino</td><td class="table__cell"><code class="inline-code">Serial</code></td><td class="table__cell"><code class="inline-code">shiftOut()</code> / SPI library</td><td class="table__cell"><code class="inline-code">Wire</code> library</td></tr>
+</tbody></table></div>
+</div>
+</div>
+<h2 class="article__h2" id="s9">The lab module (Multi-function Shield)</h2>
+<p class="article__p">In the labs a board with ready-made components is plugged onto the Arduino:</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w12-p33.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p33.webp" alt="The multi-function lab module" width="898" height="1145" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The multi-function lab module <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Arduino pin</th><th class="table__cell table__cell--head">What is connected</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>A0</strong></td><td class="table__cell">potentiometer (analog input)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>A1, A2, A3</strong></td><td class="table__cell">buttons (with pull-up resistors)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>10, 11, 12, 13</strong></td><td class="table__cell">LEDs</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>A4, A5</strong></td><td class="table__cell">I²C bus (SDA, SCL)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>3</strong></td><td class="table__cell">buzzer</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>4</strong></td><td class="table__cell">LATCH of the shift register</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>7</strong></td><td class="table__cell">CLK of the shift register</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>8</strong></td><td class="table__cell">DIO (data) of the shift register</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>2</strong></td><td class="table__cell">interrupt input INT0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">The LED display</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w12-p35.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w12-p35.webp" alt="A 4 × 7-segment display driven by two shift registers" width="1100" height="657" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A 4 × 7-segment display driven by two shift registers <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">The display is driven by <strong>two shift registers</strong> into which data is pushed serially (as in SPI):</p>
+<ul class="list">
+<li class="list__item">one register decides <strong>which segments</strong> are lit (the shape of the character),</li>
+<li class="list__item">the other — <strong>which of the four positions</strong> is active.</li>
+</ul>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Writing a digit to the display (from the lecture)</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--meta">#define</span> LATCH_DIO <span class="code__tok code__tok--number">4</span>
+<span class="code__tok code__tok--meta">#define</span> CLK_DIO   <span class="code__tok code__tok--number">7</span>
+<span class="code__tok code__tok--meta">#define</span> DATA_DIO  <span class="code__tok code__tok--number">8</span>
+
+<span class="code__tok code__tok--comment">// wzory segmentów dla cyfr 0-9 / segment patterns for digits 0-9</span>
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> SEGMENT_MAP[] = {<span class="code__tok code__tok--number">0xC0</span>, <span class="code__tok code__tok--number">0xF9</span>, <span class="code__tok code__tok--number">0xA4</span>, <span class="code__tok code__tok--number">0xB0</span>, <span class="code__tok code__tok--number">0x99</span>, <span class="code__tok code__tok--number">0x92</span>, <span class="code__tok code__tok--number">0x82</span>, <span class="code__tok code__tok--number">0xF8</span>, <span class="code__tok code__tok--number">0x80</span>, <span class="code__tok code__tok--number">0x90</span>};
+<span class="code__tok code__tok--comment">// wybór pozycji 1-4 / selects position 1-4</span>
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> SEGMENT_SELECT[] = {<span class="code__tok code__tok--number">0xF1</span>, <span class="code__tok code__tok--number">0xF2</span>, <span class="code__tok code__tok--number">0xF4</span>, <span class="code__tok code__tok--number">0xF8</span>};
+
+<span class="code__tok code__tok--keyword">void</span> WriteNumberToSegment(<span class="code__tok code__tok--keyword">byte</span> Segment, <span class="code__tok code__tok--keyword">byte</span> Value) {
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(LATCH_DIO, <span class="code__tok code__tok--keyword">LOW</span>);
+  <span class="code__tok code__tok--builtin">shiftOut</span>(DATA_DIO, CLK_DIO, <span class="code__tok code__tok--keyword">MSBFIRST</span>, SEGMENT_MAP[Value]);
+  <span class="code__tok code__tok--builtin">shiftOut</span>(DATA_DIO, CLK_DIO, <span class="code__tok code__tok--keyword">MSBFIRST</span>, SEGMENT_SELECT[Segment]);
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(LATCH_DIO, <span class="code__tok code__tok--keyword">HIGH</span>);
+}</code></pre>
+</figure>
+<p class="article__p">The order: LATCH low → send the byte with the segments → send the byte with the position → LATCH high (the data "latches" and appears on the display).</p>
+<h2 class="article__h2" id="s10">I²C in Arduino code</h2>
+<p class="article__p">The <code class="inline-code">Wire</code> library does START, the address, ACK and STOP for us.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Writing a byte to an I²C EEPROM</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(deviceaddress);
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &gt;&gt; <span class="code__tok code__tok--number">8</span>);    <span class="code__tok code__tok--comment">// MSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &amp; <span class="code__tok code__tok--number">0xFF</span>);  <span class="code__tok code__tok--comment">// LSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(data);
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();</code></pre>
+</figure>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Reading a byte from memory (Random Read)</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(deviceaddress);  <span class="code__tok code__tok--comment">// dummy write</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &gt;&gt; <span class="code__tok code__tok--number">8</span>);    <span class="code__tok code__tok--comment">// MSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(eeaddress &amp; <span class="code__tok code__tok--number">0xFF</span>);  <span class="code__tok code__tok--comment">// LSB</span>
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();
+
+<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">requestFrom</span>(deviceaddress, <span class="code__tok code__tok--number">1</span>);
+<span class="code__tok code__tok--keyword">if</span> (<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">available</span>()) <span class="code__tok code__tok--keyword">byte</span> rdata = <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">read</span>();</code></pre>
+</figure>
+<p class="article__p">The read pattern is always the same: <strong>first a "dummy write"</strong> — you send the address of the register you want to read — then <code class="inline-code">requestFrom()</code> and <code class="inline-code">read()</code>.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Reading the temperature from a DS3231 (address 0x68, register 0x11)</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--keyword">byte</span> displayTemperature() {
+  <span class="code__tok code__tok--keyword">byte</span> data = <span class="code__tok code__tok--number">0xFF</span>;
+
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">beginTransmission</span>(<span class="code__tok code__tok--number">0x68</span>);
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">write</span>(<span class="code__tok code__tok--number">0x11</span>);              <span class="code__tok code__tok--comment">// the integer portion</span>
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">endTransmission</span>();
+
+  <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">requestFrom</span>(<span class="code__tok code__tok--number">0x68</span>, <span class="code__tok code__tok--number">1</span>);
+  <span class="code__tok code__tok--keyword">if</span> (<span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">available</span>()) { data = <span class="code__tok code__tok--builtin">Wire</span>.<span class="code__tok code__tok--builtin">read</span>(); }
+
+  <span class="code__tok code__tok--keyword">return</span> data;
+}</code></pre>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">SPI (shift register): show the text "HELP" on the display.</li>
+<li class="list__item">I²C: read the integer temperature from the thermometer (address 0x68, register 0x11) and show it on the display.</li>
+<li class="list__item">I²C: read the temperature with its fractional part (register 0x12) and display it with a decimal point.</li>
+</ol>
+<p class="article__p">Step by step: <a class="link" href="../labs/13.html">Lab 13</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Terms</h3>
+<ul class="list">
+<li class="list__item"><strong>Serial</strong> (bit by bit) / <strong>parallel</strong> (a byte at once).</li>
+<li class="list__item"><strong>Synchronous</strong> (common clock) / <strong>asynchronous</strong> (START + STOP, agreed speed).</li>
+<li class="list__item"><strong>Simplex</strong> (one way) / <strong>half duplex</strong> (taking turns) / <strong>full duplex</strong> (at the same time).</li>
+</ul>
+<h3 class="article__h3">Interfaces</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART / RS-232</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Lines</td><td class="table__cell">TxD, RxD, ground</td><td class="table__cell">MOSI, MISO, SCLK, SS/CS</td><td class="table__cell">SDA, SCL (with pull-ups)</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">no</td><td class="table__cell">yes (master)</td><td class="table__cell">yes (master)</td></tr>
+<tr class="table__row"><td class="table__cell">Device selection</td><td class="table__cell">—</td><td class="table__cell">CS line</td><td class="table__cell">7-bit address + R/W bit</td></tr>
+<tr class="table__row"><td class="table__cell">Acknowledge</td><td class="table__cell">—</td><td class="table__cell">—</td><td class="table__cell">ACK after every byte</td></tr>
+<tr class="table__row"><td class="table__cell">Duplex</td><td class="table__cell">full</td><td class="table__cell">full</td><td class="table__cell">half</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>RS-232:</strong> negative logic, "1" = −3…−15 V, "0" = +3…+15 V → to TTL only through a MAX232.</li>
+<li class="list__item"><strong>I²C:</strong> START = SDA↓ while SCL = 1; STOP = SDA↑ while SCL = 1; R/W: 0 = write, 1 = read; lower address = higher priority; 100 kb/s / 400 kb/s / 3.4 Mb/s.</li>
+<li class="list__item"><strong>USB 2.0:</strong> D+ / D− (differential), half duplex, +5 V, up to 127 devices.</li>
+</ul>
+<h3 class="article__h3">The lab module — pins</h3>
+<p class="article__p">A0 potentiometer · A1–A3 buttons · 10–13 LEDs · 3 buzzer · 4 LATCH · 7 CLK · 8 DATA · A4/A5 I²C</p>
+<h3 class="article__h3">Code</h3>
+<ul class="list">
+<li class="list__item">Display: <code class="inline-code">digitalWrite(LATCH, LOW); shiftOut(DATA, CLK, MSBFIRST, segments); shiftOut(DATA, CLK, MSBFIRST, position); digitalWrite(LATCH, HIGH);</code></li>
+<li class="list__item">I²C read: <code class="inline-code">beginTransmission(address); write(register); endTransmission(); requestFrom(address, 1); read();</code></li>
+<li class="list__item">DS3231: address <strong>0x68</strong>, temperature: register <strong>0x11</strong> (integer part), <strong>0x12</strong> (fraction).</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/11.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 11: Computer systems, microprocessors and microcontrollers</span></a>
+<a class="pager__link pager__link--next" href="../lectures/13.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 13: Microcontroller peripherals and event handling</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

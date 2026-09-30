@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 8. Combinational functional blocks: multiplexer, two's complement, adder, ALU — SYC</title>
+<meta name="description" content="Ready-made "bricks" bigger than a gate. The multiplexer as a switch and as a universal logic function, negative numbers in two's complement, the adder and the arithmetic logic unit.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/08.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/08.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/08.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/08.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/08.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/08.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">A functional block</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Multiplexer (MUX)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Demultiplexer (DMUX) and decoder</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">The multiplexer as a logic function</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Number codes</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">The adder</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Comparator and ALU</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/08.html" aria-current="page"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 8</p>
+<h1 class="article__title">Combinational functional blocks: multiplexer, two's complement, adder, ALU</h1>
+<p class="article__lead">Ready-made "bricks" bigger than a gate. The multiplexer as a switch and as a universal logic function, negative numbers in two's complement, the adder and the arithmetic logic unit.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">A functional block</h2>
+<p class="article__p">A <strong>combinational functional block</strong> is a combinational circuit with <span class="math">n</span> inputs and <span class="math">m</span> outputs. A Boolean function is its special case — with one output.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p03.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p03.webp" alt="A Boolean function (one output) and a functional block (many outputs)" width="1100" height="400" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A Boolean function (one output) and a functional block (many outputs) <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Examples: <strong>switching</strong> blocks (multiplexers, demultiplexers, decoders, code converters) and <strong>arithmetic</strong> blocks (adders, comparators).</p>
+<h2 class="article__h2" id="s2">Multiplexer (MUX)</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p05.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p05.webp" alt="Multiplexer: data inputs d, address inputs a, output y, enable e" width="957" height="874" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Multiplexer: data inputs d, address inputs a, output y, enable e <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A multiplexer has:</p>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> <strong>address (select) inputs</strong>,</li>
+<li class="list__item"><span class="math">N = 2<sup class="math__sup">n</sup></span> <strong>data inputs</strong>,</li>
+<li class="list__item">one <strong>output</strong>,</li>
+<li class="list__item">an <strong>enable</strong> input (usually: e = 1 — working, e = 0 — off).</li>
+</ul>
+<p class="article__p">It works as a <strong>switch</strong>: the output receives the signal from the data input whose number is given on the address inputs.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p06.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p06.webp" alt="The address a₁a₀ selects one of four inputs" width="720" height="888" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The address a₁a₀ selects one of four inputs <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A multiplexer is a TV remote. The data inputs are the channels, the address inputs are the channel number pressed on the remote, and the output is what you see on the screen. (This comparison comes from the lab materials.)</p>
+</div>
+</div>
+<ul class="list">
+<li class="list__item">The number of data inputs grows exponentially, so large multiplexers are not built directly — they are <strong>assembled from smaller ones</strong> (cascaded).</li>
+<li class="list__item">A <strong>bus multiplexer</strong> switches whole words (e.g. 4-bit buses A and B), not single bits.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p07.webp" alt="A larger multiplexer made of smaller ones" width="1100" height="834" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A larger multiplexer made of smaller ones <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s3">Demultiplexer (DMUX) and decoder</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p09.webp" alt="Demultiplexer: one input d, N outputs" width="869" height="877" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Demultiplexer: one input d, N outputs <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A <strong>demultiplexer</strong> works the other way round: one data input, <span class="math">n</span> address inputs and <span class="math">N = 2<sup class="math__sup">n</sup></span> outputs. The input signal goes to the output indicated by the address.</p>
+<p class="article__p">A <strong>decoder</strong> is a demultiplexer whose input is permanently 1: it converts a binary number into the <strong>"1 of N"</strong> code — exactly one output is active.</p>
+<h2 class="article__h2" id="s4">The multiplexer as a logic function</h2>
+<p class="article__p">A multiplexer can implement <strong>any Boolean function</strong>. The lecture example: <span class="math">y = Σ(1, 7, 11, 13, 14, 15)</span>, variables <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub> x<sub class="math__sub">0</sub></span>.</p>
+<h3 class="article__h3">Way 1: a multiplexer with 4 address inputs (16 data inputs)</h3>
+<p class="article__p">All four variables go to the address inputs. Data inputs number 1, 7, 11, 13, 14, 15 get <strong>1</strong>, the rest get <strong>0</strong>. The multiplexer simply "reads the truth table".</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p11.webp" alt="A 16-input multiplexer as a truth table" width="980" height="1002" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A 16-input multiplexer as a truth table <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">Way 2: a multiplexer with 3 address inputs (8 data inputs)</h3>
+<p class="article__p">Three variables go to the address, and the <strong>fourth — to the data inputs</strong>. For each address compare the two values of the function (for the fourth variable equal to 0 and to 1):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Function for the "free" variable x = 0 / x = 1</th><th class="table__cell table__cell--head table__cell--center">What to feed to the input</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1 / 1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center"><span class="math">x</span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1 / 0</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Variant A</strong> — address <span class="math">x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub> x<sub class="math__sub">0</sub></span>, free variable <span class="math">x<sub class="math__sub">3</sub></span> (compare rows <span class="math">k</span> and <span class="math">k + 8</span>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">MUX input</th><th class="table__cell table__cell--head table__cell--center">0</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">2</th><th class="table__cell table__cell--head table__cell--center">3</th><th class="table__cell table__cell--head table__cell--center">4</th><th class="table__cell table__cell--head table__cell--center">5</th><th class="table__cell table__cell--head table__cell--center">6</th><th class="table__cell table__cell--head table__cell--center">7</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">y for <span class="math">x<sub class="math__sub">3</sub>=0</span> (rows 0–7)</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell">y for <span class="math">x<sub class="math__sub">3</sub>=1</span> (rows 8–15)</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>We feed</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x<sub class="math__sub">3</sub></span></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">One inverter is needed.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w08-p12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p12.webp" alt="Variant A: input 1 receives the negated x₃" width="1100" height="648" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Variant A: input 1 receives the negated x₃ <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p"><strong>Variant B</strong> — address <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub></span>, free variable <span class="math">x<sub class="math__sub">0</sub></span> (compare neighbouring rows <span class="math">2k</span> and <span class="math">2k + 1</span>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">MUX input</th><th class="table__cell table__cell--head table__cell--center">0</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">2</th><th class="table__cell table__cell--head table__cell--center">3</th><th class="table__cell table__cell--head table__cell--center">4</th><th class="table__cell table__cell--head table__cell--center">5</th><th class="table__cell table__cell--head table__cell--center">6</th><th class="table__cell table__cell--head table__cell--center">7</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Table rows</td><td class="table__cell table__cell--center">0, 1</td><td class="table__cell table__cell--center">2, 3</td><td class="table__cell table__cell--center">4, 5</td><td class="table__cell table__cell--center">6, 7</td><td class="table__cell table__cell--center">8, 9</td><td class="table__cell table__cell--center">10, 11</td><td class="table__cell table__cell--center">12, 13</td><td class="table__cell table__cell--center">14, 15</td></tr>
+<tr class="table__row"><td class="table__cell">y (for <span class="math">x<sub class="math__sub">0</sub></span> = 0 / 1)</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">1 / 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>We feed</strong></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">This time no negation is needed — <strong>the choice of the free variable matters</strong>.</p>
+<h3 class="article__h3">Way 3: a multiplexer with 2 address inputs (4 data inputs)</h3>
+<p class="article__p">The address is <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub></span>, and each data input gets a <strong>function</strong> of <span class="math">x<sub class="math__sub">1</sub>, x<sub class="math__sub">0</sub></span> read from one row of the Karnaugh map:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w08-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p15.webp" alt="Each row of the Karnaugh map is one multiplexer input" width="1100" height="672" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Each row of the Karnaugh map is one multiplexer input <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center"><span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub></span></th><th class="table__cell table__cell--head table__cell--center">Function at the input</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x<sub class="math__sub">1</sub></span> · x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> · x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> + x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> · x<sub class="math__sub">0</sub></span></td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s5">Number codes</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Code</th><th class="table__cell table__cell--head">The idea</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NKB</strong> (natural binary code)</td><td class="table__cell">plain binary, unsigned numbers</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>1 of N</strong></td><td class="table__cell">exactly one 1 in a word</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>HEX</strong></td><td class="table__cell">hexadecimal notation</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Gray</strong></td><td class="table__cell">neighbouring words differ in one bit</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>BCD</strong></td><td class="table__cell">each decimal digit separately on 4 bits: 123 → 0001 0010 0011</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ZM</strong> (sign–magnitude)</td><td class="table__cell">the top bit is the sign, the rest is the absolute value</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>U1</strong> (ones' complement)</td><td class="table__cell">a negative number = the magnitude bits inverted</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>U2</strong> (two's complement)</td><td class="table__cell">the top bit has a <strong>negative</strong> weight</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NKB</h3>
+<div class="formula"><span class="math">value = Σ 2<sup class="math__sup">i</sup> · b<sub class="math__sub">i</sub></span></div>
+<p class="article__p">Bits are numbered from zero on the right; the weights are 1, 2, 4, 8, 16, 32, 64, 128. <span class="math">N</span> bits give <span class="math">2<sup class="math__sup">N</sup></span> different values (8 bits: 0…255).</p>
+<h3 class="article__h3">Sign–magnitude and ones' complement</h3>
+<ul class="list">
+<li class="list__item"><strong>ZM:</strong> <span class="math">−24 = 1 0011000</span>, <span class="math">118 = 0 1110110</span>. Range <span class="math">±(2<sup class="math__sup">N−1</sup> − 1)</span>. Drawback: two zeros (+0 and −0).</li>
+<li class="list__item"><strong>U1:</strong> positive numbers as in ZM; negative ones — with the magnitude bits inverted: <span class="math">−86</span> is 11010110 in ZM and 10101001 in U1. Two zeros as well.</li>
+</ul>
+<h3 class="article__h3">Two's complement (U2) — the one computers actually use</h3>
+<p class="article__p">The top bit has a <strong>negative</strong> weight, the others positive:</p>
+<div class="formula"><span class="math">value = −2<sup class="math__sup">N−1</sup> · b<sub class="math__sub">N−1</sub> + Σ 2<sup class="math__sup">i</sup> · b<sub class="math__sub">i</sub></span></div>
+<ul class="list">
+<li class="list__item">Range: from <span class="math">−2<sup class="math__sup">N−1</sup></span> to <span class="math">2<sup class="math__sup">N−1</sup> − 1</span> (8 bits: −128…127; 4 bits: −8…7).</li>
+<li class="list__item">Zero has <strong>only one</strong> representation; the code is complete (<span class="math">2<sup class="math__sup">N</sup></span> values).</li>
+<li class="list__item">Positive numbers look the same as in NKB.</li>
+<li class="list__item">The top bit tells the sign: 1 = negative.</li>
+</ul>
+<p class="article__p">4-bit examples from the lab materials: <span class="math">1111 = −8+4+2+1 = −1</span>, <span class="math">1000 = −8</span>, <span class="math">0111 = 7</span>.</p>
+<p class="article__p"><strong>The opposite number:</strong> invert all the bits and add 1.</p>
+<div class="formula"><span class="math">7 = 00000111  →  11111000  →  +1  →  11111001 = −7</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A car odometer that you wind back. From 0000, going back one gives 9999 — and we agree that 9999 means "−1". Two's complement is the same thing in binary: 0000 − 1 = 1111, i.e. −1.</p>
+</div>
+</div>
+<h3 class="article__h3">Adding and subtracting in U2</h3>
+<ul class="list">
+<li class="list__item">Add <strong>exactly as in NKB</strong>, ignoring the signs.</li>
+<li class="list__item"><strong>Ignore the carry out of the top bit.</strong></li>
+<li class="list__item">Subtraction is adding the opposite number: <span class="math">a − b = a + (−b)</span>. So negation and an adder are enough.</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Operation</th><th class="table__cell table__cell--head">Written out</th><th class="table__cell table__cell--head">Result</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">25 + (−1)</td><td class="table__cell">00011001 + 11111111</td><td class="table__cell">(1) 00011000 = 24 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">25 + (−56)</td><td class="table__cell">00011001 + 11001000</td><td class="table__cell">11100001 = −31 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">(−25) + (−56)</td><td class="table__cell">11100111 + 11001000</td><td class="table__cell">(1) 10101111 = −81 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">112 + 113</td><td class="table__cell">01110000 + 01110001</td><td class="table__cell">11100001 = "−31" ✗ <strong>overflow</strong></td></tr>
+<tr class="table__row"><td class="table__cell">(−75) + (−56)</td><td class="table__cell">10110101 + 11001000</td><td class="table__cell">(1) 01111101 = "+125" ✗ <strong>overflow</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">Overflow can only happen when adding <strong>two positive</strong> or <strong>two negative</strong> numbers whose result "does not fit". You can see it in the sign: two positives gave a negative, or the other way round.</p>
+<p class="article__p"><strong>Hardware detection:</strong> look at the two carries at the top bit — the one coming in (<span class="math">C<sub class="math__sub">IN</sub></span>) and the one going out (<span class="math">C<sub class="math__sub">OUT</sub></span>). There is overflow if and only if they <strong>differ</strong>:</p>
+<div class="formula"><span class="math">OFL = C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p32.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p32.webp" alt="Detecting overflow with an XOR gate on the carries" width="1100" height="647" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Detecting overflow with an XOR gate on the carries <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Other U2 traps: the range is asymmetric (for 8 bits −128 exists, +128 does not), and incrementing 127 gives −128.</p>
+<h3 class="article__h3">Numbers with a fraction</h3>
+<ul class="list">
+<li class="list__item"><strong>Fixed point:</strong> we agree that some bits are the integer part and the rest the fraction. E.g. 5 + 3 bits in U2 — weights: −16, 8, 4, 2, 1, ½, ¼, ⅛. Then <span class="math">11001110 = −16 + 8 + 1 + ½ + ¼ = −6¼</span>. Range: from −16 to 15⅞, precision ⅛.</li>
+<li class="list__item"><strong>Floating point:</strong> <span class="math">mantissa · 2<sup class="math__sup">exponent</sup></span>.</li>
+</ul>
+<p class="article__p">With a finite number of bits some numbers are stored with an error, and irrational ones always are.</p>
+<h2 class="article__h2" id="s6">The adder</h2>
+<p class="article__p">Long addition in binary:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">76</td><td class="table__cell">01001100</td></tr>
+<tr class="table__row"><td class="table__cell">+ 118</td><td class="table__cell">01110110</td></tr>
+<tr class="table__row"><td class="table__cell">= 194</td><td class="table__cell">11000010</td></tr>
+</tbody></table></div>
+<p class="article__p">At each position three bits are added: <span class="math">a<sub class="math__sub">i</sub></span>, <span class="math">b<sub class="math__sub">i</sub></span> and the carry <span class="math">c<sub class="math__sub">i</sub></span> from the previous position; we get a sum bit and a carry onward. This is done by a <strong>one-bit (full) adder</strong>:</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p43.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p43.webp" alt="One-bit adder: truth table and symbol" width="1100" height="792" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">One-bit adder: truth table and symbol <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub>  c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span></div>
+<p class="article__p">An <span class="math">n</span>-bit adder is a <strong>cascade</strong> of one-bit adders: the carry out of one goes into the next.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p42.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p42.webp" alt="A 4-bit adder built from four one-bit adders" width="916" height="995" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A 4-bit adder built from four one-bit adders <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">For <strong>unsigned</strong> numbers a carry out of the top bit (<span class="math">c<sub class="math__sub">n</sub> = 1</span>) means the result did not fit: <span class="math">152 + 118 = 270</span> on 8 bits gives 00001110 (= 14) and a carry of 1. It can be treated as an extra, top bit of the result.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">The slide has a typo in this addition example: the second operand is labelled "188", but 01110110 is 118 (76 + 118 = 194).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Comparator and ALU</h2>
+<p class="article__p">A <strong>comparator</strong> compares two <span class="math">n</span>-bit numbers and tells whether A &lt; B, A = B or A > B.</p>
+<p class="article__p">An <strong>ALU</strong> (<em>Arithmetic Logic Unit</em>) is a <strong>combinational</strong> circuit that performs arithmetic and logic operations on two numbers (or on one).</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p45.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p45.webp" alt="ALU: data A and B, operation select F, result R, status D" width="1042" height="908" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">ALU: data A and B, operation select F, result R, status D <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>A, B</strong> — input data,</li>
+<li class="list__item"><strong>F</strong> — operation code (what to compute),</li>
+<li class="list__item"><strong>R</strong> — the result,</li>
+<li class="list__item"><strong>D</strong> — status, i.e. <strong>flags</strong> (e.g. result is zero, overflow).</li>
+</ul>
+<p class="article__p">The simplest implementation: <strong>all operations are computed at the same time</strong>, and a multiplexer controlled by the code F selects which result goes to the output.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p46.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w08-p46.webp" alt="An ALU built on a multiplexer" width="1100" height="783" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">An ALU built on a multiplexer <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Implement a given function with a multiplexer with four address inputs.</li>
+<li class="list__item">The same with a multiplexer with three address inputs and at most one inverter.</li>
+<li class="list__item">A circuit detecting overflow for 4-bit numbers in U2.</li>
+<li class="list__item">A 4-bit ALU with four operations (on the slide: 00 ADD, 01 NEG, 10 XOR, 11 AND) and flags Z (result zero) and C (overflow).</li>
+</ol>
+<p class="article__p">Step by step: <a class="link" href="../labs/09.html">Lab 9</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Multiplexer</h3>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> address inputs → <span class="math">2<sup class="math__sup">n</sup></span> data inputs; output = the data input whose number is on the address.</li>
+<li class="list__item"><strong>Function on a 16:1 MUX:</strong> feed 1 to the inputs listed in Σ, 0 to the rest.</li>
+<li class="list__item"><strong>Function on an 8:1 MUX:</strong> 3 variables to the address, the fourth "free" one <span class="math">x</span>. For each address compare y at x = 0 and x = 1:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">y(x=0), y(x=1)</th><th class="table__cell table__cell--head table__cell--center">0, 0</th><th class="table__cell table__cell--head table__cell--center">1, 1</th><th class="table__cell table__cell--head table__cell--center">0, 1</th><th class="table__cell table__cell--head table__cell--center">1, 0</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">feed the input</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">x</span></td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Free <span class="math">x<sub class="math__sub">3</sub></span>: row pairs <span class="math">(k, k+8)</span>. Free <span class="math">x<sub class="math__sub">0</sub></span>: pairs <span class="math">(2k, 2k+1)</span>.</li>
+<li class="list__item">DMUX: one input → the output indicated by the address. Decoder: binary → 1 of N.</li>
+</ul>
+<h3 class="article__h3">Two's complement (N bits)</h3>
+<ul class="list">
+<li class="list__item">Weight of the top bit: <span class="math">−2<sup class="math__sup">N−1</sup></span>. Range: <span class="math">−2<sup class="math__sup">N−1</sup> … 2<sup class="math__sup">N−1</sup>−1</span> (4 bits: −8…7; 8 bits: −128…127).</li>
+<li class="list__item"><strong>Opposite number:</strong> invert the bits, add 1.</li>
+<li class="list__item">Add as in plain binary; ignore the carry out of the MSB. Subtraction: <span class="math">a + (−b)</span>.</li>
+<li class="list__item"><strong>Overflow</strong> = <span class="math">C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span> of the top bit (positive + positive = negative, or vice versa).</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">4-bit U2</th><th class="table__cell table__cell--head table__cell--center">0111</th><th class="table__cell table__cell--head table__cell--center">0001</th><th class="table__cell table__cell--head table__cell--center">0000</th><th class="table__cell table__cell--head table__cell--center">1111</th><th class="table__cell table__cell--head table__cell--center">1110</th><th class="table__cell table__cell--head table__cell--center">1001</th><th class="table__cell table__cell--head table__cell--center">1000</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">value</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−1</td><td class="table__cell table__cell--center">−2</td><td class="table__cell table__cell--center">−7</td><td class="table__cell table__cell--center">−8</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Adder and ALU</h3>
+<ul class="list">
+<li class="list__item">Full adder: <span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub></span>,   <span class="math">c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span>. An n-bit adder = a cascade.</li>
+<li class="list__item">Half adder (no carry in) <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>: <span class="math">s = a ⊕ b</span>, <span class="math">c = ab</span>.</li>
+<li class="list__item">ALU: A, B — data; F — operation code; R — result; D — flags. All operations computed at once, a MUX picks the result.</li>
+<li class="list__item">Other codes: BCD (digit → 4 bits), ZM (sign bit + magnitude), U1 (bits inverted), Gray, 1 of N.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/07.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 7: Minimisation of Boolean functions: Karnaugh maps</span></a>
+<a class="pager__link pager__link--next" href="../lectures/09.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 9: Sequential circuits: flip-flops, registers, counters</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

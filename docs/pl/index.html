@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYC — Systemy cyfrowe i podstawy elektroniki</title>
+<meta name="description" content="Wszystkie wykłady wytłumaczone „po ludzku”, ćwiczenia rozpisane krok po kroku i krótkie ściągi do każdego tematu. Po polsku, angielsku i rosyjsku.">
+<link rel="alternate" hreflang="pl" href="../pl/index.html">
+<link rel="alternate" hreflang="en" href="../en/index.html">
+<link rel="alternate" hreflang="ru" href="../ru/index.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link nav__link--active" href="index.html" aria-current="page">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../pl/index.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../en/index.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../ru/index.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Jak korzystać z tej strony</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Najważniejsze informacje o przedmiocie</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Plan semestru</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Wykłady</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Ćwiczenia</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Programy, które się przydadzą</a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--page">
+<header class="article__header">
+
+<h1 class="article__title">SYC — Systemy cyfrowe i podstawy elektroniki</h1>
+<p class="article__lead">Wszystkie wykłady wytłumaczone „po ludzku”, ćwiczenia rozpisane krok po kroku i krótkie ściągi do każdego tematu. Po polsku, angielsku i rosyjsku.</p>
+
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Jak korzystać z tej strony</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Trzy kroki przed każdymi zajęciami</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Przeczytaj wykład</strong> z danego tygodnia — każdy temat jest opisany zwykłym tekstem, z przykładami i rysunkami ze slajdów.</li>
+<li class="steps__item"><strong>Otwórz „Krótki konspekt”</strong> (przycisk 📋 na górze każdego wykładu i w prawym dolnym rogu) — to ściąga z wzorami i zasadami, które przydają się na ćwiczeniach.</li>
+<li class="steps__item"><strong>Przejdź ćwiczenie</strong> krok po kroku i zrób zadania treningowe. Na zajęciach dostaniesz inny wariant, ale metoda będzie ta sama.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--info">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">ℹ️</span>Co oznaczają kolorowe ramki</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">🧒 <strong>Po ludzku</strong> — to samo, ale najprościej jak się da.</li>
+<li class="list__item">🎓 <strong>Z wykładu</strong> — coś, co wykładowca powiedział na żywo (nagranie wykładu 1, semestr zimowy 2026/27).</li>
+<li class="list__item">✚ <strong>Od autora strony</strong> — moje dopowiedzenia, własne przykłady i rady. Tego <strong>nie ma</strong> w slajdach ani w nagraniu, więc traktuj to jako pomoc, a nie jako „oficjalną” treść.</li>
+<li class="list__item">📝 <strong>Zadanie treningowe</strong> — zadania są <strong>własne</strong>: mają tę samą logikę co zadania z zajęć, ale inne dane. Rozwiązanie jest schowane pod przyciskiem.</li>
+</ul>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Najważniejsze informacje o przedmiocie</h2>
+<ul class="list">
+<li class="list__item"><strong>15 tygodni:</strong> 15 wykładów i 15 ćwiczeń. Ćwiczenia są <strong>o tydzień za wykładem</strong>.</li>
+<li class="list__item"><strong>Ocena tylko z ćwiczeń:</strong> 14 punktowanych zajęć × 5 pkt = <strong>70 pkt</strong>. Zalicza <strong>powyżej 35 pkt</strong>. Nie ma egzaminu ani kolokwiów.</li>
+<li class="list__item"><strong>Wszystko robi się na zajęciach</strong> — nic do domu (poza przygotowaniem się).</li>
+<li class="list__item">Ćwiczenia 1–6: sprzęt laboratoryjny (w parach). Ćwiczenia 7–11: symulator Logisim. Ćwiczenia 12–15: Arduino.</li>
+</ul>
+<p class="article__p">Szczegóły, tabela ocen i to, co jest aktualne w tym roku: <a class="link" href="grading.html">Zaliczenie</a>.</p>
+<h2 class="article__h2" id="s3">Plan semestru</h2>
+<div class="schedule" data-schedule data-locale="pl">
+<div class="schedule__controls">
+<label class="schedule__field"><span class="schedule__label">Data pierwszego wykładu</span><input class="schedule__input" type="date" data-start="lecture"></label>
+<label class="schedule__field"><span class="schedule__label">Data pierwszych ćwiczeń</span><input class="schedule__input" type="date" data-start="lab"></label>
+<button class="button button--ghost" type="button" data-schedule-clear>Wyczyść</button>
+</div>
+<p class="schedule__hint">Wpisz daty z planu zajęć — tabela sama policzy kolejne tygodnie (co 7 dni, bez świąt; dane zostają tylko w Twojej przeglądarce).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Tydzień</th><th class="table__cell table__cell--head">Wykład</th><th class="table__cell table__cell--head">Ćwiczenie</th><th class="table__cell table__cell--head">Punkty</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row">
+<td class="table__cell table__cell--center">1</td>
+<td class="table__cell"><a class="link" href="lectures/01.html">Wprowadzenie, fizyczne podstawy elektroniki i pomiary</a><span class="schedule__date" data-date="lecture" data-week="1"></span></td>
+<td class="table__cell"><a class="link" href="labs/01.html">Zajęcia wstępne: sprzęt w laboratorium</a><span class="schedule__date" data-date="lab" data-week="1"></span></td>
+<td class="table__cell table__cell--center">— (bez punktów)</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">2</td>
+<td class="table__cell"><a class="link" href="lectures/02.html">Elementy pasywne: rezystor, kondensator, cewka i impedancja</a><span class="schedule__date" data-date="lecture" data-week="2"></span></td>
+<td class="table__cell"><a class="link" href="labs/02.html">Pomiary napięć i prądów</a><span class="schedule__date" data-date="lab" data-week="2"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">3</td>
+<td class="table__cell"><a class="link" href="lectures/03.html">Pasywne układy elektroniczne: dzielniki i filtry RC</a><span class="schedule__date" data-date="lecture" data-week="3"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="3"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">4</td>
+<td class="table__cell"><a class="link" href="lectures/04.html">Półprzewodniki: diody i tranzystory</a><span class="schedule__date" data-date="lecture" data-week="4"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="4"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">5</td>
+<td class="table__cell"><a class="link" href="lectures/05.html">Wzmacniacze operacyjne</a><span class="schedule__date" data-date="lecture" data-week="5"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="5"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">6</td>
+<td class="table__cell"><a class="link" href="lectures/06.html">Układy cyfrowe — wprowadzenie: sygnały, bramki, algebra Boole'a</a><span class="schedule__date" data-date="lecture" data-week="6"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="6"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">7</td>
+<td class="table__cell"><a class="link" href="lectures/07.html">Minimalizacja funkcji boolowskich: mapy Karnaugha</a><span class="schedule__date" data-date="lecture" data-week="7"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="7"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">8</td>
+<td class="table__cell"><a class="link" href="lectures/08.html">Kombinacyjne bloki funkcjonalne: multiplekser, kod U2, sumator, ALU</a><span class="schedule__date" data-date="lecture" data-week="8"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="8"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">9</td>
+<td class="table__cell"><a class="link" href="lectures/09.html">Układy sekwencyjne: przerzutniki, rejestry, liczniki</a><span class="schedule__date" data-date="lecture" data-week="9"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="9"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">10</td>
+<td class="table__cell"><a class="link" href="lectures/10.html">Projektowanie synchronicznych układów sekwencyjnych</a><span class="schedule__date" data-date="lecture" data-week="10"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="10"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">11</td>
+<td class="table__cell"><a class="link" href="lectures/11.html">Systemy komputerowe, mikroprocesory i mikrokontrolery</a><span class="schedule__date" data-date="lecture" data-week="11"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="11"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">12</td>
+<td class="table__cell"><a class="link" href="lectures/12.html">Metody komunikacji: porty, UART, SPI, I²C</a><span class="schedule__date" data-date="lecture" data-week="12"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="12"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">13</td>
+<td class="table__cell"><a class="link" href="lectures/13.html">Peryferia mikrokontrolerów i obsługa zdarzeń</a><span class="schedule__date" data-date="lecture" data-week="13"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="13"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">14</td>
+<td class="table__cell"><a class="link" href="lectures/14.html">Architektura komputerów: procesor MIPS od środka</a><span class="schedule__date" data-date="lecture" data-week="14"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="14"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">15</td>
+<td class="table__cell"><a class="link" href="lectures/15.html">Asembler i architektura komputerów (MIPS)</a><span class="schedule__date" data-date="lecture" data-week="15"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="15"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+</tbody></table></div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">W materiałach nie ma dat kalendarzowych — jest tylko numer tygodnia. Kalkulator dat powyżej jest moim dodatkiem: dodaje po 7 dni i <strong>nie zna</strong> świąt ani dni rektorskich, więc porównaj wynik z planem zajęć.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Wykłady</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="lectures/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Wykład 1</span><span class="card__title">Wprowadzenie, fizyczne podstawy elektroniki i pomiary</span><span class="card__text">Napięcie, prąd, prawo Ohma, prawa Kirchhoffa — a potem najważniejsze na pierwsze laboratoria: jak mierzyć i jak policzyć, o ile mogliśmy się pomylić.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Wykład 2</span><span class="card__title">Elementy pasywne: rezystor, kondensator, cewka i impedancja</span><span class="card__text">Trzy podstawowe „klocki” elektroniki i jedno pojęcie, które je łączy — impedancja, czyli opór zapisany liczbą zespoloną.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/03.html">
+<span class="card__num">3</span>
+<span class="card__body"><span class="card__kicker">Wykład 3</span><span class="card__title">Pasywne układy elektroniczne: dzielniki i filtry RC</span><span class="card__text">Z dwóch elementów robimy dzielnik napięcia, a z dzielnika — filtr. Do tego decybele, częstotliwość graniczna i łączenie elementów szeregowo i równolegle.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/04.html">
+<span class="card__num">4</span>
+<span class="card__body"><span class="card__kicker">Wykład 4</span><span class="card__title">Półprzewodniki: diody i tranzystory</span><span class="card__text">Skąd w krzemie biorą się „dziury”, dlaczego dioda przewodzi tylko w jedną stronę i jak mały prąd bazy steruje dużym prądem kolektora.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/05.html">
+<span class="card__num">5</span>
+<span class="card__body"><span class="card__kicker">Wykład 5</span><span class="card__title">Wzmacniacze operacyjne</span><span class="card__text">Jeden trójkąt na schemacie, dwa rezystory — i mamy wzmacniacz o dokładnie takim wzmocnieniu, jakie chcemy. Do tego wtórnik, komparator, sumator i filtry aktywne.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/06.html">
+<span class="card__num">6</span>
+<span class="card__body"><span class="card__kicker">Wykład 6</span><span class="card__title">Układy cyfrowe — wprowadzenie: sygnały, bramki, algebra Boole'a</span><span class="card__text">Od napięcia do zer i jedynek. Czym jest stan logiczny, jakie są bramki, jak zapisać funkcję logiczną i dlaczego z samych bramek NAND da się zbudować wszystko.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/07.html">
+<span class="card__num">7</span>
+<span class="card__body"><span class="card__kicker">Wykład 7</span><span class="card__title">Minimalizacja funkcji boolowskich: mapy Karnaugha</span><span class="card__text">Ta sama funkcja może wymagać dziesięciu bramek albo trzech. Mapa Karnaugha to sposób, żeby tę krótszą wersję znaleźć bez zgadywania — a potem zbudować ją z samych NAND albo NOR.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/08.html">
+<span class="card__num">8</span>
+<span class="card__body"><span class="card__kicker">Wykład 8</span><span class="card__title">Kombinacyjne bloki funkcjonalne: multiplekser, kod U2, sumator, ALU</span><span class="card__text">Gotowe „klocki” większe niż bramka. Multiplekser jako przełącznik i jako uniwersalna funkcja logiczna, zapis liczb ujemnych w kodzie U2, sumator i jednostka arytmetyczno-logiczna.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/09.html">
+<span class="card__num">9</span>
+<span class="card__body"><span class="card__kicker">Wykład 9</span><span class="card__title">Układy sekwencyjne: przerzutniki, rejestry, liczniki</span><span class="card__text">Układ, który pamięta. Skąd bierze się pamięć, czym różnią się przerzutniki RS, D, JK i T, do czego służy zegar i jak z kilku przerzutników zrobić rejestr przesuwny albo licznik.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/10.html">
+<span class="card__num">10</span>
+<span class="card__body"><span class="card__kicker">Wykład 10</span><span class="card__title">Projektowanie synchronicznych układów sekwencyjnych</span><span class="card__text">Od opisu słowami („ma świecić czerwone, potem żółte…”) do gotowego układu z przerzutników i bramek. Cztery kroki: graf, kodowanie stanów, funkcje wzbudzeń, funkcje wyjść.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/11.html">
+<span class="card__num">11</span>
+<span class="card__body"><span class="card__kicker">Wykład 11</span><span class="card__title">Systemy komputerowe, mikroprocesory i mikrokontrolery</span><span class="card__text">Z czego składa się komputer, jak procesor wykonuje rozkaz i czym jest mikrokontroler — na przykładzie ATmega328, czyli „serca” płytki Arduino UNO.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/12.html">
+<span class="card__num">12</span>
+<span class="card__body"><span class="card__kicker">Wykład 12</span><span class="card__title">Metody komunikacji: porty, UART, SPI, I²C</span><span class="card__text">Jak mikrokontroler rozmawia ze światem. Szeregowo czy równolegle, z zegarem czy bez, kto zaczyna rozmowę — oraz trzy interfejsy, które spotkasz na ćwiczeniach z Arduino.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/13.html">
+<span class="card__num">13</span>
+<span class="card__body"><span class="card__kicker">Wykład 13</span><span class="card__title">Peryferia mikrokontrolerów i obsługa zdarzeń</span><span class="card__text">Jak mikrokontroler steruje czymś większym od siebie (PWM, tranzystor jako klucz, mostek H), jak zamienia napięcie na liczbę i z powrotem — oraz dwa sposoby reagowania na zdarzenia: odpytywanie i przerwania.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/14.html">
+<span class="card__num">14</span>
+<span class="card__body"><span class="card__kicker">Wykład 14</span><span class="card__title">Architektura komputerów: procesor MIPS od środka</span><span class="card__text">Składamy procesor z klocków, które już znamy: rejestrów, pamięci, multiplekserów i ALU. Najpierw wersja jednocyklowa, potem wielocyklowa i potokowa.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/15.html">
+<span class="card__num">15</span>
+<span class="card__body"><span class="card__kicker">Wykład 15</span><span class="card__title">Asembler i architektura komputerów (MIPS)</span><span class="card__text">Język, w którym naprawdę „mówi” procesor. Instrukcje, rejestry, pamięć, skoki i pętle w asemblerze MIPS — oraz jak taka instrukcja wygląda jako 32 zera i jedynki.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s5">Ćwiczenia</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="labs/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Ćwiczenie 1</span><span class="card__title">Zajęcia wstępne: sprzęt w laboratorium</span><span class="card__text">Pierwsze zajęcia są bez punktów. Poznajesz zasilacz, multimetr, generator i oscyloskop — cztery urządzenia, z którymi spędzisz kolejne pięć tygodni.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="labs/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Ćwiczenie 2</span><span class="card__title">Pomiary napięć i prądów</span><span class="card__text">Pierwsze punktowane zajęcia (5 pkt). Mierzysz napięcie, opór i prąd — miernikiem cyfrowym, oscyloskopem i amperomierzem wskazówkowym — i do każdego wyniku liczysz błąd.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s6">Programy, które się przydadzą</h2>
+<ul class="list">
+<li class="list__item"><strong>Logisim 2.7.1</strong> — symulator układów cyfrowych używany na ćwiczeniach 7–11 (plik <code class="inline-code">logisim-generic-2.7.1.jar</code>, wymaga Javy). Na wykładzie 2026/27 padło, że Logisim działa też <strong>w przeglądarce</strong> oraz że istnieje nowsza wersja <em>Logisim Evolution</em> (także na macOS) — „bardzo podobna, tylko trochę bardziej skomplikowana”.</li>
+<li class="list__item"><strong>Arduino IDE</strong> — do ćwiczeń 12–15 (płytka Arduino UNO R3).</li>
+<li class="list__item"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Pliki <code class="inline-code">.circ</code> z zajęć otwierają się w Logisim 2.7.1; w Logisim Evolution zwykle też, ale zapisany tam plik może już nie otworzyć się w starej wersji — na zaliczenie pracuj w tej wersji, która jest w sali.</li>
+</ul>
+</div>
+
+
+</article>
+
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

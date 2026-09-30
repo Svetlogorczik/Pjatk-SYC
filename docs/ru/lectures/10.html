@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 10. Проектирование синхронных последовательностных схем — SYC</title>
+<meta name="description" content="От описания словами («должен гореть красный, потом жёлтый…») до готовой схемы из триггеров и вентилей. Четыре шага: граф, кодирование состояний, функции возбуждения, функции выходов.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/10.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/10.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/10.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/10.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/10.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/10.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Внутреннее состояние и граф переходов</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Четыре этапа проектирования</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Пример из лекции, шаг за шагом</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Как кодировать состояния</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Минимизация числа состояний</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Не полностью определённые схемы</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Замечания об автоматах Мили</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/10.html" aria-current="page"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 10</p>
+<h1 class="article__title">Проектирование синхронных последовательностных схем</h1>
+<p class="article__lead">От описания словами («должен гореть красный, потом жёлтый…») до готовой схемы из триггеров и вентилей. Четыре шага: граф, кодирование состояний, функции возбуждения, функции выходов.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Внутреннее состояние и граф переходов</h2>
+<p class="article__p">У последовательностной схемы есть <strong>внутреннее состояние</strong>: её будущее зависит от того, в каком состоянии она сейчас и что получает на входе (см. <a class="link" href="../lectures/09.html">лекцию 9</a>).</p>
+<p class="article__p">Поведение такой схемы удобнее всего нарисовать в виде <strong>ориентированного графа</strong>:</p>
+<ul class="list">
+<li class="list__item"><strong>кружок (узел)</strong> = состояние; в автомате Мура в него вписывают ещё и значения выходов,</li>
+<li class="list__item"><strong>стрелка</strong> = переход в другое состояние; у стрелки стоит значение входа, которое этот переход вызывает.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w10-p05.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p05.webp" alt="Граф счётчика: семь состояний, из каждого одна стрелка в следующее" width="901" height="813" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Граф счётчика: семь состояний, из каждого одна стрелка в следующее <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Состояния реализуют <strong>триггерами</strong>, а переходы между ними — <strong>вентилями</strong>. Изменения состояния синхронизирует тактовый сигнал; обычно они происходят по его <strong>положительному (нарастающему) фронту</strong>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Граф состояний — это игровое поле. Фишка стоит на одной клетке (состояние). На каждый «тик» тактового сигнала смотришь на вход и двигаешь фишку по нужной стрелке. Спроектировать схему — значит нарисовать поле, пронумеровать клетки и построить машинку, которая сама двигает фишку.</p>
+</div>
+</div>
+<h3 class="article__h3">Кодирование состояний</h3>
+<p class="article__p">Триггеры помнят биты, а не названия «S0, S1…», поэтому каждому состоянию нужно присвоить <strong>двоичный код</strong>. Для кодирования <span class="math">k</span> состояний нужно столько триггеров, чтобы <span class="math">2<sup class="math__sup">n</sup> ≥ k</span> (4 состояния → 2 триггера, 5–8 состояний → 3).</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p06.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p06.webp" alt="Таблица переходов счётчика до и после кодирования состояний" width="1100" height="634" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Таблица переходов счётчика до и после кодирования состояний <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Мур и Мили</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w10-p07.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p07.webp" alt="Автомат Мили и автомат Мура" width="776" height="851" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Автомат Мили и автомат Мура <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="formula"><span class="math">x(k+1) = δ(x(k), u(k))  y(k) = λ(x(k), u(k))</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">δ</span> — <strong>функция возбуждения</strong> (<em>funkcja wzbudzeń</em>): вычисляет следующее состояние (это «память»),</li>
+<li class="list__item"><span class="math">λ</span> — <strong>функция выходов</strong>: комбинационная схема, вычисляющая выходы.</li>
+</ul>
+<p class="article__p">При проектировании чаще используют автоматы <strong>Мура</strong> (выход зависит только от состояния) — только ими мы дальше и занимаемся.</p>
+<h2 class="article__h2" id="s2">Четыре этапа проектирования</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Рецепт из лекции</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Граф.</strong> По тексту задания нарисуй граф: состояния со значениями выходов и стрелки, подписанные значениями входов. Из каждого состояния должна выходить стрелка для <strong>каждой комбинации входов</strong> — иначе схема была бы недетерминированной.</li>
+<li class="steps__item"><strong>Кодирование состояний.</strong> Присвой состояниям двоичные коды, используя как можно меньше переменных (триггеров).</li>
+<li class="steps__item"><strong>Функции возбуждения.</strong> Закодированную таблицу переходов «разбей» на отдельные триггеры: для каждого найди (картой Карно) функцию, которую нужно подать на его вход.</li>
+<li class="steps__item"><strong>Функции выходов.</strong> Для каждого выхода нарисуй карту Карно, которая превращает состояние (выходы триггеров) в значение выхода.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Почему с D-триггерами проще всего</p>
+<div class="callout__body">
+<p class="article__p">Для D-триггера <span class="math">Q<sub class="math__sub">t+1</sub> = D</span>, поэтому <strong>функция возбуждения — это просто «следующее состояние»</strong>: то, что должно оказаться в триггере после фронта, подаёшь прямо на его вход D. Поэтому столбцы «следующее состояние» из закодированной таблицы сразу переписываются в карты Карно для D1, D0.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Пример из лекции, шаг за шагом</h2>
+<p class="article__p"><strong>Задание.</strong> У схемы два входа (<span class="math">x<sub class="math__sub">2</sub>, x<sub class="math__sub">1</sub></span>) и два выхода (<span class="math">y<sub class="math__sub">2</sub>, y<sub class="math__sub">1</sub></span>):</p>
+<ol class="list list--ordered">
+<li class="list__item">когда на входах <strong>две единицы</strong> — она попеременно включает и выключает оба выхода (по положительному фронту),</li>
+<li class="list__item">когда <strong>два нуля</strong> — оба выхода выключены,</li>
+<li class="list__item">при <strong>остальных комбинациях</strong> (01, 10) — выходы ведут себя как счётчик mod 3.</li>
+</ol>
+<h3 class="article__h3">Шаг 1: состояния и граф</h3>
+<p class="article__p">На двух выходах могут появиться все 4 комбинации, а в автомате Мура каждому значению выходов соответствует своё состояние — значит, нужно минимум <strong>4 состояния</strong>:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Состояние</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S3</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p13.webp" alt="Граф переходов и соответствующая ему таблица" width="1100" height="674" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Граф переходов и соответствующая ему таблица <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Таблица переходов (в клетках — <strong>следующее состояние</strong>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Состояние \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub>y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S0</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">S3</td><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S1</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">01</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S2</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S3</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">11</td></tr>
+</tbody></table></div>
+<p class="article__p">Как это читать: столбец 00 всегда ведёт в S0 (пункт 2). Столбец 11: из S0 в S3 (оба включены), из S3 обратно в S0 (оба выключены) — попеременно (пункт 1). Столбцы 01 и 10: S0 → S1 → S2 → S0, то есть счёт 0, 1, 2, 0… (пункт 3).</p>
+<h3 class="article__h3">Шаг 2: кодирование состояний</h3>
+<p class="article__p">Выбрано: <strong>S0 → 00, S1 → 01, S2 → 11, S3 → 10</strong> (биты — это <span class="math">Q<sub class="math__sub">1</sub>Q<sub class="math__sub">0</sub></span>, выходы двух триггеров). После подстановки кодов:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">1</sub>Q<sub class="math__sub">0</sub></span> \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub>y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong> (S0)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong> (S1)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">01</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong> (S2)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong> (S3)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td></tr>
+</tbody></table></div>
+<p class="article__p">Строки расположены в порядке кода Грея (00, 01, 11, 10) — поэтому таблица сразу является картой Карно.</p>
+<h3 class="article__h3">Шаг 3: функции возбуждения (D-триггеры)</h3>
+<p class="article__p">Из каждой клетки берём <strong>левый бит</strong> в карту D1 и <strong>правый бит</strong> в карту D0:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p15.webp" alt="Карты Карно для входов D1 и D0" width="1100" height="755" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Карты Карно для входов D1 и D0 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="formula"><span class="math">D<sub class="math__sub">1</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span><span class="math__bar">Q<sub class="math__sub">0</sub></span>x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub><span class="math__bar">x<sub class="math__sub">2</sub></span>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub>x<sub class="math__sub">2</sub><span class="math__bar">x<sub class="math__sub">1</sub></span></span></div>
+<div class="formula"><span class="math">D<sub class="math__sub">0</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span><span class="math__bar">x<sub class="math__sub">2</sub></span>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>x<sub class="math__sub">2</sub><span class="math__bar">x<sub class="math__sub">1</sub></span></span></div>
+<h3 class="article__h3">Шаг 4: функции выходов</h3>
+<p class="article__p">Выходы зависят только от состояния, поэтому в картах только переменные <span class="math">Q<sub class="math__sub">1</sub>, Q<sub class="math__sub">0</sub></span>:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p16.webp" alt="Карты Карно для выходов y2 и y1" width="1100" height="824" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Карты Карно для выходов y2 и y1 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="formula"><span class="math">y<sub class="math__sub">2</sub> = Q<sub class="math__sub">1</sub>  y<sub class="math__sub">1</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub> + Q<sub class="math__sub">1</sub><span class="math__bar">Q<sub class="math__sub">0</sub></span> = Q<sub class="math__sub">1</sub> ⊕ Q<sub class="math__sub">0</sub></span></div>
+<h3 class="article__h3">Готовая схема</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p17.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p17.webp" alt="Реализация: два D-триггера и вентили" width="1100" height="879" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Реализация: два D-триггера и вентили <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Два D-триггера (общий тактовый сигнал), перед ними вентили, вычисляющие <span class="math">D<sub class="math__sub">1</sub></span> и <span class="math">D<sub class="math__sub">0</sub></span>, за ними — вентили, вычисляющие выходы.</p>
+<h2 class="article__h2" id="s4">Как кодировать состояния</h2>
+<p class="article__p">От выбора кодов зависит, насколько сложными получатся функции возбуждения. Метода, который всегда даёт минимум, нет, но помогают три правила (в порядке важности) — в каждом речь о том, чтобы указанные состояния получили коды, <strong>отличающиеся одним битом</strong>:</p>
+<ol class="list list--ordered">
+<li class="list__item">состояния, у которых <strong>одно и то же следующее состояние</strong>,</li>
+<li class="list__item"><strong>следующие состояния</strong> одного и того же текущего состояния,</li>
+<li class="list__item">состояния с <strong>одинаковыми значениями выходов</strong>.</li>
+</ol>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Состояния, «соседние по поведению», должны быть соседями и на карте Карно — тогда единицы складываются в большие группы, и формулы получаются короткими.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Минимизация числа состояний</h2>
+<p class="article__p">Иногда в графе, нарисованном «по тексту задания», состояний больше, чем нужно. Два состояния <strong>эквивалентны</strong> (их можно заменить одним), если:</p>
+<ol class="list list--ordered">
+<li class="list__item">у них <strong>одинаковые значения выходов</strong>, и</li>
+<li class="list__item">для каждой комбинации входов их следующие состояния <strong>одинаковы или эквивалентны</strong>.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p20.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p20.webp" alt="Пример: таблица из семи состояний" width="1100" height="544" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Пример: таблица из семи состояний <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Процедура из лекции:</p>
+<ol class="list list--ordered">
+<li class="list__item">Раздели состояния по выходу. Здесь: у {3, 7} Y = 1, а у {1, 2, 4, 5, 6} Y = 0. Эквивалентными могут быть только пары из одной группы.</li>
+<li class="list__item">Для каждой пары-кандидата выпиши, какие пары следующих состояний <strong>должны были бы</strong> быть совместимыми.</li>
+<li class="list__item">Вычеркни пары, которые требуют совместимости состояний с разными выходами. Повторяй, пока что-то меняется.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p21.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w10-p21.webp" alt="Проверка совместимых пар по итерациям" width="1100" height="725" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Проверка совместимых пар по итерациям <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Результат: <strong>A = {1, 2, 4}, B = {3, 7}, C = {5}, D = {6}</strong> — из семи состояний остаётся четыре (2 триггера вместо 3).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Состояние \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center">Y</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>A</strong></td><td class="table__cell table__cell--center">C</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>B</strong></td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">C</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>C</strong></td><td class="table__cell table__cell--center">D</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>D</strong></td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s6">Не полностью определённые схемы</h2>
+<p class="article__p">Иногда часть таблицы «не имеет значения»:</p>
+<ul class="list">
+<li class="list__item">какая-то комбинация входов <strong>никогда не появится</strong>,</li>
+<li class="list__item">после кодирования остаются <strong>лишние коды</strong> — например, у счётчика mod 3 три состояния, а 2 триггера дают 4 кода; четвёртый никогда не встретится.</li>
+</ul>
+<p class="article__p">В такие клетки можно вписать <strong>любое значение — какое удобно</strong> (обычно их помечают «–» или «×») и при группировке на карте Карно считать их 0 или 1 — смотря что даёт группы побольше.</p>
+<h2 class="article__h2" id="s7">Замечания об автоматах Мили</h2>
+<ul class="list">
+<li class="list__item">Выход не связан однозначно с состоянием — он зависит ещё и от входа.</li>
+<li class="list__item">Часто позволяют обойтись <strong>меньшим числом состояний</strong>, но ценой более сложной функции выходов.</li>
+<li class="list__item">На графе значение выхода пишут у <strong>стрелок</strong>, а не в кружках.</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Задания на лабораторную (со слайда)</p>
+<div class="callout__body">
+<p class="article__p">Спроектировать светофор: в нормальном режиме (вход = 1) последовательность красный → красный и жёлтый → зелёный → жёлтый; в аварийном режиме (вход = 0) жёлтый свет — постоянный (вариант 1) или мигающий (вариант 2).</p>
+<p class="article__p">Полное решение варианта 1 и тренировочные задания: <a class="link" href="../labs/11.html">Лабораторная 11</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Процедура (автомат Мура, D-триггеры)</h3>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Состояния и выходы</strong> — выпиши, что должно быть на выходах в каждом состоянии.</li>
+<li class="list__item"><strong>Граф / таблица переходов</strong> — для каждого состояния и <strong>каждой</strong> комбинации входов: следующее состояние.</li>
+<li class="list__item"><strong>Кодирование</strong> — <span class="math">n</span> триггеров, <span class="math">2<sup class="math__sup">n</sup> ≥</span> числа состояний; коды лучше в порядке Грея (00, 01, 11, 10).</li>
+<li class="list__item"><strong>Закодированная таблица</strong> — вместо названий состояний впиши коды.</li>
+<li class="list__item"><strong>Функции возбуждения</strong> — для D-триггера: <span class="math">D<sub class="math__sub">i</sub></span> = i-й бит <strong>следующего</strong> состояния. Карта Карно по переменным: биты состояния + входы.</li>
+<li class="list__item"><strong>Функции выходов</strong> — карта Карно только по переменным состояния (Мур).</li>
+<li class="list__item"><strong>Схема</strong> — триггеры на общем тактовом сигнале + вентили.</li>
+</ol>
+<h3 class="article__h3">Запомнить</h3>
+<ul class="list">
+<li class="list__item">Мур: выход = f(состояние) — значения в кружках. Мили: выход = f(состояние, вход) — значения у стрелок.</li>
+<li class="list__item">Из каждого состояния должна выходить стрелка для каждой комбинации входов.</li>
+<li class="list__item"><strong>Кодирование — коды, отличающиеся 1 битом, для:</strong> (1) состояний с одним и тем же следующим состоянием, (2) следующих состояний одного состояния, (3) состояний с одинаковыми выходами.</li>
+<li class="list__item"><strong>Эквивалентные состояния:</strong> те же выходы + следующие состояния одинаковы или эквивалентны → объединяем в одно.</li>
+<li class="list__item"><strong>Неопределённые клетки</strong> (лишние коды, невозможные входы) — вписывай что удобно.</li>
+<li class="list__item">Полезно: XOR <span class="math">= <span class="math__bar">a</span>b + a<span class="math__bar">b</span></span>; формулы часто упрощаются до XOR/AND/NOT.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/09.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 9: Последовательностные схемы: триггеры, регистры, счётчики</span></a>
+<a class="pager__link pager__link--next" href="../lectures/11.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 11: Компьютерные системы, микропроцессоры и микроконтроллеры</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 6. Układy cyfrowe — wprowadzenie: sygnały, bramki, algebra Boole'a — SYC</title>
+<meta name="description" content="Od napięcia do zer i jedynek. Czym jest stan logiczny, jakie są bramki, jak zapisać funkcję logiczną i dlaczego z samych bramek NAND da się zbudować wszystko.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/06.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/06.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/06.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/06.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/06.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/06.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Sygnał analogowy, dyskretny, cyfrowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Poziomy logiczne: TTL i CMOS</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Bramki logiczne</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Algebra Boole'a</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Funkcja boolowska i tabela prawdy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Dwie postacie kanoniczne</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Schemat logiczny</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">NAND i NOR — bramki uniwersalne</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/06.html" aria-current="page"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 6</p>
+<h1 class="article__title">Układy cyfrowe — wprowadzenie: sygnały, bramki, algebra Boole'a</h1>
+<p class="article__lead">Od napięcia do zer i jedynek. Czym jest stan logiczny, jakie są bramki, jak zapisać funkcję logiczną i dlaczego z samych bramek NAND da się zbudować wszystko.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Sygnał analogowy, dyskretny, cyfrowy</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w06-p03.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p03.webp" alt="Sygnał ciągły (u góry) i ten sam sygnał znany tylko w wybranych chwilach (na dole)" width="1100" height="774" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sygnał ciągły (u góry) i ten sam sygnał znany tylko w wybranych chwilach (na dole) <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Analogowy</strong> — ciągły w czasie; może przyjąć dowolną wartość.</li>
+<li class="list__item"><strong>Dyskretny</strong> — jego wartość znamy tylko w stałych odstępach czasu (próbki).</li>
+<li class="list__item"><strong>Cyfrowy (logiczny)</strong> — liczą się tylko <strong>dwa stany</strong>: 0 i 1. Każdemu stanowi odpowiada pewien <strong>przedział napięć</strong>.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Analogowy to ściemniacz światła — dowolna jasność. Cyfrowy to zwykły włącznik — świeci albo nie. Dzięki temu drobne zakłócenia nie szkodzą: „prawie 5 V” to dalej jedynka.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Poziomy logiczne: TTL i CMOS</h2>
+<h3 class="article__h3">TTL</h3>
+<p class="article__p">Układy TTL są zbudowane z tranzystorów <strong>bipolarnych</strong> i zasilane napięciem <strong>5 V</strong>.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Napięcie (względem masy)</th><th class="table__cell table__cell--head">Stan</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">0 V – 0,8 V</td><td class="table__cell"><strong>logiczne 0</strong> (stan niski)</td></tr>
+<tr class="table__row"><td class="table__cell">0,8 V – 2 V</td><td class="table__cell">nieokreślony — tak nie wolno</td></tr>
+<tr class="table__row"><td class="table__cell">2 V – 5 V</td><td class="table__cell"><strong>logiczna 1</strong> (stan wysoki)</td></tr>
+</tbody></table></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w06-p04.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p04.webp" alt="Bramka NAND w technologii TTL" width="706" height="899" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Bramka NAND w technologii TTL <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">CMOS</h3>
+<p class="article__p">Układy CMOS składają się z par tranzystorów <strong>MOS o przeciwnym typie</strong> (kanał n i kanał p), połączonych tak, że w ustalonym stanie <strong>przewodzi tylko jeden z nich</strong>.</p>
+<ul class="list">
+<li class="list__item">Proste i tanie w produkcji, pozwalają na bardzo duże upakowanie.</li>
+<li class="list__item">Zasilanie 3–18 V; nowsze serie niskonapięciowe: 3,3 V, 2,5 V, a nawet 1,8 V.</li>
+<li class="list__item"><strong>Prawie nie pobierają mocy w spoczynku</strong> — tylko w chwili zmiany stanu.</li>
+<li class="list__item">Poziomy logiczne są blisko napięć zasilania: „0” to 0–30% napięcia zasilania, „1” to 70–100%.</li>
+</ul>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p05.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p05.webp" alt="Inwerter CMOS: zawsze przewodzi albo górny, albo dolny tranzystor" width="1100" height="627" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Inwerter CMOS: zawsze przewodzi albo górny, albo dolny tranzystor <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p07.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p07.webp" alt="Bramka NAND w technologii CMOS" width="831" height="1319" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Bramka NAND w technologii CMOS <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<h3 class="article__h3">Trzeci stan: wysoka impedancja</h3>
+<p class="article__p">Oprócz 0 i 1 istnieje <strong>stan wysokiej impedancji</strong> (Hi-Z): punkt układu nie jest z niczym połączony — „wisi w powietrzu”. Żeby taki punkt miał określony stan, łączy się go przez rezystor z zasilaniem (<strong>rezystor podciągający</strong>, <em>pull-up</em>) albo z masą. Są bramki, których wyjście może być w stanie Hi-Z (np. typu <em>open collector</em>).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Hi-Z to telefon z wyjętą wtyczką: nie mówi ani „tak”, ani „nie” — po prostu go nie ma na linii. Rezystor podciągający to ustalenie: „jeśli nikt nic nie mówi, przyjmujemy, że odpowiedź brzmi TAK”. Wrócimy do tego przy przyciskach i magistrali I²C (<a class="link" href="../lectures/12.html">wykład 12</a>).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Bramki logiczne</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w06-p09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p09.webp" alt="Sześć podstawowych bramek i ich tabele prawdy" width="1100" height="789" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sześć podstawowych bramek i ich tabele prawdy <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Bramka</th><th class="table__cell table__cell--head">Zapis</th><th class="table__cell table__cell--head">Wynik 1, gdy…</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NOT</strong> (negacja)</td><td class="table__cell"><span class="math"><span class="math__bar">a</span></span></td><td class="table__cell">wejście jest 0</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>AND</strong> (iloczyn)</td><td class="table__cell"><span class="math">a · b</span></td><td class="table__cell"><strong>oba</strong> wejścia są 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>OR</strong> (suma)</td><td class="table__cell"><span class="math">a + b</span></td><td class="table__cell"><strong>co najmniej jedno</strong> wejście jest 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>XOR</strong> (albo–albo)</td><td class="table__cell"><span class="math">a ⊕ b</span></td><td class="table__cell">wejścia są <strong>różne</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>NAND</strong></td><td class="table__cell"><span class="math"><span class="math__bar">a · b</span></span></td><td class="table__cell"><strong>nie</strong> oba wejścia są 1 (odwrotność AND)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>NOR</strong></td><td class="table__cell"><span class="math"><span class="math__bar">a + b</span></span></td><td class="table__cell"><strong>żadne</strong> wejście nie jest 1 (odwrotność OR)</td></tr>
+</tbody></table></div>
+<p class="article__p">Kółeczko na wyjściu symbolu oznacza negację.</p>
+<h2 class="article__h2" id="s4">Algebra Boole'a</h2>
+<p class="article__p">Działamy na dwóch wartościach {0, 1} i trzech operacjach. W różnych książkach mają różne symbole:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Operacja</th><th class="table__cell table__cell--head table__cell--center">Logika</th><th class="table__cell table__cell--head table__cell--center">Zbiory</th><th class="table__cell table__cell--head table__cell--center">Technika cyfrowa (używamy tej)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">koniunkcja (iloczyn, AND)</td><td class="table__cell table__cell--center">∧</td><td class="table__cell table__cell--center">∩</td><td class="table__cell table__cell--center"><span class="math">·</span></td></tr>
+<tr class="table__row"><td class="table__cell">alternatywa (suma, OR)</td><td class="table__cell table__cell--center">∨</td><td class="table__cell table__cell--center">∪</td><td class="table__cell table__cell--center"><span class="math">+</span></td></tr>
+<tr class="table__row"><td class="table__cell">negacja (NOT)</td><td class="table__cell table__cell--center">¬</td><td class="table__cell table__cell--center">∼</td><td class="table__cell table__cell--center">kreska nad: <span class="math"><span class="math__bar">a</span></span></td></tr>
+</tbody></table></div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Uwaga</p>
+<div class="callout__body">
+<p class="article__p">W algebrze Boole'a „+” to <strong>OR</strong>, a nie dodawanie: <span class="math">1 + 1 = 1</span>.</p>
+</div>
+</div>
+<h3 class="article__h3">Prawa</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Prawo</th><th class="table__cell table__cell--head">Dla iloczynu</th><th class="table__cell table__cell--head">Dla sumy</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">łączność</td><td class="table__cell"><span class="math">(ab)c = a(bc)</span></td><td class="table__cell"><span class="math">(a+b)+c = a+(b+c)</span></td></tr>
+<tr class="table__row"><td class="table__cell">przemienność</td><td class="table__cell"><span class="math">ab = ba</span></td><td class="table__cell"><span class="math">a+b = b+a</span></td></tr>
+<tr class="table__row"><td class="table__cell">rozdzielność</td><td class="table__cell"><span class="math">a(b+c) = ab + ac</span></td><td class="table__cell"><span class="math">a + bc = (a+b)(a+c)</span></td></tr>
+<tr class="table__row"><td class="table__cell">absorpcja</td><td class="table__cell"><span class="math">a(a+b) = a</span></td><td class="table__cell"><span class="math">a + ab = a</span></td></tr>
+<tr class="table__row"><td class="table__cell">dopełnienie</td><td class="table__cell"><span class="math">a · <span class="math__bar">a</span> = 0</span></td><td class="table__cell"><span class="math">a + <span class="math__bar">a</span> = 1</span></td></tr>
+</tbody></table></div>
+<p class="article__p">Dwa prawa szczególnie ważne w technice cyfrowej:</p>
+<div class="formula"><span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span>  <span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span>  (prawa de Morgana)</span></div>
+<div class="formula"><span class="math">a<span class="math__bar">b</span> + ab = a  (reguła sklejania)</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">De Morgan po ludzku: „nieprawda, że (pada <strong>lub</strong> wieje)” to to samo, co „nie pada <strong>i</strong> nie wieje”. Kreskę nad całością można „przełamać” na pół, ale wtedy znak w środku zmienia się na przeciwny.</p>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Przydatne drobiazgi, których nie ma na slajdzie</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">a + 0 = a</span>,  <span class="math">a · 1 = a</span>,  <span class="math">a + 1 = 1</span>,  <span class="math">a · 0 = 0</span>,  <span class="math">a + a = a</span>,  <span class="math">a · a = a</span>,  <span class="math"><span class="math__bar"><span class="math__bar">a</span></span> = a</span> (podwójna negacja znika).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Funkcja boolowska i tabela prawdy</h2>
+<p class="article__p"><strong>Funkcja boolowska</strong> <span class="math">n</span> zmiennych przyporządkowuje każdej kombinacji zer i jedynek na wejściach jedną wartość (0 albo 1) na wyjściu: <span class="math">f: B<sup class="math__sup">n</sup> → B</span>. Jest matematycznym modelem <strong>układu kombinacyjnego</strong> — takiego, w którym wyjście zależy tylko od tego, co jest teraz na wejściach.</p>
+<p class="article__p">Każdą funkcję można zapisać <strong>tabelą prawdy</strong>. Dla <span class="math">n</span> wejść tabela ma <span class="math">2<sup class="math__sup">n</sup></span> wierszy. Przykład — funkcja XOR:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Nr wiersza</th><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">f(a,b)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">2</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<p class="article__p">Numer wiersza to liczba dziesiętna, którą tworzą bity wejść (01 = 1, 10 = 2…). Dzięki temu funkcję można podać krótko:</p>
+<ul class="list">
+<li class="list__item"><strong>zbiór jedynek:</strong> <span class="math">f<sup class="math__sup">1</sup> = {1, 2}</span> — wiersze, w których wynik to 1; zapis <span class="math">f = Σ(1, 2)</span>,</li>
+<li class="list__item"><strong>zbiór zer:</strong> <span class="math">f<sup class="math__sup">0</sup> = {0, 3}</span> — wiersze, w których wynik to 0; zapis <span class="math">f = Π(0, 3)</span>.</li>
+</ul>
+<h2 class="article__h2" id="s6">Dwie postacie kanoniczne</h2>
+<h3 class="article__h3">Postać sumacyjna (DNF) — „suma iloczynów”</h3>
+<p class="article__p">Patrzymy na wiersze z <strong>jedynką</strong>. Każdy taki wiersz daje jeden iloczyn wszystkich zmiennych: zmienna równa 0 w tym wierszu wchodzi <strong>z negacją</strong>, równa 1 — bez. Iloczyny łączymy sumą.</p>
+<p class="article__p">Dla XOR: wiersz 01 → <span class="math"><span class="math__bar">a</span>b</span>, wiersz 10 → <span class="math">a<span class="math__bar">b</span></span>:</p>
+<div class="formula"><span class="math">f(a,b) = <span class="math__bar">a</span>b + a<span class="math__bar">b</span> = Σ(1, 2)</span></div>
+<h3 class="article__h3">Postać iloczynowa (CNF) — „iloczyn sum”</h3>
+<p class="article__p">Patrzymy na wiersze z <strong>zerem</strong>. Każdy daje jedną sumę, ale tu jest <strong>odwrotnie</strong>: zmienna równa 0 wchodzi <strong>bez negacji</strong>, równa 1 — z negacją. Sumy łączymy iloczynem.</p>
+<p class="article__p">Dla XOR: wiersz 00 → <span class="math">(a + b)</span>, wiersz 11 → <span class="math">(<span class="math__bar">a</span> + <span class="math__bar">b</span>)</span>:</p>
+<div class="formula"><span class="math">f(a,b) = (a + b) · (<span class="math__bar">a</span> + <span class="math__bar">b</span>) = Π(0, 3)</span></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Jak się nie pomylić</p>
+<div class="callout__body">
+<p class="article__p">Iloczyn ma dać <strong>1</strong> dokładnie w swoim wierszu → wszystkie czynniki muszą być jedynkami → zera trzeba zanegować. Suma ma dać <strong>0</strong> dokładnie w swoim wierszu → wszystkie składniki muszą być zerami → jedynki trzeba zanegować.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Schemat logiczny</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w06-p18.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p18.webp" alt="Schemat realizujący funkcję y = (a·~b + ~a·b)·(a + ~b + c)" width="1100" height="642" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat realizujący funkcję y = (a·~b + ~a·b)·(a + ~b + c) <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Schemat pokazuje logiczną strukturę funkcji; informacja płynie od wejść (lewa strona) do wyjścia.</li>
+<li class="list__item"><strong>Kropka</strong> na przecięciu linii oznacza połączenie; przecięcie bez kropki — linie się mijają.</li>
+<li class="list__item">Ten schemat realizuje funkcję <span class="math">y = (a<span class="math__bar">b</span> + <span class="math__bar">a</span>b) · (a + <span class="math__bar">b</span> + c)</span>.</li>
+</ul>
+<h2 class="article__h2" id="s8">NAND i NOR — bramki uniwersalne</h2>
+<p class="article__p">Logika z czterema operatorami (∧, ∨, ⇒, ¬) jest nadmiarowa — część operatorów da się wyrazić przez pozostałe. Wystarczą dwa: negacja + koniunkcja albo negacja + alternatywa. A bramka <strong>NAND</strong> (lub <strong>NOR</strong>) zawiera obie naraz, więc <strong>wystarcza jeden rodzaj bramki</strong>, żeby zbudować dowolną funkcję.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p21.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p21.webp" alt="NOT, AND i OR zbudowane z samych bramek NAND" width="1100" height="709" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">NOT, AND i OR zbudowane z samych bramek NAND <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w06-p22.webp" alt="NOT, OR i AND zbudowane z samych bramek NOR" width="1100" height="656" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">NOT, OR i AND zbudowane z samych bramek NOR <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Chcę zrobić</th><th class="table__cell table__cell--head">Z bramek NAND</th><th class="table__cell table__cell--head">Z bramek NOR</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">NOT a</td><td class="table__cell"><span class="math"><span class="math__bar">a · a</span></span> — oba wejścia zwarte</td><td class="table__cell"><span class="math"><span class="math__bar">a + a</span></span> — oba wejścia zwarte</td></tr>
+<tr class="table__row"><td class="table__cell">a AND b</td><td class="table__cell">NAND, a za nim NOT: <span class="math"><span class="math__bar"><span class="math__bar">a · b</span></span></span></td><td class="table__cell">najpierw zaneguj wejścia: <span class="math"><span class="math__bar"><span class="math__bar">a</span> + <span class="math__bar">b</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">a OR b</td><td class="table__cell">najpierw zaneguj wejścia: <span class="math"><span class="math__bar"><span class="math__bar">a</span> · <span class="math__bar">b</span></span></span></td><td class="table__cell">NOR, a za nim NOT: <span class="math"><span class="math__bar"><span class="math__bar">a + b</span></span></span></td></tr>
+</tbody></table></div>
+<p class="article__p">Druga i trzecia kolumna wynikają wprost z praw de Morgana.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Zadania na ćwiczenia (ze slajdu)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Zapoznanie z programem Logisim, realizacja prostych funkcji na bramkach.</li>
+<li class="list__item">Zrealizować z dostępnych bramek zadaną funkcję (na slajdzie: <span class="math">y = a · <span class="math__bar">b</span> · c + a ⊕ b + c</span>).</li>
+<li class="list__item">Z bramek NAND zbudować NOT, AND i OR — każdą w osobnym obwodzie.</li>
+<li class="list__item">Z tych „klocków” zrealizować funkcję z punktu 2 tak, żeby schemat odzwierciedlał strukturę wzoru.</li>
+</ol>
+<p class="article__p">Krok po kroku: <a class="link" href="../labs/07.html">Ćwiczenie 7</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Poziomy logiczne</h3>
+<ul class="list">
+<li class="list__item"><strong>TTL</strong> (5 V, tranzystory bipolarne): 0 → 0–0,8 V; 1 → 2–5 V; pomiędzy — nieokreślony.</li>
+<li class="list__item"><strong>CMOS</strong> (3–18 V, pary MOS): 0 → 0–30% zasilania; 1 → 70–100%; moc tylko przy przełączaniu.</li>
+<li class="list__item"><strong>Hi-Z</strong> — trzeci stan (nic nie podłączone); ustala się go rezystorem podciągającym (pull-up).</li>
+</ul>
+<h3 class="article__h3">Bramki</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">AND</th><th class="table__cell table__cell--head table__cell--center">OR</th><th class="table__cell table__cell--head table__cell--center">XOR</th><th class="table__cell table__cell--head table__cell--center">NAND</th><th class="table__cell table__cell--head table__cell--center">NOR</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Algebra Boole'a</h3>
+<ul class="list">
+<li class="list__item"><span class="math">a + <span class="math__bar">a</span> = 1</span>,  <span class="math">a · <span class="math__bar">a</span> = 0</span>,  <span class="math">a + ab = a</span>,  <span class="math">a(a+b) = a</span></li>
+<li class="list__item"><span class="math">a(b+c) = ab + ac</span>,  <span class="math">a + bc = (a+b)(a+c)</span></li>
+<li class="list__item"><strong>De Morgan:</strong> <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span></span>,   <span class="math"><span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span></li>
+<li class="list__item"><strong>Sklejanie:</strong> <span class="math">a<span class="math__bar">b</span> + ab = a</span></li>
+</ul>
+<h3 class="article__h3">Postacie kanoniczne</h3>
+<ul class="list">
+<li class="list__item"><strong>Sumacyjna (DNF), Σ:</strong> z wierszy z <strong>1</strong>; iloczyn zmiennych, <strong>0 → negacja</strong>; iloczyny łączymy „+”.</li>
+<li class="list__item"><strong>Iloczynowa (CNF), Π:</strong> z wierszy z <strong>0</strong>; suma zmiennych, <strong>1 → negacja</strong>; sumy łączymy „·”.</li>
+<li class="list__item">Numer wiersza = wartość dziesiętna bitów wejściowych.</li>
+</ul>
+<h3 class="article__h3">Z samych NAND</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a·a</span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a·b</span></span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>·<span class="math__bar">b</span></span></span></p>
+<h3 class="article__h3">Z samych NOR</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a+a</span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a+b</span></span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>+<span class="math__bar">b</span></span></span></p>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/05.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 5: Wzmacniacze operacyjne</span></a>
+<a class="pager__link pager__link--next" href="../lectures/07.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 7: Minimalizacja funkcji boolowskich: mapy Karnaugha</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

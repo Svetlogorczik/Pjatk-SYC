@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 5. Wzmacniacze operacyjne — SYC</title>
+<meta name="description" content="Jeden trójkąt na schemacie, dwa rezystory — i mamy wzmacniacz o dokładnie takim wzmocnieniu, jakie chcemy. Do tego wtórnik, komparator, sumator i filtry aktywne.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/05.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/05.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/05.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/05.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/05.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/05.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Sprzężenie zwrotne</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Wzmacniacz operacyjny</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Podstawowe układy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Moduł laboratoryjny</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/05.html" aria-current="page"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 5</p>
+<h1 class="article__title">Wzmacniacze operacyjne</h1>
+<p class="article__lead">Jeden trójkąt na schemacie, dwa rezystory — i mamy wzmacniacz o dokładnie takim wzmocnieniu, jakie chcemy. Do tego wtórnik, komparator, sumator i filtry aktywne.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Sprzężenie zwrotne</h2>
+<p class="article__p"><strong>Sprzężenie zwrotne</strong> (<em>feedback</em>) to oddziaływanie wyjścia układu na jego własne wejście: układ dostaje informację o tym, co sam robi.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w05-p05.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p05.webp" alt="Pętla sprzężenia: blok K, a w drodze powrotnej blok β" width="1100" height="560" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pętla sprzężenia: blok K, a w drodze powrotnej blok β <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Rodzaj</th><th class="table__cell table__cell--head">Co robi</th><th class="table__cell table__cell--head">Do czego</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Ujemne</strong></td><td class="table__cell">sygnał powrotny <strong>osłabia</strong> wyjście</td><td class="table__cell">stabilizacja — tego używamy we wzmacniaczach (H. S. Black, 1927)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Dodatnie</strong></td><td class="table__cell">sygnał powrotny <strong>wzmacnia</strong> wyjście</td><td class="table__cell">samo w sobie jest destrukcyjne — układ „ucieka” do skrajnej wartości</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Dwubiegunowe</strong></td><td class="table__cell">połączenie obu</td><td class="table__cell">—</td></tr>
+</tbody></table></div>
+<p class="article__p">Dla układu z rysunku (blok <span class="math">K</span> w torze głównym, blok <span class="math">β</span> w sprzężeniu) transmitancja po zamknięciu pętli wynosi:</p>
+<div class="formula"><span class="math">T = <span class="math__frac"><span class="math__num">Out</span><span class="math__den">In</span></span> = <span class="math__frac"><span class="math__num">K</span><span class="math__den">1 − K · β</span></span></span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Tempomat w samochodzie. Auto jedzie za wolno → dodaj gazu; za szybko → odejmij. Układ cały czas patrzy na własny wynik i poprawia się w przeciwną stronę. To jest ujemne sprzężenie. Dodatnie to mikrofon przystawiony do głośnika: pisk narasta sam z siebie.</p>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Po co to komu: wzmocnienie zależy tylko od rezystorów</p>
+<div class="callout__body">
+<p class="article__p">Przy ujemnym sprzężeniu sygnał powrotny się odejmuje, więc w mianowniku jest <span class="math">1 + K·|β|</span>. Jeśli <span class="math">K</span> jest ogromne (a we wzmacniaczu operacyjnym jest — setki tysięcy), jedynka przestaje się liczyć i zostaje <span class="math">T ≈ <span class="math__frac"><span class="math__num">1</span><span class="math__den">|β|</span></span></span>. Czyli <strong>wzmocnienie całego układu zależy wyłącznie od elementów sprzężenia</strong> (dwóch rezystorów), a nie od samego wzmacniacza. Dlatego wzory poniżej zawierają tylko <span class="math">R<sub class="math__sub">1</sub></span> i <span class="math">R<sub class="math__sub">2</sub></span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Wzmacniacz operacyjny</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p07.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p07.webp" alt="Symbol wzmacniacza operacyjnego: dwa wejścia, wyjście, zasilanie +Vs i −Vs" width="782" height="690" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Symbol wzmacniacza operacyjnego: dwa wejścia, wyjście, zasilanie +Vs i −Vs <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong>Wzmacniacz operacyjny</strong> to wielostopniowy wzmacniacz <strong>różnicowy</strong> prądu stałego o bardzo dużym wzmocnieniu. Ma:</p>
+<ul class="list">
+<li class="list__item">wejście <strong>nieodwracające</strong> „+” (<span class="math">V<sub class="math__sub">+</sub></span>),</li>
+<li class="list__item">wejście <strong>odwracające</strong> „−” (<span class="math">V<sub class="math__sub">−</sub></span>),</li>
+<li class="list__item">jedno wyjście,</li>
+<li class="list__item">dwa zasilania: dodatnie <span class="math">+V<sub class="math__sub">S</sub></span> i ujemne <span class="math">−V<sub class="math__sub">S</sub></span>.</li>
+</ul>
+<p class="article__p">Wzmacnia <strong>tylko różnicę</strong> napięć między wejściami:</p>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = k<sub class="math__sub">otwartej pętli</sub> · (V<sub class="math__sub">+</sub> − V<sub class="math__sub">−</sub>)</span></div>
+<p class="article__p">Samo w sobie takie wzmocnienie jest bezużytecznie wielkie — dopiero pętla sprzężenia zwrotnego nadaje układowi pożądane właściwości.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Skąd nazwa</p>
+<div class="callout__body">
+<p class="article__p">Wzmacniacz projektowano do modelowania <strong>operacji</strong> matematycznych (dodawanie, odejmowanie, całkowanie, różniczkowanie) w komputerach analogowych. Pierwszy scalony: µA709 (1965), szybko zastąpiony przez model <strong>741</strong>, produkowany do dziś.</p>
+</div>
+</div>
+<h3 class="article__h3">Ideał kontra rzeczywistość</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Parametr</th><th class="table__cell table__cell--head">Idealny</th><th class="table__cell table__cell--head">Rzeczywisty (µA741)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Wzmocnienie w otwartej pętli</td><td class="table__cell">nieskończone</td><td class="table__cell">10⁵–10⁷ (741: 2·10⁵)</td></tr>
+<tr class="table__row"><td class="table__cell">Impedancja wejściowa</td><td class="table__cell">nieskończona</td><td class="table__cell">kilka MΩ (741: 2 MΩ)</td></tr>
+<tr class="table__row"><td class="table__cell">Impedancja wyjściowa</td><td class="table__cell">zero</td><td class="table__cell">ok. 100 Ω (741: 75 Ω)</td></tr>
+<tr class="table__row"><td class="table__cell">Prąd wejściowy</td><td class="table__cell">zero</td><td class="table__cell">ok. 10 nA (bipolarne), pA (CMOS)</td></tr>
+<tr class="table__row"><td class="table__cell">Napięcie niezrównoważenia (<em>offset</em>)</td><td class="table__cell">zero</td><td class="table__cell">ok. 1 mV</td></tr>
+<tr class="table__row"><td class="table__cell">Pasmo przenoszenia</td><td class="table__cell">nieskończone</td><td class="table__cell">ograniczone</td></tr>
+<tr class="table__row"><td class="table__cell">Szybkość narastania (<em>slew rate</em>)</td><td class="table__cell">nieskończona</td><td class="table__cell">rzędu V/µs</td></tr>
+<tr class="table__row"><td class="table__cell">Szumy</td><td class="table__cell">brak</td><td class="table__cell">są</td></tr>
+</tbody></table></div>
+<p class="article__p">Inne niedoskonałości: tłumienie sygnału wspólnego nie jest idealne (współczynnik <strong>CMRR</strong>), parametry zmieniają się z temperaturą, pojemność wejściowa ogranicza pasmo.</p>
+<p class="article__p">Dopóki opis idealny wystarcza, wzmacniacz można traktować jak <strong>czarną skrzynkę o bardzo dużym wzmocnieniu</strong>. Wzmacniacze na tranzystorach FET/MOSFET są bliższe ideału niż starsze bipolarne.</p>
+<p class="article__p"><strong>Napięcie niezrównoważenia</strong> to małe napięcie na wyjściu, które pojawia się nawet wtedy, gdy oba wejścia są zwarte do masy — skutek braku idealnej symetrii stopnia wejściowego. Mierzy się je na <a class="link" href="../labs/06.html">ćwiczeniu 6</a>.</p>
+<h3 class="article__h3">Budowa wewnętrzna</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w05-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p12.webp" alt="Trzy stopnie: wzmacniacz różnicowy → wzmacniacz napięcia → stopień końcowy" width="1100" height="139" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Trzy stopnie: wzmacniacz różnicowy → wzmacniacz napięcia → stopień końcowy <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Wzmacniacz różnicowy</strong> — wzmacnia różnicę, daje małe szumy i dużą impedancję wejściową.</li>
+<li class="list__item"><strong>Wzmacniacz napięcia</strong> — daje duże wzmocnienie (i niestety ogranicza pasmo).</li>
+<li class="list__item"><strong>Stopień wyjściowy</strong> — daje małą impedancję wyjściową, ogranicza prąd, chroni przed zwarciem.</li>
+</ol>
+<h3 class="article__h3">Dwie nieliniowości</h3>
+<ul class="list">
+<li class="list__item"><strong>Nasycenie</strong> — napięcie wyjściowe nie może wyjść poza napięcia zasilania. Jeśli z obliczeń wychodzi 30 V, a zasilanie to ±12 V, na wyjściu będzie ok. 12 V i „obcięty” sygnał.</li>
+<li class="list__item"><strong>Slew rate</strong> — wyjście nie może zmieniać się dowolnie szybko (rzędu woltów na mikrosekundę).</li>
+</ul>
+<h3 class="article__h3">Pasmo za wzmocnienie</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w05-p16.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p16.webp" alt="Pole S₁ = S₂: większe wzmocnienie oznacza węższe pasmo" width="1100" height="368" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pole S₁ = S₂: większe wzmocnienie oznacza węższe pasmo <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Iloczyn pasma i wzmocnienia jest stały: <span class="math">f<sub class="math__sub">3dB</sub> · k<sub class="math__sub">max</sub> = const</span>. Chcesz większe wzmocnienie — dostaniesz węższe pasmo, i odwrotnie.</p>
+<h2 class="article__h2" id="s3">Podstawowe układy</h2>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Dwie „złote zasady” do analizy (przy ujemnym sprzężeniu)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Do wejść wzmacniacza <strong>nie wpływa prąd</strong> (impedancja wejściowa ≈ ∞).</li>
+<li class="list__item">Wzmacniacz ustawia wyjście tak, żeby <strong>napięcia na obu wejściach były równe</strong> (<span class="math">V<sub class="math__sub">+</sub> = V<sub class="math__sub">−</sub></span>).</li>
+</ol>
+<p class="article__p">Z tych dwóch zasad i prawa Ohma da się wyprowadzić każdy wzór z tej sekcji. Nie dotyczą komparatora — tam sprzężenia nie ma.</p>
+</div>
+</div>
+<h3 class="article__h3">Wzmacniacz odwracający</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p18.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p18.webp" alt="Wzmacniacz odwracający: sygnał przez R₁ na wejście „−”, R₂ w sprzężeniu" width="1002" height="619" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wzmacniacz odwracający: sygnał przez R₁ na wejście „−”, R₂ w sprzężeniu <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> · V<sub class="math__sub">in</sub>  Z<sub class="math__sub">in</sub> = R<sub class="math__sub">1</sub></span></div>
+<p class="article__p">Wzmacnia i <strong>odwraca</strong> sygnał (minus = przesunięcie fazy o 180°: gdy wejście idzie w górę, wyjście idzie w dół).</p>
+<h3 class="article__h3">Wzmacniacz nieodwracający</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p19.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p19.webp" alt="Wzmacniacz nieodwracający: sygnał na wejście „+”, dzielnik R₁–R₂ w sprzężeniu" width="1060" height="556" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wzmacniacz nieodwracający: sygnał na wejście „+”, dzielnik R₁–R₂ w sprzężeniu <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = (1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>) · V<sub class="math__sub">in</sub>  Z<sub class="math__sub">in</sub> ≈ ∞</span></div>
+<p class="article__p">Wzmacnia bez odwracania; wzmocnienie jest zawsze <strong>większe od 1</strong>. Impedancja wejściowa jest ogromna (1 MΩ do 10 TΩ).</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Przykład własny: R₁ = 2,2 kΩ, R₂ = 10 kΩ</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">odwracający: <span class="math">k = −<span class="math__frac"><span class="math__num">10</span><span class="math__den">2,2</span></span> = −4,55</span> → z sinusa 0,4 V<sub>pp</sub> robi się 1,82 V<sub>pp</sub>, odwrócony;</li>
+<li class="list__item">nieodwracający: <span class="math">k = 1 + <span class="math__frac"><span class="math__num">10</span><span class="math__den">2,2</span></span> = 5,55</span> → z 0,4 V<sub>pp</sub> robi się 2,22 V<sub>pp</sub>, w fazie.</li>
+</ul>
+<p class="article__p">Te same dwa rezystory dają w układzie nieodwracającym wzmocnienie większe dokładnie o 1.</p>
+</div>
+</div>
+<h3 class="article__h3">Wtórnik napięciowy</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p20.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p20.webp" alt="Wtórnik: wyjście połączone wprost z wejściem „−”" width="1058" height="439" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wtórnik: wyjście połączone wprost z wejściem „−” <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = V<sub class="math__sub">in</sub></span></div>
+<p class="article__p">Wzmocnienie równe 1 — po co? Bo ma bardzo dużą impedancję wejściową i bardzo małą wyjściową (ok. 100 Ω). Wstawiony między dwa układy sprawia, że drugi <strong>nie obciąża</strong> pierwszego (np. miernik nie „psuje” tego, co mierzy).</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Na slajdzie układ jest podpisany „wtórnik emiterowy (impedancyjny)”. W sprawozdaniu z ćwiczeń nazywa się <strong>wtórnikiem napięciowym</strong> — i tej nazwy używam.</p>
+</div>
+</div>
+<h3 class="article__h3">Komparator</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p21.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p21.webp" alt="Komparator: wzmacniacz bez sprzężenia zwrotnego" width="1002" height="368" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Komparator: wzmacniacz bez sprzężenia zwrotnego <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Bez sprzężenia wzmacniacz od razu wpada w nasycenie i działa jak <strong>porównywarka</strong> dwóch napięć. Na wyjściu jest albo dodatnie, albo ujemne napięcie zasilania:</p>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = +V<sub class="math__sub">c</sub>  gdy  V<sub class="math__sub">1</sub> &lt; V<sub class="math__sub">2</sub>  V<sub class="math__sub">out</sub> = −V<sub class="math__sub">c</sub>  gdy  V<sub class="math__sub">1</sub> &gt; V<sub class="math__sub">2</sub></span></div>
+<p class="article__p">(<span class="math">V<sub class="math__sub">1</sub></span> — wejście „−”, <span class="math">V<sub class="math__sub">2</sub></span> — wejście „+”.) Krótko: <strong>wyższe napięcie na „+” → wyjście na plusie</strong>.</p>
+<h3 class="article__h3">Wzmacniacz różnicowy</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p17.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p17.webp" alt="Wzmacniacz różnicowy z czterema rezystorami" width="1002" height="749" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wzmacniacz różnicowy z czterema rezystorami <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Wzmacnia różnicę <span class="math">V<sub class="math__sub">2</sub> − V<sub class="math__sub">1</sub></span>. Gdy <span class="math">R<sub class="math__sub">1</sub> = R<sub class="math__sub">2</sub></span> oraz <span class="math">R<sub class="math__sub">f</sub> = R<sub class="math__sub">g</sub></span>:</p>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">f</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> · (V<sub class="math__sub">2</sub> − V<sub class="math__sub">1</sub>)</span></div>
+<h3 class="article__h3">Sumator</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w05-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p22.webp" alt="Sumator: kilka wejść, każde przez własny rezystor" width="1100" height="641" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sumator: kilka wejść, każde przez własny rezystor <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = −R<sub class="math__sub">f</sub> · ( <span class="math__frac"><span class="math__num">V<sub class="math__sub">1</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> + <span class="math__frac"><span class="math__num">V<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">2</sub></span></span> + … + <span class="math__frac"><span class="math__num">V<sub class="math__sub">n</sub></span><span class="math__den">R<sub class="math__sub">n</sub></span></span> )</span></div>
+<p class="article__p">Suma ważona: im mniejszy rezystor wejściowy, tym większa „waga” danego napięcia. Przy jednakowych rezystorach: <span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">f</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>(V<sub class="math__sub">1</sub> + V<sub class="math__sub">2</sub> + … + V<sub class="math__sub">n</sub>)</span>. Na sumatorze opiera się przetwornik cyfrowo-analogowy z <a class="link" href="../lectures/13.html">wykładu 13</a>.</p>
+<h3 class="article__h3">Układ całkujący i różniczkujący</h3>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w05-p23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p23.webp" alt="Integrator: kondensator w sprzężeniu" width="1100" height="642" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Integrator: kondensator w sprzężeniu <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w05-p24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p24.webp" alt="Układ różniczkujący: kondensator na wejściu" width="1100" height="625" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Układ różniczkujący: kondensator na wejściu <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">1</span><span class="math__den">RC</span></span> ∫ V<sub class="math__sub">in</sub> dt + V<sub class="math__sub">pocz</sub>  V<sub class="math__sub">out</sub> = −RC · <span class="math__frac"><span class="math__num">dV<sub class="math__sub">in</sub></span><span class="math__den">dt</span></span></span></div>
+<h3 class="article__h3">Filtry aktywne</h3>
+<p class="article__p"><strong>Filtr aktywny</strong> zawiera co najmniej jeden element aktywny (np. wzmacniacz operacyjny). Może jednocześnie filtrować i wzmacniać.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w05-p25.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p25.webp" alt="Aktywny filtr dolnoprzepustowy: kondensator C₂ równolegle do R₂" width="1016" height="975" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Aktywny filtr dolnoprzepustowy: kondensator C₂ równolegle do R₂ <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w05-p26.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p26.webp" alt="Aktywny filtr górnoprzepustowy: kondensator C₁ szeregowo z R₁" width="1100" height="616" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Aktywny filtr górnoprzepustowy: kondensator C₁ szeregowo z R₁ <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">T<sub class="math__sub">dolno</sub>(s) = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> · <span class="math__frac"><span class="math__num">1</span><span class="math__den">1 + sC<sub class="math__sub">2</sub>R<sub class="math__sub">2</sub></span></span>  T<sub class="math__sub">górno</sub>(s) = −<span class="math__frac"><span class="math__num">sC<sub class="math__sub">1</sub>R<sub class="math__sub">2</sub></span><span class="math__den">1 + sC<sub class="math__sub">1</sub>R<sub class="math__sub">1</sub></span></span></span></div>
+<p class="article__p">Minus oznacza odwrócenie fazy o 180°.</p>
+<h2 class="article__h2" id="s4">Moduł laboratoryjny</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w05-p27.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w05-p27.webp" alt="Płytka ze wzmacniaczem i zworkami J1–J5" width="1100" height="783" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Płytka ze wzmacniaczem i zworkami J1–J5 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Na ćwiczeniach używa się gotowej płytki ze wzmacniaczem. Zworki <strong>J1–J5</strong> (zwarte, otwarte albo z wpiętym rezystorem) decydują, który z powyższych układów powstanie. Szczegóły: <a class="link" href="../labs/06.html">Ćwiczenie 6</a>.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Wzmacniacz operacyjny</h3>
+<ul class="list">
+<li class="list__item">Wzmacnia różnicę: <span class="math">V<sub class="math__sub">out</sub> = k · (V<sub class="math__sub">+</sub> − V<sub class="math__sub">−</sub>)</span>, <span class="math">k</span> ogromne (10⁵…10⁷).</li>
+<li class="list__item">Ideał: <span class="math">k = ∞</span>, <span class="math">Z<sub class="math__sub">in</sub> = ∞</span>, <span class="math">Z<sub class="math__sub">out</sub> = 0</span>, prąd wejściowy 0, offset 0.</li>
+<li class="list__item">Wyjście nie wyjdzie poza zasilanie (<strong>nasycenie</strong>). Pasmo × wzmocnienie = const.</li>
+<li class="list__item"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Przy ujemnym sprzężeniu: do wejść nie płynie prąd oraz <span class="math">V<sub class="math__sub">+</sub> = V<sub class="math__sub">−</sub></span>.</li>
+</ul>
+<h3 class="article__h3">Układy</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Układ</th><th class="table__cell table__cell--head">Wzór</th><th class="table__cell table__cell--head">Uwagi</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Odwracający</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> V<sub class="math__sub">in</sub></span></td><td class="table__cell">faza odwrócona o 180°; <span class="math">Z<sub class="math__sub">in</sub> = R<sub class="math__sub">1</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Nieodwracający</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = (1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>) V<sub class="math__sub">in</sub></span></td><td class="table__cell">k > 1; <span class="math">Z<sub class="math__sub">in</sub> ≈ ∞</span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Wtórnik</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = V<sub class="math__sub">in</sub></span></td><td class="table__cell">separuje układy (duże <span class="math">Z<sub class="math__sub">in</sub></span>, małe <span class="math">Z<sub class="math__sub">out</sub></span>)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Komparator</strong></td><td class="table__cell"><span class="math">+V<sub class="math__sub">c</sub></span> gdy <span class="math">V<sub class="math__sub">+</sub> &gt; V<sub class="math__sub">−</sub></span>, inaczej <span class="math">−V<sub class="math__sub">c</sub></span></td><td class="table__cell">bez sprzężenia</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Różnicowy</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">f</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>(V<sub class="math__sub">2</sub> − V<sub class="math__sub">1</sub>)</span></td><td class="table__cell">gdy <span class="math">R<sub class="math__sub">1</sub>=R<sub class="math__sub">2</sub></span>, <span class="math">R<sub class="math__sub">f</sub>=R<sub class="math__sub">g</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Sumator</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −R<sub class="math__sub">f</sub>(<span class="math__frac"><span class="math__num">V<sub class="math__sub">1</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> + <span class="math__frac"><span class="math__num">V<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">2</sub></span></span> + …)</span></td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Całkujący</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">1</span><span class="math__den">RC</span></span> ∫ V<sub class="math__sub">in</sub> dt</span></td><td class="table__cell">C w sprzężeniu</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Różniczkujący</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −RC <span class="math__frac"><span class="math__num">dV<sub class="math__sub">in</sub></span><span class="math__den">dt</span></span></span></td><td class="table__cell">C na wejściu</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Sprzężenie zwrotne</h3>
+<ul class="list">
+<li class="list__item">Ujemne — stabilizuje (używane we wzmacniaczach). Dodatnie — destabilizuje.</li>
+<li class="list__item">Układ zamknięty: <span class="math">T = <span class="math__frac"><span class="math__num">K</span><span class="math__den">1 − Kβ</span></span></span>.</li>
+<li class="list__item">R₂ to zawsze rezystor <strong>w sprzężeniu</strong> (między wyjściem a wejściem „−”).</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/04.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 4: Półprzewodniki: diody i tranzystory</span></a>
+<a class="pager__link pager__link--next" href="../lectures/06.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 6: Układy cyfrowe — wprowadzenie: sygnały, bramki, algebra Boole'a</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

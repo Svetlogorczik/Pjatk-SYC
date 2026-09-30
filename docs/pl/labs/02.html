@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 2. Pomiary napięć i prądów — SYC</title>
+<meta name="description" content="Pierwsze punktowane zajęcia (5 pkt). Mierzysz napięcie, opór i prąd — miernikiem cyfrowym, oscyloskopem i amperomierzem wskazówkowym — i do każdego wyniku liczysz błąd.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/02.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/02.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/02.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/02.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/02.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/02.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co trzeba umieć przed zajęciami</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Dane przyrządów</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Zadanie 1.1 — napięcie stałe, miernik cyfrowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Zadanie 1.2 — napięcie stałe, oscyloskop</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Zadanie 2 — rezystancja</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Zadanie 3.1 — prąd stały, metoda bezpośrednia (przyrząd analogowy)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Zadanie 3.2 — prąd stały, metoda pośrednia (przyrząd cyfrowy)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Zadanie 4 — parametry sygnału zmiennego</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Zadania treningowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/02.html" aria-current="page"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 2</p>
+<h1 class="article__title">Pomiary napięć i prądów</h1>
+<p class="article__lead">Pierwsze punktowane zajęcia (5 pkt). Mierzysz napięcie, opór i prąd — miernikiem cyfrowym, oscyloskopem i amperomierzem wskazówkowym — i do każdego wyniku liczysz błąd.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/01.html">Wykład do tego ćwiczenia: Wykład 1 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co trzeba umieć przed zajęciami</h2>
+<ul class="list">
+<li class="list__item">Wzory na błąd przyrządu cyfrowego i analogowego oraz metodę max–min — <a class="link" href="../lectures/01.html">wykład 1</a> (otwórz tam <strong>Krótki konspekt</strong>).</li>
+<li class="list__item">Obsługę multimetru i oscyloskopu — <a class="link" href="../labs/01.html">ćwiczenie 1</a>.</li>
+<li class="list__item">Weź <strong>kalkulator</strong>.</li>
+</ul>
+<p class="article__p">Na zajęciach dostajesz dwustronny formularz sprawozdania z czterema zadaniami. Wypełniasz go na miejscu, w parze.</p>
+<h2 class="article__h2" id="s2">Dane przyrządów</h2>
+<p class="article__p">Bez tych liczb nie policzysz żadnego błędu. Na zajęciach są w instrukcji miernika i w formularzu.</p>
+<h3 class="article__h3">Multimetr cyfrowy DT9208A</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-dmm-spec.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-dmm-spec.webp" alt="Fragment instrukcji: dokładność serii DT92xx (DT9208A to kolumna „08A”)" width="1300" height="918" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Fragment instrukcji: dokładność serii DT92xx (DT9208A to kolumna „08A”) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Wielkość</th><th class="table__cell table__cell--head">Zakres</th><th class="table__cell table__cell--head">Rozdzielczość (1 cyfra)</th><th class="table__cell table__cell--head">Dokładność</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Napięcie stałe</td><td class="table__cell">200 mV</td><td class="table__cell">0,1 mV</td><td class="table__cell">±(0,5% + 3d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 V</td><td class="table__cell">0,001 V</td><td class="table__cell">±(0,8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">20 V</td><td class="table__cell">0,01 V</td><td class="table__cell">±(0,8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 V</td><td class="table__cell">0,1 V</td><td class="table__cell">±(0,8% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">1000 V</td><td class="table__cell">1 V</td><td class="table__cell">±(1,0% + 2d)</td></tr>
+<tr class="table__row"><td class="table__cell">Rezystancja</td><td class="table__cell">200 Ω</td><td class="table__cell">0,1 Ω</td><td class="table__cell">±(1,0% + 10d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 kΩ</td><td class="table__cell">0,001 kΩ</td><td class="table__cell">±(1,0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">20 kΩ</td><td class="table__cell">0,01 kΩ</td><td class="table__cell">±(1,0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 kΩ</td><td class="table__cell">0,1 kΩ</td><td class="table__cell">±(1,0% + 4d)</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 MΩ</td><td class="table__cell">0,001 MΩ</td><td class="table__cell">±(1,0% + 4d)</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Kolumnę „rozdzielczość” dopisałem sam: miernik ma wyświetlacz 3½ cyfry (największe wskazanie 1999), więc ostatnia cyfra na zakresie 2 V to 0,001 V, na 20 V — 0,01 V itd. <strong>Zawsze sprawdź na swoim mierniku, gdzie stoi kropka.</strong></p>
+<h3 class="article__h3">Przyrządy analogowe</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Przyrząd</th><th class="table__cell table__cell--head table__cell--center">Klasa</th><th class="table__cell table__cell--head">Zakres</th><th class="table__cell table__cell--head">Błąd odczytu</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Oscyloskop</td><td class="table__cell table__cell--center">2</td><td class="table__cell">czułość × <strong>8 działek</strong></td><td class="table__cell">nie większy niż 0,1 działki</td></tr>
+<tr class="table__row"><td class="table__cell">Amperomierz w zasilaczu</td><td class="table__cell table__cell--center">2,5</td><td class="table__cell">2 A</td><td class="table__cell">w przykładzie z zajęć: 0,025 A</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s3">Zadanie 1.1 — napięcie stałe, miernik cyfrowy</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Czarny przewód miernika do gniazda <strong>COM</strong>, czerwony do <strong>VΩ</strong>.</li>
+<li class="steps__item">Pokrętło na napięcie stałe (V⎓), na początek zakres <strong>20 V</strong>.</li>
+<li class="steps__item">Ustaw na zasilaczu pierwszą wartość napięcia (na zajęciach: 5 V, potem 15 V).</li>
+<li class="steps__item">Przyłóż końcówki do zacisków zasilacza: czerwona do (+), czarna do (−).</li>
+<li class="steps__item">Jeśli wynik zmieściłby się na niższym zakresie — <strong>przełącz na niższy</strong> (np. 1,1 V mierz na zakresie 2 V). Jeśli pojawia się „1” — wróć na wyższy.</li>
+<li class="steps__item">Zapisz: <strong>napięcie, zakres</strong>, a potem policz błąd bezwzględny i względny.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t11a.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t11a.webp" alt="Zasilacz ustawiony na 1,0 V; miernik na zakresie 2 V pokazuje 1,110 V" width="1300" height="1167" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Zasilacz ustawiony na 1,0 V; miernik na zakresie 2 V pokazuje 1,110 V <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t11b.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t11b.webp" alt="Zasilacz ustawiony na 10,0 V; miernik na zakresie 20 V pokazuje 9,90 V" width="1300" height="1277" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Zasilacz ustawiony na 10,0 V; miernik na zakresie 20 V pokazuje 9,90 V <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład — wartości ze zdjęć powyżej</p>
+<div class="callout__body">
+<p class="article__p"><strong>1,110 V na zakresie 2 V</strong> (rozdzielczość 0,001 V, dokładność 0,8% + 2d):</p>
+<p class="article__p"><span class="math">ΔU = 0,8% · 1,110 + 2 · 0,001 = 0,0089 + 0,002 = 0,0109 ≈ 0,011 V</span></p>
+<p class="article__p"><span class="math">δ = <span class="math__frac"><span class="math__num">0,0109</span><span class="math__den">1,110</span></span> · 100% = 0,98%</span>   →   <strong>U = 1,110 ± 0,011 V</strong></p>
+<p class="article__p"><strong>9,90 V na zakresie 20 V</strong> (rozdzielczość 0,01 V):</p>
+<p class="article__p"><span class="math">ΔU = 0,8% · 9,90 + 2 · 0,01 = 0,079 + 0,02 = 0,099 ≈ 0,10 V</span></p>
+<p class="article__p"><span class="math">δ = <span class="math__frac"><span class="math__num">0,099</span><span class="math__den">9,90</span></span> · 100% = 1,0%</span>   →   <strong>U = 9,90 ± 0,10 V</strong></p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Jak zaokrąglać (z wykładu 1)</p>
+<div class="callout__body">
+<p class="article__p">Błąd zaokrąglamy do <strong>tylu miejsc po przecinku, ile ma wynik pomiaru</strong> — dalsze cyfry to już „chaos”. Zaokrąglamy, a nie obcinamy.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Zadanie 1.2 — napięcie stałe, oscyloskop</h2>
+<p class="article__p">Oscyloskop traktujemy tu jak woltomierz wskazówkowy: napięcie stałe przesuwa poziomą linię w górę.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Kabel z CH1 oscyloskopu podłącz do zasilacza (masa do „−”).</li>
+<li class="steps__item">Przełącznik wejścia na <strong>GND</strong> — ustaw linię pokrętłem POSITION na dolnej (albo środkowej) kresce. To jest 0 V.</li>
+<li class="steps__item">Przełącz na <strong>DC</strong>. Linia podskoczy w górę.</li>
+<li class="steps__item">Dobierz <strong>VOLTS/DIV</strong> tak, żeby linia była jak najwyżej, ale jeszcze na ekranie.</li>
+<li class="steps__item">Policz, o ile działek linia się podniosła (z dokładnością do 0,1 działki).</li>
+<li class="steps__item">Zapisz: <strong>liczbę działek, czułość</strong>, i policz napięcie, zakres i błędy.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t12a.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t12a.webp" alt="Krok 2: linia zerowa ustawiona na dole ekranu (wejście na GND)" width="1300" height="796" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Krok 2: linia zerowa ustawiona na dole ekranu (wejście na GND) <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t12b.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t12b.webp" alt="Krok 3–5: po przełączeniu na DC linia podniosła się o 5 działek" width="1300" height="1217" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Krok 3–5: po przełączeniu na DC linia podniosła się o 5 działek <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-p15.webp" alt="Slajd z zajęć: które pokrętła i przełączniki są potrzebne" width="1400" height="832" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slajd z zajęć: które pokrętła i przełączniki są potrzebne <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Wzory dla oscyloskopu:</p>
+<div class="formula"><span class="math">U = działki · czułość  zakres = 8 · czułość</span></div>
+<div class="formula"><span class="math">ΔU = <span class="math__frac"><span class="math__num">kl · zakres</span><span class="math__den">100</span></span> + 0,1 · czułość</span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z materiałów do ćwiczeń</p>
+<div class="callout__body">
+<p class="article__p">Czułość 0,5 V/dz → zakres <span class="math">0,5 · 8 = 4 V</span>. Błąd podstawowy: <span class="math"><span class="math__frac"><span class="math__num">2 · 4</span><span class="math__den">100</span></span> = 0,08 V</span>. Błąd odczytu: <span class="math">0,1 · 0,5 = 0,05 V</span>. Błąd całkowity: <span class="math">0,08 + 0,05 = 0,13 V</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Zadanie 2 — rezystancja</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Rezystor <strong>wyjmij z układu</strong> (mierzymy go „luzem”).</li>
+<li class="steps__item">Czerwony przewód w <strong>VΩ</strong>, pokrętło na Ω.</li>
+<li class="steps__item">Przyłóż końcówki do nóżek rezystora (kierunek nie ma znaczenia).</li>
+<li class="steps__item">Wybierz <strong>najmniejszy zakres, na którym nie pojawia się „1”</strong>.</li>
+<li class="steps__item">Zapisz wartość i zakres; policz ΔR i δ. Powtórz dla R1–R4.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p17.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-p17.webp" alt="Slajd z zajęć: rezystory 10 Ω i 1 kΩ, miernik pokazuje 11,2 Ω i 1,310 kΩ" width="1400" height="788" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slajd z zajęć: rezystory 10 Ω i 1 kΩ, miernik pokazuje 11,2 Ω i 1,310 kΩ <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład — wartości ze slajdu</p>
+<div class="callout__body">
+<p class="article__p"><strong>11,2 Ω na zakresie 200 Ω</strong> (rozdzielczość 0,1 Ω, dokładność 1% + 10d):</p>
+<p class="article__p"><span class="math">ΔR = 1% · 11,2 + 10 · 0,1 = 0,112 + 1,0 ≈ 1,1 Ω</span>,   <span class="math">δ = 9,9%</span></p>
+<p class="article__p"><strong>1,310 kΩ na zakresie 2 kΩ</strong> (rozdzielczość 0,001 kΩ, dokładność 1% + 4d):</p>
+<p class="article__p"><span class="math">ΔR = 1% · 1,310 + 4 · 0,001 = 0,0131 + 0,004 ≈ 0,017 kΩ</span>,   <span class="math">δ = 1,3%</span></p>
+<p class="article__p">Widać, że na zakresie 200 Ω człon „10 cyfr” (czyli aż 1 Ω) psuje dokładność pomiaru małych rezystancji.</p>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Kod paskowy rezystorów</p>
+<div class="callout__body">
+<p class="article__p">Na slajdzie widać paski rezystorów. Dwa pierwsze paski to cyfry, trzeci to mnożnik (liczba zer), ostatni to tolerancja (złoty = 5%).</p>
+<p class="article__p">czarny 0 · brązowy 1 · czerwony 2 · pomarańczowy 3 · żółty 4 · zielony 5 · niebieski 6 · fioletowy 7 · szary 8 · biały 9</p>
+<p class="article__p">Brązowy–czarny–czarny = 10 Ω; brązowy–czarny–czerwony = 10 i dwa zera = 1 kΩ. Wartość zmierzona może różnić się od nominalnej o tolerancję — to normalne.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Zadanie 3.1 — prąd stały, metoda bezpośrednia (przyrząd analogowy)</h2>
+<p class="article__p">Do zasilacza podłączony jest rezystor mocy 4 Ω. Prąd odczytujesz ze <strong>wskaźnika wskazówkowego zasilacza</strong>.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Podłącz rezystor 4 Ω do zacisków zasilacza.</li>
+<li class="steps__item">Ustaw napięcie <strong>2 V</strong>.</li>
+<li class="steps__item">Odczytaj położenie wskazówki na skali 0–2 A (patrz prosto, nie z boku).</li>
+<li class="steps__item">Policz błąd: klasa 2,5, zakres 2 A, plus błąd odczytu.</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab02-p19.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-p19.webp" alt="Slajd z zajęć: rezystor 4 Ω na zasilaczu, wskazówka pokazuje ok. 0,475 A" width="1360" height="900" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Slajd z zajęć: rezystor 4 Ω na zasilaczu, wskazówka pokazuje ok. 0,475 A <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z materiałów do ćwiczeń</p>
+<div class="callout__body">
+<p class="article__p">Błąd podstawowy: <span class="math"><span class="math__frac"><span class="math__num">2,5 · 2,0</span><span class="math__den">100</span></span> = 0,05 A</span>. Błąd odczytu: <span class="math">0,025 A</span>. Razem: <span class="math">ΔI = 0,075 A</span>.</p>
+<p class="article__p">Dla odczytu 0,475 A: <span class="math">δ = <span class="math__frac"><span class="math__num">0,075</span><span class="math__den">0,475</span></span> · 100% ≈ 16%</span>. Błąd jest duży, bo wskazówka jest na początku skali — z prawa Ohma spodziewamy się <span class="math">2 V / 4 Ω = 0,5 A</span>, czyli ćwierci zakresu.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Zadanie 3.2 — prąd stały, metoda pośrednia (przyrząd cyfrowy)</h2>
+<p class="article__p">Ten sam prąd, ale policzony z prawa Ohma: mierzysz <strong>U</strong> i <strong>R</strong> miernikiem cyfrowym, a błąd liczysz metodą max–min.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Przy podłączonym rezystorze zmierz miernikiem <strong>napięcie</strong> na zaciskach zasilacza. Zapisz U i zakres, policz ΔU.</li>
+<li class="steps__item"><strong>Odłącz rezystor od zasilacza</strong> i zmierz jego <strong>rezystancję</strong>. Zapisz R i zakres, policz ΔR.</li>
+<li class="steps__item">Policz <span class="math">I<sub class="math__sub">min</sub></span>, <span class="math">I<sub class="math__sub">max</sub></span>, a z nich <span class="math">I</span> i <span class="math">ΔI</span>.</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t32a.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t32a.webp" alt="Pomiar napięcia: 2,00 V na zakresie 20 V" width="900" height="912" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pomiar napięcia: 2,00 V na zakresie 20 V <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t32b.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t32b.webp" alt="Pomiar rezystancji odłączonego rezystora: 3,9 Ω na zakresie 200 Ω" width="900" height="1950" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pomiar rezystancji odłączonego rezystora: 3,9 Ω na zakresie 200 Ω <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U − ΔU</span><span class="math__den">R + ΔR</span></span>  I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U + ΔU</span><span class="math__den">R − ΔR</span></span>  I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub> + I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span>  ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> − I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład — wartości ze zdjęć</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">U = 2,00 V</span> (zakres 20 V):  <span class="math">ΔU = 0,8% · 2,00 + 2 · 0,01 = 0,036 V</span></p>
+<p class="article__p"><span class="math">R = 3,9 Ω</span> (zakres 200 Ω):  <span class="math">ΔR = 1% · 3,9 + 10 · 0,1 = 1,04 ≈ 1,0 Ω</span></p>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">2,00 − 0,036</span><span class="math__den">3,9 + 1,0</span></span> = 0,401 A</span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">2,00 + 0,036</span><span class="math__den">3,9 − 1,0</span></span> = 0,702 A</span></p>
+<p class="article__p"><span class="math">I = <span class="math__frac"><span class="math__num">0,401 + 0,702</span><span class="math__den">2</span></span> = 0,55 A</span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">0,702 − 0,401</span><span class="math__den">2</span></span> = 0,15 A</span></p>
+<p class="article__p"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Wniosek: metoda pośrednia wyszła <strong>gorzej</strong> niż bezpośrednia, bo opór 3,9 Ω zmierzony na zakresie 200 Ω ma błąd aż 1 Ω. To dobre zdanie do sprawozdania.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s8">Zadanie 4 — parametry sygnału zmiennego</h2>
+<p class="article__p">Z generatora podajesz sinus i mierzysz oscyloskopem <strong>okres</strong> oraz <strong>napięcie międzyszczytowe</strong> — dla 1 kHz i dla 1 MHz.</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Wyjście <strong>OUT</strong> generatora połącz kablem BNC z wejściem <strong>CH1</strong> oscyloskopu.</li>
+<li class="steps__item">Na generatorze ustaw <strong>sinus</strong> i częstotliwość <strong>1 kHz</strong>.</li>
+<li class="steps__item">Oscyloskop: przełącznik na GND — ustaw linię na środku; potem na AC lub DC.</li>
+<li class="steps__item">Dobierz <strong>VOLTS/DIV</strong> (przebieg ma zajmować większość ekranu) i <strong>TIME/DIV</strong> (1–3 okresy na ekranie). Ustaw <strong>LEVEL</strong>, żeby obraz stał.</li>
+<li class="steps__item">Policz działki <strong>w pionie</strong> od dołka do szczytu → napięcie międzyszczytowe.</li>
+<li class="steps__item">Policz działki <strong>w poziomie</strong> dla jednego pełnego okresu → okres T, a potem <span class="math">f = 1/T</span>.</li>
+<li class="steps__item">Powtórz dla <strong>1 MHz</strong> (TIME/DIV trzeba zmniejszyć tysiąc razy — do ułamków mikrosekundy).</li>
+</ol>
+</div>
+</div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t4b.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t4b.webp" alt="Generator ustawiony na 1 kHz, sinus" width="1300" height="942" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Generator ustawiony na 1 kHz, sinus <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab02-t4c.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab02-t4c.webp" alt="Sinus na ekranie oscyloskopu" width="1300" height="938" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sinus na ekranie oscyloskopu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<div class="formula"><span class="math">U<sub class="math__sub">pp</sub> = działki<sub class="math__sub">pion</sub> · czułość  T = działki<sub class="math__sub">poziom</sub> · podstawa czasu  f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">T</span></span></span></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Rada od autora strony</p>
+<div class="callout__body">
+<p class="article__p">Okres mierz między dwoma takimi samymi punktami, np. od szczytu do szczytu albo między dwoma przejściami przez zero „w górę”. Przesuń przebieg pokrętłem POSITION tak, żeby szczyt trafił na pionową kreskę — łatwiej liczyć. Obliczona częstotliwość powinna wyjść blisko tej z generatora; jeśli różni się o rząd wielkości, pomyliłeś jednostkę (ms / µs).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Zadania treningowe</h2>
+<p class="article__p">Dane są <strong>inne niż na zajęciach</strong> — chodzi o to, żeby przećwiczyć sposób liczenia.</p>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>1. Woltomierz cyfrowy</p>
+<div class="callout__body">
+<p class="article__p">Miernik DT9208A pokazał <strong>3,28 V</strong> oraz <strong>12,06 V</strong> (oba na zakresie 20 V) i <strong>1,571 V</strong> (na zakresie 2 V). Policz błąd bezwzględny i względny każdego pomiaru.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">3,28 V:  <span class="math">ΔU = 0,008 · 3,28 + 2 · 0,01 = 0,0262 + 0,02 = 0,046 ≈ 0,05 V</span>;   <span class="math">δ = 0,046/3,28 = 1,4%</span>   →   3,28 ± 0,05 V</li>
+<li class="list__item">12,06 V:  <span class="math">ΔU = 0,008 · 12,06 + 0,02 = 0,116 ≈ 0,12 V</span>;   <span class="math">δ = 0,97%</span>   →   12,06 ± 0,12 V</li>
+<li class="list__item">1,571 V:  <span class="math">ΔU = 0,008 · 1,571 + 2 · 0,001 = 0,0146 ≈ 0,015 V</span>;   <span class="math">δ = 0,93%</span>   →   1,571 ± 0,015 V</li>
+</ul>
+<p class="article__p">Im bliżej końca zakresu, tym mniejszy błąd względny.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>2. Oscyloskop jako woltomierz</p>
+<div class="callout__body">
+<p class="article__p">Mierzysz napięcie 3,3 V oscyloskopem (klasa 2, 8 działek, błąd odczytu 0,1 działki). Policz błąd dla czułości <strong>0,5 V/dz</strong> i dla <strong>1 V/dz</strong>. Którą wybrać?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">0,5 V/dz: linia na 6,6 działki; zakres 4 V; <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · 4</span><span class="math__den">100</span></span> + 0,1 · 0,5 = 0,08 + 0,05 = 0,13 V</span>;   <span class="math">δ = 3,9%</span></li>
+<li class="list__item">1 V/dz: linia na 3,3 działki; zakres 8 V; <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · 8</span><span class="math__den">100</span></span> + 0,1 · 1 = 0,16 + 0,1 = 0,26 V</span>;   <span class="math">δ = 7,9%</span></li>
+</ul>
+<p class="article__p">Wybieramy 0,5 V/dz — najmniejszą czułość, przy której linia jeszcze mieści się na ekranie. Błąd jest dwa razy mniejszy.</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>3. Omomierz</p>
+<div class="callout__body">
+<p class="article__p">Miernik pokazał: <strong>46,8 Ω</strong> (zakres 200 Ω), <strong>0,993 kΩ</strong> (zakres 2 kΩ), <strong>2,17 kΩ</strong> (zakres 20 kΩ), <strong>47,3 kΩ</strong> (zakres 200 kΩ). Policz ΔR i δ. Dlaczego 2,17 kΩ nie zmierzono na zakresie 2 kΩ?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">46,8 Ω:  <span class="math">ΔR = 0,468 + 10 · 0,1 = 1,47 ≈ 1,5 Ω</span>;   <span class="math">δ = 3,1%</span></li>
+<li class="list__item">0,993 kΩ:  <span class="math">ΔR = 0,00993 + 4 · 0,001 = 0,014 kΩ</span>;   <span class="math">δ = 1,4%</span></li>
+<li class="list__item">2,17 kΩ:  <span class="math">ΔR = 0,0217 + 4 · 0,01 = 0,062 ≈ 0,06 kΩ</span>;   <span class="math">δ = 2,8%</span></li>
+<li class="list__item">47,3 kΩ:  <span class="math">ΔR = 0,473 + 4 · 0,1 = 0,87 ≈ 0,9 kΩ</span>;   <span class="math">δ = 1,8%</span></li>
+</ul>
+<p class="article__p">2,17 kΩ jest większe niż 1,999 kΩ — na zakresie 2 kΩ miernik pokazałby „1” (przekroczenie zakresu).</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>4. Amperomierz wskazówkowy</p>
+<div class="callout__body">
+<p class="article__p">Amperomierz klasy 2,5 o zakresie 2 A pokazuje <strong>0,70 A</strong>. Błąd odczytu przyjmij 0,025 A. Policz ΔI i δ. Jaki byłby błąd względny przy wskazaniu 1,8 A?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">ΔI = <span class="math__frac"><span class="math__num">2,5 · 2</span><span class="math__den">100</span></span> + 0,025 = 0,075 A</span> — taki sam dla każdego wskazania.</p>
+<ul class="list">
+<li class="list__item">0,70 A:  <span class="math">δ = 0,075/0,70 = 10,7%</span></li>
+<li class="list__item">1,8 A:  <span class="math">δ = 0,075/1,8 = 4,2%</span></li>
+</ul>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>5. Prąd metodą pośrednią</p>
+<div class="callout__body">
+<p class="article__p">Zmierzono <span class="math">U = 3,02 V</span> (zakres 20 V) i <span class="math">R = 8,2 Ω</span> (zakres 200 Ω). Wyznacz prąd i jego błąd metodą max–min.</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">ΔU = 0,008 · 3,02 + 0,02 = 0,044 ≈ 0,04 V</span>;    <span class="math">ΔR = 0,082 + 1,0 = 1,08 ≈ 1,1 Ω</span></p>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">3,02 − 0,04</span><span class="math__den">8,2 + 1,1</span></span> = <span class="math__frac"><span class="math__num">2,98</span><span class="math__den">9,3</span></span> = 0,320 A</span>;    <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">3,02 + 0,04</span><span class="math__den">8,2 − 1,1</span></span> = <span class="math__frac"><span class="math__num">3,06</span><span class="math__den">7,1</span></span> = 0,431 A</span></p>
+<p class="article__p"><span class="math">I = <span class="math__frac"><span class="math__num">0,320 + 0,431</span><span class="math__den">2</span></span> = 0,376 A</span>;    <span class="math">ΔI = <span class="math__frac"><span class="math__num">0,431 − 0,320</span><span class="math__den">2</span></span> = 0,055 A</span></p>
+<p class="article__p"><strong>I = 0,376 ± 0,055 A</strong> (ok. 15%)</p>
+</div>
+</details>
+<div class="callout callout--task">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📝</span>6. Sygnał zmienny</p>
+<div class="callout__body">
+<p class="article__p">Na ekranie sinus ma 5,6 działki od dołka do szczytu przy 0,5 V/dz, a jeden okres zajmuje 8 działek przy 50 µs/dz. Podaj <span class="math">U<sub class="math__sub">pp</sub></span>, T i f. Jaką podstawę czasu ustawić dla sygnału 1 MHz, żeby jeden okres zajmował 5 działek?</p>
+</div>
+</div>
+<details class="callout callout--solution">
+<summary class="callout__title"><span class="callout__icon" aria-hidden="true">✅</span>Pokaż rozwiązanie</summary>
+<div class="callout__body">
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = 5,6 · 0,5 = 2,8 V</span>;   <span class="math">T = 8 · 50 µs = 400 µs = 0,4 ms</span>;   <span class="math">f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">0,0004</span></span> = 2500 Hz = 2,5 kHz</span></p>
+<p class="article__p">Dla 1 MHz: <span class="math">T = 1 µs</span>; 5 działek → <span class="math"><span class="math__frac"><span class="math__num">1 µs</span><span class="math__den">5</span></span> = 0,2 µs/dz</span>.</p>
+</div>
+</details>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Co najczęściej zabiera punkty</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">Zły zakres (pomiar 1,1 V na zakresie 20 V zamiast 2 V).</li>
+<li class="list__item">Pomylenie rozdzielczości: na zakresie 20 V jedna cyfra to 0,01 V, nie 0,001 V.</li>
+<li class="list__item">Brak jednostek w tabeli i niezaokrąglone błędy (0,010888 V).</li>
+<li class="list__item">Pomiar rezystancji rezystora podłączonego do zasilacza.</li>
+<li class="list__item">Pokrętło VAR oscyloskopu poza pozycją CAL — wszystkie odczyty są wtedy błędne.</li>
+</ul>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Multimetr DT9208A</h3>
+<p class="article__p"><span class="math">Δ = a% · wynik + n · rozdzielczość</span></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Zakresy</th><th class="table__cell table__cell--head">Dokładność</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Napięcie DC</td><td class="table__cell">2 V (0,001) · 20 V (0,01) · 200 V (0,1)</td><td class="table__cell">0,8% + 2d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 mV (0,1 mV)</td><td class="table__cell">0,5% + 3d</td></tr>
+<tr class="table__row"><td class="table__cell">Rezystancja</td><td class="table__cell">200 Ω (0,1 Ω)</td><td class="table__cell">1% + 10d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 k (0,001) · 20 k (0,01) · 200 k (0,1) · 2 M (0,001)</td><td class="table__cell">1% + 4d</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Przyrządy analogowe</h3>
+<ul class="list">
+<li class="list__item">Oscyloskop (kl. 2, 8 działek):  <span class="math">U = dz · czułość</span>;  zakres <span class="math">= 8 · czułość</span>;  <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · zakres</span><span class="math__den">100</span></span> + 0,1 · czułość</span></li>
+<li class="list__item">Amperomierz zasilacza (kl. 2,5; 2 A):  <span class="math">ΔI = 0,05 + 0,025 = 0,075 A</span></li>
+</ul>
+<h3 class="article__h3">Metoda max–min</h3>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,   <span class="math">I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub>+I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span></span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></p>
+<h3 class="article__h3">Sygnał zmienny</h3>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = dz<sub class="math__sub">pion</sub> · V/dz</span>,   <span class="math">T = dz<sub class="math__sub">poziom</sub> · s/dz</span>,   <span class="math">f = 1/T</span>   (1 kHz → T = 1 ms; 1 MHz → T = 1 µs)</p>
+<h3 class="article__h3">Pamiętaj</h3>
+<ul class="list">
+<li class="list__item">Błąd względny: <span class="math">δ = <span class="math__frac"><span class="math__num">Δ</span><span class="math__den">wynik</span></span> · 100%</span>. Wynik zapisuj jako <strong>x ± Δ</strong> z jednostką.</li>
+<li class="list__item">Błąd zaokrąglaj do tylu miejsc po przecinku, ile ma wynik.</li>
+<li class="list__item">Najmniejszy zakres, na którym wynik się mieści. „1” = za mały zakres.</li>
+<li class="list__item">Rezystancję mierz po odłączeniu elementu od zasilania.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../labs/01.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Ćwiczenie 1: Zajęcia wstępne: sprzęt w laboratorium</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

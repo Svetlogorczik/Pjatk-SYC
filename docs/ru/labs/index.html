@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лабораторные — SYC</title>
+<meta name="description" content="Лекции, лабораторные и краткие конспекты по предмету SYC (PJATK) — простым языком, на трёх языках.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/index.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/index.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/index.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/labs/index.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/labs/index.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/labs/index.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout">
+
+<main class="layout__main" id="main">
+<article class="article article--list">
+<header class="article__header"><h1 class="article__title">Лабораторные</h1></header>
+<div class="article__body">
+<ul class="cards">
+<li class="cards__item"><a class="card" href="../labs/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Лабораторная 1</span><span class="card__title">Вводное занятие: оборудование лаборатории</span><span class="card__text">Первое занятие — без баллов. Ты знакомишься с блоком питания, мультиметром, генератором и осциллографом — четырьмя приборами, с которыми проведёшь следующие пять недель.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="../labs/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Лабораторная 2</span><span class="card__title">Измерение напряжений и токов</span><span class="card__text">Первое занятие с баллами (5 баллов). Ты измеряешь напряжение, сопротивление и ток — цифровым прибором, осциллографом и стрелочным амперметром — и для каждого результата считаешь погрешность.</span></span>
+</a></li>
+</ul>
+</div>
+</article>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

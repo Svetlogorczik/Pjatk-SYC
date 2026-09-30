@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 14. Architektura komputerów: procesor MIPS od środka — SYC</title>
+<meta name="description" content="Składamy procesor z klocków, które już znamy: rejestrów, pamięci, multiplekserów i ALU. Najpierw wersja jednocyklowa, potem wielocyklowa i potokowa.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/14.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/14.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/14.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/14.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/14.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/14.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Architektura a mikroarchitektura</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Dwie części projektu</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Cztery główne elementy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Trzy mikroarchitektury</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Procesor jednocyklowy — składamy ścieżkę danych</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Procesor wielocyklowy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Procesor potokowy</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/14.html" aria-current="page"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 14</p>
+<h1 class="article__title">Architektura komputerów: procesor MIPS od środka</h1>
+<p class="article__lead">Składamy procesor z klocków, które już znamy: rejestrów, pamięci, multiplekserów i ALU. Najpierw wersja jednocyklowa, potem wielocyklowa i potokowa.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Architektura a mikroarchitektura</h2>
+<ul class="list">
+<li class="list__item"><strong>Architektura</strong> to komputer widziany oczami programisty: <strong>zestaw instrukcji</strong> i <strong>stan</strong> (rejestry, pamięć). Przykłady: MIPS, x86.</li>
+<li class="list__item"><strong>Mikroarchitektura</strong> to konkretny sposób zbudowania sprzętu, który tę architekturę realizuje. Jedna architektura może mieć wiele mikroarchitektur — różniących się wydajnością, kosztem i złożonością.</li>
+</ul>
+<p class="article__p">Na wykładzie rozważamy tylko mały podzbiór instrukcji MIPS:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Grupa</th><th class="table__cell table__cell--head">Instrukcje</th><th class="table__cell table__cell--head">Co robią</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">arytmetyczno-logiczne (typ R)</td><td class="table__cell"><code class="inline-code">add</code>, <code class="inline-code">sub</code>, <code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">slt</code></td><td class="table__cell">działanie na dwóch rejestrach, wynik do trzeciego</td></tr>
+<tr class="table__row"><td class="table__cell">pamięciowe</td><td class="table__cell"><code class="inline-code">lw</code>, <code class="inline-code">sw</code></td><td class="table__cell">odczyt słowa z pamięci / zapis słowa do pamięci</td></tr>
+<tr class="table__row"><td class="table__cell">warunkowe</td><td class="table__cell"><code class="inline-code">beq</code></td><td class="table__cell">skok, jeśli dwa rejestry są równe</td></tr>
+</tbody></table></div>
+<p class="article__p">Same instrukcje i ich zapis są omówione w <a class="link" href="../lectures/15.html">wykładzie 15</a> — jeśli nie wiesz, co to <code class="inline-code">lw</code> albo „pole rt”, zajrzyj najpierw tam.</p>
+<h2 class="article__h2" id="s2">Dwie części projektu</h2>
+<ul class="list">
+<li class="list__item"><strong>Ścieżka danych</strong> (<em>datapath</em>) — to, przez co płyną dane: pamięci, rejestry, ALU, multipleksery. W MIPS jest 32-bitowa.</li>
+<li class="list__item"><strong>Jednostka sterująca</strong> (<em>control</em>) — patrzy na aktualną instrukcję i wytwarza sygnały sterujące: co ma wybrać każdy multiplekser, który rejestr zapisać, czy pisać do pamięci.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Ścieżka danych to tory i zwrotnice, jednostka sterująca to dyżurny ruchu, który dla każdego pociągu (instrukcji) przestawia zwrotnice tak, żeby dane dojechały, gdzie trzeba.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Cztery główne elementy</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p04.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p04.webp" alt="Licznik rozkazów, pamięć instrukcji, plik rejestrów i pamięć danych" width="1100" height="297" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Licznik rozkazów, pamięć instrukcji, plik rejestrów i pamięć danych <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head">Co robi</th><th class="table__cell table__cell--head">Wejścia / wyjścia</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Program Counter (PC)</strong></td><td class="table__cell">zwykły rejestr 32-bitowy; wskazuje aktualną instrukcję</td><td class="table__cell">—</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Instruction Memory</strong></td><td class="table__cell">pamięć instrukcji; dla adresu A podaje 32-bitową instrukcję</td><td class="table__cell">A → RD</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Register File</strong></td><td class="table__cell">32 rejestry; <strong>dwa porty odczytu</strong> i <strong>jeden port zapisu</strong></td><td class="table__cell">adresy A1, A2 (5 bitów) → RD1, RD2; zapis: adres A3, dane WD3, zezwolenie WE3</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Data Memory</strong></td><td class="table__cell">pamięć danych</td><td class="table__cell">adres A; WE = 1: zapis WD przy zboczu zegara; WE = 0: odczyt na RD</td></tr>
+</tbody></table></div>
+<p class="article__p">Odczyt z pamięci instrukcji, pliku rejestrów i pamięci danych jest <strong>kombinacyjny</strong> (natychmiastowy); zapis następuje przy narastającym zboczu zegara.</p>
+<h2 class="article__h2" id="s4">Trzy mikroarchitektury</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Jak wykonuje instrukcję</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Jednocyklowa</strong> (<em>single-cycle</em>)</td><td class="table__cell">całą instrukcję w <strong>jednym cyklu</strong> zegara; prosta jednostka sterująca</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Wielocyklowa</strong> (<em>multicycle</em>)</td><td class="table__cell">w serii krótszych cykli; prostsze instrukcje zajmują mniej cykli</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Potokowa</strong> (<em>pipelined</em>)</td><td class="table__cell">jak jednocyklowa podzielona na etapy; <strong>kilka instrukcji jest w trakcie wykonywania jednocześnie</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">Miarą wydajności jest czas wykonania programu:</p>
+<div class="formula"><span class="math">czas = (liczba instrukcji) × <span class="math__frac"><span class="math__num">cykle</span><span class="math__den">instrukcja</span></span> × <span class="math__frac"><span class="math__num">sekundy</span><span class="math__den">cykl</span></span></span></div>
+<h2 class="article__h2" id="s5">Procesor jednocyklowy — składamy ścieżkę danych</h2>
+<p class="article__p">Budujemy ścieżkę stopniowo, na przykładzie instrukcji <code class="inline-code">lw</code> (załaduj słowo z pamięci do rejestru).</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Instrukcja lw krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Pobranie</strong> (<em>fetch</em>): PC podaje adres, pamięć instrukcji wystawia 32-bitową instrukcję <em>Instr</em>.</li>
+<li class="steps__item"><strong>Odczyt rejestru bazowego:</strong> pole <code class="inline-code">rs</code> instrukcji (bity 25:21) idzie na adres A1 pliku rejestrów; na RD1 pojawia się adres bazowy.</li>
+<li class="steps__item"><strong>Rozszerzenie znaku:</strong> 16-bitowe pole <em>immediate</em> (przesunięcie) trzeba rozszerzyć do 32 bitów z zachowaniem znaku — powstaje <em>SignImm</em>.</li>
+<li class="steps__item"><strong>Obliczenie adresu:</strong> ALU dodaje adres bazowy (SrcA) i przesunięcie (SrcB). Wynik <em>ALUResult</em> to adres w pamięci danych.</li>
+<li class="steps__item"><strong>Odczyt z pamięci i zapis do rejestru:</strong> dane z pamięci (<em>ReadData</em>) wracają do pliku rejestrów i na koniec cyklu są zapisywane w rejestrze wskazanym przez pole <code class="inline-code">rt</code> (sygnał <em>RegWrite</em>).</li>
+<li class="steps__item"><strong>Następna instrukcja:</strong> instrukcje mają 32 bity = 4 bajty, więc nowa wartość licznika to <strong>PC + 4</strong> (osobny sumator).</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p08.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p08.webp" alt="Pobranie instrukcji i odczyt rejestru bazowego" width="1100" height="905" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pobranie instrukcji i odczyt rejestru bazowego <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p11.webp" alt="Obliczenie PC + 4" width="1100" height="469" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Obliczenie PC + 4 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">Dokładamy kolejne instrukcje</h3>
+<p class="article__p"><strong><code class="inline-code">sw</code></strong> (zapis do pamięci): oprócz adresu potrzebna jest wartość do zapisania. Drugi rejestr (pole <code class="inline-code">rt</code>, bity 20:16) czytamy portem A2; z RD2 trafia na wejście <em>WriteData</em> pamięci danych. Sygnał <em>MemWrite</em> zezwala na zapis.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p12.webp" alt="Ścieżka danych dla instrukcji sw" width="1100" height="484" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ścieżka danych dla instrukcji sw <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong>Typ R</strong> (<code class="inline-code">add</code>, <code class="inline-code">sub</code>…): ALU działa na <strong>dwóch rejestrach</strong>, a wynik wraca do rejestru — nie z pamięci. Potrzebne są multipleksery:</p>
+<ul class="list">
+<li class="list__item"><strong>ALUSrc</strong> — drugi argument ALU: rejestr (0) czy rozszerzona stała (1),</li>
+<li class="list__item"><strong>MemtoReg</strong> — co zapisać do rejestru: wynik ALU (0) czy dane z pamięci (1),</li>
+<li class="list__item"><strong>RegDst</strong> — który rejestr jest docelowy: pole <code class="inline-code">rt</code> (dla <code class="inline-code">lw</code>) czy pole <code class="inline-code">rd</code> (dla typu R).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p13.webp" alt="Ścieżka danych z multiplekserami dla instrukcji typu R" width="1100" height="451" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ścieżka danych z multiplekserami dla instrukcji typu R <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong><code class="inline-code">beq</code></strong> (skok warunkowy): ALU <strong>odejmuje</strong> dwa rejestry; jeśli wynik to zero, ustawia flagę <em>Zero</em>. Adres skoku: <span class="math">PCBranch = PC + 4 + SignImm × 4</span> (przesunięcie w lewo o 2 bity to mnożenie przez 4). Multiplekser sterowany sygnałem <em>PCSrc</em> wybiera, czy do PC trafi PC + 4, czy PCBranch.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p15.webp" alt="Ścieżka danych dla instrukcji beq" width="1100" height="479" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ścieżka danych dla instrukcji beq <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">Kompletny procesor jednocyklowy</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p16.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p16.webp" alt="Kompletny jednocyklowy procesor MIPS z jednostką sterującą" width="1100" height="589" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kompletny jednocyklowy procesor MIPS z jednostką sterującą <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Jednostka sterująca wylicza sygnały sterujące z pól <strong>opcode</strong> i <strong>funct</strong> instrukcji. Składa się z dwóch części.</p>
+<p class="article__p"><strong>Dekoder główny</strong> — na podstawie opcode:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Instrukcja</th><th class="table__cell table__cell--head table__cell--center">Opcode</th><th class="table__cell table__cell--head table__cell--center">RegWrite</th><th class="table__cell table__cell--head table__cell--center">RegDst</th><th class="table__cell table__cell--head table__cell--center">ALUSrc</th><th class="table__cell table__cell--head table__cell--center">Branch</th><th class="table__cell table__cell--head table__cell--center">MemWrite</th><th class="table__cell table__cell--head table__cell--center">MemtoReg</th><th class="table__cell table__cell--head table__cell--center">ALUOp</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">typ R</td><td class="table__cell table__cell--center">000000</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw</code></td><td class="table__cell table__cell--center">100011</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw</code></td><td class="table__cell table__cell--center">101011</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq</code></td><td class="table__cell table__cell--center">000100</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">01</td></tr>
+</tbody></table></div>
+<p class="article__p">X = „wszystko jedno” (np. <code class="inline-code">sw</code> niczego nie zapisuje do rejestru, więc nie ma znaczenia, co wybierze RegDst).</p>
+<p class="article__p"><strong>Dekoder ALU</strong> — na podstawie ALUOp (i ewentualnie pola funct):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ALUOp</th><th class="table__cell table__cell--head table__cell--center">Funct</th><th class="table__cell table__cell--head table__cell--center">ALUControl</th><th class="table__cell table__cell--head">Działanie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">010</td><td class="table__cell">dodaj (dla <code class="inline-code">lw</code>, <code class="inline-code">sw</code>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">110</td><td class="table__cell">odejmij (dla <code class="inline-code">beq</code>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100000</td><td class="table__cell table__cell--center">010</td><td class="table__cell"><code class="inline-code">add</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100010</td><td class="table__cell table__cell--center">110</td><td class="table__cell"><code class="inline-code">sub</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100100</td><td class="table__cell table__cell--center">000</td><td class="table__cell"><code class="inline-code">and</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100101</td><td class="table__cell table__cell--center">001</td><td class="table__cell"><code class="inline-code">or</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">101010</td><td class="table__cell table__cell--center">111</td><td class="table__cell"><code class="inline-code">slt</code> (ustaw, jeśli mniejszy)</td></tr>
+</tbody></table></div>
+<p class="article__p">Jednostka sterująca procesora jednocyklowego jest <strong>układem kombinacyjnym</strong> — te dwie tabele to po prostu tabele prawdy.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z wykładu: instrukcja or</p>
+<div class="callout__body">
+<p class="article__p">Plik rejestrów czyta dwa rejestry źródłowe (pola 25:21 i 20:16). Drugi argument ALU pochodzi z rejestru (ALUSrc = 0). To instrukcja typu R, więc ALUOp = 10, a dekoder ALU z pola funct ustala ALUControl = 001 (OR). Wynik bierzemy z ALU (MemtoReg = 0) i zapisujemy do rejestru (RegWrite = 1, RegDst = 1). To nie skok (Branch = 0), więc do PC trafia PC + 4.</p>
+</div>
+</div>
+<h3 class="article__h3">Wady procesora jednocyklowego</h3>
+<ol class="list list--ordered">
+<li class="list__item">Cykl zegara musi być tak długi, żeby zdążyła się wykonać <strong>najwolniejsza instrukcja</strong> (<code class="inline-code">lw</code>) — choć większość jest szybsza.</li>
+<li class="list__item">Potrzebuje <strong>trzech sumatorów</strong> (ALU i dwa do obliczania PC), a szybkie sumatory są drogie.</li>
+<li class="list__item">Ma <strong>osobne pamięci</strong> instrukcji i danych, a większość komputerów ma jedną wspólną.</li>
+</ol>
+<h2 class="article__h2" id="s6">Procesor wielocyklowy</h2>
+<p class="article__p">Instrukcja jest dzielona na <strong>kilka krótszych kroków</strong>. W każdym kroku procesor robi jedną rzecz: czyta albo zapisuje pamięć lub rejestr albo używa ALU.</p>
+<ul class="list">
+<li class="list__item"><strong>Jedna ALU</strong> jest używana wielokrotnie — także do liczenia PC + 4 i adresu skoku (nie trzeba osobnych sumatorów).</li>
+<li class="list__item"><strong>Jedna wspólna pamięć</strong> na instrukcje i dane: w jednym kroku czytamy instrukcję, w innym dane.</li>
+<li class="list__item">Wyniki pośrednie trzeba gdzieś przetrzymać między krokami — stąd dodatkowe rejestry <strong>niearchitekturalne</strong> (niewidoczne dla programisty): <em>Instruction Register</em> (z sygnałem IRWrite), rejestry <strong>A</strong> i <strong>B</strong> (odczytane wartości rejestrów), <strong>ALUOut</strong>, <strong>Data</strong>.</li>
+<li class="list__item">Dochodzą nowe multipleksery: <strong>IorD</strong> (adres pamięci: z PC czy z ALUOut), <strong>ALUSrcA</strong> (PC czy rejestr A), <strong>ALUSrcB</strong> (rejestr B, stała 4, SignImm…).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p24.webp" alt="Elementy procesora wielocyklowego: wspólna pamięć instrukcji i danych" width="1100" height="396" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Elementy procesora wielocyklowego: wspólna pamięć instrukcji i danych <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">Jednostka sterująca jest teraz układem sekwencyjnym</h3>
+<p class="article__p">Kolejność sygnałów sterujących zależy od instrukcji i zmienia się z kroku na krok — więc jednostka sterująca to <strong>automat stanów</strong> (dokładnie taki, jak w <a class="link" href="../lectures/10.html">wykładzie 10</a>). Każdy stan to zestaw wartości sygnałów sterujących.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w14-p37.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p37.webp" alt="Graf stanów jednostki sterującej procesora wielocyklowego" width="1100" height="1075" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Graf stanów jednostki sterującej procesora wielocyklowego <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Graf zawsze zaczyna się od stanów <strong>Fetch</strong> (pobranie) i <strong>Decode</strong> (dekodowanie); dalsza ścieżka zależy od rodzaju instrukcji.</p>
+<h2 class="article__h2" id="s7">Procesor potokowy</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p38.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w14-p38.webp" alt="Procesor jednocyklowy a potokowy: w potoku kolejne instrukcje nachodzą na siebie w czasie" width="1100" height="498" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Procesor jednocyklowy a potokowy: w potoku kolejne instrukcje nachodzą na siebie w czasie <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Wykonanie instrukcji dzieli się na etapy: <strong>Fetch → Decode → Execute → Memory → Writeback</strong>. Gdy pierwsza instrukcja przechodzi do etapu drugiego, do pierwszego wchodzi już następna. Pojedyncza instrukcja nie wykonuje się szybciej, ale w tym samym czasie kończy się ich znacznie więcej.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Pralnia. Jednocyklowo: pierzesz, suszysz i składasz jeden wsad, i dopiero potem bierzesz następny. Potokowo: gdy pierwszy wsad się suszy, drugi już się pierze. Jedno pranie trwa tyle samo, ale pralnia wypuszcza je dużo częściej.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Zadania na ćwiczenia (ze slajdu)</p>
+<div class="callout__body">
+<p class="article__p">Zadania podane na końcu tego wykładu dotyczą ostatnich ćwiczeń z Arduino: zliczanie naciśnięć przycisku z użyciem <strong>przerwania INT0</strong>, to samo metodą <strong>odpytywania</strong>, oraz generator 1 Hz, którego częstotliwość zmienia przycisk. Krok po kroku: <a class="link" href="../labs/15.html">Ćwiczenie 15</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Pojęcia</h3>
+<ul class="list">
+<li class="list__item"><strong>Architektura</strong> = zestaw instrukcji + stan (rejestry, pamięć). <strong>Mikroarchitektura</strong> = sposób realizacji sprzętowej.</li>
+<li class="list__item"><strong>Ścieżka danych</strong> (PC, pamięci, plik rejestrów, ALU, multipleksery) + <strong>jednostka sterująca</strong> (sygnały dla ścieżki).</li>
+<li class="list__item">Czas programu = liczba instrukcji × cykle/instrukcję × sekundy/cykl.</li>
+</ul>
+<h3 class="article__h3">Trzy mikroarchitektury</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Cykl</th><th class="table__cell table__cell--head">Sterowanie</th><th class="table__cell table__cell--head">Uwagi</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Jednocyklowa</strong></td><td class="table__cell">1 długi cykl na instrukcję</td><td class="table__cell"><strong>kombinacyjne</strong></td><td class="table__cell">cykl dopasowany do najwolniejszej (<code class="inline-code">lw</code>); 3 sumatory; osobne pamięci</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Wielocyklowa</strong></td><td class="table__cell">kilka krótkich kroków</td><td class="table__cell"><strong>sekwencyjne</strong> (automat: Fetch → Decode → …)</td><td class="table__cell">jedna ALU, jedna pamięć, dodatkowe rejestry (IR, A, B, ALUOut, Data)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Potokowa</strong></td><td class="table__cell">etapy: Fetch, Decode, Execute, Memory, Writeback</td><td class="table__cell">—</td><td class="table__cell">kilka instrukcji jednocześnie w różnych etapach</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Sygnały sterujące (jednocyklowy)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Sygnał</th><th class="table__cell table__cell--head">0</th><th class="table__cell table__cell--head">1</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RegWrite</strong></td><td class="table__cell">—</td><td class="table__cell">zapis do pliku rejestrów</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RegDst</strong></td><td class="table__cell">rejestr docelowy = <code class="inline-code">rt</code></td><td class="table__cell">rejestr docelowy = <code class="inline-code">rd</code></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ALUSrc</strong></td><td class="table__cell">drugi argument ALU z rejestru</td><td class="table__cell">z rozszerzonej stałej</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemWrite</strong></td><td class="table__cell">—</td><td class="table__cell">zapis do pamięci danych</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemtoReg</strong></td><td class="table__cell">do rejestru wynik ALU</td><td class="table__cell">do rejestru dane z pamięci</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Branch</strong></td><td class="table__cell">—</td><td class="table__cell">instrukcja <code class="inline-code">beq</code>; skok, gdy flaga Zero = 1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">ALUOp: 00 → dodaj (<code class="inline-code">lw</code>, <code class="inline-code">sw</code>); 01 → odejmij (<code class="inline-code">beq</code>); 10 → patrz pole funct (typ R).</li>
+<li class="list__item">Następna instrukcja: <strong>PC + 4</strong>; skok: PC + 4 + SignImm × 4.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/13.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 13: Peryferia mikrokontrolerów i obsługa zdarzeń</span></a>
+<a class="pager__link pager__link--next" href="../lectures/15.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 15: Asembler i architektura komputerów (MIPS)</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

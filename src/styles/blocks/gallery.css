@@ -1,0 +1,12 @@
+/* gallery — several figures side by side */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+  margin: 1.5rem 0;
+}
+
+.gallery__item {
+  margin: 0;
+}

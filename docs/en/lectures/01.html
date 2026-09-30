@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 1. Introduction, physical basics of electronics and measurements — SYC</title>
+<meta name="description" content="Voltage, current, Ohm's law, Kirchhoff's laws — and then the key thing for the first labs: how to measure and how to work out how wrong we might be.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/01.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/01.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/01.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/01.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/01.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/01.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">What this is for</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Potential and voltage</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Ground, the 0 V point</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Electric current</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Ohm's law — the most important formula</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Kirchhoff's laws</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Measurements: direct and indirect</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Every measurement has an error</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Absolute and relative error</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Analog instrument (with a needle)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">Digital instrument (multimeter)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s12">Choosing the range — the point of the first labs</a></li>
+<li class="toc__item"><a class="toc__link" href="#s13">Error of an indirect measurement — the max–min method</a></li>
+<li class="toc__item"><a class="toc__link" href="#s14">Rounding the result</a></li>
+<li class="toc__item"><a class="toc__link" href="#s15">Graphs of measurements</a></li>
+<li class="toc__item"><a class="toc__link" href="#s16">Literature given in the lecture</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/01.html" aria-current="page"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 1</p>
+<h1 class="article__title">Introduction, physical basics of electronics and measurements</h1>
+<p class="article__lead">Voltage, current, Ohm's law, Kirchhoff's laws — and then the key thing for the first labs: how to measure and how to work out how wrong we might be.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a>
+<a class="button button--ghost" href="../labs/02.html">Lab for this lecture: Lab 2 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">What this is for</h2>
+<p class="article__p">The SYC course has three parts: <strong>electronics</strong> (lectures 1–5), <strong>digital circuits</strong> (6–10) and <strong>microcontrollers and computer architecture</strong> (11–15). Labs run one week behind the lectures, so what you read here you do "by hand" in class a week later — see <a class="link" href="../labs/02.html">Lab 2</a>. The grading rules are on a separate page: <a class="link" href="../grading.html">Passing the course</a>.</p>
+<p class="article__p">This lecture has two halves. The first is a quick physics refresher (voltage, current, two or three laws). The second is <strong>metrology</strong>, the science of measuring — and that is what you need in the very next class.</p>
+<h2 class="article__h2" id="s2">Potential and voltage</h2>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Picture mountains. Every place has its <strong>height</strong> — that is the <em>potential</em>. Water flows on its own only when there is a <strong>height difference</strong> between two places — that is the <em>voltage</em>. A single place has no "voltage" of its own; voltage is always <strong>between two points</strong>.</p>
+</div>
+</div>
+<p class="article__p">Formally, the <strong>electric potential</strong> <span class="math">φ<sub class="math__sub">A</sub></span> at point A is the work <span class="math">W</span> needed to move a charge <span class="math">q</span> from that point to infinity, divided by the charge:</p>
+<div class="formula"><span class="math">φ<sub class="math__sub">A</sub> = <span class="math__frac"><span class="math__num">W<sub class="math__sub">A→∞</sub></span><span class="math__den">q</span></span></span></div>
+<p class="article__p">The lecturer himself says the formula is not practical — "nobody is going to run to infinity with an electron". What matters is this: the <strong>voltage</strong> <span class="math">U<sub class="math__sub">AB</sub></span> is the <strong>potential difference</strong> between points A and B:</p>
+<div class="formula"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub> = <span class="math__frac"><span class="math__num">W<sub class="math__sub">A→B</sub></span><span class="math__den">q</span></span></span></div>
+<ul class="list">
+<li class="list__item">Voltage is measured in <strong>volts [V]</strong>.</li>
+<li class="list__item">In diagrams voltage is drawn as an arrow; <strong>the arrowhead points to the higher potential</strong> (the "+" side).</li>
+</ul>
+<h2 class="article__h2" id="s3">Ground, the 0 V point</h2>
+<p class="article__p">Since only the difference matters, it is convenient to pick one point of the circuit and say: "this is 0 V". That point is called <strong>ground</strong> (<strong>GND</strong>, symbol ⊥; in Polish <em>masa</em>). All other potentials in the circuit are given relative to ground.</p>
+<ul class="list">
+<li class="list__item">Nobody checks what the "true" potential of ground is — we simply <strong>agree</strong> that it is 0 V.</li>
+<li class="list__item">Ground is usually the <strong>negative terminal of the power supply</strong>.</li>
+<li class="list__item">Metal parts of devices (the case, the shield of a BNC cable) are normally connected to ground.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">It is like "sea level" on a map. Nobody measures a mountain from the centre of the Earth — we measure from a level everybody agreed to call zero. In a car, ground is the whole metal body connected to the battery's minus.</p>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Ground is not the same as earth</p>
+<div class="callout__body">
+<p class="article__p">Earth (the pin in a wall socket) connects the case to the soil for safety. Ground is just the 0 V reference point of a circuit. They are often connected together, but they are two different ideas.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Electric current</h2>
+<p class="article__p"><strong>Current</strong> is an ordered movement of electric charges. It flows when there is a voltage between two points and a path to flow through. Current is measured in <strong>amperes [A]</strong>.</p>
+<ul class="list">
+<li class="list__item">In wires it is the <strong>electrons</strong> (negative charge) that move — physically from "−" to "+".</li>
+<li class="list__item">By convention (historical, from Faraday's time) we draw current <strong>from "+" to "−"</strong>, like water falling downhill. It is only a convention.</li>
+<li class="list__item">Positive charges can be, for example, ions (in batteries).</li>
+</ul>
+<h2 class="article__h2" id="s5">Ohm's law — the most important formula</h2>
+<p class="article__p">The lecturer: <em>"the one formula that is really worth remembering — without it you understand very little in electronics"</em>.</p>
+<div class="formula"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span> = G · U</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">I</span> — current [A], <span class="math">U</span> — voltage [V], <span class="math">R</span> — <strong>resistance</strong> in ohms [Ω].</li>
+<li class="list__item"><span class="math">G = 1/R</span> — <strong>conductance</strong> in siemens [S] (the inverse of resistance).</li>
+<li class="list__item">More voltage gives more current. More resistance gives less current.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w01-p10.webp" alt="Ohm's law: resistor R, voltage U and current I" width="1100" height="999" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ohm's law: resistor R, voltage U and current I <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A water pipe: voltage is the pressure, current is the amount of water per second, and a resistor is a narrowing in the pipe. Push harder (bigger U) — more flows. Narrower pipe (bigger R) — less flows.</p>
+</div>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> My own example</p>
+<div class="callout__body">
+<p class="article__p">I connect a 450 Ω resistor to a 9 V battery. Current: <span class="math">I = <span class="math__frac"><span class="math__num">9 V</span><span class="math__den">450 Ω</span></span> = 0.02 A = 20 mA</span>.</p>
+<p class="article__p">The other way round: I want 10 mA through an LED and 3 V must "stay" on the resistor. Required resistance: <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span> = <span class="math__frac"><span class="math__num">3 V</span><span class="math__den">0.01 A</span></span> = 300 Ω</span>.</p>
+</div>
+</div>
+<p class="article__p">Three forms of the same formula (learn to rearrange them in your head): <span class="math">I = U/R</span>, <span class="math">U = I·R</span>, <span class="math">R = U/I</span>.</p>
+<h2 class="article__h2" id="s6">Kirchhoff's laws</h2>
+<h3 class="article__h3">First law (currents at a node)</h3>
+<p class="article__p">A <strong>node</strong> is a place where several wires meet. The sum of currents flowing into a node equals the sum of currents flowing out. In other words: count incoming currents as plus and outgoing as minus, and the total is zero.</p>
+<div class="formula"><span class="math">i<sub class="math__sub">1</sub> = i<sub class="math__sub">2</sub> + i<sub class="math__sub">3</sub> + i<sub class="math__sub">4</sub>  ⇔  Σ i<sub class="math__sub">k</sub> = 0</span></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w01-p11.webp" alt="A node: current i₁ flows in, currents i₂, i₃, i₄ flow out" width="989" height="812" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A node: current i₁ flows in, currents i₂, i₃, i₄ flow out <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A plumbing T-piece: as much water as went in must come out. Current has nowhere to "vanish" and nowhere to "appear" from.</p>
+</div>
+</div>
+<h3 class="article__h3">Second law (voltages around a loop)</h3>
+<p class="article__p">A <strong>loop</strong> is a closed path in a circuit. Walk all the way around a loop adding up every voltage (with signs — along your walking direction is plus, against it is minus) and you get <strong>zero</strong>.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w01-p12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w01-p12.webp" alt="A loop: the voltages around a closed path add up to zero" width="737" height="757" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A loop: the voltages around a closed path add up to zero <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Why: one point has only one potential. If you start at a point, walk around the loop and come back, you must be at the same "height" you started from.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lecture</p>
+<div class="callout__body">
+<p class="article__p">The lecturer said the second law will be used rarely, while the first one will be used a lot.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Measurements: direct and indirect</h2>
+<ul class="list">
+<li class="list__item"><strong>Direct measurement</strong> — you read the result straight from the instrument: voltage with a voltmeter, mass with scales, length with a tape.</li>
+<li class="list__item"><strong>Indirect measurement</strong> — you measure something else and <strong>calculate</strong> what you need. Examples from the lecture: current calculated from voltage and resistance (<span class="math">I = U/R</span>); distance from the travel time of an ultrasound pulse (distance = speed · time).</li>
+</ul>
+<h2 class="article__h2" id="s8">Every measurement has an error</h2>
+<p class="article__p">A number alone is not enough. You also have to say <strong>how much it can be trusted</strong> — that is the <em>measurement uncertainty</em>. In the labs we simplify: uncertainty = measurement error.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Type of error</th><th class="table__cell table__cell--head">What it is</th><th class="table__cell table__cell--head">Example from the lecture</th><th class="table__cell table__cell--head">What to do</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Systematic</strong></td><td class="table__cell">always the same; caused by a flaw of the instrument or method</td><td class="table__cell">a "100 cm" tape that is really 101 cm long</td><td class="table__cell">can be corrected (here: multiply the result by 100/101)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Random</strong></td><td class="table__cell">slightly different every time (temperature, noise…)</td><td class="table__cell">repeated readings differ in the last digit</td><td class="table__cell">cannot be removed; can be analysed statistically</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Gross</strong></td><td class="table__cell">a plain mistake</td><td class="table__cell">measuring an amplifier that was never powered on</td><td class="table__cell">reject it and measure again</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s9">Absolute and relative error</h2>
+<div class="formula"><span class="math">Δx = x − x<sub class="math__sub">0</sub>  δ<sub class="math__sub">x</sub> = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x<sub class="math__sub">0</sub>|</span></span> · 100%</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">x</span> — what the instrument showed; <span class="math">x<sub class="math__sub">0</sub></span> — the true value (in practice <strong>unknown</strong>, so the measured value is used in the denominator).</li>
+<li class="list__item">The <strong>absolute error</strong> <span class="math">Δx</span> has the same unit as the measurement (volts, amperes, ohms…).</li>
+<li class="list__item">The <strong>relative error</strong> <span class="math">δ</span> is in percent and says "how much error there is in the measurement". It shows the quality of the measurement.</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lab instructions</p>
+<div class="callout__body">
+<p class="article__p">I am really 183 cm tall. A friend measured 180 cm with a ruler. Absolute error: 180 − 183 = −3 cm. Relative error: 3 / 183 = 0.0164 = <strong>1.64%</strong>.</p>
+</div>
+</div>
+<p class="article__p">We write a result as <strong>x ± Δx</strong>, meaning "the true value lies somewhere between x − Δx and x + Δx".</p>
+<h2 class="article__h2" id="s10">Analog instrument (with a needle)</h2>
+<p class="article__p">An analog instrument has a <strong>class</strong> (<em>kl</em>) — a number describing its quality — and a <strong>range</strong> (<em>Z</em>), the largest value that can be measured at the current setting.</p>
+<div class="formula"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span></div>
+<p class="article__p">Notice that <strong>the measured value is not in the formula</strong>. The absolute error is the same everywhere on the scale.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lecture (class 2, range 20 V)</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">Δx = <span class="math__frac"><span class="math__num">2 · 20</span><span class="math__den">100</span></span> = 0.4 V</span> — everywhere on the scale.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Reading</th><th class="table__cell table__cell--head table__cell--right">Absolute error</th><th class="table__cell table__cell--head table__cell--right">Relative error</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">20 V</td><td class="table__cell table__cell--right">0.4 V</td><td class="table__cell table__cell--right">0.4 / 20 = <strong>2%</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">10 V</td><td class="table__cell table__cell--right">0.4 V</td><td class="table__cell table__cell--right">0.4 / 10 = <strong>4%</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">4 V</td><td class="table__cell table__cell--right">0.4 V</td><td class="table__cell table__cell--right">0.4 / 4 = <strong>10%</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">The closer to zero, the worse. The smallest possible relative error is at the end of the range and equals the class of the instrument.</p>
+</div>
+</div>
+<p class="article__p">On top of that comes the <strong>reading error</strong>: the needle (or the trace on an oscilloscope) has a thickness, you look at an angle (parallax) — you cannot read it perfectly. Usually something like <strong>0.1 of a division</strong> is assumed. This error is <strong>added</strong> to the class error.</p>
+<h2 class="article__h2" id="s11">Digital instrument (multimeter)</h2>
+<p class="article__p">Here the error has two parts:</p>
+<div class="formula"><span class="math">Δ = ±(a% · X + n · Δr)</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">a%</span> — a percentage <strong>of the reading</strong> <span class="math">X</span> (written in manuals as e.g. <code class="inline-code">0.8%</code>, sometimes <code class="inline-code">%rdg</code>);</li>
+<li class="list__item"><span class="math">n</span> — a number of "digits" (written <code class="inline-code">2d</code>, <code class="inline-code">2dgt</code>);</li>
+<li class="list__item"><span class="math">Δr</span> — the <strong>resolution</strong>: the smallest change visible on the display, i.e. the value of the last digit.</li>
+</ul>
+<p class="article__p">The manual notation <code class="inline-code">±(0.1% + 4dgt)</code> reads: "take 0.1% of the reading and add 4 times the value of the last digit".</p>
+<p class="article__p">The resolution depends on the range — look where the decimal point is. For a four-digit meter:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Range</th><th class="table__cell table__cell--head table__cell--right">What the reading looks like</th><th class="table__cell table__cell--head table__cell--right">Resolution Δr</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 V</td><td class="table__cell table__cell--right">1.427</td><td class="table__cell table__cell--right">0.001 V</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 V</td><td class="table__cell table__cell--right">1.43</td><td class="table__cell table__cell--right">0.01 V</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">200 V</td><td class="table__cell table__cell--right">1.4</td><td class="table__cell table__cell--right">0.1 V</td></tr>
+</tbody></table></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Example from the lecture: an AA battery, accuracy ±(1% + 2d)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Range</th><th class="table__cell table__cell--head table__cell--right">Reading</th><th class="table__cell table__cell--head table__cell--right">1% of reading</th><th class="table__cell table__cell--head table__cell--right">2 · Δr</th><th class="table__cell table__cell--head table__cell--right">Error Δ</th><th class="table__cell table__cell--head table__cell--right">Relative error</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 V</td><td class="table__cell table__cell--right">1.427 V</td><td class="table__cell table__cell--right">0.014</td><td class="table__cell table__cell--right">0.002</td><td class="table__cell table__cell--right"><strong>0.016 V</strong></td><td class="table__cell table__cell--right">1.1%</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 V</td><td class="table__cell table__cell--right">1.43 V</td><td class="table__cell table__cell--right">0.014</td><td class="table__cell table__cell--right">0.02</td><td class="table__cell table__cell--right"><strong>0.03 V</strong></td><td class="table__cell table__cell--right">2.4%</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">200 V</td><td class="table__cell table__cell--right">1.4 V</td><td class="table__cell table__cell--right">0.014</td><td class="table__cell table__cell--right">0.2</td><td class="table__cell table__cell--right"><strong>0.2 V</strong></td><td class="table__cell table__cell--right">15%</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> I worked out the total and percentage columns myself — the lecture only showed the components. The conclusion is the same: same battery, same meter, and the error differs more than tenfold.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s12">Choosing the range — the point of the first labs</h2>
+<div class="callout callout--def">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📖</span>Two rules from the lecture</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">A measurement is more accurate the <strong>closer the measured value is to the end of the range</strong>.</li>
+<li class="list__item">A digital measurement is more accurate the <strong>more digits</strong> you see in the result.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">In practice: pick the <strong>smallest range on which the result still fits</strong>. For 5 V with ranges 2 / 20 / 200 V that is 20 V. For an analog meter: the needle should deflect as far as possible.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lecture</p>
+<div class="callout__body">
+<p class="article__p">From the lecture: if you pick up a meter and see it has many digits (5–6), you can expect a good-quality instrument; few digits — probably a poor one.</p>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Tip from the site author</p>
+<div class="callout__body">
+<p class="article__p">If you do not know what voltage to expect, start from the <strong>largest</strong> range and go down. When the display shows just a "1" on the left, the range is too small — go one step back up. (The manual of the lab meter gives the same advice.)</p>
+</div>
+</div>
+<h2 class="article__h2" id="s13">Error of an indirect measurement — the max–min method</h2>
+<p class="article__p">We calculate something from a formula and each number in the formula has its own error. The method is simple: compute the <strong>worst cases</strong>.</p>
+<p class="article__p">For <span class="math">I = U/R</span>:</p>
+<div class="formula"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U − ΔU</span><span class="math__den">R + ΔR</span></span>  I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U + ΔU</span><span class="math__den">R − ΔR</span></span></span></div>
+<div class="formula"><span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> + I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span>  ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> − I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></div>
+<p class="article__p">So: the largest current occurs when the voltage is "on the plus side" and the resistance "on the minus side"; the smallest — the opposite. The result is the middle, and the error is half the spread.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> My own example</p>
+<div class="callout__body">
+<p class="article__p">Measured: <span class="math">U = 10.0 ± 0.2 V</span> and <span class="math">R = 100 ± 5 Ω</span>.</p>
+<ul class="list">
+<li class="list__item"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">9.8</span><span class="math__den">105</span></span> = 0.0933 A</span></li>
+<li class="list__item"><span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">10.2</span><span class="math__den">95</span></span> = 0.1074 A</span></li>
+<li class="list__item"><span class="math">Î = <span class="math__frac"><span class="math__num">0.1074 + 0.0933</span><span class="math__den">2</span></span> = 0.1004 A</span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">0.1074 − 0.0933</span><span class="math__den">2</span></span> = 0.0070 A</span></li>
+</ul>
+<p class="article__p">Result: <strong>I = 0.100 ± 0.007 A</strong> (relative error 7%).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s14">Rounding the result</h2>
+<ol class="list list--ordered">
+<li class="list__item">Round the <strong>error</strong> to at most <strong>two significant digits</strong>: 0.0084356 → 0.0084.</li>
+<li class="list__item">The error cannot be smaller than the resolution of the instrument.</li>
+<li class="list__item">Round the <strong>result</strong> to the same decimal place as the error.</li>
+<li class="list__item">Round, do not truncate (digit 0–4 — down, 5–9 — up).</li>
+</ol>
+<p class="article__p">The final notation from the slide: <span class="math">X = 0.1264 ± 0.0084</span>.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">On the slide the number 0.12645635… is written as 0.1264. Strict rounding to four places gives 0.1265 (the fifth digit is 5). In class follow rule 4 — the lecturer said explicitly "round, do not cut".</p>
+</div>
+</div>
+<h2 class="article__h2" id="s15">Graphs of measurements</h2>
+<ul class="list">
+<li class="list__item">Choose the scale so that the curve fills almost the whole graph.</li>
+<li class="list__item">Mark the measured points with <strong>crosses</strong>.</li>
+<li class="list__item">Draw a <strong>smooth line</strong> (straight or curved) so that roughly the same number of points lies on each side of it.</li>
+<li class="list__item"><strong>Do not connect the points with segments</strong> — a zig-zag "from point to point" is a mistake.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w01-p22.webp" alt="The line runs "between" the measured points, not through each of them" width="667" height="352" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The line runs "between" the measured points, not through each of them <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lecture</p>
+<div class="callout__body">
+<p class="article__p">This will matter for filters (lab 4): the characteristic will have to be approximated by two straight lines.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s16">Literature given in the lecture</h2>
+<ol class="list list--ordered">
+<li class="list__item">P. Horowitz, W. Hill — <em>The Art of Electronics</em> (Polish edition: <em>Sztuka elektroniki</em>, WKŁ 2012).</li>
+<li class="list__item">B. Wilkinson — <em>Układy cyfrowe</em> (Digital System Design), WKŁ 2001 (the lecturer: "a very nice book").</li>
+<li class="list__item">J. Doliński — <em>Mikrokontrolery AVR w praktyce</em>, BTC.</li>
+<li class="list__item">A. Pawluczuk — <em>Sztuka programowania mikrokontrolerów AVR — przykłady</em>, BTC.</li>
+<li class="list__item">R. Baranowski — <em>Mikrokontrolery AVR ATmega w praktyce</em>, BTC.</li>
+</ol>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Formulas</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">What</th><th class="table__cell table__cell--head">Formula</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Ohm's law</td><td class="table__cell"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span></span>,   <span class="math">U = I·R</span>,   <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Voltage</td><td class="table__cell"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub></span> (always between two points)</td></tr>
+<tr class="table__row"><td class="table__cell">Kirchhoff I</td><td class="table__cell">currents into a node = currents out of it</td></tr>
+<tr class="table__row"><td class="table__cell">Kirchhoff II</td><td class="table__cell">voltages around a closed loop add up to 0</td></tr>
+<tr class="table__row"><td class="table__cell">Absolute error</td><td class="table__cell"><span class="math">Δx = x − x<sub class="math__sub">0</sub></span> (same unit as the measurement)</td></tr>
+<tr class="table__row"><td class="table__cell">Relative error</td><td class="table__cell"><span class="math">δ = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x|</span></span> · 100%</span></td></tr>
+<tr class="table__row"><td class="table__cell">Analog instrument</td><td class="table__cell"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span>  + reading error (e.g. 0.1 division)</td></tr>
+<tr class="table__row"><td class="table__cell">Digital instrument</td><td class="table__cell"><span class="math">Δ = a% · X + n · Δr</span></td></tr>
+<tr class="table__row"><td class="table__cell">Indirect measurement</td><td class="table__cell"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,  <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,  <span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>+I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span>,  <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Rules</h3>
+<ul class="list">
+<li class="list__item"><strong>Ground (GND)</strong> = agreed 0 V, usually the supply minus.</li>
+<li class="list__item">By convention current flows from "+" to "−".</li>
+<li class="list__item"><strong>Range:</strong> the smallest one on which the result fits; measure near the end of the range.</li>
+<li class="list__item"><strong>Resolution Δr</strong> = the value of the last digit on the display (it depends on the range!).</li>
+<li class="list__item">Error → max 2 significant digits; result → same decimal place; write <strong>x ± Δx</strong>.</li>
+<li class="list__item">Graph: crosses + a smooth line, never a zig-zag.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<span class="pager__link pager__link--empty"></span>
+<a class="pager__link pager__link--next" href="../lectures/02.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 2: Passive components: resistor, capacitor, inductor and impedance</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 8. Kombinacyjne bloki funkcjonalne: multiplekser, kod U2, sumator, ALU — SYC</title>
+<meta name="description" content="Gotowe „klocki” większe niż bramka. Multiplekser jako przełącznik i jako uniwersalna funkcja logiczna, zapis liczb ujemnych w kodzie U2, sumator i jednostka arytmetyczno-logiczna.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/08.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/08.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/08.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/08.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/08.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/08.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Blok funkcjonalny</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Multiplekser (MUX)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Demultiplekser (DMUX) i dekoder</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Multiplekser jako funkcja logiczna</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Kody liczbowe</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Sumator</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Komparator i ALU</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/08.html" aria-current="page"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 8</p>
+<h1 class="article__title">Kombinacyjne bloki funkcjonalne: multiplekser, kod U2, sumator, ALU</h1>
+<p class="article__lead">Gotowe „klocki” większe niż bramka. Multiplekser jako przełącznik i jako uniwersalna funkcja logiczna, zapis liczb ujemnych w kodzie U2, sumator i jednostka arytmetyczno-logiczna.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Blok funkcjonalny</h2>
+<p class="article__p"><strong>Kombinacyjny blok funkcjonalny</strong> to układ kombinacyjny o <span class="math">n</span> wejściach i <span class="math">m</span> wyjściach. Funkcja boolowska to jego szczególny przypadek — z jednym wyjściem.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p03.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p03.webp" alt="Funkcja boolowska (jedno wyjście) i blok funkcjonalny (wiele wyjść)" width="1100" height="400" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Funkcja boolowska (jedno wyjście) i blok funkcjonalny (wiele wyjść) <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Przykłady: układy <strong>komutacyjne</strong> (multipleksery, demultipleksery, dekodery, konwertery kodów) i <strong>arytmetyczne</strong> (sumatory, komparatory).</p>
+<h2 class="article__h2" id="s2">Multiplekser (MUX)</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p05.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p05.webp" alt="Multiplekser: wejścia informacyjne d, wejścia adresowe a, wyjście y, zezwolenie e" width="957" height="874" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Multiplekser: wejścia informacyjne d, wejścia adresowe a, wyjście y, zezwolenie e <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Multiplekser ma:</p>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> <strong>wejść adresowych</strong> (wybierających),</li>
+<li class="list__item"><span class="math">N = 2<sup class="math__sup">n</sup></span> <strong>wejść informacyjnych</strong> (danych),</li>
+<li class="list__item">jedno <strong>wyjście</strong>,</li>
+<li class="list__item">wejście <strong>zezwolenia</strong> <em>enable</em> (zwykle: e = 1 — działa, e = 0 — wyłączony).</li>
+</ul>
+<p class="article__p">Działa jak <strong>przełącznik</strong>: na wyjście trafia sygnał z tego wejścia informacyjnego, którego numer podano na wejściach adresowych.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p06.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p06.webp" alt="Adres a₁a₀ wybiera jedno z czterech wejść" width="720" height="888" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Adres a₁a₀ wybiera jedno z czterech wejść <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Multiplekser to pilot do telewizora. Wejścia informacyjne to kanały, wejścia adresowe to numer kanału wciśnięty na pilocie, a wyjście to to, co widać na ekranie. (To porównanie pochodzi z materiałów do ćwiczeń.)</p>
+</div>
+</div>
+<ul class="list">
+<li class="list__item">Liczba wejść informacyjnych rośnie wykładniczo, więc dużych multiplekserów nie buduje się wprost — <strong>składa się je z mniejszych</strong> (kaskadowo).</li>
+<li class="list__item"><strong>Multiplekser grupowy</strong> przełącza całe słowa (np. 4-bitowe szyny A i B), a nie pojedyncze bity.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p07.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p07.webp" alt="Większy multiplekser z mniejszych" width="1100" height="834" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Większy multiplekser z mniejszych <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s3">Demultiplekser (DMUX) i dekoder</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p09.webp" alt="Demultiplekser: jedno wejście d, N wyjść" width="869" height="877" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Demultiplekser: jedno wejście d, N wyjść <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong>Demultiplekser</strong> działa odwrotnie: ma jedno wejście informacyjne, <span class="math">n</span> wejść adresowych i <span class="math">N = 2<sup class="math__sup">n</sup></span> wyjść. Sygnał z wejścia trafia na to wyjście, które wskazuje adres.</p>
+<p class="article__p"><strong>Dekoder</strong> to demultiplekser, którego wejście jest na stałe równe 1: zamienia liczbę binarną (NKB) na kod <strong>„1 z N”</strong> — aktywne jest dokładnie jedno wyjście.</p>
+<h2 class="article__h2" id="s4">Multiplekser jako funkcja logiczna</h2>
+<p class="article__p">Multiplekserem można zrealizować <strong>dowolną funkcję boolowską</strong>. Przykład z wykładu: <span class="math">y = Σ(1, 7, 11, 13, 14, 15)</span>, zmienne <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub> x<sub class="math__sub">0</sub></span>.</p>
+<h3 class="article__h3">Sposób 1: multiplekser o 4 wejściach adresowych (16 wejść)</h3>
+<p class="article__p">Wszystkie cztery zmienne idą na wejścia adresowe. Na wejścia informacyjne o numerach 1, 7, 11, 13, 14, 15 podajemy <strong>1</strong>, na pozostałe <strong>0</strong>. Multiplekser po prostu „czyta tabelę prawdy”.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p11.webp" alt="Multiplekser 16-wejściowy jako tabela prawdy" width="980" height="1002" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Multiplekser 16-wejściowy jako tabela prawdy <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h3 class="article__h3">Sposób 2: multiplekser o 3 wejściach adresowych (8 wejść)</h3>
+<p class="article__p">Trzy zmienne idą na adres, a <strong>czwarta — na wejścia informacyjne</strong>. Dla każdego adresu porównujemy dwie wartości funkcji (dla czwartej zmiennej równej 0 i 1):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Funkcja dla „wolnej” zmiennej x = 0 / x = 1</th><th class="table__cell table__cell--head table__cell--center">Co podać na wejście</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1 / 1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center"><span class="math">x</span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1 / 0</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Wariant A</strong> — adres <span class="math">x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub> x<sub class="math__sub">0</sub></span>, wolna zmienna <span class="math">x<sub class="math__sub">3</sub></span> (porównujemy wiersze <span class="math">k</span> i <span class="math">k + 8</span>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Wejście MUX</th><th class="table__cell table__cell--head table__cell--center">0</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">2</th><th class="table__cell table__cell--head table__cell--center">3</th><th class="table__cell table__cell--head table__cell--center">4</th><th class="table__cell table__cell--head table__cell--center">5</th><th class="table__cell table__cell--head table__cell--center">6</th><th class="table__cell table__cell--head table__cell--center">7</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">y dla <span class="math">x<sub class="math__sub">3</sub>=0</span> (wiersze 0–7)</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell">y dla <span class="math">x<sub class="math__sub">3</sub>=1</span> (wiersze 8–15)</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Podajemy</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x<sub class="math__sub">3</sub></span></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">3</sub></span></td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Potrzebny jest jeden negator.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w08-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p12.webp" alt="Wariant A: na wejściu 1 pojawia się zanegowane x₃" width="1100" height="648" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wariant A: na wejściu 1 pojawia się zanegowane x₃ <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p"><strong>Wariant B</strong> — adres <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub> x<sub class="math__sub">1</sub></span>, wolna zmienna <span class="math">x<sub class="math__sub">0</sub></span> (porównujemy sąsiednie wiersze <span class="math">2k</span> i <span class="math">2k + 1</span>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Wejście MUX</th><th class="table__cell table__cell--head table__cell--center">0</th><th class="table__cell table__cell--head table__cell--center">1</th><th class="table__cell table__cell--head table__cell--center">2</th><th class="table__cell table__cell--head table__cell--center">3</th><th class="table__cell table__cell--head table__cell--center">4</th><th class="table__cell table__cell--head table__cell--center">5</th><th class="table__cell table__cell--head table__cell--center">6</th><th class="table__cell table__cell--head table__cell--center">7</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Wiersze tabeli</td><td class="table__cell table__cell--center">0, 1</td><td class="table__cell table__cell--center">2, 3</td><td class="table__cell table__cell--center">4, 5</td><td class="table__cell table__cell--center">6, 7</td><td class="table__cell table__cell--center">8, 9</td><td class="table__cell table__cell--center">10, 11</td><td class="table__cell table__cell--center">12, 13</td><td class="table__cell table__cell--center">14, 15</td></tr>
+<tr class="table__row"><td class="table__cell">y (dla <span class="math">x<sub class="math__sub">0</sub></span> = 0 / 1)</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 0</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">0 / 1</td><td class="table__cell table__cell--center">1 / 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Podajemy</strong></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">0</sub></span></td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<p class="article__p">Tym razem negacja nie jest potrzebna — <strong>wybór wolnej zmiennej ma znaczenie</strong>.</p>
+<h3 class="article__h3">Sposób 3: multiplekser o 2 wejściach adresowych (4 wejścia)</h3>
+<p class="article__p">Adres to <span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub></span>, a na każde wejście podajemy <strong>funkcję</strong> zmiennych <span class="math">x<sub class="math__sub">1</sub>, x<sub class="math__sub">0</sub></span>, odczytaną z jednego wiersza mapy Karnaugha:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w08-p15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p15.webp" alt="Każdy wiersz mapy Karnaugha to jedno wejście multipleksera" width="1100" height="672" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Każdy wiersz mapy Karnaugha to jedno wejście multipleksera <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center"><span class="math">x<sub class="math__sub">3</sub> x<sub class="math__sub">2</sub></span></th><th class="table__cell table__cell--head table__cell--center">Funkcja na wejściu</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x<sub class="math__sub">1</sub></span> · x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> · x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> + x<sub class="math__sub">0</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center"><span class="math">x<sub class="math__sub">1</sub> · x<sub class="math__sub">0</sub></span></td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s5">Kody liczbowe</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Kod</th><th class="table__cell table__cell--head">O co chodzi</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NKB</strong> (naturalny kod binarny)</td><td class="table__cell">zwykły system dwójkowy, liczby bez znaku</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>1 z N</strong></td><td class="table__cell">w słowie zawsze dokładnie jedna jedynka</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>HEX</strong></td><td class="table__cell">zapis szesnastkowy</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Graya</strong></td><td class="table__cell">sąsiednie słowa różnią się jednym bitem</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>BCD</strong></td><td class="table__cell">każda cyfra dziesiętna osobno na 4 bitach: 123 → 0001 0010 0011</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ZM</strong> (znak–moduł)</td><td class="table__cell">najstarszy bit to znak, reszta to wartość bezwzględna</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>U1</strong> (uzupełnień do 1)</td><td class="table__cell">liczba ujemna = zanegowane bity modułu</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>U2</strong> (uzupełnień do 2)</td><td class="table__cell">najstarszy bit ma wagę <strong>ujemną</strong></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">NKB</h3>
+<div class="formula"><span class="math">wartość = Σ 2<sup class="math__sup">i</sup> · b<sub class="math__sub">i</sub></span></div>
+<p class="article__p">Bity numerujemy od zera z prawej strony; wagi to 1, 2, 4, 8, 16, 32, 64, 128. Na <span class="math">N</span> bitach jest <span class="math">2<sup class="math__sup">N</sup></span> różnych wartości (8 bitów: 0…255).</p>
+<h3 class="article__h3">Znak–moduł i U1</h3>
+<ul class="list">
+<li class="list__item"><strong>ZM:</strong> <span class="math">−24 = 1 0011000</span>, <span class="math">118 = 0 1110110</span>. Zakres <span class="math">±(2<sup class="math__sup">N−1</sup> − 1)</span>. Wada: są dwa zera (+0 i −0).</li>
+<li class="list__item"><strong>U1:</strong> liczby dodatnie jak w ZM; ujemne — z zanegowanymi bitami modułu: <span class="math">−86</span> w ZM to 11010110, w U1 to 10101001. Też dwa zera.</li>
+</ul>
+<h3 class="article__h3">Kod U2 — ten, którego naprawdę używają komputery</h3>
+<p class="article__p">Najstarszy bit ma wagę <strong>ujemną</strong>, pozostałe — dodatnie:</p>
+<div class="formula"><span class="math">wartość = −2<sup class="math__sup">N−1</sup> · b<sub class="math__sub">N−1</sub> + Σ 2<sup class="math__sup">i</sup> · b<sub class="math__sub">i</sub></span></div>
+<ul class="list">
+<li class="list__item">Zakres: od <span class="math">−2<sup class="math__sup">N−1</sup></span> do <span class="math">2<sup class="math__sup">N−1</sup> − 1</span> (8 bitów: −128…127; 4 bity: −8…7).</li>
+<li class="list__item">Zero ma <strong>tylko jedną</strong> reprezentację; kod jest pełny (<span class="math">2<sup class="math__sup">N</sup></span> wartości).</li>
+<li class="list__item">Liczby dodatnie wyglądają tak samo jak w NKB.</li>
+<li class="list__item">Najstarszy bit mówi o znaku: 1 = ujemna.</li>
+</ul>
+<p class="article__p">Przykłady 4-bitowe z materiałów do ćwiczeń: <span class="math">1111 = −8+4+2+1 = −1</span>, <span class="math">1000 = −8</span>, <span class="math">0111 = 7</span>.</p>
+<p class="article__p"><strong>Liczba przeciwna:</strong> zaneguj wszystkie bity i dodaj 1.</p>
+<div class="formula"><span class="math">7 = 00000111  →  11111000  →  +1  →  11111001 = −7</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Licznik kilometrów w samochodzie, który cofasz. Z 0000 cofnięcie o jeden daje 9999 — i umawiamy się, że 9999 znaczy „−1”. W U2 jest tak samo, tylko dwójkowo: 0000 − 1 = 1111, czyli −1.</p>
+</div>
+</div>
+<h3 class="article__h3">Dodawanie i odejmowanie w U2</h3>
+<ul class="list">
+<li class="list__item">Dodajemy <strong>tak samo jak w NKB</strong>, bez patrzenia na znaki.</li>
+<li class="list__item"><strong>Przeniesienie z najstarszego bitu ignorujemy.</strong></li>
+<li class="list__item">Odejmowanie to dodanie liczby przeciwnej: <span class="math">a − b = a + (−b)</span>. Wystarczą więc negacja i sumator.</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Działanie</th><th class="table__cell table__cell--head">Zapis</th><th class="table__cell table__cell--head">Wynik</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">25 + (−1)</td><td class="table__cell">00011001 + 11111111</td><td class="table__cell">(1) 00011000 = 24 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">25 + (−56)</td><td class="table__cell">00011001 + 11001000</td><td class="table__cell">11100001 = −31 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">(−25) + (−56)</td><td class="table__cell">11100111 + 11001000</td><td class="table__cell">(1) 10101111 = −81 ✓</td></tr>
+<tr class="table__row"><td class="table__cell">112 + 113</td><td class="table__cell">01110000 + 01110001</td><td class="table__cell">11100001 = „−31” ✗ <strong>przekroczenie zakresu</strong></td></tr>
+<tr class="table__row"><td class="table__cell">(−75) + (−56)</td><td class="table__cell">10110101 + 11001000</td><td class="table__cell">(1) 01111101 = „+125” ✗ <strong>przekroczenie zakresu</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">Przekroczenie zakresu (<em>overflow</em>) może się zdarzyć tylko wtedy, gdy dodajemy <strong>dwie dodatnie</strong> albo <strong>dwie ujemne</strong>, a wynik „nie mieści się”. Widać to po znaku: z dwóch dodatnich wyszła ujemna albo odwrotnie.</p>
+<p class="article__p"><strong>Wykrywanie sprzętowe:</strong> patrzymy na dwa przeniesienia przy najstarszym bicie — wchodzące (<span class="math">C<sub class="math__sub">IN</sub></span>) i wychodzące (<span class="math">C<sub class="math__sub">OUT</sub></span>). Przekroczenie jest wtedy i tylko wtedy, gdy <strong>są różne</strong>:</p>
+<div class="formula"><span class="math">OFL = C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p32.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p32.webp" alt="Wykrywanie przekroczenia zakresu bramką XOR na przeniesieniach" width="1100" height="647" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wykrywanie przekroczenia zakresu bramką XOR na przeniesieniach <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Inne pułapki U2: zakres jest niesymetryczny (dla 8 bitów −128 istnieje, a +128 nie), a zwiększenie 127 o 1 daje −128.</p>
+<h3 class="article__h3">Liczby z ułamkiem</h3>
+<ul class="list">
+<li class="list__item"><strong>Stałoprzecinkowe:</strong> umawiamy się, że część bitów to część całkowita, a reszta — ułamkowa. Np. 5 + 3 bity w U2 — wagi: −16, 8, 4, 2, 1, ½, ¼, ⅛. Wtedy <span class="math">11001110 = −16 + 8 + 1 + ½ + ¼ = −6¼</span>. Zakres: od −16 do 15⅞, dokładność ⅛.</li>
+<li class="list__item"><strong>Zmiennoprzecinkowe:</strong> <span class="math">mantysa · 2<sup class="math__sup">wykładnik</sup></span>.</li>
+</ul>
+<p class="article__p">Przy skończonej liczbie bitów niektóre liczby zapisują się z błędem, a niewymierne — zawsze.</p>
+<h2 class="article__h2" id="s6">Sumator</h2>
+<p class="article__p">Dodawanie pisemne w systemie dwójkowym:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">76</td><td class="table__cell">01001100</td></tr>
+<tr class="table__row"><td class="table__cell">+ 118</td><td class="table__cell">01110110</td></tr>
+<tr class="table__row"><td class="table__cell">= 194</td><td class="table__cell">11000010</td></tr>
+</tbody></table></div>
+<p class="article__p">Na każdej pozycji sumujemy trzy bity: <span class="math">a<sub class="math__sub">i</sub></span>, <span class="math">b<sub class="math__sub">i</sub></span> i przeniesienie <span class="math">c<sub class="math__sub">i</sub></span> z poprzedniej pozycji; dostajemy bit sumy i przeniesienie dalej. Robi to <strong>sumator jednobitowy (pełny)</strong>:</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p43.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p43.webp" alt="Sumator jednobitowy: tabela prawdy i symbol" width="1100" height="792" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sumator jednobitowy: tabela prawdy i symbol <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub>  c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span></div>
+<p class="article__p">Sumator <span class="math">n</span>-bitowy to <strong>kaskada</strong> sumatorów jednobitowych: przeniesienie z jednego wchodzi do następnego.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p42.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p42.webp" alt="Sumator 4-bitowy zbudowany z czterech jednobitowych" width="916" height="995" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sumator 4-bitowy zbudowany z czterech jednobitowych <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Dla liczb <strong>bez znaku</strong> przeniesienie z najstarszego bitu (<span class="math">c<sub class="math__sub">n</sub> = 1</span>) oznacza, że wynik się nie zmieścił: <span class="math">152 + 118 = 270</span> na 8 bitach daje 00001110 (= 14) i przeniesienie 1. Można je traktować jako dodatkowy, najstarszy bit wyniku.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Na slajdzie przy tym przykładzie dodawania jest literówka: drugi składnik podpisano „188”, a zapis 01110110 to 118 (76 + 118 = 194).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Komparator i ALU</h2>
+<p class="article__p"><strong>Komparator</strong> porównuje dwie liczby <span class="math">n</span>-bitowe i mówi, czy A &lt; B, A = B, czy A > B.</p>
+<p class="article__p"><strong>ALU</strong> (<em>Arithmetic Logic Unit</em>, jednostka arytmetyczno-logiczna) to układ <strong>kombinacyjny</strong>, który wykonuje operacje arytmetyczne i logiczne na dwóch liczbach (albo na jednej).</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w08-p45.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p45.webp" alt="ALU: dane A i B, wybór operacji F, wynik R, status D" width="1042" height="908" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">ALU: dane A i B, wybór operacji F, wynik R, status D <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>A, B</strong> — dane wejściowe,</li>
+<li class="list__item"><strong>F</strong> — kod operacji (co ma policzyć),</li>
+<li class="list__item"><strong>R</strong> — wynik,</li>
+<li class="list__item"><strong>D</strong> — status, czyli <strong>flagi</strong> (np. wynik równy zero, przekroczenie zakresu).</li>
+</ul>
+<p class="article__p">Najprostsza realizacja: <strong>wszystkie operacje liczą się jednocześnie</strong>, a multiplekser sterowany kodem F wybiera, który wynik trafia na wyjście.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w08-p46.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w08-p46.webp" alt="ALU zbudowane na multiplekserze" width="1100" height="783" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">ALU zbudowane na multiplekserze <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Zadania na ćwiczenia (ze slajdu)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Zrealizować daną funkcję na multiplekserze o czterech wejściach adresowych.</li>
+<li class="list__item">To samo na multiplekserze o trzech wejściach adresowych i co najwyżej jednym negatorze.</li>
+<li class="list__item">Układ wykrywający przekroczenie zakresu dla liczb 4-bitowych w U2.</li>
+<li class="list__item">4-bitowe ALU z czterema działaniami (na slajdzie: 00 ADD, 01 NEG, 10 XOR, 11 AND) i flagami Z (wynik zero) oraz C (przekroczenie zakresu).</li>
+</ol>
+<p class="article__p">Krok po kroku: <a class="link" href="../labs/09.html">Ćwiczenie 9</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Multiplekser</h3>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> wejść adresowych → <span class="math">2<sup class="math__sup">n</sup></span> wejść informacyjnych; wyjście = wejście o numerze podanym na adresie.</li>
+<li class="list__item"><strong>Funkcja na MUX 16:1:</strong> na wejścia o numerach z listy Σ podaj 1, na resztę 0.</li>
+<li class="list__item"><strong>Funkcja na MUX 8:1:</strong> 3 zmienne na adres, czwarta „wolna” <span class="math">x</span>. Dla każdego adresu porównaj y przy x = 0 i x = 1:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">y(x=0), y(x=1)</th><th class="table__cell table__cell--head table__cell--center">0, 0</th><th class="table__cell table__cell--head table__cell--center">1, 1</th><th class="table__cell table__cell--head table__cell--center">0, 1</th><th class="table__cell table__cell--head table__cell--center">1, 0</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">na wejście</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">x</span></td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Wolna <span class="math">x<sub class="math__sub">3</sub></span>: pary wierszy <span class="math">(k, k+8)</span>. Wolna <span class="math">x<sub class="math__sub">0</sub></span>: pary <span class="math">(2k, 2k+1)</span>.</li>
+<li class="list__item">DMUX: jedno wejście → wyjście wskazane adresem. Dekoder: NKB → 1 z N.</li>
+</ul>
+<h3 class="article__h3">Kod U2 (N bitów)</h3>
+<ul class="list">
+<li class="list__item">Waga najstarszego bitu: <span class="math">−2<sup class="math__sup">N−1</sup></span>. Zakres: <span class="math">−2<sup class="math__sup">N−1</sup> … 2<sup class="math__sup">N−1</sup>−1</span> (4 bity: −8…7; 8 bitów: −128…127).</li>
+<li class="list__item"><strong>Liczba przeciwna:</strong> zaneguj bity, dodaj 1.</li>
+<li class="list__item">Dodawanie jak w NKB; przeniesienie z MSB ignoruj. Odejmowanie: <span class="math">a + (−b)</span>.</li>
+<li class="list__item"><strong>Overflow</strong> = <span class="math">C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span> najstarszego bitu (dodatnia + dodatnia = ujemna albo odwrotnie).</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">4 bity U2</th><th class="table__cell table__cell--head table__cell--center">0111</th><th class="table__cell table__cell--head table__cell--center">0001</th><th class="table__cell table__cell--head table__cell--center">0000</th><th class="table__cell table__cell--head table__cell--center">1111</th><th class="table__cell table__cell--head table__cell--center">1110</th><th class="table__cell table__cell--head table__cell--center">1001</th><th class="table__cell table__cell--head table__cell--center">1000</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">wartość</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−1</td><td class="table__cell table__cell--center">−2</td><td class="table__cell table__cell--center">−7</td><td class="table__cell table__cell--center">−8</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Sumator i ALU</h3>
+<ul class="list">
+<li class="list__item">Sumator pełny: <span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub></span>,   <span class="math">c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span>. Sumator n-bitowy = kaskada.</li>
+<li class="list__item">Półsumator (bez przeniesienia wejściowego) <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span>: <span class="math">s = a ⊕ b</span>, <span class="math">c = ab</span>.</li>
+<li class="list__item">ALU: A, B — dane; F — kod operacji; R — wynik; D — flagi. Wszystkie operacje liczone naraz, MUX wybiera wynik.</li>
+<li class="list__item">Inne kody: BCD (cyfra → 4 bity), ZM (bit znaku + moduł), U1 (negacja bitów), Gray, 1 z N.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/07.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 7: Minimalizacja funkcji boolowskich: mapy Karnaugha</span></a>
+<a class="pager__link pager__link--next" href="../lectures/09.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 9: Układy sekwencyjne: przerzutniki, rejestry, liczniki</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

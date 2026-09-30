@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 9. Układy sekwencyjne: przerzutniki, rejestry, liczniki — SYC</title>
+<meta name="description" content="Układ, który pamięta. Skąd bierze się pamięć, czym różnią się przerzutniki RS, D, JK i T, do czego służy zegar i jak z kilku przerzutników zrobić rejestr przesuwny albo licznik.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/09.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/09.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/09.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/09.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/09.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/09.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Układ, który pamięta</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Przerzutnik RS</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Zegar</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Przerzutniki D, JK i T</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Rejestry</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Liczniki</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/09.html" aria-current="page"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 9</p>
+<h1 class="article__title">Układy sekwencyjne: przerzutniki, rejestry, liczniki</h1>
+<p class="article__lead">Układ, który pamięta. Skąd bierze się pamięć, czym różnią się przerzutniki RS, D, JK i T, do czego służy zegar i jak z kilku przerzutników zrobić rejestr przesuwny albo licznik.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Układ, który pamięta</h2>
+<p class="article__p">W <strong>układzie kombinacyjnym</strong> wyjście zależy tylko od aktualnych wejść: <span class="math">y = f(u)</span>. Te same wejścia — zawsze ten sam wynik.</p>
+<p class="article__p">Jeśli jednak wyjście układu poprowadzimy z powrotem na jego wejście (<strong>sprzężenie zwrotne</strong>), wyjście zaczyna zależeć także od tego, <strong>co było wcześniej</strong>. Układ ma <strong>pamięć</strong>.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p04.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p04.webp" alt="Dwie bramki NAND połączone „na krzyż”: jaka jest wartość Q?" width="1100" height="670" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Dwie bramki NAND połączone „na krzyż”: jaka jest wartość Q? <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p06.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p06.webp" alt="Układ kombinacyjny y = f(u) i sekwencyjny y = f(x, u)" width="1100" height="605" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Układ kombinacyjny y = f(u) i sekwencyjny y = f(x, u) <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+</div>
+<p class="article__p">Na pytanie z rysunku („R = 1, S = 1 — jaka jest wartość Q?”) odpowiedź brzmi: <strong>nie wiadomo</strong> — zależy od tego, co było wcześniej. To właśnie efekt pamięci.</p>
+<p class="article__p">W <strong>układzie sekwencyjnym</strong> pojawia się <strong>stan wewnętrzny</strong> <span class="math">x</span>:</p>
+<div class="formula"><span class="math">x(k+1) = δ(x(k), u(k))  — równanie stanu (funkcja wzbudzeń)</span></div>
+<div class="formula"><span class="math">y(k) = λ(x(k), u(k))  — równanie wyjścia (funkcja wyjść)</span></div>
+<ul class="list">
+<li class="list__item">Nowy stan zależy od <strong>starego stanu</strong> i od <strong>wejść</strong>.</li>
+<li class="list__item">Stan może nie być widoczny na wyjściu — dlatego jest „wewnętrzny”.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Układ kombinacyjny to kalkulator: wpisujesz 2 + 2, dostajesz 4, zawsze. Układ sekwencyjny to długopis z przyciskiem: to samo kliknięcie raz wysuwa wkład, raz go chowa — bo długopis „pamięta”, w jakim jest stanie.</p>
+</div>
+</div>
+<h3 class="article__h3">Automaty Moore'a i Mealy'ego</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w09-p08.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p08.webp" alt="Blok δ realizuje pamięć, blok λ — funkcję wyjść" width="776" height="1005" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Blok δ realizuje pamięć, blok λ — funkcję wyjść <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Blok <strong>δ</strong> (z pamięcią) wyznacza następny stan.</li>
+<li class="list__item">Blok <strong>λ</strong> to zwykły układ kombinacyjny liczący wyjście.</li>
+<li class="list__item"><strong>Automat Moore'a:</strong> wyjście zależy <strong>tylko od stanu</strong>.</li>
+<li class="list__item"><strong>Automat Mealy'ego:</strong> wyjście zależy od <strong>stanu i wejść</strong>.</li>
+</ul>
+<h2 class="article__h2" id="s2">Przerzutnik RS</h2>
+<p class="article__p">Przerzutniki to podstawowe elementy, z których buduje się układy sekwencyjne. Każdy pamięta <strong>jeden bit</strong>. Najprostszy to RS z dwóch bramek NAND:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p09.webp" alt="Przerzutnik RS na bramkach NAND i jego tabela" width="1100" height="496" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik RS na bramkach NAND i jego tabela <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head">Co się dzieje</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">—</td><td class="table__cell"><strong>kombinacja zabroniona</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">ustawienie (<em>set</em>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">zerowanie (<em>reset</em>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">pamiętanie — bez zmian</td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub> · R<sub class="math__sub">t</sub> + <span class="math__bar">S<sub class="math__sub">t</sub></span></span></div>
+<p class="article__p">Ta wersja jest <strong>aktywna stanem niskim</strong>: „naciśnięcie” to podanie zera. S = 0 ustawia Q na 1, R = 0 zeruje Q, a gdy oba wejścia są jedynkami — przerzutnik pamięta.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Przerzutnik RS zbudowany z bramek <strong>NOR</strong> działa odwrotnie — jest aktywny stanem <strong>wysokim</strong> (S = 1 ustawia, R = 1 zeruje, 00 pamięta, 11 zabronione). Oba warianty są w szablonie do <a class="link" href="../labs/10.html">ćwiczenia 10</a>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Zegar</h2>
+<p class="article__p">W układach sekwencyjnych ważna jest <strong>kolejność</strong> zmian. Żeby wszystko zmieniało się w tych samych, ściśle określonych chwilach, dodaje się wejście <strong>zegarowe</strong> (C, CLK).</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w09-p10.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p10.webp" alt="Wyzwalanie poziomem i zboczem" width="923" height="681" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Wyzwalanie poziomem i zboczem <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Wyzwalanie poziomem:</strong> układ reaguje, dopóki zegar ma stan 1 (albo 0).</li>
+<li class="list__item"><strong>Wyzwalanie zboczem:</strong> układ reaguje tylko w momencie <strong>zmiany</strong> zegara, zwykle z 0 na 1 (zbocze narastające). Na symbolu oznacza to trójkącik przy wejściu zegara.</li>
+</ul>
+<h3 class="article__h3">Zatrzask (przerzutnik RS z zegarem)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p11.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p11.webp" alt="Przerzutnik RS z wejściem zegarowym C" width="1100" height="396" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik RS z wejściem zegarowym C <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span> (gdy C = 1)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span> — bez zmian</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">zabroniona</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Gdy <strong>C = 0</strong>, zmiany na S i R nie mają żadnego wpływu.</li>
+<li class="list__item">Gdy <strong>C = 1</strong>, wyjście zmienia się zgodnie z tabelą.</li>
+<li class="list__item">Przejście C z 1 na 0 „zatrzaskuje” stan — stąd nazwa <strong>zatrzask</strong> (<em>latch</em>).</li>
+</ul>
+<h2 class="article__h2" id="s4">Przerzutniki D, JK i T</h2>
+<h3 class="article__h3">Typ D</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p12.webp" alt="Przerzutnik D: symbol, tabela i graf stanów" width="1100" height="582" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik D: symbol, tabela i graf stanów <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = D<sub class="math__sub">t</sub></span></div>
+<p class="article__p">Najprostszy i najczęściej używany: w chwili zbocza zegara <strong>zapamiętuje to, co jest na wejściu D</strong>, i trzyma do następnego zbocza. Ma też wejścia <strong>asynchroniczne</strong> (działające natychmiast, niezależnie od zegara): <strong>SET</strong> (ustaw Q = 1) i <strong>CLR</strong> (wyzeruj Q = 0).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Przerzutnik D to aparat fotograficzny. Wejście D to scena, zbocze zegara to naciśnięcie migawki, a Q to zdjęcie: pokazuje to, co było w chwili „pstryk”, i nie zmienia się, dopóki nie zrobisz następnego.</p>
+</div>
+</div>
+<h3 class="article__h3">Typ JK</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p13.webp" alt="Przerzutnik JK" width="1100" height="528" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik JK <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">J</th><th class="table__cell table__cell--head table__cell--center">K</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">pamiętaj</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">zeruj</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">ustaw</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">Q<sub class="math__sub">t</sub></span></span></td><td class="table__cell"><strong>zmień na przeciwny</strong></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = J<sub class="math__sub">t</sub> · <span class="math__bar">Q<sub class="math__sub">t</sub></span> + <span class="math__bar">K<sub class="math__sub">t</sub></span> · Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">Jak RS, ale bez kombinacji zabronionej — dla 11 przerzutnik się przełącza.</p>
+<h3 class="article__h3">Typ T</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p14.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p14.webp" alt="Przerzutnik T" width="1100" height="508" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik T <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = T<sub class="math__sub">t</sub> ⊕ Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">T = 1 → przy zboczu zegara stan zmienia się na przeciwny; T = 0 → bez zmian. (<em>T</em> od <em>toggle/trigger</em>.)</p>
+<h3 class="article__h3">Dzielnik częstotliwości przez 2</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p21.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p21.webp" alt="Przerzutnik zmieniający stan przy każdym impulsie zegara" width="1100" height="302" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przerzutnik zmieniający stan przy każdym impulsie zegara <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Przerzutnik JK z J = K = 1 (albo przerzutnik D, któremu na wejście D podano jego własne <span class="math"><span class="math__bar">Q</span></span>) zmienia stan przy <strong>każdym</strong> zboczu zegara. Na wyjściu powstaje przebieg o <strong>dwa razy mniejszej częstotliwości</strong>. Na tym opierają się liczniki.</p>
+<h2 class="article__h2" id="s5">Rejestry</h2>
+<h3 class="article__h3">Rejestr przesuwny</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p15.webp" alt="Czterobitowy rejestr przesuwny z przerzutników D" width="1100" height="537" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Czterobitowy rejestr przesuwny z przerzutników D <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Kilka przerzutników D połączonych w łańcuch: wyjście Q jednego idzie na wejście D następnego, a zegar jest wspólny. Przy każdym zboczu zegara zawartość <strong>przesuwa się o jedną pozycję</strong>.</p>
+<p class="article__p">Jeśli na wejście podamy na stałe jedynkę, rejestr wypełnia się tak: 0000 → 1000 → 1100 → 1110 → 1111.</p>
+<h3 class="article__h3">Licznik pierścieniowy</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p16.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p16.webp" alt="Licznik pierścieniowy: wyjście ostatniego przerzutnika wraca na wejście pierwszego" width="1100" height="531" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Licznik pierścieniowy: wyjście ostatniego przerzutnika wraca na wejście pierwszego <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Rejestr przesuwny zamknięty w pętlę. Jedna jedynka krąży w kółko: 1000 → 0100 → 0010 → 0001 → 1000… Trzeba najpierw ustawić stan początkowy (wejścia SET/CLR). Cztery przerzutniki dają 4 stany — kod „1 z N”.</p>
+<h3 class="article__h3">Licznik Johnsona</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p17.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p17.webp" alt="Licznik Johnsona: na wejście wraca zanegowane wyjście ostatniego przerzutnika" width="1100" height="701" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Licznik Johnsona: na wejście wraca zanegowane wyjście ostatniego przerzutnika <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Pętla z <strong>negacją</strong>: na wejście pierwszego przerzutnika idzie <span class="math"><span class="math__bar">Q</span></span> ostatniego. Rejestr najpierw wypełnia się jedynkami, potem zerami:</p>
+<div class="formula"><span class="math">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000 → 0000</span></div>
+<p class="article__p">Cztery przerzutniki dają <strong>8 stanów</strong> (dwa razy więcej niż w pierścieniowym). W kodzie Johnsona sąsiednie stany różnią się jednym bitem.</p>
+<h3 class="article__h3">Generator liczb pseudolosowych (PRBS)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p18.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p18.webp" alt="Rejestr przesuwny ze sprzężeniem przez bramkę XOR" width="1100" height="652" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Rejestr przesuwny ze sprzężeniem przez bramkę XOR <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Na wejście rejestru podajemy <strong>XOR wybranych wyjść</strong>. Powstaje ciąg, który wygląda na losowy (<em>Pseudo-Random Binary Sequence</em>), choć w rzeczywistości jest okresowy. Dla rejestru 8-bitowego z odczepami 2, 3, 4, 8 okres wynosi 255; dla 10-bitowego z odczepami 7, 10 — 1023.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Od autora strony (nie z wykładu)</p>
+<div class="callout__body">
+<p class="article__p">Dla rejestru <strong>4-bitowego</strong> najdłuższy ciąg (15 stanów) daje XOR wyjść przerzutników 3 i 4. Stan 0000 jest pułapką: XOR samych zer to zero, więc rejestr nigdy z niego nie wyjdzie — dlatego generator trzeba wystartować z niezerowego stanu (w szablonie z ćwiczeń: 0001).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Liczniki</h2>
+<h3 class="article__h3">Asynchroniczny licznik binarny</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p22.webp" alt="Czterobitowy asynchroniczny licznik binarny" width="1100" height="386" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Czterobitowy asynchroniczny licznik binarny <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Kilka dzielników przez 2 jeden za drugim: pierwszy przerzutnik jest taktowany zegarem, każdy następny — <strong>wyjściem poprzedniego</strong>. Pierwszy zmienia się co impuls, drugi co dwa, trzeci co cztery… Wyjścia A, B, C, D tworzą liczbę binarną 0…15.</p>
+<p class="article__p">„Asynchroniczny” znaczy, że przerzutniki <strong>nie mają wspólnego zegara</strong> — zmiana „przetacza się” przez kolejne stopnie.</p>
+<h3 class="article__h3">Licznik modulo N</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p23.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p23.webp" alt="Asynchroniczny licznik modulo 10" width="1100" height="507" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Asynchroniczny licznik modulo 10 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Licznik mod 10 ma liczyć 0, 1, …, 9 i wracać do 0. Sposób: bramka wykrywa stan <strong>10</strong> (binarnie 1010 — jedynki na B i D) i natychmiast podaje sygnał na wejścia zerujące <strong>CLR</strong> wszystkich przerzutników.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Przepis na licznik mod N</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Zapisz liczbę <span class="math">N</span> binarnie.</li>
+<li class="list__item">Bramką AND (lub NAND — zależnie od tego, czy CLR reaguje na 1, czy na 0) wykryj <strong>jedynki</strong> tego zapisu.</li>
+<li class="list__item">Wyjście bramki podłącz do CLR wszystkich przerzutników.</li>
+</ol>
+<p class="article__p">Licznik mod 6: <span class="math">6 = 0110</span> → AND z wyjść B i C. Stan 6 pojawia się tylko na ułamek chwili i od razu zmienia się w 0.</p>
+</div>
+</div>
+<h3 class="article__h3">Licznik od X do Y</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p24.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w09-p24.webp" alt="Licznik generujący sekwencję 3–4–5–6–7–8" width="1100" height="692" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Licznik generujący sekwencję 3–4–5–6–7–8 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Żeby licznik nie zaczynał od zera, używa się wejść <strong>SET</strong>. Dla sekwencji 3…8: bramka wykrywa stan <strong>9</strong> (1001) i wtedy przerzutniki, które w liczbie 3 (0011) mają jedynkę, są <strong>ustawiane</strong> (SET), a pozostałe <strong>zerowane</strong> (CLR).</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Zadania na ćwiczenia (ze slajdu)</p>
+<div class="callout__body">
+<p class="article__p">Z przerzutników D: rejestr przesuwny, licznik pierścieniowy, licznik Johnsona, licznik mod 9, licznik od 3 do 9, generator pseudolosowy z XOR; do tego zatrzask 1-bitowy z przerzutników RS na NAND oraz rejestr szeregowy z równoległym wyjściem.</p>
+<p class="article__p">Krok po kroku: <a class="link" href="../labs/10.html">Ćwiczenie 10</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Przerzutniki</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Typ</th><th class="table__cell table__cell--head">Równanie</th><th class="table__cell table__cell--head">Tabela</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS (NAND)</strong>, aktywny zerem</td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub>·R + <span class="math__bar">S</span></span></td><td class="table__cell">S=0 → 1; R=0 → 0; 11 → pamięta; 00 zabronione</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RS z zegarem</strong> (zatrzask)</td><td class="table__cell">—</td><td class="table__cell">C=1: 00 pamięta, 01 → 0, 10 → 1, 11 zabronione; C=0: nic</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>D</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = D</span></td><td class="table__cell">przy zboczu zegara Q := D</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>JK</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = J<span class="math__bar">Q</span> + <span class="math__bar">K</span>Q</span></td><td class="table__cell">00 pamięta, 01 → 0, 10 → 1, 11 → zmiana</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>T</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = T ⊕ Q</span></td><td class="table__cell">T=1 → zmiana, T=0 → pamięta</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>SET / CLR</strong> — asynchroniczne (natychmiast, bez zegara): Q = 1 / Q = 0.</li>
+<li class="list__item">D z <span class="math"><span class="math__bar">Q</span></span> na wejściu D (albo JK z J=K=1) = <strong>dzielnik częstotliwości przez 2</strong>.</li>
+<li class="list__item">Moore: wyjście = f(stan). Mealy: wyjście = f(stan, wejście).</li>
+</ul>
+<h3 class="article__h3">Rejestry (4 przerzutniki D, wspólny zegar)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Układ</th><th class="table__cell table__cell--head">Na wejście pierwszego D</th><th class="table__cell table__cell--head">Sekwencja</th><th class="table__cell table__cell--head table__cell--center">Stanów</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Rejestr przesuwny</td><td class="table__cell">sygnał zewnętrzny</td><td class="table__cell">0000 → 1000 → 1100 → 1110 → 1111 (dla „1”)</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Licznik pierścieniowy</td><td class="table__cell">Q ostatniego</td><td class="table__cell">1000 → 0100 → 0010 → 0001</td><td class="table__cell table__cell--center">4</td></tr>
+<tr class="table__row"><td class="table__cell">Licznik Johnsona</td><td class="table__cell"><span class="math"><span class="math__bar">Q</span></span> ostatniego</td><td class="table__cell">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000</td><td class="table__cell table__cell--center">8</td></tr>
+<tr class="table__row"><td class="table__cell">PRBS</td><td class="table__cell">XOR dwóch wyjść (3 i 4) <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span></td><td class="table__cell">pseudolosowa, start ≠ 0000</td><td class="table__cell table__cell--center">15 <span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Liczniki</h3>
+<ul class="list">
+<li class="list__item"><strong>Asynchroniczny binarny:</strong> każdy przerzutnik jako dzielnik przez 2, taktowany wyjściem poprzedniego.</li>
+<li class="list__item"><strong>Mod N:</strong> wykryj stan N bramką → CLR wszystkich. (mod 10: 1010; mod 9: 1001; mod 6: 0110)</li>
+<li class="list__item"><strong>Od X do Y:</strong> wykryj stan Y+1 → SET tam, gdzie X ma jedynki, CLR tam, gdzie zera.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/08.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 8: Kombinacyjne bloki funkcjonalne: multiplekser, kod U2, sumator, ALU</span></a>
+<a class="pager__link pager__link--next" href="../lectures/10.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 10: Projektowanie synchronicznych układów sekwencyjnych</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

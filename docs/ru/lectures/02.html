@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 2. Пассивные элементы: резистор, конденсатор, катушка и импеданс — SYC</title>
+<meta name="description" content="Три базовых «кирпичика» электроники и одно понятие, которое их объединяет, — импеданс, то есть сопротивление, записанное комплексным числом.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/02.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/02.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/02.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/02.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/02.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/02.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Приставки — чтобы не писать столько нулей</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Проводники, изоляторы, полупроводники</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Постоянный (DC) и переменный (AC) ток</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Пассивные и активные элементы</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Резистор</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Конденсатор</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Катушка индуктивности</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Обозначения на схемах</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Преобразование Лапласа — зачем программисту такое чудовище</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Импеданс — «сопротивление» для переменного тока</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">Амплитуда и сдвиг фаз</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/02.html" aria-current="page"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 2</p>
+<h1 class="article__title">Пассивные элементы: резистор, конденсатор, катушка и импеданс</h1>
+<p class="article__lead">Три базовых «кирпичика» электроники и одно понятие, которое их объединяет, — импеданс, то есть сопротивление, записанное комплексным числом.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Приставки — чтобы не писать столько нулей</h2>
+<p class="article__p">В электронике числа бывают очень большими или очень маленькими, поэтому их записывают как <span class="math">A × 10<sup class="math__sup">n</sup></span> и пользуются приставками.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Приставка</th><th class="table__cell table__cell--head table__cell--center">Символ</th><th class="table__cell table__cell--head table__cell--center">Степень 10</th><th class="table__cell table__cell--head">Множитель</th><th class="table__cell table__cell--head">Пример</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">гига</td><td class="table__cell table__cell--center">G</td><td class="table__cell table__cell--center">9</td><td class="table__cell">1 000 000 000</td><td class="table__cell">1 ГГц</td></tr>
+<tr class="table__row"><td class="table__cell">мега</td><td class="table__cell table__cell--center">M</td><td class="table__cell table__cell--center">6</td><td class="table__cell">1 000 000</td><td class="table__cell">1 МОм = 1 000 000 Ом</td></tr>
+<tr class="table__row"><td class="table__cell">кило</td><td class="table__cell table__cell--center">k</td><td class="table__cell table__cell--center">3</td><td class="table__cell">1 000</td><td class="table__cell">1 кОм = 1000 Ом</td></tr>
+<tr class="table__row"><td class="table__cell">милли</td><td class="table__cell table__cell--center">m</td><td class="table__cell table__cell--center">−3</td><td class="table__cell">0,001</td><td class="table__cell">20 мА = 0,02 А</td></tr>
+<tr class="table__row"><td class="table__cell">микро</td><td class="table__cell table__cell--center">µ</td><td class="table__cell table__cell--center">−6</td><td class="table__cell">0,000 001</td><td class="table__cell">1 мкс</td></tr>
+<tr class="table__row"><td class="table__cell">нано</td><td class="table__cell table__cell--center">n</td><td class="table__cell table__cell--center">−9</td><td class="table__cell">0,000 000 001</td><td class="table__cell">10 нФ = 0,000 000 01 Ф</td></tr>
+<tr class="table__row"><td class="table__cell">пико</td><td class="table__cell table__cell--center">p</td><td class="table__cell table__cell--center">−12</td><td class="table__cell">0,000 000 000 001</td><td class="table__cell">36 пФ</td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Совет от автора сайта</p>
+<div class="callout__body">
+<p class="article__p">На калькуляторе вводи приставки как степени: 10 нФ — это <code class="inline-code">10E-9</code>, 100 кГц — <code class="inline-code">100E3</code>. Больше всего ошибок на лабораторных 3 и 4 — из-за путаницы «n» и «µ».</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Проводники, изоляторы, полупроводники</h2>
+<ul class="list">
+<li class="list__item"><strong>Проводник</strong> — внешнее напряжение вызывает ток (металлы).</li>
+<li class="list__item"><strong>Изолятор</strong> — электроны крепко связаны с ядрами атомов, и электрическое поле их не «вырвет»; ток не течёт.</li>
+<li class="list__item"><strong>Полупроводник</strong> — проводит или нет в зависимости от условий. О них — <a class="link" href="../lectures/04.html">лекция 4</a>.</li>
+</ul>
+<h2 class="article__h2" id="s3">Постоянный (DC) и переменный (AC) ток</h2>
+<ul class="list">
+<li class="list__item"><strong>DC</strong> (<em>direct current</em>) — ток течёт в одну сторону и имеет постоянное значение. Батарейка, блок питания.</li>
+<li class="list__item"><strong>AC</strong> (<em>alternating current</em>) — направление тока периодически меняется; среднее значение за период равно нулю. Розетка, сигнал с генератора.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">DC — это река: вода всё время течёт в одну сторону. AC — это волна у берега: вода идёт то вперёд, то назад, а «в среднем» остаётся на месте.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Пассивные и активные элементы</h2>
+<ul class="list">
+<li class="list__item"><strong>Пассивные</strong> — не требуют питания для работы. Энергия на выходе не может быть больше, чем на входе. Это резистор, конденсатор, катушка.</li>
+<li class="list__item"><strong>Активные</strong> — требуют питания; благодаря ему энергия на выходе может быть больше, чем на входе (транзистор, усилитель).</li>
+</ul>
+<h2 class="article__h2" id="s5">Резистор</h2>
+<p class="article__p">Сопротивление — это отношение напряжения на концах элемента к току, который через него течёт:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span>  [Ом]</span></div>
+<p class="article__p">Оно зависит от материала и размеров:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">ρ · L</span><span class="math__den">A</span></span></span></div>
+<p class="article__p">где <span class="math">ρ</span> — удельное сопротивление материала, <span class="math">L</span> — длина, <span class="math">A</span> — площадь сечения. Длиннее и тоньше провод — больше сопротивление.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p07.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p07.webp" alt="Вольт-амперные характеристики: у резистора прямая, у диода и лампочки — нет" width="1100" height="325" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Вольт-амперные характеристики: у резистора прямая, у диода и лампочки — нет <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Резистор — <strong>линейный</strong> элемент: вдвое большее напряжение даёт вдвое больший ток (прямая на графике). Диод и лампочка так себя не ведут.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p09.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p09.webp" alt="Разные виды резисторов" width="1100" height="483" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Разные виды резисторов <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s6">Конденсатор</h2>
+<p class="article__p">Две металлические обкладки, разделённые изолятором. Накапливает <strong>заряд</strong> <span class="math">Q</span> (в кулонах [Кл]); чем больше заряд, тем больше напряжение между обкладками.</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span>  [Ф]</span></div>
+<p class="article__p">Ёмкость <span class="math">C</span> измеряется в фарадах. Для двух параллельных пластин площадью <span class="math">A</span> на расстоянии <span class="math">d</span>:</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">ε<sub class="math__sub">r</sub> · ε<sub class="math__sub">0</sub> · A</span><span class="math__den">d</span></span></span></div>
+<p class="article__p">(<span class="math">ε<sub class="math__sub">0</sub> = 8,84 × 10<sup class="math__sup">−12</sup></span> Ф/м — электрическая постоянная, <span class="math">ε<sub class="math__sub">r</sub></span> — относительная диэлектрическая проницаемость изолятора.) Больше пластины и меньше зазор — больше ёмкость.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p12.webp" alt="Виды конденсаторов: керамические, плёночные, электролитические, танталовые" width="1100" height="484" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Виды конденсаторов: керамические, плёночные, электролитические, танталовые <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Конденсатор — это ведёрко для заряда. Постоянный ток наполняет его — и всё, дальше ничего не течёт. При переменном токе ведёрко по очереди наполняется и опустошается, поэтому в цепи всё время что-то течёт. Поэтому конденсатор <strong>не пропускает DC, но пропускает AC</strong> — и тем охотнее, чем быстрее изменения.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Катушка индуктивности</h2>
+<p class="article__p">Виток провода. Протекающий ток создаёт магнитное поле, в котором накапливается энергия.</p>
+<div class="formula"><span class="math">L = <span class="math__frac"><span class="math__num">µ · n<sup class="math__sup">2</sup> · A</span><span class="math__den">l</span></span>  [Гн]</span></div>
+<p class="article__p">Индуктивность <span class="math">L</span> (в генри) растёт с <strong>квадратом числа витков</strong> <span class="math">n</span>, с площадью сечения <span class="math">A</span> и магнитной проницаемостью <span class="math">µ</span>, а убывает с длиной катушки <span class="math">l</span>.</p>
+<p class="article__p">Когда ток меняется, катушка создаёт напряжение, которое этому изменению <strong>противодействует</strong> (электродвижущая сила, ЭДС):</p>
+<div class="formula"><span class="math">E = −<span class="math__frac"><span class="math__num">dΦ</span><span class="math__den">dt</span></span> = −L · <span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p13.webp" alt="Катушка: n витков, длина l, площадь сечения A" width="1100" height="553" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Катушка: n витков, длина l, площадь сечения A <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Катушка — это тяжёлый маховик: его трудно раскрутить и трудно остановить. Постоянный ток проходит через неё свободно (маховик крутится ровно), а быстрым изменениям тока катушка сопротивляется — тем сильнее, чем они быстрее.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s8">Обозначения на схемах</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p15.webp" alt="Символы: резистор, потенциометр, конденсатор, полярный конденсатор, катушка" width="1100" height="1030" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Символы: резистор, потенциометр, конденсатор, полярный конденсатор, катушка <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s9">Преобразование Лапласа — зачем программисту такое чудовище</h2>
+<p class="article__p">Уравнения катушки и конденсатора содержат производные и интегралы. Преобразование Лапласа — это «переводчик», который превращает описание во времени <span class="math">x(t)</span> в описание через комплексную переменную <span class="math">s</span>, — и тогда вместо дифференцирования и интегрирования достаточно <strong>умножать и делить</strong>.</p>
+<div class="formula"><span class="math">X(s) = ∫ x(t) · e<sup class="math__sup">−st</sup> dt ,  s = σ + jω</span></div>
+<p class="article__p">Из всей части лекции о преобразовании нужно запомнить три вещи:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Во временной области</th><th class="table__cell table__cell--head">В области Лапласа</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">производная <span class="math"><span class="math__frac"><span class="math__num">d</span><span class="math__den">dt</span></span></span></td><td class="table__cell">умножение на <span class="math">s</span></td></tr>
+<tr class="table__row"><td class="table__cell">интеграл <span class="math">∫ … dt</span></td><td class="table__cell">умножение на <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">синусоидальный сигнал с круговой частотой <span class="math">ω</span></td><td class="table__cell">подставляем <span class="math">s = jω</span> (это уже преобразование Фурье)</td></tr>
+</tbody></table></div>
+<p class="article__p">Здесь <span class="math">ω = 2πf</span> — <strong>круговая частота</strong> (по-польски <em>pulsacja</em>, рад/с), <span class="math">f</span> — частота (Гц), а <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span> — мнимая единица. Электронщики пишут <span class="math">j</span>, а не <span class="math">i</span>, потому что <span class="math">i</span> — это ток.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p22.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p22.webp" alt="Дифференцирование во времени = умножение на s" width="1100" height="141" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Дифференцирование во времени = умножение на s <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Комплексные числа за 30 секунд</p>
+<div class="callout__body">
+<p class="article__p">Комплексное число — это точка на плоскости: <span class="math">Z = a + jb</span>. Часть <span class="math">a</span> откладываем по горизонтали (действительная), <span class="math">b</span> — по вертикали (мнимая).</p>
+<ul class="list">
+<li class="list__item">Длина стрелки от нуля до точки: <span class="math">|Z| = <span class="math__sqrt">√<span class="math__bar">a<sup class="math__sup">2</sup> + b<sup class="math__sup">2</sup></span></span></span> — это <strong>модуль</strong>.</li>
+<li class="list__item">Угол стрелки относительно горизонтальной оси: <span class="math">φ</span> — это <strong>фаза</strong> (аргумент).</li>
+<li class="list__item">Показательная форма: <span class="math">Z = |Z| · e<sup class="math__sup">jφ</sup></span>, причём <span class="math">a = |Z| · cos φ</span>, <span class="math">b = |Z| · sin φ</span>.</li>
+<li class="list__item"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span> (пригодится для конденсатора).</li>
+</ul>
+<p class="article__p">На слайдах есть ещё длинный список готовых преобразований (sin, cos, экспонента…). На лабораторных этого предмета они не нужны.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s10">Импеданс — «сопротивление» для переменного тока</h2>
+<p class="article__p">Закон Ома работает и для катушек с конденсаторами, если вместо сопротивления <span class="math">R</span> подставить <strong>импеданс</strong> <span class="math">Z</span>:</p>
+<div class="formula"><span class="math">Z = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span> = R + jX</span></div>
+<ul class="list">
+<li class="list__item">действительная часть <span class="math">R</span> — <strong>активное сопротивление</strong> (<em>rezystancja</em>),</li>
+<li class="list__item">мнимая часть <span class="math">X</span> — <strong>реактивное сопротивление</strong> (<em>reaktancja</em>; сопротивление катушки или конденсатора; <strong>зависит от частоты</strong>).</li>
+</ul>
+<h3 class="article__h3">Катушка</h3>
+<p class="article__p">Из уравнения <span class="math">v<sub class="math__sub">L</sub>(t) = L · <span class="math__frac"><span class="math__num">di<sub class="math__sub">L</sub></span><span class="math__den">dt</span></span></span> после перехода к Лапласу (производная → умножение на <span class="math">s</span>): <span class="math">V<sub class="math__sub">L</sub>(s) = sL · I<sub class="math__sub">L</sub>(s)</span>, значит</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">L</sub> = sL = jωL</span></div>
+<h3 class="article__h3">Конденсатор</h3>
+<p class="article__p">Из уравнения <span class="math">v<sub class="math__sub">C</sub>(t) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">C</span></span> ∫ i<sub class="math__sub">C</sub> dt</span> (интеграл → умножение на <span class="math">1/s</span>): <span class="math">V<sub class="math__sub">C</sub>(s) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> · I<sub class="math__sub">C</sub>(s)</span>, значит</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">C</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j · <span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></div>
+<h3 class="article__h3">Что из этого следует</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head">Импеданс</th><th class="table__cell table__cell--head">Модуль <span class="math">|Z|</span></th><th class="table__cell table__cell--head">Реактивное сопр.</th><th class="table__cell table__cell--head">Характер</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Резистор</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math">R</span></td><td class="table__cell">0</td><td class="table__cell">активный — не зависит от частоты</td></tr>
+<tr class="table__row"><td class="table__cell">Конденсатор</td><td class="table__cell"><span class="math">−j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">отрицательное</td><td class="table__cell"><strong>ёмкостный</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Катушка</td><td class="table__cell"><span class="math">jωL</span></td><td class="table__cell"><span class="math">2πfL</span></td><td class="table__cell">положительное</td><td class="table__cell"><strong>индуктивный</strong></td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p32.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p32.webp" alt="Как реактивное сопротивление зависит от частоты" width="1100" height="387" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Как реактивное сопротивление зависит от частоты <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">При <span class="math">ω = 0</span> (постоянный ток): у конденсатора сопротивление <strong>бесконечное</strong> (разрыв), у катушки — <strong>нулевое</strong> (короткое замыкание).</li>
+<li class="list__item">При <span class="math">ω → ∞</span>: конденсатор — замыкание, катушка — разрыв.</li>
+<li class="list__item">Частота растёт → <span class="math">X<sub class="math__sub">C</sub></span> падает, <span class="math">X<sub class="math__sub">L</sub></span> растёт.</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Собственный пример: сколько «омов» у конденсатора?</p>
+<div class="callout__body">
+<p class="article__p">Конденсатор 22 нФ на частоте 50 кГц:</p>
+<p class="article__p"><span class="math">|Z<sub class="math__sub">C</sub>| = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 50 000 · 22 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">0,00691</span></span> ≈ 145 Ом</span></p>
+<p class="article__p">Тот же конденсатор на 5 кГц имеет в 10 раз больше: около 1447 Ом. На 500 кГц — в 10 раз меньше: около 14,5 Ом.</p>
+<p class="article__p">Катушка 330 мкГн на 50 кГц: <span class="math">|Z<sub class="math__sub">L</sub>| = 2π · 50 000 · 330 × 10<sup class="math__sup">−6</sup> ≈ 104 Ом</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s11">Амплитуда и сдвиг фаз</h2>
+<p class="article__p">Импеданс как комплексное число несёт <strong>две</strong> информации:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Модуль</strong> <span class="math">|Z| = <span class="math__frac"><span class="math__num">амплитуда напряжения</span><span class="math__den">амплитуда тока</span></span></span> — сколько вольт приходится на один ампер.</li>
+<li class="list__item"><strong>Фаза</strong> <span class="math">φ</span> — насколько синусоида тока <strong>сдвинута во времени</strong> относительно синусоиды напряжения (в градусах или радианах).</li>
+</ol>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p33.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w02-p33.webp" alt="Две синусоиды, сдвинутые во времени: напряжение и ток" width="1100" height="835" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Две синусоиды, сдвинутые во времени: напряжение и ток <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head table__cell--center">Фаза <span class="math">φ</span> импеданса</th><th class="table__cell table__cell--head">Что видно на осциллографе</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Резистор</td><td class="table__cell table__cell--center">0°</td><td class="table__cell">пик тока ровно под пиком напряжения</td></tr>
+<tr class="table__row"><td class="table__cell">Конденсатор</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell">ток <strong>опережает</strong> напряжение на четверть периода</td></tr>
+<tr class="table__row"><td class="table__cell">Катушка</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell">ток <strong>отстаёт</strong> от напряжения на четверть периода</td></tr>
+</tbody></table></div>
+<p class="article__p">Сдвиг, снятый с экрана, переводится в градусы так:</p>
+<div class="formula"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></div>
+<p class="article__p">где <span class="math">t<sub class="math__sub">p</sub></span> — сдвиг между пиками (в делениях), <span class="math">T</span> — период (в делениях). Четверть периода — это 90°.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции</p>
+<div class="callout__body">
+<p class="article__p">На лекции 1 (2026/27) лектор анонсировал это занятие так: вы запишете импеданс как комплексное число и увидите, что «это не только математическая абстракция, а имеет отражение в физическом мире» — его можно «потрогать» на осциллографе.</p>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Как запомнить, что опережает</p>
+<div class="callout__body">
+<p class="article__p">Конденсатор сначала должен получить ток, чтобы на нём появилось напряжение → <strong>ток первый</strong>. Катушка сопротивляется изменению тока → <strong>напряжение первое</strong>, ток приходит позже. Английская мнемоника: «ELI the ICE man» (в катушке L: E перед I; в конденсаторе C: I перед E).</p>
+</div>
+</div>
+<p class="article__p">Как это измеряется на практике: <a class="link" href="../labs/03.html">Лабораторная 3</a>.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Приставки</h3>
+<p class="article__p">G = 10⁹, M = 10⁶, k = 10³, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹, p = 10⁻¹²</p>
+<h3 class="article__h3">Три элемента</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Резистор</th><th class="table__cell table__cell--head">Конденсатор</th><th class="table__cell table__cell--head">Катушка</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Величина</td><td class="table__cell">R [Ом]</td><td class="table__cell">C [Ф]</td><td class="table__cell">L [Гн]</td></tr>
+<tr class="table__row"><td class="table__cell">Определение</td><td class="table__cell"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td><td class="table__cell"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span></span></td><td class="table__cell"><span class="math">E = −L<span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Импеданс</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math">jωL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Модуль</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell"><span class="math">2πfL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Фаза Z</td><td class="table__cell">0°</td><td class="table__cell">−90°</td><td class="table__cell">+90°</td></tr>
+<tr class="table__row"><td class="table__cell">DC (f = 0)</td><td class="table__cell">R</td><td class="table__cell">разрыв (∞)</td><td class="table__cell">замыкание (0)</td></tr>
+<tr class="table__row"><td class="table__cell">f → ∞</td><td class="table__cell">R</td><td class="table__cell">замыкание (0)</td><td class="table__cell">разрыв (∞)</td></tr>
+<tr class="table__row"><td class="table__cell">f растёт</td><td class="table__cell">не меняется</td><td class="table__cell">сопротивление падает</td><td class="table__cell">сопротивление растёт</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Формулы</h3>
+<ul class="list">
+<li class="list__item"><span class="math">ω = 2πf</span>,   <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span>,   <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span></li>
+<li class="list__item"><span class="math">Z = R + jX = |Z| · e<sup class="math__sup">jφ</sup></span>;   <span class="math">R = |Z| cos φ</span>,   <span class="math">X = |Z| sin φ</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span> (амплитуда напряжения на амплитуду тока)</li>
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span> (сдвиг и период в делениях)</li>
+<li class="list__item">Лаплас: производная → <span class="math">·s</span>, интеграл → <span class="math">·<span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span>, синусоида → <span class="math">s = jω</span></li>
+<li class="list__item">X отрицательное → ёмкостный характер; X положительное → индуктивный</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/01.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 1: Введение, физические основы электроники и измерения</span></a>
+<a class="pager__link pager__link--next" href="../lectures/03.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 3: Пассивные электронные цепи: делители и RC-фильтры</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

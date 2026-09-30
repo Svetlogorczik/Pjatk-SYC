@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 10. Designing synchronous sequential circuits — SYC</title>
+<meta name="description" content="From a description in words ("red should light up, then yellow…") to a finished circuit of flip-flops and gates. Four steps: the graph, state coding, excitation functions, output functions.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/10.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/10.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/10.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/10.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/10.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/10.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Internal state and the transition graph</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The four design stages</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">The lecture example, step by step</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">How to code the states</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Minimising the number of states</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Incompletely specified circuits</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Notes on Mealy machines</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/10.html" aria-current="page"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 10</p>
+<h1 class="article__title">Designing synchronous sequential circuits</h1>
+<p class="article__lead">From a description in words ("red should light up, then yellow…") to a finished circuit of flip-flops and gates. Four steps: the graph, state coding, excitation functions, output functions.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Internal state and the transition graph</h2>
+<p class="article__p">A sequential circuit has an <strong>internal state</strong>: its future depends on the state it is in now and on what it receives at the input (see <a class="link" href="../lectures/09.html">lecture 9</a>).</p>
+<p class="article__p">The behaviour of such a circuit is best drawn as a <strong>directed graph</strong>:</p>
+<ul class="list">
+<li class="list__item">a <strong>circle (node)</strong> = a state; in a Moore machine the output values are written inside it as well,</li>
+<li class="list__item">an <strong>arrow</strong> = a transition to another state; next to the arrow is the input value that causes it.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w10-p05.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p05.webp" alt="A counter's graph: seven states, one arrow from each to the next" width="901" height="813" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A counter's graph: seven states, one arrow from each to the next <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">States are implemented with <strong>flip-flops</strong>, and the transitions between them with <strong>gates</strong>. State changes are synchronised by the clock; they usually happen at its <strong>positive (rising) edge</strong>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A state graph is a game board. The pawn stands on one square (the state). At every tick of the clock you look at the input and move the pawn along the matching arrow. Designing the circuit means: draw the board, number the squares and build a little machine that moves the pawn by itself.</p>
+</div>
+</div>
+<h3 class="article__h3">State coding</h3>
+<p class="article__p">Flip-flops remember bits, not names like "S0, S1…", so each state must be given a <strong>binary code</strong>. To code <span class="math">k</span> states you need enough flip-flops that <span class="math">2<sup class="math__sup">n</sup> ≥ k</span> (4 states → 2 flip-flops, 5–8 states → 3).</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p06.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p06.webp" alt="A counter's transition table before and after coding the states" width="1100" height="634" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A counter's transition table before and after coding the states <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">Moore and Mealy</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w10-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p07.webp" alt="A Mealy machine and a Moore machine" width="776" height="851" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A Mealy machine and a Moore machine <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">x(k+1) = δ(x(k), u(k))  y(k) = λ(x(k), u(k))</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">δ</span> — the <strong>excitation function</strong>: computes the next state (this is the "memory"),</li>
+<li class="list__item"><span class="math">λ</span> — the <strong>output function</strong>: a combinational circuit computing the outputs.</li>
+</ul>
+<p class="article__p">In design, <strong>Moore</strong> machines (output depends only on the state) are used more often — and they are the only ones we deal with below.</p>
+<h2 class="article__h2" id="s2">The four design stages</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>The recipe from the lecture</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Graph.</strong> From the task description draw the graph: states with their output values and arrows labelled with input values. Each state must have an arrow for <strong>every combination of inputs</strong> — otherwise the circuit would be non-deterministic.</li>
+<li class="steps__item"><strong>State coding.</strong> Assign binary codes to the states using as few variables (flip-flops) as possible.</li>
+<li class="steps__item"><strong>Excitation functions.</strong> "Split" the coded transition table into single flip-flops: for each one determine (with a Karnaugh map) the function to feed to its input.</li>
+<li class="steps__item"><strong>Output functions.</strong> For each output draw a Karnaugh map that turns the state (flip-flop outputs) into the output value.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Why D flip-flops are the easiest</p>
+<div class="callout__body">
+<p class="article__p">For a D flip-flop <span class="math">Q<sub class="math__sub">t+1</sub> = D</span>, so <strong>the excitation function is simply "the next state"</strong>: whatever should be in the flip-flop after the clock edge, you feed straight to its D input. That is why the "next state" columns of the coded table go directly into the Karnaugh maps for D1, D0.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">The lecture example, step by step</h2>
+<p class="article__p"><strong>Task.</strong> The circuit has two inputs (<span class="math">x<sub class="math__sub">2</sub>, x<sub class="math__sub">1</sub></span>) and two outputs (<span class="math">y<sub class="math__sub">2</sub>, y<sub class="math__sub">1</sub></span>):</p>
+<ol class="list list--ordered">
+<li class="list__item">when the inputs are <strong>two ones</strong> — it alternately turns both outputs on and off (at the positive clock edge),</li>
+<li class="list__item">when they are <strong>two zeros</strong> — both outputs are off,</li>
+<li class="list__item">for the <strong>other combinations</strong> (01, 10) — the outputs behave like a mod-3 counter.</li>
+</ol>
+<h3 class="article__h3">Step 1: states and the graph</h3>
+<p class="article__p">All 4 combinations can appear on two outputs, and in a Moore machine each output value has its own state — so at least <strong>4 states</strong> are needed:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">State</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub></span></th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">S3</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p13.webp" alt="The transition graph and the corresponding table" width="1100" height="674" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The transition graph and the corresponding table <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">The transition table (the cells hold the <strong>next state</strong>):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">State \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub>y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S0</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">S3</td><td class="table__cell table__cell--center">S1</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S1</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S2</td><td class="table__cell table__cell--center">01</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S2</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>S3</strong></td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">S0</td><td class="table__cell table__cell--center">11</td></tr>
+</tbody></table></div>
+<p class="article__p">How to read it: column 00 always leads to S0 (point 2). Column 11: from S0 to S3 (both on), from S3 back to S0 (both off) — alternating (point 1). Columns 01 and 10: S0 → S1 → S2 → S0, i.e. counting 0, 1, 2, 0… (point 3).</p>
+<h3 class="article__h3">Step 2: state coding</h3>
+<p class="article__p">The choice: <strong>S0 → 00, S1 → 01, S2 → 11, S3 → 10</strong> (the bits are <span class="math">Q<sub class="math__sub">1</sub>Q<sub class="math__sub">0</sub></span> — the outputs of two flip-flops). After substituting the codes:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">1</sub>Q<sub class="math__sub">0</sub></span> \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center"><span class="math">y<sub class="math__sub">2</sub>y<sub class="math__sub">1</sub></span></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong> (S0)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong> (S1)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">01</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong> (S2)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong> (S3)</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">11</td></tr>
+</tbody></table></div>
+<p class="article__p">The rows are in Gray-code order (00, 01, 11, 10) — so the table is already a Karnaugh map.</p>
+<h3 class="article__h3">Step 3: excitation functions (D flip-flops)</h3>
+<p class="article__p">From every cell take the <strong>left bit</strong> into the D1 map and the <strong>right bit</strong> into the D0 map:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p15.webp" alt="Karnaugh maps for inputs D1 and D0" width="1100" height="755" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Karnaugh maps for inputs D1 and D0 <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">D<sub class="math__sub">1</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span><span class="math__bar">Q<sub class="math__sub">0</sub></span>x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub><span class="math__bar">x<sub class="math__sub">2</sub></span>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub>x<sub class="math__sub">2</sub><span class="math__bar">x<sub class="math__sub">1</sub></span></span></div>
+<div class="formula"><span class="math">D<sub class="math__sub">0</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span><span class="math__bar">x<sub class="math__sub">2</sub></span>x<sub class="math__sub">1</sub> + <span class="math__bar">Q<sub class="math__sub">1</sub></span>x<sub class="math__sub">2</sub><span class="math__bar">x<sub class="math__sub">1</sub></span></span></div>
+<h3 class="article__h3">Step 4: output functions</h3>
+<p class="article__p">The outputs depend only on the state, so the maps have only the variables <span class="math">Q<sub class="math__sub">1</sub>, Q<sub class="math__sub">0</sub></span>:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p16.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p16.webp" alt="Karnaugh maps for outputs y2 and y1" width="1100" height="824" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Karnaugh maps for outputs y2 and y1 <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">y<sub class="math__sub">2</sub> = Q<sub class="math__sub">1</sub>  y<sub class="math__sub">1</sub> = <span class="math__bar">Q<sub class="math__sub">1</sub></span>Q<sub class="math__sub">0</sub> + Q<sub class="math__sub">1</sub><span class="math__bar">Q<sub class="math__sub">0</sub></span> = Q<sub class="math__sub">1</sub> ⊕ Q<sub class="math__sub">0</sub></span></div>
+<h3 class="article__h3">The finished circuit</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p17.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p17.webp" alt="Implementation: two D flip-flops and gates" width="1100" height="879" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Implementation: two D flip-flops and gates <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Two D flip-flops (common clock), in front of them the gates computing <span class="math">D<sub class="math__sub">1</sub></span> and <span class="math">D<sub class="math__sub">0</sub></span>, behind them the gates computing the outputs.</p>
+<h2 class="article__h2" id="s4">How to code the states</h2>
+<p class="article__p">The choice of codes decides how complicated the excitation functions turn out. There is no method that always gives the minimum, but three rules help (in order of priority) — each says that certain states should get codes <strong>differing in one bit</strong>:</p>
+<ol class="list list--ordered">
+<li class="list__item">states that have <strong>the same next state</strong>,</li>
+<li class="list__item">the <strong>next states</strong> of the same current state,</li>
+<li class="list__item">states that have <strong>the same output values</strong>.</li>
+</ol>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">States that are "neighbours in behaviour" should also be neighbours on the Karnaugh map — then the ones form large groups and the formulas come out short.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Minimising the number of states</h2>
+<p class="article__p">Sometimes a graph drawn "from the task text" has more states than needed. Two states are <strong>equivalent</strong> (can be replaced by one) if:</p>
+<ol class="list list--ordered">
+<li class="list__item">they have <strong>the same output values</strong>, and</li>
+<li class="list__item">for every combination of inputs their next states are <strong>the same or equivalent</strong>.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p20.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p20.webp" alt="Example: a table of seven states" width="1100" height="544" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Example: a table of seven states <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">The procedure from the lecture:</p>
+<ol class="list list--ordered">
+<li class="list__item">Split the states by output. Here: {3, 7} have Y = 1 and {1, 2, 4, 5, 6} have Y = 0. Only pairs from the same group can be equivalent.</li>
+<li class="list__item">For each candidate pair list which pairs of next states <strong>would have to</strong> be compatible.</li>
+<li class="list__item">Cross out the pairs that require compatibility of states with different outputs. Repeat until nothing changes.</li>
+</ol>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w10-p21.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w10-p21.webp" alt="Checking compatible pairs in successive iterations" width="1100" height="725" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Checking compatible pairs in successive iterations <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Result: <strong>A = {1, 2, 4}, B = {3, 7}, C = {5}, D = {6}</strong> — seven states shrink to four (2 flip-flops instead of 3).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">State \ <span class="math">x<sub class="math__sub">2</sub>x<sub class="math__sub">1</sub></span></th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th><th class="table__cell table__cell--head table__cell--center">Y</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>A</strong></td><td class="table__cell table__cell--center">C</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>B</strong></td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">C</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>C</strong></td><td class="table__cell table__cell--center">D</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>D</strong></td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">A</td><td class="table__cell table__cell--center">B</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s6">Incompletely specified circuits</h2>
+<p class="article__p">Sometimes part of the table "does not matter":</p>
+<ul class="list">
+<li class="list__item">some combination of inputs <strong>never occurs</strong>,</li>
+<li class="list__item">after coding there are <strong>spare codes</strong> — e.g. a mod-3 counter has 3 states while 2 flip-flops give 4 codes; the fourth never occurs.</li>
+</ul>
+<p class="article__p">Such cells may hold <strong>any value — whichever is convenient</strong> (they are usually marked "–" or "×"), and when grouping on the Karnaugh map you treat them as 0 or 1, whichever gives larger groups.</p>
+<h2 class="article__h2" id="s7">Notes on Mealy machines</h2>
+<ul class="list">
+<li class="list__item">The output is not tied to the state alone — it also depends on the input.</li>
+<li class="list__item">They often allow <strong>fewer states</strong>, at the cost of a more complex output function.</li>
+<li class="list__item">On the graph the output value is written next to the <strong>arrows</strong>, not inside the circles.</li>
+</ul>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<p class="article__p">Design traffic lights: in normal mode (input = 1) the sequence red → red and yellow → green → yellow; in emergency mode (input = 0) the yellow light — steady (variant 1) or blinking (variant 2).</p>
+<p class="article__p">The full solution of variant 1 and practice tasks: <a class="link" href="../labs/11.html">Lab 11</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">The procedure (Moore machine, D flip-flops)</h3>
+<ol class="list list--ordered">
+<li class="list__item"><strong>States and outputs</strong> — write down what the outputs should be in each state.</li>
+<li class="list__item"><strong>Graph / transition table</strong> — for every state and <strong>every</strong> combination of inputs: the next state.</li>
+<li class="list__item"><strong>Coding</strong> — <span class="math">n</span> flip-flops, <span class="math">2<sup class="math__sup">n</sup> ≥</span> number of states; codes best in Gray order (00, 01, 11, 10).</li>
+<li class="list__item"><strong>Coded table</strong> — replace state names with codes.</li>
+<li class="list__item"><strong>Excitation functions</strong> — for a D flip-flop: <span class="math">D<sub class="math__sub">i</sub></span> = the i-th bit of the <strong>next</strong> state. Karnaugh map over: state bits + inputs.</li>
+<li class="list__item"><strong>Output functions</strong> — Karnaugh map over the state variables only (Moore).</li>
+<li class="list__item"><strong>Circuit</strong> — flip-flops on a common clock + gates.</li>
+</ol>
+<h3 class="article__h3">Remember</h3>
+<ul class="list">
+<li class="list__item">Moore: output = f(state) — values in the circles. Mealy: output = f(state, input) — values at the arrows.</li>
+<li class="list__item">Every state needs an arrow for every combination of inputs.</li>
+<li class="list__item"><strong>Coding — codes differing in 1 bit for:</strong> (1) states with the same next state, (2) next states of the same state, (3) states with the same outputs.</li>
+<li class="list__item"><strong>Equivalent states:</strong> same outputs + next states the same or equivalent → merge into one.</li>
+<li class="list__item"><strong>Don't-care cells</strong> (spare codes, impossible inputs) — fill in whatever is convenient.</li>
+<li class="list__item">Handy: XOR <span class="math">= <span class="math__bar">a</span>b + a<span class="math__bar">b</span></span>; the formulas often simplify to XOR/AND/NOT.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/09.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 9: Sequential circuits: flip-flops, registers, counters</span></a>
+<a class="pager__link pager__link--next" href="../lectures/11.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 11: Computer systems, microprocessors and microcontrollers</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

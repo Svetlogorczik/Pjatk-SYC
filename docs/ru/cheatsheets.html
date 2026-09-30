@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Конспекты — SYC</title>
+<meta name="description" content="Лекции, лабораторные и краткие конспекты по предмету SYC (PJATK) — простым языком, на трёх языках.">
+<link rel="alternate" hreflang="pl" href="../pl/cheatsheets.html">
+<link rel="alternate" hreflang="en" href="../en/cheatsheets.html">
+<link rel="alternate" hreflang="ru" href="../ru/cheatsheets.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link" href="lectures/index.html">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="cheatsheets.html" aria-current="page">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../pl/cheatsheets.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../en/cheatsheets.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../ru/cheatsheets.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#c1">Лекция 1. Введение, физические основы электроники и измерения</a></li>
+<li class="toc__item"><a class="toc__link" href="#c2">Лекция 2. Пассивные элементы: резистор, конденсатор, катушка и импеданс</a></li>
+<li class="toc__item"><a class="toc__link" href="#c3">Лекция 3. Пассивные электронные цепи: делители и RC-фильтры</a></li>
+<li class="toc__item"><a class="toc__link" href="#c4">Лекция 4. Полупроводники: диоды и транзисторы</a></li>
+<li class="toc__item"><a class="toc__link" href="#c5">Лекция 5. Операционные усилители</a></li>
+<li class="toc__item"><a class="toc__link" href="#c6">Лекция 6. Цифровые схемы — введение: сигналы, вентили, булева алгебра</a></li>
+<li class="toc__item"><a class="toc__link" href="#c7">Лекция 7. Минимизация булевых функций: карты Карно</a></li>
+<li class="toc__item"><a class="toc__link" href="#c8">Лекция 8. Комбинационные функциональные блоки: мультиплексор, дополнительный код, сумматор, АЛУ</a></li>
+<li class="toc__item"><a class="toc__link" href="#c9">Лекция 9. Последовательностные схемы: триггеры, регистры, счётчики</a></li>
+<li class="toc__item"><a class="toc__link" href="#c10">Лекция 10. Проектирование синхронных последовательностных схем</a></li>
+<li class="toc__item"><a class="toc__link" href="#c11">Лекция 11. Компьютерные системы, микропроцессоры и микроконтроллеры</a></li>
+<li class="toc__item"><a class="toc__link" href="#c12">Лекция 12. Способы связи: порты, UART, SPI, I²C</a></li>
+<li class="toc__item"><a class="toc__link" href="#c13">Лекция 13. Периферия микроконтроллеров и обработка событий</a></li>
+<li class="toc__item"><a class="toc__link" href="#c14">Лекция 14. Архитектура компьютеров: процессор MIPS изнутри</a></li>
+<li class="toc__item"><a class="toc__link" href="#c15">Лекция 15. Ассемблер и архитектура компьютеров (MIPS)</a></li>
+<li class="toc__item"><a class="toc__link" href="#c16">Лабораторная 1. Вводное занятие: оборудование лаборатории</a></li>
+<li class="toc__item"><a class="toc__link" href="#c17">Лабораторная 2. Измерение напряжений и токов</a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--cheats">
+<header class="article__header">
+<h1 class="article__title">Конспекты</h1>
+<p class="article__lead">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="article__actions"><button class="button button--primary" type="button" data-print>🖨️ Распечатать все конспекты</button></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<section class="cheat cheat--inline" id="c1">
+<h2 class="cheat__title"><a class="link" href="lectures/01.html">Лекция 1. Введение, физические основы электроники и измерения</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Формулы</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Что</th><th class="table__cell table__cell--head">Формула</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Закон Ома</td><td class="table__cell"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span></span>,   <span class="math">U = I·R</span>,   <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Напряжение</td><td class="table__cell"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub></span> (всегда между двумя точками)</td></tr>
+<tr class="table__row"><td class="table__cell">I закон Кирхгофа</td><td class="table__cell">токи, втекающие в узел = токи, вытекающие из него</td></tr>
+<tr class="table__row"><td class="table__cell">II закон Кирхгофа</td><td class="table__cell">сумма напряжений в замкнутом контуре = 0</td></tr>
+<tr class="table__row"><td class="table__cell">Абсолютная погрешность</td><td class="table__cell"><span class="math">Δx = x − x<sub class="math__sub">0</sub></span> (единица как у измерения)</td></tr>
+<tr class="table__row"><td class="table__cell">Относительная погрешность</td><td class="table__cell"><span class="math">δ = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x|</span></span> · 100%</span></td></tr>
+<tr class="table__row"><td class="table__cell">Аналоговый прибор</td><td class="table__cell"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span>  + погрешность отсчёта (напр. 0,1 деления)</td></tr>
+<tr class="table__row"><td class="table__cell">Цифровой прибор</td><td class="table__cell"><span class="math">Δ = a% · X + n · Δr</span></td></tr>
+<tr class="table__row"><td class="table__cell">Косвенное измерение</td><td class="table__cell"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,  <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,  <span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>+I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span>,  <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Правила</h3>
+<ul class="list">
+<li class="list__item"><strong>Масса (GND)</strong> = условные 0 В, обычно минус питания.</li>
+<li class="list__item">Условно ток течёт от «+» к «−».</li>
+<li class="list__item"><strong>Предел:</strong> наименьший, в который результат помещается; измеряй ближе к концу предела.</li>
+<li class="list__item"><strong>Разрешение Δr</strong> = цена последней цифры на дисплее (зависит от предела!).</li>
+<li class="list__item">Погрешность → максимум 2 значащие цифры; результат → тот же знак после запятой; запись <strong>x ± Δx</strong>.</li>
+<li class="list__item">График: крестики + гладкая линия, никогда не ломаная.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c2">
+<h2 class="cheat__title"><a class="link" href="lectures/02.html">Лекция 2. Пассивные элементы: резистор, конденсатор, катушка и импеданс</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Приставки</h3>
+<p class="article__p">G = 10⁹, M = 10⁶, k = 10³, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹, p = 10⁻¹²</p>
+<h3 class="article__h3">Три элемента</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Резистор</th><th class="table__cell table__cell--head">Конденсатор</th><th class="table__cell table__cell--head">Катушка</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Величина</td><td class="table__cell">R [Ом]</td><td class="table__cell">C [Ф]</td><td class="table__cell">L [Гн]</td></tr>
+<tr class="table__row"><td class="table__cell">Определение</td><td class="table__cell"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td><td class="table__cell"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span></span></td><td class="table__cell"><span class="math">E = −L<span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Импеданс</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math">jωL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Модуль</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell"><span class="math">2πfL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Фаза Z</td><td class="table__cell">0°</td><td class="table__cell">−90°</td><td class="table__cell">+90°</td></tr>
+<tr class="table__row"><td class="table__cell">DC (f = 0)</td><td class="table__cell">R</td><td class="table__cell">разрыв (∞)</td><td class="table__cell">замыкание (0)</td></tr>
+<tr class="table__row"><td class="table__cell">f → ∞</td><td class="table__cell">R</td><td class="table__cell">замыкание (0)</td><td class="table__cell">разрыв (∞)</td></tr>
+<tr class="table__row"><td class="table__cell">f растёт</td><td class="table__cell">не меняется</td><td class="table__cell">сопротивление падает</td><td class="table__cell">сопротивление растёт</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Формулы</h3>
+<ul class="list">
+<li class="list__item"><span class="math">ω = 2πf</span>,   <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span>,   <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span></li>
+<li class="list__item"><span class="math">Z = R + jX = |Z| · e<sup class="math__sup">jφ</sup></span>;   <span class="math">R = |Z| cos φ</span>,   <span class="math">X = |Z| sin φ</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span> (амплитуда напряжения на амплитуду тока)</li>
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span> (сдвиг и период в делениях)</li>
+<li class="list__item">Лаплас: производная → <span class="math">·s</span>, интеграл → <span class="math">·<span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span>, синусоида → <span class="math">s = jω</span></li>
+<li class="list__item">X отрицательное → ёмкостный характер; X положительное → индуктивный</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c3">
+<h2 class="cheat__title"><a class="link" href="lectures/03.html">Лекция 3. Пассивные электронные цепи: делители и RC-фильтры</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Формулы</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Что</th><th class="table__cell table__cell--head">Формула</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Передаточная функция</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">Y(s)</span><span class="math__den">X(s)</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Делитель напряжения</td><td class="table__cell"><span class="math">U<sub class="math__sub">OUT</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub>+R<sub class="math__sub">2</sub></span></span> · U<sub class="math__sub">IN</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell">Импедансный делитель</td><td class="table__cell"><span class="math">U<sub class="math__sub">OUT</sub> = <span class="math__frac"><span class="math__num">Z<sub class="math__sub">2</sub></span><span class="math__den">Z<sub class="math__sub">1</sub>+Z<sub class="math__sub">2</sub></span></span> · U<sub class="math__sub">IN</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell">Постоянная времени</td><td class="table__cell"><span class="math">T = R · C</span> [с]; через время T: 63,2%</td></tr>
+<tr class="table__row"><td class="table__cell">Усиление</td><td class="table__cell"><span class="math">k = <span class="math__frac"><span class="math__num">U<sub class="math__sub">OUT</sub></span><span class="math__den">U<sub class="math__sub">IN</sub></span></span></span>,   <span class="math">k<sub class="math__sub">dB</sub> = 20 · log<sub class="math__sub">10</sub> k</span></td></tr>
+<tr class="table__row"><td class="table__cell">Граничная частота</td><td class="table__cell"><span class="math">f<sub class="math__sub">g</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2πRC</span></span></span>  ↔  <span class="math">k = 0,707</span>  ↔  −3 дБ</td></tr>
+<tr class="table__row"><td class="table__cell">Фильтр нижних частот</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">1+sRC</span></span></span>;   <span class="math">k = <span class="math__frac"><span class="math__num">1</span><span class="math__den"><span class="math__sqrt">√<span class="math__bar">1+(f/f<sub class="math__sub">g</sub>)<sup class="math__sup">2</sup></span></span></span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Фильтр верхних частот</td><td class="table__cell"><span class="math">T(s) = <span class="math__frac"><span class="math__num">sRC</span><span class="math__den">1+sRC</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Запомнить</h3>
+<ul class="list">
+<li class="list__item"><strong>Нижних частот:</strong> R последовательно, C на массу — пропускает низкие f.</li>
+<li class="list__item"><strong>Верхних частот:</strong> C последовательно, R на массу — пропускает высокие f.</li>
+<li class="list__item">Вне полосы пропускания: <strong>20 дБ/декаду</strong> (×10 частоты = ÷10 амплитуды); два фильтра: 40 дБ/дек.</li>
+<li class="list__item">0 дБ = ×1; −3 дБ = ×0,707; −20 дБ = ×0,1; −40 дБ = ×0,01.</li>
+<li class="list__item">Последовательно: R и L складываются, C — через обратные величины. Параллельно: C складываются, R и L — через обратные.</li>
+<li class="list__item">Линейная система: синус на входе → синус той же частоты на выходе.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c4">
+<h2 class="cheat__title"><a class="link" href="lectures/04.html">Лекция 4. Полупроводники: диоды и транзисторы</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Полупроводники</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">n-тип</th><th class="table__cell table__cell--head">p-тип</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Примесь</td><td class="table__cell">донор, V группа (P, As)</td><td class="table__cell">акцептор, III группа (B, Al)</td></tr>
+<tr class="table__row"><td class="table__cell">Основные носители</td><td class="table__cell">электроны</td><td class="table__cell">дырки</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">p-n-переход: диффузия → рекомбинация → обеднённая область → потенциальный барьер.</li>
+<li class="list__item"><strong>Прямое включение:</strong> «+» на p (анод), «−» на n (катод). <strong>Обратное:</strong> наоборот — ток не течёт.</li>
+</ul>
+<h3 class="article__h3">Диод</h3>
+<ul class="list">
+<li class="list__item">Проводит от анода к катоду, когда напряжение превысит порог: кремниевый ≈ <strong>0,6 В</strong>; красный светодиод ≈ 2 В <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.</li>
+<li class="list__item">Светодиод: длинная ножка = анод (+). Всегда с резистором: <span class="math">R = <span class="math__frac"><span class="math__num">U<sub class="math__sub">пит</sub> − U<sub class="math__sub">LED</sub></span><span class="math__den">I</span></span></span> <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.</li>
+</ul>
+<h3 class="article__h3">Биполярный транзистор</h3>
+<ul class="list">
+<li class="list__item">Выводы: <strong>E</strong> (эмиттер), <strong>B</strong> (база), <strong>C</strong> (коллектор). Стрелка = эмиттер. NPN: стрелка наружу, PNP: внутрь.</li>
+<li class="list__item">Маленький ток базы управляет большим током коллектора: <span class="math">I<sub class="math__sub">C</sub> = β · I<sub class="math__sub">B</sub></span>, β > 100.</li>
+<li class="list__item">Включается при <span class="math">U<sub class="math__sub">BE</sub> ≈ 0,6 В</span> (переход Б–Э в прямом направлении).</li>
+<li class="list__item">Характеристики: входная <span class="math">I<sub class="math__sub">B</sub>(U<sub class="math__sub">BE</sub>)</span>, выходная <span class="math">I<sub class="math__sub">C</sub>(U<sub class="math__sub">CE</sub>)</span>, передаточная <span class="math">I<sub class="math__sub">C</sub>(I<sub class="math__sub">B</sub>)</span> — линейная.</li>
+<li class="list__item">Как ключ <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>: нет тока базы → <strong>закрыт</strong> (выключен); большой ток базы → <strong>насыщен</strong> (включён).</li>
+</ul>
+<h3 class="article__h3">Полевые транзисторы</h3>
+<ul class="list">
+<li class="list__item">Выводы: <strong>S</strong> (исток), <strong>D</strong> (сток), <strong>G</strong> (затвор). Управляются <strong>напряжением</strong> затвора, ток затвора ≈ 0.</li>
+<li class="list__item">JFET: затвор сужает канал. <span class="math">g<sub class="math__sub">m</sub> = <span class="math__frac"><span class="math__num">dI<sub class="math__sub">DS</sub></span><span class="math__den">dV<sub class="math__sub">GS</sub></span></span></span>.</li>
+<li class="list__item">MOSFET: затвор изолирован оксидом; основа цифровых схем (CMOS).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c5">
+<h2 class="cheat__title"><a class="link" href="lectures/05.html">Лекция 5. Операционные усилители</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Операционный усилитель</h3>
+<ul class="list">
+<li class="list__item">Усиливает разность: <span class="math">V<sub class="math__sub">out</sub> = k · (V<sub class="math__sub">+</sub> − V<sub class="math__sub">−</sub>)</span>, <span class="math">k</span> огромное (10⁵…10⁷).</li>
+<li class="list__item">Идеал: <span class="math">k = ∞</span>, <span class="math">Z<sub class="math__sub">in</sub> = ∞</span>, <span class="math">Z<sub class="math__sub">out</sub> = 0</span>, входной ток 0, смещение 0.</li>
+<li class="list__item">Выход не выйдет за пределы питания (<strong>насыщение</strong>). Полоса × усиление = const.</li>
+<li class="list__item"><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> При отрицательной обратной связи: во входы ток не течёт и <span class="math">V<sub class="math__sub">+</sub> = V<sub class="math__sub">−</sub></span>.</li>
+</ul>
+<h3 class="article__h3">Схемы</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Схема</th><th class="table__cell table__cell--head">Формула</th><th class="table__cell table__cell--head">Примечания</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Инвертирующий</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> V<sub class="math__sub">in</sub></span></td><td class="table__cell">фаза перевёрнута на 180°; <span class="math">Z<sub class="math__sub">in</sub> = R<sub class="math__sub">1</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Неинвертирующий</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = (1 + <span class="math__frac"><span class="math__num">R<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>) V<sub class="math__sub">in</sub></span></td><td class="table__cell">k > 1; <span class="math">Z<sub class="math__sub">in</sub> ≈ ∞</span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Повторитель</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = V<sub class="math__sub">in</sub></span></td><td class="table__cell">развязывает схемы (большое <span class="math">Z<sub class="math__sub">in</sub></span>, малое <span class="math">Z<sub class="math__sub">out</sub></span>)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Компаратор</strong></td><td class="table__cell"><span class="math">+V<sub class="math__sub">c</sub></span> при <span class="math">V<sub class="math__sub">+</sub> &gt; V<sub class="math__sub">−</sub></span>, иначе <span class="math">−V<sub class="math__sub">c</sub></span></td><td class="table__cell">без обратной связи</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Дифференциальный</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = <span class="math__frac"><span class="math__num">R<sub class="math__sub">f</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span>(V<sub class="math__sub">2</sub> − V<sub class="math__sub">1</sub>)</span></td><td class="table__cell">при <span class="math">R<sub class="math__sub">1</sub>=R<sub class="math__sub">2</sub></span>, <span class="math">R<sub class="math__sub">f</sub>=R<sub class="math__sub">g</sub></span></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Сумматор</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −R<sub class="math__sub">f</sub>(<span class="math__frac"><span class="math__num">V<sub class="math__sub">1</sub></span><span class="math__den">R<sub class="math__sub">1</sub></span></span> + <span class="math__frac"><span class="math__num">V<sub class="math__sub">2</sub></span><span class="math__den">R<sub class="math__sub">2</sub></span></span> + …)</span></td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Интегратор</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −<span class="math__frac"><span class="math__num">1</span><span class="math__den">RC</span></span> ∫ V<sub class="math__sub">in</sub> dt</span></td><td class="table__cell">C в обратной связи</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Дифференциатор</strong></td><td class="table__cell"><span class="math">V<sub class="math__sub">out</sub> = −RC <span class="math__frac"><span class="math__num">dV<sub class="math__sub">in</sub></span><span class="math__den">dt</span></span></span></td><td class="table__cell">C на входе</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Обратная связь</h3>
+<ul class="list">
+<li class="list__item">Отрицательная — стабилизирует (используется в усилителях). Положительная — дестабилизирует.</li>
+<li class="list__item">Замкнутая система: <span class="math">T = <span class="math__frac"><span class="math__num">K</span><span class="math__den">1 − Kβ</span></span></span>.</li>
+<li class="list__item">R₂ — это всегда резистор <strong>в обратной связи</strong> (между выходом и входом «−»).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c6">
+<h2 class="cheat__title"><a class="link" href="lectures/06.html">Лекция 6. Цифровые схемы — введение: сигналы, вентили, булева алгебра</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Логические уровни</h3>
+<ul class="list">
+<li class="list__item"><strong>TTL</strong> (5 В, биполярные транзисторы): 0 → 0–0,8 В; 1 → 2–5 В; между ними — неопределённость.</li>
+<li class="list__item"><strong>CMOS</strong> (3–18 В, пары МОП): 0 → 0–30% питания; 1 → 70–100%; мощность только при переключении.</li>
+<li class="list__item"><strong>Hi-Z</strong> — третье состояние (ничего не подключено); задаётся подтягивающим резистором (pull-up).</li>
+</ul>
+<h3 class="article__h3">Вентили</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">AND</th><th class="table__cell table__cell--head table__cell--center">OR</th><th class="table__cell table__cell--head table__cell--center">XOR</th><th class="table__cell table__cell--head table__cell--center">NAND</th><th class="table__cell table__cell--head table__cell--center">NOR</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Булева алгебра</h3>
+<ul class="list">
+<li class="list__item"><span class="math">a + <span class="math__bar">a</span> = 1</span>,  <span class="math">a · <span class="math__bar">a</span> = 0</span>,  <span class="math">a + ab = a</span>,  <span class="math">a(a+b) = a</span></li>
+<li class="list__item"><span class="math">a(b+c) = ab + ac</span>,  <span class="math">a + bc = (a+b)(a+c)</span></li>
+<li class="list__item"><strong>Де Морган:</strong> <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span></span>,   <span class="math"><span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span></li>
+<li class="list__item"><strong>Склеивание:</strong> <span class="math">a<span class="math__bar">b</span> + ab = a</span></li>
+</ul>
+<h3 class="article__h3">Канонические формы</h3>
+<ul class="list">
+<li class="list__item"><strong>Суммарная (ДНФ), Σ:</strong> по строкам с <strong>1</strong>; произведение переменных, <strong>0 → отрицание</strong>; произведения соединяем «+».</li>
+<li class="list__item"><strong>Мультипликативная (КНФ), Π:</strong> по строкам с <strong>0</strong>; сумма переменных, <strong>1 → отрицание</strong>; суммы соединяем «·».</li>
+<li class="list__item">Номер строки = десятичное значение входных битов.</li>
+</ul>
+<h3 class="article__h3">Только из NAND</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a·a</span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a·b</span></span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>·<span class="math__bar">b</span></span></span></p>
+<h3 class="article__h3">Только из NOR</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a+a</span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a+b</span></span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>+<span class="math__bar">b</span></span></span></p>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c7">
+<h2 class="cheat__title"><a class="link" href="lectures/07.html">Лекция 7. Минимизация булевых функций: карты Карно</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Карта Карно — порядок действий</h3>
+<ol class="list list--ordered">
+<li class="list__item">Нарисуй карту; столбцы и строки в <strong>коде Грея: 00, 01, 11, 10</strong>.</li>
+<li class="list__item">Впиши значения из таблицы истинности (следи за порядком столбцов!).</li>
+<li class="list__item">Отметь группы: прямоугольники по <strong>1, 2, 4, 8</strong> клеток; как можно больше по размеру, как можно меньше по числу; могут пересекаться; края и углы соприкасаются <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.</li>
+<li class="list__item">Для каждой группы: <strong>выбрось переменные, которые меняются</strong>, запиши постоянные.</li>
+</ol>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head table__cell--center">Группируешь</th><th class="table__cell table__cell--head table__cell--center">Из группы получается</th><th class="table__cell table__cell--head table__cell--center">Переменная = 0</th><th class="table__cell table__cell--head table__cell--center">Переменная = 1</th><th class="table__cell table__cell--head table__cell--center">Соединяешь</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Суммарная форма</strong></td><td class="table__cell table__cell--center">единицы</td><td class="table__cell table__cell--center">произведение</td><td class="table__cell table__cell--center">с отрицанием</td><td class="table__cell table__cell--center">без отрицания</td><td class="table__cell table__cell--center">суммой (+)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Мультипликативная форма</strong></td><td class="table__cell table__cell--center">нули</td><td class="table__cell table__cell--center">сумма</td><td class="table__cell table__cell--center">без отрицания</td><td class="table__cell table__cell--center">с отрицанием</td><td class="table__cell table__cell--center">произведением (·)</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Нумерация клеток (4 переменные, строка ab, столбец cd)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ab \ cd</th><th class="table__cell table__cell--head table__cell--center">00</th><th class="table__cell table__cell--head table__cell--center">01</th><th class="table__cell table__cell--head table__cell--center">11</th><th class="table__cell table__cell--head table__cell--center">10</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>00</strong></td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">2</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>01</strong></td><td class="table__cell table__cell--center">4</td><td class="table__cell table__cell--center">5</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">6</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>11</strong></td><td class="table__cell table__cell--center">12</td><td class="table__cell table__cell--center">13</td><td class="table__cell table__cell--center">15</td><td class="table__cell table__cell--center">14</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center"><strong>10</strong></td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">9</td><td class="table__cell table__cell--center">11</td><td class="table__cell table__cell--center">10</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">На NAND / NOR</h3>
+<ul class="list">
+<li class="list__item"><strong>NAND:</strong> суммарная форма → двойное отрицание → де Морган:  <span class="math">ab + cd = <span class="math__bar"><span class="math__bar">ab</span> · <span class="math__bar">cd</span></span></span></li>
+<li class="list__item"><strong>NOR:</strong> мультипликативная форма → двойное отрицание → де Морган:  <span class="math">(a+b)(c+d) = <span class="math__bar"><span class="math__bar">a+b</span> + <span class="math__bar">c+d</span></span></span></li>
+<li class="list__item">Склеивание: <span class="math">a·f + <span class="math__bar">a</span>·f = f</span>.   Код Грея (3 бита): 000, 001, 011, 010, 110, 111, 101, 100.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c8">
+<h2 class="cheat__title"><a class="link" href="lectures/08.html">Лекция 8. Комбинационные функциональные блоки: мультиплексор, дополнительный код, сумматор, АЛУ</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Мультиплексор</h3>
+<ul class="list">
+<li class="list__item"><span class="math">n</span> адресных входов → <span class="math">2<sup class="math__sup">n</sup></span> информационных; выход = вход с номером, поданным на адрес.</li>
+<li class="list__item"><strong>Функция на MUX 16:1:</strong> на входы с номерами из списка Σ подай 1, на остальные 0.</li>
+<li class="list__item"><strong>Функция на MUX 8:1:</strong> 3 переменные на адрес, четвёртая «свободная» <span class="math">x</span>. Для каждого адреса сравни y при x = 0 и x = 1:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">y(x=0), y(x=1)</th><th class="table__cell table__cell--head table__cell--center">0, 0</th><th class="table__cell table__cell--head table__cell--center">1, 1</th><th class="table__cell table__cell--head table__cell--center">0, 1</th><th class="table__cell table__cell--head table__cell--center">1, 0</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">на вход</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">x</span></td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">x</span></span></td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Свободная <span class="math">x<sub class="math__sub">3</sub></span>: пары строк <span class="math">(k, k+8)</span>. Свободная <span class="math">x<sub class="math__sub">0</sub></span>: пары <span class="math">(2k, 2k+1)</span>.</li>
+<li class="list__item">DMUX: один вход → выход, указанный адресом. Дешифратор: NKB → 1 из N.</li>
+</ul>
+<h3 class="article__h3">Дополнительный код U2 (N бит)</h3>
+<ul class="list">
+<li class="list__item">Вес старшего бита: <span class="math">−2<sup class="math__sup">N−1</sup></span>. Диапазон: <span class="math">−2<sup class="math__sup">N−1</sup> … 2<sup class="math__sup">N−1</sup>−1</span> (4 бита: −8…7; 8 бит: −128…127).</li>
+<li class="list__item"><strong>Противоположное число:</strong> инвертируй биты, прибавь 1.</li>
+<li class="list__item">Сложение как в NKB; перенос из старшего бита игнорируй. Вычитание: <span class="math">a + (−b)</span>.</li>
+<li class="list__item"><strong>Переполнение</strong> = <span class="math">C<sub class="math__sub">IN</sub> ⊕ C<sub class="math__sub">OUT</sub></span> старшего бита (положительное + положительное = отрицательное или наоборот).</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">4 бита U2</th><th class="table__cell table__cell--head table__cell--center">0111</th><th class="table__cell table__cell--head table__cell--center">0001</th><th class="table__cell table__cell--head table__cell--center">0000</th><th class="table__cell table__cell--head table__cell--center">1111</th><th class="table__cell table__cell--head table__cell--center">1110</th><th class="table__cell table__cell--head table__cell--center">1001</th><th class="table__cell table__cell--head table__cell--center">1000</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">значение</td><td class="table__cell table__cell--center">7</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">−1</td><td class="table__cell table__cell--center">−2</td><td class="table__cell table__cell--center">−7</td><td class="table__cell table__cell--center">−8</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Сумматор и АЛУ</h3>
+<ul class="list">
+<li class="list__item">Полный сумматор: <span class="math">y = a ⊕ b ⊕ c<sub class="math__sub">0</sub></span>,   <span class="math">c = ab + ac<sub class="math__sub">0</sub> + bc<sub class="math__sub">0</sub></span>. n-разрядный сумматор = каскад.</li>
+<li class="list__item">Полусумматор (без входного переноса) <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>: <span class="math">s = a ⊕ b</span>, <span class="math">c = ab</span>.</li>
+<li class="list__item">АЛУ: A, B — данные; F — код операции; R — результат; D — флаги. Все операции считаются сразу, MUX выбирает результат.</li>
+<li class="list__item">Другие коды: BCD (цифра → 4 бита), ZM (бит знака + модуль), U1 (инверсия битов), Грея, 1 из N.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c9">
+<h2 class="cheat__title"><a class="link" href="lectures/09.html">Лекция 9. Последовательностные схемы: триггеры, регистры, счётчики</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Триггеры</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Тип</th><th class="table__cell table__cell--head">Уравнение</th><th class="table__cell table__cell--head">Таблица</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS (NAND)</strong>, активен нулём</td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub>·R + <span class="math__bar">S</span></span></td><td class="table__cell">S=0 → 1; R=0 → 0; 11 → хранит; 00 запрещено</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RS с тактом</strong> (защёлка)</td><td class="table__cell">—</td><td class="table__cell">C=1: 00 хранит, 01 → 0, 10 → 1, 11 запрещено; C=0: ничего</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>D</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = D</span></td><td class="table__cell">по фронту Q := D</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>JK</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = J<span class="math__bar">Q</span> + <span class="math__bar">K</span>Q</span></td><td class="table__cell">00 хранит, 01 → 0, 10 → 1, 11 → переключение</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>T</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = T ⊕ Q</span></td><td class="table__cell">T=1 → переключение, T=0 → хранит</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>SET / CLR</strong> — асинхронные (сразу, без такта): Q = 1 / Q = 0.</li>
+<li class="list__item">D с <span class="math"><span class="math__bar">Q</span></span> на входе D (или JK с J=K=1) = <strong>делитель частоты на 2</strong>.</li>
+<li class="list__item">Мур: выход = f(состояние). Мили: выход = f(состояние, вход).</li>
+</ul>
+<h3 class="article__h3">Регистры (4 D-триггера, общий такт)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Схема</th><th class="table__cell table__cell--head">На вход первого D</th><th class="table__cell table__cell--head">Последовательность</th><th class="table__cell table__cell--head table__cell--center">Состояний</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Сдвиговый регистр</td><td class="table__cell">внешний сигнал</td><td class="table__cell">0000 → 1000 → 1100 → 1110 → 1111 (для «1»)</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Кольцевой счётчик</td><td class="table__cell">Q последнего</td><td class="table__cell">1000 → 0100 → 0010 → 0001</td><td class="table__cell table__cell--center">4</td></tr>
+<tr class="table__row"><td class="table__cell">Счётчик Джонсона</td><td class="table__cell"><span class="math"><span class="math__bar">Q</span></span> последнего</td><td class="table__cell">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000</td><td class="table__cell table__cell--center">8</td></tr>
+<tr class="table__row"><td class="table__cell">PRBS</td><td class="table__cell">XOR двух выходов (3 и 4) <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span></td><td class="table__cell">псевдослучайная, старт ≠ 0000</td><td class="table__cell table__cell--center">15 <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Счётчики</h3>
+<ul class="list">
+<li class="list__item"><strong>Асинхронный двоичный:</strong> каждый триггер — делитель на 2, тактируется выходом предыдущего.</li>
+<li class="list__item"><strong>Mod N:</strong> обнаружь состояние N вентилем → CLR всех. (mod 10: 1010; mod 9: 1001; mod 6: 0110)</li>
+<li class="list__item"><strong>От X до Y:</strong> обнаружь состояние Y+1 → SET там, где у X единицы, CLR там, где нули.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c10">
+<h2 class="cheat__title"><a class="link" href="lectures/10.html">Лекция 10. Проектирование синхронных последовательностных схем</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Процедура (автомат Мура, D-триггеры)</h3>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Состояния и выходы</strong> — выпиши, что должно быть на выходах в каждом состоянии.</li>
+<li class="list__item"><strong>Граф / таблица переходов</strong> — для каждого состояния и <strong>каждой</strong> комбинации входов: следующее состояние.</li>
+<li class="list__item"><strong>Кодирование</strong> — <span class="math">n</span> триггеров, <span class="math">2<sup class="math__sup">n</sup> ≥</span> числа состояний; коды лучше в порядке Грея (00, 01, 11, 10).</li>
+<li class="list__item"><strong>Закодированная таблица</strong> — вместо названий состояний впиши коды.</li>
+<li class="list__item"><strong>Функции возбуждения</strong> — для D-триггера: <span class="math">D<sub class="math__sub">i</sub></span> = i-й бит <strong>следующего</strong> состояния. Карта Карно по переменным: биты состояния + входы.</li>
+<li class="list__item"><strong>Функции выходов</strong> — карта Карно только по переменным состояния (Мур).</li>
+<li class="list__item"><strong>Схема</strong> — триггеры на общем тактовом сигнале + вентили.</li>
+</ol>
+<h3 class="article__h3">Запомнить</h3>
+<ul class="list">
+<li class="list__item">Мур: выход = f(состояние) — значения в кружках. Мили: выход = f(состояние, вход) — значения у стрелок.</li>
+<li class="list__item">Из каждого состояния должна выходить стрелка для каждой комбинации входов.</li>
+<li class="list__item"><strong>Кодирование — коды, отличающиеся 1 битом, для:</strong> (1) состояний с одним и тем же следующим состоянием, (2) следующих состояний одного состояния, (3) состояний с одинаковыми выходами.</li>
+<li class="list__item"><strong>Эквивалентные состояния:</strong> те же выходы + следующие состояния одинаковы или эквивалентны → объединяем в одно.</li>
+<li class="list__item"><strong>Неопределённые клетки</strong> (лишние коды, невозможные входы) — вписывай что удобно.</li>
+<li class="list__item">Полезно: XOR <span class="math">= <span class="math__bar">a</span>b + a<span class="math__bar">b</span></span>; формулы часто упрощаются до XOR/AND/NOT.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c11">
+<h2 class="cheat__title"><a class="link" href="lectures/11.html">Лекция 11. Компьютерные системы, микропроцессоры и микроконтроллеры</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Компьютер</h3>
+<ul class="list">
+<li class="list__item"><strong>Фон Нейман:</strong> процессор (с АЛУ) + память (данные <strong>и</strong> программа вместе) + ввод/вывод; команды выполняются по очереди.</li>
+<li class="list__item"><strong>Гарвард:</strong> отдельная память программы и данных (микроконтроллеры: Flash + RAM).</li>
+<li class="list__item"><strong>Командный цикл:</strong> выборка → декодирование → выполнение.</li>
+<li class="list__item"><strong>Регистры:</strong> PC (адрес следующей команды), регистр команд, аккумулятор, SP (стек), регистр флагов.</li>
+<li class="list__item"><strong>Шины:</strong> адреса, данных, управления.</li>
+<li class="list__item"><strong>CISC:</strong> много сложных команд, разное время. <strong>RISC:</strong> мало простых команд, один цикл, конвейер.</li>
+</ul>
+<h3 class="article__h3">Микроконтроллер</h3>
+<p class="article__p">µC = процессор + RAM + память программы + порты ввода-вывода + периферия (UART, SPI, I²C, АЦП, таймеры, watchdog) в одной микросхеме.</p>
+<p class="article__p">Программирование: высоковольтный программатор / ISP / <strong>загрузчик</strong> (Arduino).</p>
+<h3 class="article__h3">ATmega328 (Arduino UNO)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Ядро</td><td class="table__cell">8-бит RISC, 131 команда, 32 регистра</td></tr>
+<tr class="table__row"><td class="table__cell">Flash</td><td class="table__cell">32 кБ (программа; приложение + загрузчик)</td></tr>
+<tr class="table__row"><td class="table__cell">SRAM</td><td class="table__cell">2 кБ (данные, пропадают при выключении)</td></tr>
+<tr class="table__row"><td class="table__cell">EEPROM</td><td class="table__cell">1 кБ (постоянные данные)</td></tr>
+<tr class="table__row"><td class="table__cell">АЦП</td><td class="table__cell">10 бит → 0…1023, 8 каналов</td></tr>
+<tr class="table__row"><td class="table__cell">Тактовая частота</td><td class="table__cell">до 16 МГц</td></tr>
+<tr class="table__row"><td class="table__cell">Интерфейсы</td><td class="table__cell">USART, SPI, I²C (TWI)</td></tr>
+<tr class="table__row"><td class="table__cell">Порты</td><td class="table__cell">B, C (аналоговые), D</td></tr>
+<tr class="table__row"><td class="table__cell">Сброс</td><td class="table__cell">power-on, внешний, watchdog, brown-out</td></tr>
+</tbody></table></div>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c12">
+<h2 class="cheat__title"><a class="link" href="lectures/12.html">Лекция 12. Способы связи: порты, UART, SPI, I²C</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Понятия</h3>
+<ul class="list">
+<li class="list__item"><strong>Последовательная</strong> (бит за битом) / <strong>параллельная</strong> (байт сразу).</li>
+<li class="list__item"><strong>Синхронная</strong> (общий тактовый сигнал) / <strong>асинхронная</strong> (START + STOP, договорённая скорость).</li>
+<li class="list__item"><strong>Симплекс</strong> (в одну сторону) / <strong>полудуплекс</strong> (по очереди) / <strong>полный дуплекс</strong> (одновременно).</li>
+</ul>
+<h3 class="article__h3">Интерфейсы</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">UART / RS-232</th><th class="table__cell table__cell--head">SPI</th><th class="table__cell table__cell--head">I²C</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Линии</td><td class="table__cell">TxD, RxD, масса</td><td class="table__cell">MOSI, MISO, SCLK, SS/CS</td><td class="table__cell">SDA, SCL (с подтяжкой)</td></tr>
+<tr class="table__row"><td class="table__cell">Тактовый сигнал</td><td class="table__cell">нет</td><td class="table__cell">да (master)</td><td class="table__cell">да (master)</td></tr>
+<tr class="table__row"><td class="table__cell">Выбор устройства</td><td class="table__cell">—</td><td class="table__cell">линия CS</td><td class="table__cell">7-битный адрес + бит R/W</td></tr>
+<tr class="table__row"><td class="table__cell">Подтверждение</td><td class="table__cell">—</td><td class="table__cell">—</td><td class="table__cell">ACK после каждого байта</td></tr>
+<tr class="table__row"><td class="table__cell">Дуплекс</td><td class="table__cell">полный</td><td class="table__cell">полный</td><td class="table__cell">полу-</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>RS-232:</strong> отрицательная логика, «1» = −3…−15 В, «0» = +3…+15 В → к TTL только через MAX232.</li>
+<li class="list__item"><strong>I²C:</strong> START = SDA↓ при SCL = 1; STOP = SDA↑ при SCL = 1; R/W: 0 = запись, 1 = чтение; меньший адрес = выше приоритет; 100 кбит/с / 400 кбит/с / 3,4 Мбит/с.</li>
+<li class="list__item"><strong>USB 2.0:</strong> D+ / D− (дифференциально), полудуплекс, +5 В, до 127 устройств.</li>
+</ul>
+<h3 class="article__h3">Учебный модуль — выводы</h3>
+<p class="article__p">A0 потенциометр · A1–A3 кнопки · 10–13 светодиоды · 3 пищалка · 4 LATCH · 7 CLK · 8 DATA · A4/A5 I²C</p>
+<h3 class="article__h3">Код</h3>
+<ul class="list">
+<li class="list__item">Индикатор: <code class="inline-code">digitalWrite(LATCH, LOW); shiftOut(DATA, CLK, MSBFIRST, сегменты); shiftOut(DATA, CLK, MSBFIRST, позиция); digitalWrite(LATCH, HIGH);</code></li>
+<li class="list__item">Чтение по I²C: <code class="inline-code">beginTransmission(адрес); write(регистр); endTransmission(); requestFrom(адрес, 1); read();</code></li>
+<li class="list__item">DS3231: адрес <strong>0x68</strong>, температура: регистр <strong>0x11</strong> (целая часть), <strong>0x12</strong> (дробная).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c13">
+<h2 class="cheat__title"><a class="link" href="lectures/13.html">Лекция 13. Периферия микроконтроллеров и обработка событий</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Выводы и ШИМ</h3>
+<ul class="list">
+<li class="list__item"><code class="inline-code">pinMode(pin, OUTPUT / INPUT / INPUT_PULLUP)</code>; максимум <strong>40 мА</strong> на вывод; выход нельзя замыкать на массу или питание.</li>
+<li class="list__item"><strong>ШИМ:</strong> заполнение <span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span>; среднее напряжение = заполнение × 5 В. Arduino: <code class="inline-code">analogWrite(pin, 0…255)</code>, около 490 Гц.</li>
+<li class="list__item"><strong>Серво:</strong> импульс каждые 20 мс (50 Гц); 1,5 мс = нейтральное положение (90°).</li>
+<li class="list__item"><strong>АЦП:</strong> 10 бит → 0…1023;   <span class="math">U = <span class="math__frac"><span class="math__num">показание · 5</span><span class="math__den">1023</span></span></span> <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.  «Аналоговый» выход = ШИМ + фильтр.</li>
+</ul>
+<h3 class="article__h3">Транзистор как ключ</h3>
+<ul class="list">
+<li class="list__item"><strong>Отсечка</strong> (нет тока базы) = выключен; <strong>насыщение</strong> (большой ток базы) = включён.</li>
+<li class="list__item"><strong>H-мост:</strong> S1+S4 → одно направление, S2+S3 → противоположное; скорость — ШИМ.</li>
+</ul>
+<h3 class="article__h3">Преобразователи</h3>
+<ul class="list">
+<li class="list__item"><strong>ЦАП</strong> с взвешенными резисторами: операционный усилитель как сумматор токов.</li>
+<li class="list__item"><strong>АЦП flash:</strong> <span class="math">2<sup class="math__sup">n</sup> − 1</span> компараторов, очень быстрый, мало бит.</li>
+<li class="list__item"><strong>АЦП последовательных приближений:</strong> <span class="math">n</span> сравнений для <span class="math">n</span> бит (сначала с половиной диапазона).</li>
+</ul>
+<h3 class="article__h3">События</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Опрос</th><th class="table__cell table__cell--head">Прерывание</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">программа сама проверяет в цикле</td><td class="table__cell">аппаратура сообщает, программа прерывается</td></tr>
+<tr class="table__row"><td class="table__cell">просто, но тратит время</td><td class="table__cell">быстро, но сложнее</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Прерывания: аппаратные (внешние, от таймера, исключения) и программные; маскируемые / немаскируемые (сброс).</li>
+<li class="list__item">Вектор прерывания = адрес обработчика; PC кладётся в <strong>стек</strong>.</li>
+<li class="list__item">Обработка: определи → сбрось причину → запрети → регистры в стек → <strong>обработай</strong> → регистры из стека → разреши → вернись.</li>
+<li class="list__item">AVR: приоритетов нет (плоская система).</li>
+<li class="list__item">Arduino: <code class="inline-code">attachInterrupt(digitalPinToInterrupt(2), функция, CHANGE | RISING | FALLING);</code> общие переменные: <code class="inline-code">volatile</code>.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c14">
+<h2 class="cheat__title"><a class="link" href="lectures/14.html">Лекция 14. Архитектура компьютеров: процессор MIPS изнутри</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Понятия</h3>
+<ul class="list">
+<li class="list__item"><strong>Архитектура</strong> = набор команд + состояние (регистры, память). <strong>Микроархитектура</strong> = способ аппаратной реализации.</li>
+<li class="list__item"><strong>Тракт данных</strong> (PC, памяти, регистровый файл, АЛУ, мультиплексоры) + <strong>устройство управления</strong> (сигналы для тракта).</li>
+<li class="list__item">Время программы = число команд × тактов/команду × секунд/такт.</li>
+</ul>
+<h3 class="article__h3">Три микроархитектуры</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Такт</th><th class="table__cell table__cell--head">Управление</th><th class="table__cell table__cell--head">Примечания</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Однотактная</strong></td><td class="table__cell">1 длинный такт на команду</td><td class="table__cell"><strong>комбинационное</strong></td><td class="table__cell">такт под самую медленную (<code class="inline-code">lw</code>); 3 сумматора; отдельные памяти</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Многотактная</strong></td><td class="table__cell">несколько коротких шагов</td><td class="table__cell"><strong>последовательностное</strong> (автомат: Fetch → Decode → …)</td><td class="table__cell">одно АЛУ, одна память, дополнительные регистры (IR, A, B, ALUOut, Data)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Конвейерная</strong></td><td class="table__cell">ступени: Fetch, Decode, Execute, Memory, Writeback</td><td class="table__cell">—</td><td class="table__cell">несколько команд одновременно на разных ступенях</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Управляющие сигналы (однотактный)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Сигнал</th><th class="table__cell table__cell--head">0</th><th class="table__cell table__cell--head">1</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RegWrite</strong></td><td class="table__cell">—</td><td class="table__cell">запись в регистровый файл</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RegDst</strong></td><td class="table__cell">регистр-приёмник = <code class="inline-code">rt</code></td><td class="table__cell">регистр-приёмник = <code class="inline-code">rd</code></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ALUSrc</strong></td><td class="table__cell">второй аргумент АЛУ из регистра</td><td class="table__cell">из расширенной константы</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemWrite</strong></td><td class="table__cell">—</td><td class="table__cell">запись в память данных</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemtoReg</strong></td><td class="table__cell">в регистр — результат АЛУ</td><td class="table__cell">в регистр — данные из памяти</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Branch</strong></td><td class="table__cell">—</td><td class="table__cell">команда <code class="inline-code">beq</code>; переход при флаге Zero = 1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">ALUOp: 00 → сложить (<code class="inline-code">lw</code>, <code class="inline-code">sw</code>); 01 → вычесть (<code class="inline-code">beq</code>); 10 → смотри поле funct (тип R).</li>
+<li class="list__item">Следующая команда: <strong>PC + 4</strong>; переход: PC + 4 + SignImm × 4.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c15">
+<h2 class="cheat__title"><a class="link" href="lectures/15.html">Лекция 15. Ассемблер и архитектура компьютеров (MIPS)</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Регистры MIPS</h3>
+<p class="article__p"><code class="inline-code">$0</code> = ноль · <code class="inline-code">$t0–$t7</code> временные (8–15) · <code class="inline-code">$s0–$s7</code> переменные (16–23) · <code class="inline-code">$a0–$a3</code> аргументы · <code class="inline-code">$v0</code> результат · <code class="inline-code">$sp</code> стек · <code class="inline-code">$ra</code> адрес возврата</p>
+<h3 class="article__h3">Команды</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Команда</th><th class="table__cell table__cell--head">Значение</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">add rd, rs, rt</code> / <code class="inline-code">sub</code></td><td class="table__cell">rd = rs ± rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">addi rt, rs, imm</code></td><td class="table__cell">rt = rs + константа</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code>, <code class="inline-code">andi</code>, <code class="inline-code">ori</code></td><td class="table__cell">логические, побитно</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sll</code>, <code class="inline-code">srl</code>, <code class="inline-code">sra</code></td><td class="table__cell">сдвиги (× или ÷ на 2ⁿ)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw rt, imm(rs)</code></td><td class="table__cell">rt = память[rs + imm]</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw rt, imm(rs)</code></td><td class="table__cell">память[rs + imm] = rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, L</code> / <code class="inline-code">bne</code></td><td class="table__cell">переход, если равны / не равны</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j L</code>, <code class="inline-code">jal L</code>, <code class="inline-code">jr $ra</code></td><td class="table__cell">переход, вызов функции, возврат</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Форматы (32 бита)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Поля</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong></td><td class="table__cell">op(6)=0 · rs(5) · rt(5) · rd(5) · shamt(5) · funct(6)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong></td><td class="table__cell">op(6) · rs(5) · rt(5) · imm(16)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong></td><td class="table__cell">op(6) · addr(26)</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">funct: add = 32, sub = 34, and = 36, or = 37, slt = 42. op: addi = 8, lw = 35, sw = 43, beq = 4.</li>
+<li class="list__item">Декодирование: hex → двоичный вид → первые 6 бит (opcode) → разбивка на поля.</li>
+</ul>
+<h3 class="article__h3">Память</h3>
+<ul class="list">
+<li class="list__item"><strong>Байтовая</strong> адресация; слово = 4 байта → адреса слов: 0, 4, 8… <code class="inline-code">array[i]</code> = база + 4·i.</li>
+<li class="list__item">Стек: LIFO, <code class="inline-code">$sp</code>, растёт вниз. Функция: аргументы <code class="inline-code">$a0–$a3</code>, результат <code class="inline-code">$v0</code>, <code class="inline-code">jal</code> / <code class="inline-code">jr $ra</code>.</li>
+<li class="list__item">Компилятор → ассемблер → компоновщик → загрузчик.</li>
+<li class="list__item">MIPS = RISC (простые, 3 операнда, 4 байта); x86 = CISC (2 операнда, переменная длина).</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c16">
+<h2 class="cheat__title"><a class="link" href="labs/01.html">Лабораторная 1. Вводное занятие: оборудование лаборатории</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Мультиметр</h3>
+<ul class="list">
+<li class="list__item">Чёрный провод всегда в <strong>COM</strong>. Красный: <strong>VΩ</strong> (напряжение, сопротивление) или <strong>mA / 20A</strong> (ток).</li>
+<li class="list__item"><strong>Напряжение — параллельно. Ток — последовательно. Сопротивление — без питания.</strong></li>
+<li class="list__item">«1» на дисплее = предел слишком мал. Неизвестное значение → начинай с наибольшего предела.</li>
+</ul>
+<h3 class="article__h3">Осциллограф</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Хочу…</th><th class="table__cell table__cell--head">Кручу / переключаю</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">картинку больше / меньше по вертикали</td><td class="table__cell">VOLTS/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">больше / меньше периодов</td><td class="table__cell">TIME/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">остановить плывущую картинку</td><td class="table__cell">LEVEL (trigger)</td></tr>
+<tr class="table__row"><td class="table__cell">увидеть, где 0 В</td><td class="table__cell">переключатель на GND</td></tr>
+<tr class="table__row"><td class="table__cell">измерить постоянное напряжение</td><td class="table__cell">переключатель на DC</td></tr>
+<tr class="table__row"><td class="table__cell">видеть оба канала</td><td class="table__cell">MODE → DUAL</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">U = деления × VOLTS/DIV</span>;   <span class="math">T = деления × TIME/DIV</span>;   <span class="math">f = 1/T</span></li>
+<li class="list__item">Ручки VAR должны стоять в положении <strong>CAL</strong>.</li>
+</ul>
+<h3 class="article__h3">Блок питания и генератор</h3>
+<ul class="list">
+<li class="list__item">Блок питания: красная (+), чёрная (−) = масса; переключатель 5 V / 15 V; стрелка показывает ток.</li>
+<li class="list__item">Генератор (DDS): WAVE — форма; ◀ ▶ + ADJ — частота; AMPL — амплитуда; OFFS — постоянная составляющая; выход <strong>OUT</strong>.</li>
+<li class="list__item">Массы генератора и осциллографа должны приходить в одну точку схемы.</li>
+</ul>
+</div>
+</section>
+<section class="cheat cheat--inline" id="c17">
+<h2 class="cheat__title"><a class="link" href="labs/02.html">Лабораторная 2. Измерение напряжений и токов</a></h2>
+<div class="cheat__body">
+<h3 class="article__h3">Мультиметр DT9208A</h3>
+<p class="article__p"><span class="math">Δ = a% · показание + n · разрешение</span></p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Пределы</th><th class="table__cell table__cell--head">Точность</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Напряжение DC</td><td class="table__cell">2 В (0,001) · 20 В (0,01) · 200 В (0,1)</td><td class="table__cell">0,8% + 2d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">200 мВ (0,1 мВ)</td><td class="table__cell">0,5% + 3d</td></tr>
+<tr class="table__row"><td class="table__cell">Сопротивление</td><td class="table__cell">200 Ом (0,1 Ом)</td><td class="table__cell">1% + 10d</td></tr>
+<tr class="table__row"><td class="table__cell"></td><td class="table__cell">2 к (0,001) · 20 к (0,01) · 200 к (0,1) · 2 М (0,001)</td><td class="table__cell">1% + 4d</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Аналоговые приборы</h3>
+<ul class="list">
+<li class="list__item">Осциллограф (кл. 2, 8 делений):  <span class="math">U = дел · чувствительность</span>;  предел <span class="math">= 8 · чувствительность</span>;  <span class="math">ΔU = <span class="math__frac"><span class="math__num">2 · предел</span><span class="math__den">100</span></span> + 0,1 · чувствительность</span></li>
+<li class="list__item">Амперметр блока питания (кл. 2,5; 2 А):  <span class="math">ΔI = 0,05 + 0,025 = 0,075 А</span></li>
+</ul>
+<h3 class="article__h3">Метод max–min</h3>
+<p class="article__p"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,   <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,   <span class="math">I = <span class="math__frac"><span class="math__num">I<sub class="math__sub">min</sub>+I<sub class="math__sub">max</sub></span><span class="math__den">2</span></span></span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></p>
+<h3 class="article__h3">Переменный сигнал</h3>
+<p class="article__p"><span class="math">U<sub class="math__sub">pp</sub> = дел<sub class="math__sub">верт</sub> · В/дел</span>,   <span class="math">T = дел<sub class="math__sub">гориз</sub> · с/дел</span>,   <span class="math">f = 1/T</span>   (1 кГц → T = 1 мс; 1 МГц → T = 1 мкс)</p>
+<h3 class="article__h3">Помни</h3>
+<ul class="list">
+<li class="list__item">Относительная погрешность: <span class="math">δ = <span class="math__frac"><span class="math__num">Δ</span><span class="math__den">показание</span></span> · 100%</span>. Результат записывай как <strong>x ± Δ</strong> с единицей.</li>
+<li class="list__item">Погрешность округляй до стольких знаков после запятой, сколько у результата.</li>
+<li class="list__item">Наименьший предел, в который результат помещается. «1» = предел слишком мал.</li>
+<li class="list__item">Сопротивление измеряй, отключив элемент от питания.</li>
+</ul>
+</div>
+</section>
+</div>
+</article>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

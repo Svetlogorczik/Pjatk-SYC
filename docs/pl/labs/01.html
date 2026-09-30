@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ćwiczenie 1. Zajęcia wstępne: sprzęt w laboratorium — SYC</title>
+<meta name="description" content="Pierwsze zajęcia są bez punktów. Poznajesz zasilacz, multimetr, generator i oscyloskop — cztery urządzenia, z którymi spędzisz kolejne pięć tygodni.">
+<link rel="alternate" hreflang="pl" href="../../pl/labs/01.html">
+<link rel="alternate" hreflang="en" href="../../en/labs/01.html">
+<link rel="alternate" hreflang="ru" href="../../ru/labs/01.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link" href="../lectures/index.html">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../labs/index.html" aria-current="page">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/labs/01.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/labs/01.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/labs/01.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Co się dzieje na tych zajęciach</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Zasilacz laboratoryjny (W.E.P. 1502USB)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Miernik uniwersalny (multimetr DT9208A)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Generator funkcyjny (FY2100S)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Oscyloskop (Twintex TOS-2020CF)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Kable, złącza i płytka stykowa</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Warto obejrzeć (linki z materiałów do ćwiczeń)</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie ćwiczenia">
+<p class="side-nav__title">Wszystkie ćwiczenia</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../labs/01.html" aria-current="page"><span class="side-nav__num">1</span><span class="side-nav__text">Poznajemy sprzęt</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../labs/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Pomiary napięć i prądów</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lab">
+<header class="article__header">
+<p class="article__kicker">Ćwiczenie 1</p>
+<h1 class="article__title">Zajęcia wstępne: sprzęt w laboratorium</h1>
+<p class="article__lead">Pierwsze zajęcia są bez punktów. Poznajesz zasilacz, multimetr, generator i oscyloskop — cztery urządzenia, z którymi spędzisz kolejne pięć tygodni.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a>
+<a class="button button--ghost" href="../lectures/01.html">Wykład do tego ćwiczenia: Wykład 1 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Co się dzieje na tych zajęciach</h2>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu 1 (2026/27)</p>
+<div class="callout__body">
+<p class="article__p">„Zajęcia pierwsze będą zajęciami wstępnymi: zapoznanie się ze sprzętem laboratoryjnym, zasadami BHP, używaniem kabli — jak one wyglądają — omówienie, czym jest składowa AC, DC. Te rzeczy lepiej jest pokazać na sprzęcie.” Za te zajęcia <strong>nie ma punktów</strong>.</p>
+</div>
+</div>
+<ul class="list">
+<li class="list__item">Pracujesz <strong>w parze</strong>; na stole jest jeden zasilacz, jeden miernik, jeden generator i jeden oscyloskop.</li>
+<li class="list__item">Warto wyjść z tych zajęć, umiejąc trzy rzeczy: <strong>zmierzyć napięcie multimetrem</strong>, <strong>ustawić sygnał na generatorze</strong> i <strong>zobaczyć go stabilnie na oscyloskopie</strong>. Od tego zależą punkty na ćwiczeniach 2–6.</li>
+</ul>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Bezpieczeństwo</p>
+<div class="callout__body">
+<p class="article__p">Napięcia w laboratorium są niskie (do 15 V), ale instrukcja oscyloskopu ostrzega: zachowaj ostrożność przy napięciach powyżej <strong>30 V AC (skutecznych), 42 V AC (szczytowych) i 60 V DC</strong> — mogą porazić. Nie zwieraj zacisków zasilacza, a układ zmieniaj przy wyłączonym zasilaniu.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Zasilacz laboratoryjny (W.E.P. 1502USB)</h2>
+<p class="article__p">Zasilacz daje <strong>stałe napięcie o wartości, którą sam ustawisz</strong> — od 0 do 15 V, prąd do 2 A.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-p38.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p38.webp" alt="Przód zasilacza z opisem elementów" width="1399" height="776" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Przód zasilacza z opisem elementów <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Nr</th><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head">Do czego</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">3</td><td class="table__cell">zacisk napięcia <strong>(+)</strong>, czerwony</td><td class="table__cell">tu wpinasz przewód „plus”</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">4</td><td class="table__cell">zacisk masy <strong>(−)</strong>, czarny</td><td class="table__cell">tu wpinasz przewód „minus” (masa)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">5</td><td class="table__cell">przełącznik <strong>5 V / 15 V</strong></td><td class="table__cell">zakres pracy: 0–5 V albo 0–15 V</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">6</td><td class="table__cell">włącznik zasilania</td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">7</td><td class="table__cell">pokrętło regulacji napięcia</td><td class="table__cell"></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">8</td><td class="table__cell">wyświetlacz LED</td><td class="table__cell">pokazuje ustawione napięcie (dokładność 0,1 V)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">9</td><td class="table__cell">wskaźnik wskazówkowy</td><td class="table__cell">pokazuje pobierany <strong>prąd</strong> (0–2 A)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">2</td><td class="table__cell">wyjście USB 5 V</td><td class="table__cell">z niego zasilany jest generator</td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p39.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p39.webp" alt="Tył zasilacza: bezpiecznik, tranzystor mocy, przewód zasilający" width="1319" height="809" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Tył zasilacza: bezpiecznik, tranzystor mocy, przewód zasilający <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Zasilacz ma <strong>zabezpieczenie przeciwzwarciowe</strong>: przy zwarciu (prąd powyżej 2 A) piszczy i odcina wyjście, a po usunięciu zwarcia sam wraca do pracy.</li>
+<li class="list__item">Wyświetlacz pokazuje napięcie tylko z dokładnością do 0,1 V — dlatego dokładną wartość mierzy się multimetrem.</li>
+</ul>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Jak ustawić napięcie</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Skręć pokrętło (7) w lewo do zera.</li>
+<li class="steps__item">Wybierz zakres przełącznikiem (5): do 5 V albo do 15 V.</li>
+<li class="steps__item">Włącz zasilacz (6).</li>
+<li class="steps__item">Kręć pokrętłem, patrząc na wyświetlacz, aż zobaczysz potrzebną wartość.</li>
+<li class="steps__item">Dopiero teraz podłącz układ — czerwony przewód do (+), czarny do (−).</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Miernik uniwersalny (multimetr DT9208A)</h2>
+<p class="article__p">Obok oscyloskopu najważniejszy przyrząd. Mierzy napięcie, prąd, rezystancję, a także pojemność, częstotliwość i wzmocnienie tranzystora.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-multimeter.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-multimeter.webp" alt="Multimetr DT9208A" width="900" height="1965" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Multimetr DT9208A <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Gniazda na dole: <strong>COM</strong> (zawsze czarny przewód), <strong>VΩ</strong> (czerwony — napięcie i rezystancja), <strong>mA</strong> (czerwony — prąd do 200 mA), <strong>20A</strong> (czerwony — duże prądy).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Co mierzysz</th><th class="table__cell table__cell--head">Czerwony przewód</th><th class="table__cell table__cell--head">Pokrętło</th><th class="table__cell table__cell--head">Jak podłączyć</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Napięcie stałe</strong></td><td class="table__cell">VΩ</td><td class="table__cell">V⎓ (DC)</td><td class="table__cell"><strong>równolegle</strong> — do dwóch punktów, między którymi mierzysz</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Napięcie zmienne</strong></td><td class="table__cell">VΩ</td><td class="table__cell">V~ (AC)</td><td class="table__cell">równolegle</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Prąd</strong></td><td class="table__cell">mA (do 200 mA) lub 20A</td><td class="table__cell">A⎓ lub A~</td><td class="table__cell"><strong>szeregowo</strong> — trzeba rozciąć obwód i włączyć miernik w przerwę</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Rezystancja</strong></td><td class="table__cell">VΩ</td><td class="table__cell">Ω</td><td class="table__cell">do końcówek elementu, <strong>przy wyłączonym zasilaniu</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Ciągłość / dioda</strong></td><td class="table__cell">VΩ</td><td class="table__cell">symbol diody</td><td class="table__cell">piszczy, gdy opór &lt; ok. 70 Ω; dla diody pokazuje napięcie przewodzenia</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Pojemność</strong></td><td class="table__cell">gniazda Cx</td><td class="table__cell">F</td><td class="table__cell">kondensator musi być rozładowany</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Tranzystor</strong></td><td class="table__cell">gniazdo hFE</td><td class="table__cell">hFE</td><td class="table__cell">włóż nóżki tranzystora zgodnie z opisem E, B, C</td></tr>
+</tbody></table></div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Czynności wstępne przed każdym pomiarem (z instrukcji miernika)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Włącz miernik. Jeśli <strong>nie</strong> pojawia się symbol baterii — jest sprawny.</li>
+<li class="steps__item">Upewnij się, że mierzona wartość nie przekroczy możliwości miernika.</li>
+<li class="steps__item">Ustaw pokrętło na właściwą wielkość i zakres <strong>przed</strong> dotknięciem układu.</li>
+<li class="steps__item">Nie wiesz, jakiej wartości się spodziewać? Zacznij od <strong>najwyższego</strong> zakresu i schodź w dół.</li>
+<li class="steps__item">Sama cyfra <strong>„1”</strong> po lewej stronie wyświetlacza oznacza <strong>przekroczenie zakresu</strong> — przełącz na wyższy.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Trzy klasyczne błędy</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item"><strong>Pomiar prądu równolegle</strong> (jak napięcia) — amperomierz ma prawie zerowy opór, więc robisz zwarcie i przepalasz bezpiecznik 200 mA. Zakres 20 A <strong>nie ma</strong> bezpiecznika.</li>
+<li class="list__item"><strong>Pomiar rezystancji w układzie pod napięciem</strong> — wynik jest bez sensu, a miernik może się uszkodzić.</li>
+<li class="list__item"><strong>Czerwony przewód zostawiony w gnieździe mA</strong> po pomiarze prądu, a potem próba pomiaru napięcia.</li>
+</ul>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Generator funkcyjny (FY2100S)</h2>
+<p class="article__p">Generator wytwarza <strong>sygnał zmienny o wybranym kształcie, częstotliwości i amplitudzie</strong>. Na zajęciach jest oznaczany skrótem <strong>DDS</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-p54.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p54.webp" alt="Generator funkcyjny: elementy płyty czołowej" width="1400" height="772" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Generator funkcyjny: elementy płyty czołowej <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head">Do czego</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">wyświetlacz LCD</td><td class="table__cell">pokazuje częstotliwość (<code class="inline-code">F=…</code>) i kształt (<code class="inline-code">WAVE=SINE</code>)</td></tr>
+<tr class="table__row"><td class="table__cell">przyciski ◀ ▶</td><td class="table__cell">wybór cyfry, którą zmieniasz</td></tr>
+<tr class="table__row"><td class="table__cell">pokrętło <strong>ADJ</strong> (niebieskie)</td><td class="table__cell">zmiana wartości wybranej cyfry</td></tr>
+<tr class="table__row"><td class="table__cell">przycisk <strong>WAVE</strong></td><td class="table__cell">kształt: sinus, prostokąt, trójkąt</td></tr>
+<tr class="table__row"><td class="table__cell">pokrętło <strong>AMPL</strong></td><td class="table__cell">amplituda sygnału</td></tr>
+<tr class="table__row"><td class="table__cell">pokrętło <strong>OFFS</strong></td><td class="table__cell">składowa stała (przesunięcie sygnału w górę / w dół)</td></tr>
+<tr class="table__row"><td class="table__cell">przycisk −20 dB</td><td class="table__cell">tłumik: zmniejsza amplitudę 10 razy</td></tr>
+<tr class="table__row"><td class="table__cell">gniazdo <strong>OUT</strong> (BNC)</td><td class="table__cell">wyjście sygnału — stąd idzie przewód do układu</td></tr>
+<tr class="table__row"><td class="table__cell">gniazdo <strong>TTL</strong></td><td class="table__cell">wyjście prostokąta 0/5 V</td></tr>
+<tr class="table__row"><td class="table__cell">gniazdo <strong>EXT IN</strong></td><td class="table__cell">wejście licznika / miernika częstotliwości</td></tr>
+</tbody></table></div>
+<p class="article__p">Generator jest zasilany napięciem 5 V przez USB (z gniazda w zasilaczu).</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Składowa stała i zmienna — o co chodzi</p>
+<div class="callout__body">
+<p class="article__p">Każdy sygnał można rozłożyć na dwie części: <strong>składową stałą (DC)</strong> — jego wartość średnią — i <strong>składową zmienną (AC)</strong> — to, co „faluje” wokół tej średniej. Sinus o amplitudzie 1 V „jeżdżący” między 2 V a 4 V ma składową stałą 3 V i składową zmienną ±1 V. Pokrętło <strong>OFFS</strong> zmienia tylko składową stałą.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Oscyloskop (Twintex TOS-2020CF)</h2>
+<p class="article__p">Oscyloskop <strong>rysuje wykres napięcia w funkcji czasu</strong>. Pozwala zobaczyć przebiegi zbyt szybkie dla oka — i zmierzyć ich amplitudę, okres i przesunięcie. Ten model jest <strong>analogowy</strong>, ma <strong>2 kanały</strong> i pasmo <strong>20 MHz</strong>.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-oscilloscope.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-oscilloscope.webp" alt="Oscyloskop w laboratorium" width="1300" height="731" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Oscyloskop w laboratorium <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h3 class="article__h3">Jak to działa</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p63.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p63.webp" alt="Schemat blokowy oscyloskopu" width="1400" height="983" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Schemat blokowy oscyloskopu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Cztery bloki:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Wyświetlacz</strong> — lampa, w której wiązka elektronów rysuje ślad na ekranie.</li>
+<li class="list__item"><strong>Tor odchylania pionowego</strong> (kanały CH1 i CH2) — im większe napięcie, tym wyżej plamka.</li>
+<li class="list__item"><strong>Tor odchylania poziomego</strong> (podstawa czasu) — przesuwa plamkę równomiernie z lewa na prawo.</li>
+<li class="list__item"><strong>Układ wyzwalania</strong> (<em>trigger</em>) — pilnuje, żeby każde kolejne „przerysowanie” zaczynało się w tym samym miejscu przebiegu; dzięki temu obraz stoi, a nie pływa.</li>
+</ol>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p64.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p64.webp" alt="Lampa oscyloskopowa: działo elektronowe, płytki odchylające, ekran" width="1400" height="628" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Lampa oscyloskopowa: działo elektronowe, płytki odchylające, ekran <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<h3 class="article__h3">Panel sterowania</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/labs/lab01-scope-panel.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-scope-panel.webp" alt="Płyta czołowa: część HORIZONTAL, TRIGGER i VERTICAL" width="1300" height="1083" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Płyta czołowa: część HORIZONTAL, TRIGGER i VERTICAL <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Pokrętło / przełącznik</th><th class="table__cell table__cell--head">Co robi</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>VOLTS/DIV</strong> (osobne dla CH1 i CH2)</td><td class="table__cell">skala pionowa: ile woltów przypada na jedną działkę</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>TIME/DIV</strong></td><td class="table__cell">skala pozioma: ile czasu przypada na jedną działkę</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>POSITION ▲▼</strong></td><td class="table__cell">przesuwa przebieg w górę / w dół</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>◀ POSITION ▶</strong></td><td class="table__cell">przesuwa przebieg w lewo / w prawo</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>LEVEL</strong> (TRIGGER)</td><td class="table__cell">poziom wyzwalania — nim „zatrzymujesz” pływający obraz</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MODE</strong> (VERTICAL)</td><td class="table__cell">co widać: CH1, CH2, <strong>DUAL</strong> (oba), ADD (suma)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>AC / GND / DC</strong></td><td class="table__cell">sposób podłączenia wejścia (patrz niżej)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>X10 MAG</strong></td><td class="table__cell">rozciąga obraz w poziomie 10 razy</td></tr>
+<tr class="table__row"><td class="table__cell">małe pokrętło <strong>VAR / CAL</strong></td><td class="table__cell">płynna regulacja; do pomiarów <strong>musi być w pozycji CAL</strong></td></tr>
+</tbody></table></div>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p68.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p68.webp" alt="VOLTS/DIV — czułość kanału" width="1400" height="1164" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">VOLTS/DIV — czułość kanału <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p70.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p70.webp" alt="TIME/DIV — podstawa czasu" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">TIME/DIV — podstawa czasu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p71.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p71.webp" alt="LEVEL — poziom wyzwalania" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">LEVEL — poziom wyzwalania <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-p73.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p73.webp" alt="POSITION — przesuwanie przebiegu" width="1400" height="1170" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">POSITION — przesuwanie przebiegu <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<p class="article__p"><strong>AC / GND / DC:</strong></p>
+<ul class="list">
+<li class="list__item"><strong>DC</strong> — widzisz cały sygnał, razem ze składową stałą. Tego używasz do pomiaru napięcia stałego.</li>
+<li class="list__item"><strong>AC</strong> — składowa stała jest odcinana; widzisz tylko część zmienną, ustawioną wokół zera.</li>
+<li class="list__item"><strong>GND</strong> — wejście jest zwarte do masy: na ekranie jest płaska linia pokazująca, <strong>gdzie jest 0 V</strong>. Ustaw ją pokrętłem POSITION na wybranej kresce, zanim zaczniesz mierzyć.</li>
+</ul>
+<h3 class="article__h3">Po co jest wyzwalanie</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab01-p72.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-p72.webp" alt="Obraz stabilny i niestabilny w zależności od synchronizacji podstawy czasu z sygnałem" width="1400" height="749" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Obraz stabilny i niestabilny w zależności od synchronizacji podstawy czasu z sygnałem <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p">Jeśli okres podstawy czasu nie jest dopasowany do okresu sygnału, każde przerysowanie zaczyna się w innym miejscu i obraz „ucieka”. Pokrętło <strong>LEVEL</strong> ustawia napięcie, przy którym rysowanie ma się zaczynać — obraz się zatrzymuje.</p>
+<h3 class="article__h3">Jak odczytać wynik</h3>
+<div class="formula"><span class="math">U = (liczba działek w pionie) × (VOLTS/DIV)  T = (liczba działek w poziomie) × (TIME/DIV)  f = <span class="math__frac"><span class="math__num">1</span><span class="math__den">T</span></span></span></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Przykład własny</p>
+<div class="callout__body">
+<p class="article__p">Sinus zajmuje w pionie 4,6 działki od dołka do szczytu, VOLTS/DIV = 0,5 V → napięcie międzyszczytowe <span class="math">U<sub class="math__sub">pp</sub> = 4,6 × 0,5 = 2,3 V</span>.</p>
+<p class="article__p">Jeden pełny okres zajmuje 5 działek w poziomie, TIME/DIV = 0,2 ms → <span class="math">T = 5 × 0,2 = 1 ms</span>, czyli <span class="math">f = 1 kHz</span>.</p>
+</div>
+</div>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Pierwsze pięć minut z oscyloskopem (moja lista kontrolna)</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Włącz oscyloskop i poczekaj, aż pojawi się linia. Nie ma linii? Przekręć INTEN (jasność) i oba POSITION na środek, MODE triggera ustaw na <strong>AUTO</strong>.</li>
+<li class="steps__item">Przełącznik wejścia ustaw na <strong>GND</strong> i pokrętłem POSITION ustaw linię na środkowej kresce — to Twoje 0 V.</li>
+<li class="steps__item">Sprawdź, czy małe pokrętła VAR są w pozycji <strong>CAL</strong> (inaczej skala kłamie).</li>
+<li class="steps__item">Podłącz sygnał do CH1 i przełącz na <strong>DC</strong>.</li>
+<li class="steps__item">Kręć <strong>VOLTS/DIV</strong>, aż przebieg zajmie większość ekranu w pionie (ale się mieści).</li>
+<li class="steps__item">Kręć <strong>TIME/DIV</strong>, aż zobaczysz 1–3 okresy.</li>
+<li class="steps__item">Obraz pływa? Kręć <strong>LEVEL</strong>, aż stanie.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Kable, złącza i płytka stykowa</h2>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-bnc.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-bnc.webp" alt="Złącza BNC i trójnik" width="1300" height="731" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Złącza BNC i trójnik <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/labs/lab01-parts.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab01-parts.webp" alt="Elementy używane na zajęciach: rezystory, tranzystory, diody" width="900" height="1600" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Elementy używane na zajęciach: rezystory, tranzystory, diody <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item">Generator i oscyloskop łączy się kablami ze złączem <strong>BNC</strong>. Kabel ma żyłę środkową (sygnał) i ekran — metalowa obudowa złącza to <strong>masa</strong>.</li>
+<li class="list__item">Z wykładu: metalowe części urządzeń i ekrany kabli BNC są zwykle połączone z masą, a przez bolec w gniazdku — z uziemieniem. Wniosek praktyczny: <strong>masy generatora i oscyloskopu są ze sobą połączone</strong>, więc ich „czarne” końcówki muszą trafić w ten sam punkt układu.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/labs/lab03-s16.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/labs/lab03-s16.webp" alt="Płytka stykowa: jak połączone są otwory" width="1400" height="712" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Płytka stykowa: jak połączone są otwory <span class="figure__source">Źródło: materiały do ćwiczeń</span></figcaption>
+</figure>
+<p class="article__p"><strong>Płytka stykowa</strong> (<em>breadboard</em>) pozwala budować układy bez lutowania. W środkowej części otwory są połączone <strong>krótkimi kolumnami po 5</strong>; długie szyny wzdłuż brzegów służą do rozprowadzenia zasilania i masy. Dwie nóżki włożone w tę samą kolumnę są ze sobą połączone.</p>
+<h2 class="article__h2" id="s7">Warto obejrzeć (linki z materiałów do ćwiczeń)</h2>
+<ul class="list">
+<li class="list__item">Veritasium: <a class="link link--external" href="https://www.youtube.com/watch?v=oI_X2cMHNe0" target="_blank" rel="noopener">The Big Misconception About Electricity</a> i <a class="link link--external" href="https://www.youtube.com/watch?v=bHIhgxav9LY" target="_blank" rel="noopener">How Electricity Actually Works</a> — czym naprawdę jest prąd.</li>
+<li class="list__item"><a class="link link--external" href="https://www.youtube.com/watch?v=X_crwFuPht4" target="_blank" rel="noopener">Analogia wodna prawa Ohma</a>.</li>
+<li class="list__item">Kanał RS Elektronika: <a class="link link--external" href="https://www.youtube.com/watch?v=3YdOdJMfkww" target="_blank" rel="noopener">obsługa sprzętu</a>.</li>
+<li class="list__item">UNSW ELEC1111: <a class="link link--external" href="https://www.youtube.com/playlist?list=PLHSIfioizVW2xQQmJ_JnuMRyQRUgb7TqG" target="_blank" rel="noopener">Lab Guidance</a> — krótkie filmy o multimetrze, oscyloskopie i płytce stykowej.</li>
+</ul>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Multimetr</h3>
+<ul class="list">
+<li class="list__item">Czarny przewód zawsze w <strong>COM</strong>. Czerwony: <strong>VΩ</strong> (napięcie, opór) albo <strong>mA / 20A</strong> (prąd).</li>
+<li class="list__item"><strong>Napięcie — równolegle. Prąd — szeregowo. Opór — bez zasilania.</strong></li>
+<li class="list__item">„1” na wyświetlaczu = za mały zakres. Nieznana wartość → zaczynaj od największego zakresu.</li>
+</ul>
+<h3 class="article__h3">Oscyloskop</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Chcę…</th><th class="table__cell table__cell--head">Kręcę / przełączam</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">większy / mniejszy obraz w pionie</td><td class="table__cell">VOLTS/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">więcej / mniej okresów</td><td class="table__cell">TIME/DIV</td></tr>
+<tr class="table__row"><td class="table__cell">zatrzymać pływający obraz</td><td class="table__cell">LEVEL (trigger)</td></tr>
+<tr class="table__row"><td class="table__cell">zobaczyć, gdzie jest 0 V</td><td class="table__cell">przełącznik na GND</td></tr>
+<tr class="table__row"><td class="table__cell">zmierzyć napięcie stałe</td><td class="table__cell">przełącznik na DC</td></tr>
+<tr class="table__row"><td class="table__cell">widzieć oba kanały</td><td class="table__cell">MODE → DUAL</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><span class="math">U = działki × VOLTS/DIV</span>;   <span class="math">T = działki × TIME/DIV</span>;   <span class="math">f = 1/T</span></li>
+<li class="list__item">Pokrętła VAR muszą być w pozycji <strong>CAL</strong>.</li>
+</ul>
+<h3 class="article__h3">Zasilacz i generator</h3>
+<ul class="list">
+<li class="list__item">Zasilacz: czerwony (+), czarny (−) = masa; przełącznik 5 V / 15 V; wskazówka pokazuje prąd.</li>
+<li class="list__item">Generator (DDS): WAVE — kształt; ◀ ▶ + ADJ — częstotliwość; AMPL — amplituda; OFFS — składowa stała; wyjście <strong>OUT</strong>.</li>
+<li class="list__item">Masy generatora i oscyloskopu muszą być w tym samym punkcie układu.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<span class="pager__link pager__link--empty"></span>
+<a class="pager__link pager__link--next" href="../labs/02.html"><span class="pager__dir">Następny →</span><span class="pager__title">Ćwiczenie 2: Pomiary napięć i prądów</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

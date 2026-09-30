@@ -1,0 +1,50 @@
+/* table — data table; table-wrap makes it scroll horizontally on small screens */
+.table-wrap {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.table__cell {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table__cell--head {
+  background: var(--color-surface-2);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table__cell--center {
+  text-align: center;
+}
+
+.table__cell--right {
+  text-align: right;
+}
+
+.table__body .table__row:last-child .table__cell {
+  border-bottom: 0;
+}
+
+.table__body .table__row:nth-child(even) {
+  background: color-mix(in srgb, var(--color-surface-2) 45%, transparent);
+}
+
+@media print {
+  .table-wrap {
+    overflow: visible;
+    break-inside: avoid;
+  }
+}

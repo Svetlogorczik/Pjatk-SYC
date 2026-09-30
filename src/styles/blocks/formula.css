@@ -1,0 +1,16 @@
+/* formula — a formula on its own line */
+.formula {
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  border-radius: var(--radius-small);
+  background: var(--color-surface-2);
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+@media print {
+  .formula {
+    break-inside: avoid;
+  }
+}

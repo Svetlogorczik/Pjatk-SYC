@@ -1,0 +1,22 @@
+/* list — bullet and numbered lists inside the content */
+.list {
+  margin: 0 0 1rem;
+  padding-left: 1.4rem;
+}
+
+.list__item {
+  margin: 0.3rem 0;
+}
+
+.list__item::marker {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.list .list {
+  margin: 0.3rem 0 0.4rem;
+}
+
+.list__item > .article__p:last-child {
+  margin-bottom: 0.4rem;
+}

@@ -1,0 +1,55 @@
+/* modal — dialog that shows the cheat sheet */
+.modal {
+  width: min(46rem, calc(100vw - 1.5rem));
+  max-height: min(88vh, 60rem);
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 0.35);
+}
+
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal::backdrop {
+  background: rgb(10 14 24 / 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.modal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem 0.7rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.modal__title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.modal__close {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.modal__close:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.modal__body {
+  padding: 1rem 1.25rem 1.5rem;
+  overflow-y: auto;
+}

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYC — Digital Systems and Basics of Electronics</title>
+<meta name="description" content="Every lecture explained in plain language, labs written out step by step and a short cheat sheet for every topic. In Polish, English and Russian.">
+<link rel="alternate" hreflang="pl" href="../pl/index.html">
+<link rel="alternate" hreflang="en" href="../en/index.html">
+<link rel="alternate" hreflang="ru" href="../ru/index.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link nav__link--active" href="index.html" aria-current="page">Home</a></li>
+<li class="nav__item"><a class="nav__link" href="lectures/index.html">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../pl/index.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../en/index.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../ru/index.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">How to use this site</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The course in a nutshell</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Semester plan</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Lectures</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Labs</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Software you will need</a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--page">
+<header class="article__header">
+
+<h1 class="article__title">SYC — Digital Systems and Basics of Electronics</h1>
+<p class="article__lead">Every lecture explained in plain language, labs written out step by step and a short cheat sheet for every topic. In Polish, English and Russian.</p>
+
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">How to use this site</h2>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Three steps before every class</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Read the lecture</strong> for the week — each topic is written as normal text, with examples and figures from the slides.</li>
+<li class="steps__item"><strong>Open the "Quick summary"</strong> (the 📋 button at the top of every lecture and in the bottom-right corner) — a cheat sheet with the formulas and rules you need in the lab.</li>
+<li class="steps__item"><strong>Walk through the lab</strong> step by step and do the practice tasks. In class you will get a different variant, but the method is the same.</li>
+</ol>
+</div>
+</div>
+<div class="callout callout--info">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">ℹ️</span>What the coloured boxes mean</p>
+<div class="callout__body">
+<ul class="list">
+<li class="list__item">🧒 <strong>In plain words</strong> — the same thing, as simple as possible.</li>
+<li class="list__item">🎓 <strong>From the lecture</strong> — something the lecturer said live (recording of lecture 1, winter semester 2026/27).</li>
+<li class="list__item">✚ <strong>From the site author</strong> — my own remarks, examples and tips. This is <strong>not</strong> in the slides or the recording, so treat it as help, not as "official" content.</li>
+<li class="list__item">📝 <strong>Practice task</strong> — the tasks are <strong>original</strong>: same logic as the class tasks, different data. The solution is hidden behind a button.</li>
+</ul>
+</div>
+</div>
+<h2 class="article__h2" id="s2">The course in a nutshell</h2>
+<ul class="list">
+<li class="list__item"><strong>15 weeks:</strong> 15 lectures and 15 labs. Labs run <strong>one week behind the lectures</strong>.</li>
+<li class="list__item"><strong>The grade comes from labs only:</strong> 14 graded classes × 5 pts = <strong>70 pts</strong>. You pass with <strong>more than 35 pts</strong>. No exam, no mid-term tests.</li>
+<li class="list__item"><strong>Everything is done in class</strong> — no homework (apart from preparing).</li>
+<li class="list__item">Labs 1–6: lab equipment (in pairs). Labs 7–11: the Logisim simulator. Labs 12–15: Arduino.</li>
+</ul>
+<p class="article__p">Details, the grade table and what is current this year: <a class="link" href="grading.html">Passing the course</a>.</p>
+<h2 class="article__h2" id="s3">Semester plan</h2>
+<div class="schedule" data-schedule data-locale="en">
+<div class="schedule__controls">
+<label class="schedule__field"><span class="schedule__label">Date of the first lecture</span><input class="schedule__input" type="date" data-start="lecture"></label>
+<label class="schedule__field"><span class="schedule__label">Date of the first lab</span><input class="schedule__input" type="date" data-start="lab"></label>
+<button class="button button--ghost" type="button" data-schedule-clear>Clear</button>
+</div>
+<p class="schedule__hint">Enter the dates from your timetable — the table works out the following weeks (every 7 days, holidays ignored; the data stays in your browser only).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Week</th><th class="table__cell table__cell--head">Lecture</th><th class="table__cell table__cell--head">Lab</th><th class="table__cell table__cell--head">Points</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row">
+<td class="table__cell table__cell--center">1</td>
+<td class="table__cell"><a class="link" href="lectures/01.html">Introduction, physical basics of electronics and measurements</a><span class="schedule__date" data-date="lecture" data-week="1"></span></td>
+<td class="table__cell"><a class="link" href="labs/01.html">Introductory class: the lab equipment</a><span class="schedule__date" data-date="lab" data-week="1"></span></td>
+<td class="table__cell table__cell--center">— (not graded)</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">2</td>
+<td class="table__cell"><a class="link" href="lectures/02.html">Passive components: resistor, capacitor, inductor and impedance</a><span class="schedule__date" data-date="lecture" data-week="2"></span></td>
+<td class="table__cell"><a class="link" href="labs/02.html">Measuring voltages and currents</a><span class="schedule__date" data-date="lab" data-week="2"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">3</td>
+<td class="table__cell"><a class="link" href="lectures/03.html">Passive electronic circuits: dividers and RC filters</a><span class="schedule__date" data-date="lecture" data-week="3"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="3"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">4</td>
+<td class="table__cell"><a class="link" href="lectures/04.html">Semiconductors: diodes and transistors</a><span class="schedule__date" data-date="lecture" data-week="4"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="4"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">5</td>
+<td class="table__cell"><a class="link" href="lectures/05.html">Operational amplifiers</a><span class="schedule__date" data-date="lecture" data-week="5"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="5"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">6</td>
+<td class="table__cell"><a class="link" href="lectures/06.html">Digital circuits — introduction: signals, gates, Boolean algebra</a><span class="schedule__date" data-date="lecture" data-week="6"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="6"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">7</td>
+<td class="table__cell"><a class="link" href="lectures/07.html">Minimisation of Boolean functions: Karnaugh maps</a><span class="schedule__date" data-date="lecture" data-week="7"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="7"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">8</td>
+<td class="table__cell"><a class="link" href="lectures/08.html">Combinational functional blocks: multiplexer, two's complement, adder, ALU</a><span class="schedule__date" data-date="lecture" data-week="8"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="8"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">9</td>
+<td class="table__cell"><a class="link" href="lectures/09.html">Sequential circuits: flip-flops, registers, counters</a><span class="schedule__date" data-date="lecture" data-week="9"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="9"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">10</td>
+<td class="table__cell"><a class="link" href="lectures/10.html">Designing synchronous sequential circuits</a><span class="schedule__date" data-date="lecture" data-week="10"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="10"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">11</td>
+<td class="table__cell"><a class="link" href="lectures/11.html">Computer systems, microprocessors and microcontrollers</a><span class="schedule__date" data-date="lecture" data-week="11"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="11"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">12</td>
+<td class="table__cell"><a class="link" href="lectures/12.html">Communication methods: ports, UART, SPI, I²C</a><span class="schedule__date" data-date="lecture" data-week="12"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="12"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">13</td>
+<td class="table__cell"><a class="link" href="lectures/13.html">Microcontroller peripherals and event handling</a><span class="schedule__date" data-date="lecture" data-week="13"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="13"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">14</td>
+<td class="table__cell"><a class="link" href="lectures/14.html">Computer architecture: the MIPS processor from the inside</a><span class="schedule__date" data-date="lecture" data-week="14"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="14"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+<tr class="table__row">
+<td class="table__cell table__cell--center">15</td>
+<td class="table__cell"><a class="link" href="lectures/15.html">Assembly language and computer architecture (MIPS)</a><span class="schedule__date" data-date="lecture" data-week="15"></span></td>
+<td class="table__cell">—<span class="schedule__date" data-date="lab" data-week="15"></span></td>
+<td class="table__cell table__cell--center">5</td>
+</tr>
+</tbody></table></div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">The materials contain no calendar dates — only week numbers. The date calculator above is my addition: it adds 7 days at a time and <strong>knows nothing</strong> about holidays or days off, so compare the result with your timetable.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Lectures</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="lectures/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Lecture 1</span><span class="card__title">Introduction, physical basics of electronics and measurements</span><span class="card__text">Voltage, current, Ohm's law, Kirchhoff's laws — and then the key thing for the first labs: how to measure and how to work out how wrong we might be.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Lecture 2</span><span class="card__title">Passive components: resistor, capacitor, inductor and impedance</span><span class="card__text">The three basic "building blocks" of electronics and one idea that ties them together — impedance, resistance written as a complex number.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/03.html">
+<span class="card__num">3</span>
+<span class="card__body"><span class="card__kicker">Lecture 3</span><span class="card__title">Passive electronic circuits: dividers and RC filters</span><span class="card__text">Two components make a voltage divider, and a divider makes a filter. Plus decibels, the cut-off frequency, and connecting components in series and in parallel.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/04.html">
+<span class="card__num">4</span>
+<span class="card__body"><span class="card__kicker">Lecture 4</span><span class="card__title">Semiconductors: diodes and transistors</span><span class="card__text">Where "holes" in silicon come from, why a diode conducts in one direction only, and how a small base current controls a large collector current.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/05.html">
+<span class="card__num">5</span>
+<span class="card__body"><span class="card__kicker">Lecture 5</span><span class="card__title">Operational amplifiers</span><span class="card__text">One triangle on the schematic, two resistors — and we have an amplifier with exactly the gain we want. Plus the follower, comparator, summing amplifier and active filters.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/06.html">
+<span class="card__num">6</span>
+<span class="card__body"><span class="card__kicker">Lecture 6</span><span class="card__title">Digital circuits — introduction: signals, gates, Boolean algebra</span><span class="card__text">From voltage to zeros and ones. What a logic state is, which gates exist, how to write a logic function, and why NAND gates alone are enough to build anything.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/07.html">
+<span class="card__num">7</span>
+<span class="card__body"><span class="card__kicker">Lecture 7</span><span class="card__title">Minimisation of Boolean functions: Karnaugh maps</span><span class="card__text">The same function may need ten gates or three. A Karnaugh map is a way to find the shorter version without guessing — and then build it from NAND or NOR gates only.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/08.html">
+<span class="card__num">8</span>
+<span class="card__body"><span class="card__kicker">Lecture 8</span><span class="card__title">Combinational functional blocks: multiplexer, two's complement, adder, ALU</span><span class="card__text">Ready-made "bricks" bigger than a gate. The multiplexer as a switch and as a universal logic function, negative numbers in two's complement, the adder and the arithmetic logic unit.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/09.html">
+<span class="card__num">9</span>
+<span class="card__body"><span class="card__kicker">Lecture 9</span><span class="card__title">Sequential circuits: flip-flops, registers, counters</span><span class="card__text">A circuit that remembers. Where memory comes from, how RS, D, JK and T flip-flops differ, what the clock is for, and how a few flip-flops make a shift register or a counter.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/10.html">
+<span class="card__num">10</span>
+<span class="card__body"><span class="card__kicker">Lecture 10</span><span class="card__title">Designing synchronous sequential circuits</span><span class="card__text">From a description in words ("red should light up, then yellow…") to a finished circuit of flip-flops and gates. Four steps: the graph, state coding, excitation functions, output functions.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/11.html">
+<span class="card__num">11</span>
+<span class="card__body"><span class="card__kicker">Lecture 11</span><span class="card__title">Computer systems, microprocessors and microcontrollers</span><span class="card__text">What a computer consists of, how a processor executes an instruction, and what a microcontroller is — using the ATmega328, the "heart" of the Arduino UNO board.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/12.html">
+<span class="card__num">12</span>
+<span class="card__body"><span class="card__kicker">Lecture 12</span><span class="card__title">Communication methods: ports, UART, SPI, I²C</span><span class="card__text">How a microcontroller talks to the world. Serial or parallel, with a clock or without, who starts the conversation — and the three interfaces you will meet in the Arduino labs.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/13.html">
+<span class="card__num">13</span>
+<span class="card__body"><span class="card__kicker">Lecture 13</span><span class="card__title">Microcontroller peripherals and event handling</span><span class="card__text">How a microcontroller controls something bigger than itself (PWM, a transistor as a switch, the H-bridge), how it turns a voltage into a number and back — and two ways of reacting to events: polling and interrupts.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/14.html">
+<span class="card__num">14</span>
+<span class="card__body"><span class="card__kicker">Lecture 14</span><span class="card__title">Computer architecture: the MIPS processor from the inside</span><span class="card__text">We assemble a processor from bricks we already know: registers, memory, multiplexers and an ALU. First the single-cycle version, then the multicycle and the pipelined ones.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="lectures/15.html">
+<span class="card__num">15</span>
+<span class="card__body"><span class="card__kicker">Lecture 15</span><span class="card__title">Assembly language and computer architecture (MIPS)</span><span class="card__text">The language a processor really "speaks". Instructions, registers, memory, branches and loops in MIPS assembly — and what such an instruction looks like as 32 zeros and ones.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s5">Labs</h2>
+<ul class="cards">
+<li class="cards__item"><a class="card" href="labs/01.html">
+<span class="card__num">1</span>
+<span class="card__body"><span class="card__kicker">Lab 1</span><span class="card__title">Introductory class: the lab equipment</span><span class="card__text">The first class carries no points. You get to know the power supply, the multimeter, the generator and the oscilloscope — four devices you will spend the next five weeks with.</span></span>
+</a></li>
+<li class="cards__item"><a class="card" href="labs/02.html">
+<span class="card__num">2</span>
+<span class="card__body"><span class="card__kicker">Lab 2</span><span class="card__title">Measuring voltages and currents</span><span class="card__text">The first graded class (5 pts). You measure voltage, resistance and current — with a digital meter, an oscilloscope and a needle ammeter — and work out the error of every result.</span></span>
+</a></li>
+</ul>
+<h2 class="article__h2" id="s6">Software you will need</h2>
+<ul class="list">
+<li class="list__item"><strong>Logisim 2.7.1</strong> — the digital circuit simulator used in labs 7–11 (file <code class="inline-code">logisim-generic-2.7.1.jar</code>, needs Java). In the 2026/27 lecture it was said that Logisim also runs <strong>in the browser</strong> and that there is a newer version, <em>Logisim Evolution</em> (also for macOS) — "very similar, just a bit more complicated".</li>
+<li class="list__item"><strong>Arduino IDE</strong> — for labs 12–15 (Arduino UNO R3 board).</li>
+<li class="list__item"><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> The class <code class="inline-code">.circ</code> files open in Logisim 2.7.1; usually in Logisim Evolution too, but a file saved there may no longer open in the old version — for graded work use the version installed in the lab room.</li>
+</ul>
+</div>
+
+
+</article>
+
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../assets/js/app.js" defer></script>
+</body>
+</html>

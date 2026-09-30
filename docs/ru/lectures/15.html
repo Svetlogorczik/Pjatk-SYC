@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 15. Ассемблер и архитектура компьютеров (MIPS) — SYC</title>
+<meta name="description" content="Язык, на котором на самом деле «говорит» процессор. Команды, регистры, память, переходы и циклы на ассемблере MIPS — и как такая команда выглядит в виде 32 нулей и единиц.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/15.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/15.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/15.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/15.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/15.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/15.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Язык компьютера</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Регистры</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Память</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Машинный язык: три формата</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Логические команды и сдвиги</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Переходы и ветвления</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Массивы</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Функции и стек</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Остальные темы</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">От исходного кода до работающей программы</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">MIPS и x86</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/15.html" aria-current="page"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 15</p>
+<h1 class="article__title">Ассемблер и архитектура компьютеров (MIPS)</h1>
+<p class="article__lead">Язык, на котором на самом деле «говорит» процессор. Команды, регистры, память, переходы и циклы на ассемблере MIPS — и как такая команда выглядит в виде 32 нулей и единиц.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Язык компьютера</h2>
+<ul class="list">
+<li class="list__item">Слова в языке компьютера — это <strong>команды</strong> (инструкции), а его словарь — <strong>набор команд</strong>.</li>
+<li class="list__item">Все программы, работающие на данном компьютере, используют один и тот же набор команд.</li>
+<li class="list__item">Команды закодированы двоичными числами — это <strong>машинный язык</strong>.</li>
+<li class="list__item">Удобнее записывать их символически — это <strong>ассемблер</strong> (<em>assembly</em>).</li>
+</ul>
+<p class="article__p">Одна строка кода высокого уровня и её аналог в MIPS:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">ASM</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">add</span> a, b, c      <span class="code__tok code__tok--comment"># a = b + c</span></code></pre>
+</figure>
+<ul class="list">
+<li class="list__item"><code class="inline-code">add</code> — <strong>мнемоника</strong>: говорит, какую операцию выполнить,</li>
+<li class="list__item"><code class="inline-code">b</code> и <code class="inline-code">c</code> — <strong>операнды-источники</strong>, <code class="inline-code">a</code> — <strong>операнд-приёмник</strong> (результат).</li>
+<li class="list__item">Комментарий начинается с <code class="inline-code">#</code> и идёт до конца строки.</li>
+</ul>
+<p class="article__p">Более сложное выражение нужно разбить на несколько команд: <code class="inline-code">a = b + c − d</code> — это <code class="inline-code">sub t, c, d</code> и <code class="inline-code">add a, b, t</code>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Ассемблер — это рецепт, расписанный на самые мелкие шаги: «возьми яйцо», «разбей яйцо», «вылей в миску». Никакого «сделай омлет» — процессор знает только такие отдельные движения.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Регистры</h2>
+<p class="article__p">Команды работают с <strong>регистрами</strong> — быстрыми ячейками внутри процессора. В MIPS их <strong>32</strong> (<em>Register File</em>). Имена начинаются с <code class="inline-code">$</code>.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Регистры</th><th class="table__cell table__cell--head table__cell--center">Номера</th><th class="table__cell table__cell--head">Для чего</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$0</code></td><td class="table__cell table__cell--center">0</td><td class="table__cell">всегда содержит ноль</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$v0</code>–<code class="inline-code">$v1</code></td><td class="table__cell table__cell--center">2–3</td><td class="table__cell">значение, возвращаемое функцией</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$a0</code>–<code class="inline-code">$a3</code></td><td class="table__cell table__cell--center">4–7</td><td class="table__cell">аргументы функции</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$t0</code>–<code class="inline-code">$t7</code></td><td class="table__cell table__cell--center">8–15</td><td class="table__cell"><strong>временные</strong> (<em>temporary</em>) — промежуточные результаты</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$s0</code>–<code class="inline-code">$s7</code></td><td class="table__cell table__cell--center">16–23</td><td class="table__cell"><strong>сохраняемые</strong> (<em>saved</em>) — переменные программы</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$sp</code></td><td class="table__cell table__cell--center">29</td><td class="table__cell">указатель стека</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$ra</code></td><td class="table__cell table__cell--center">31</td><td class="table__cell">адрес возврата из функции</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Номера регистров я дополнил по документации MIPS; на слайдах названы только некоторые ($t0 = 8, $s3 = 19, $s4 = 20, $s5 = 21) — они совпадают с этой таблицей.</p>
+<p class="article__p">Пример из лекции — две строки на C превращаются в четыре команды:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">C</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--c">a = b - c;
+f = (g + h) - (i + j);</code></pre>
+</figure>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">То же на ассемблере MIPS</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># $s0 = a, $s1 = b, $s2 = c, $s3 = f, $s4 = g, $s5 = h, $s6 = i, $s7 = j</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s2</span>    <span class="code__tok code__tok--comment"># a = b - c</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$s4</span>, <span class="code__tok code__tok--builtin">$s5</span>    <span class="code__tok code__tok--comment"># $t0 = g + h</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$s6</span>, <span class="code__tok code__tok--builtin">$s7</span>    <span class="code__tok code__tok--comment"># $t1 = i + j</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$t1</span>    <span class="code__tok code__tok--comment"># f = (g + h) - (i + j)</span></code></pre>
+</figure>
+<h2 class="article__h2" id="s3">Память</h2>
+<p class="article__p">Регистров всего 32, поэтому большинство данных лежит в <strong>памяти</strong>. Для переноса данных есть две команды:</p>
+<ul class="list">
+<li class="list__item"><code class="inline-code">lw</code> (<em>load word</em>) — загрузить слово из памяти в регистр,</li>
+<li class="list__item"><code class="inline-code">sw</code> (<em>store word</em>) — записать слово из регистра в память.</li>
+</ul>
+<p class="article__p">Адрес записывается как <strong>смещение(базовый регистр)</strong>: <code class="inline-code">lw $s3, 8($t0)</code> значит «возьми слово по адресу $t0 + 8».</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p07.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p07.webp" alt="Память с байтовой адресацией: слово — это 4 байта" width="1100" height="795" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Память с байтовой адресацией: слово — это 4 байта <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Память MIPS адресуется <strong>байтами</strong>: у каждого байта свой адрес.</li>
+<li class="list__item"><strong>Слово</strong> — это 32 бита = 4 байта, поэтому адреса соседних слов кратны 4: 0, 4, 8, 12…</li>
+</ul>
+<h3 class="article__h3">Big-endian и little-endian</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p09.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p09.webp" alt="Порядок байтов в слове: Big-Endian и Little-Endian" width="1024" height="738" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Порядок байтов в слове: Big-Endian и Little-Endian <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Это два способа нумерации байтов в слове. В <strong>big-endian</strong> байт номер 0 находится на «большом» (старшем) конце; в <strong>little-endian</strong> — на «малом» (младшем).</p>
+<h3 class="article__h3">Константы (непосредственные значения)</h3>
+<p class="article__p">Константа, записанная прямо в команде, называется <strong>непосредственной</strong> (<em>immediate</em>) — за ней не нужно обращаться ни к регистру, ни к памяти. Для этого служит <code class="inline-code">addi</code> (прибавить константу).</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Память и константы</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">lw</span>  <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$0</span>)       <span class="code__tok code__tok--comment"># $s3 = memory word at address 4</span>
+<span class="code__tok code__tok--keyword">sw</span>  <span class="code__tok code__tok--builtin">$s7</span>, <span class="code__tok code__tok--number">20</span>(<span class="code__tok code__tok--builtin">$0</span>)      <span class="code__tok code__tok--comment"># memory word at address 20 = $s7</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">4</span>     <span class="code__tok code__tok--comment"># a = a + 4   (constant inside the instruction)</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">-12</span>   <span class="code__tok code__tok--comment"># b = a - 12</span></code></pre>
+</figure>
+<h2 class="article__h2" id="s4">Машинный язык: три формата</h2>
+<p class="article__p">Каждая команда MIPS занимает ровно <strong>32 бита</strong>. Форматов три:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Формат</th><th class="table__cell table__cell--head">Поля (число бит)</th><th class="table__cell table__cell--head">Для чего</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong> (<em>register</em>)</td><td class="table__cell">op (6) · rs (5) · rt (5) · rd (5) · shamt (5) · funct (6)</td><td class="table__cell">операции над тремя регистрами</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong> (<em>immediate</em>)</td><td class="table__cell">op (6) · rs (5) · rt (5) · imm (16)</td><td class="table__cell">два регистра и 16-битная константа</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong> (<em>jump</em>)</td><td class="table__cell">op (6) · addr (26)</td><td class="table__cell">переходы</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Тип R</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p12.webp" alt="Формат команды типа R" width="1100" height="243" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Формат команды типа R <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><code class="inline-code">rs</code>, <code class="inline-code">rt</code> — регистры-источники, <code class="inline-code">rd</code> — регистр-приёмник,</li>
+<li class="list__item">у всех команд типа R <strong>op = 0</strong>; какая это операция, определяет поле <strong>funct</strong>,</li>
+<li class="list__item"><code class="inline-code">shamt</code> — на сколько бит сдвигать (только в командах сдвига).</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции: add $t0, $s4, $s5</p>
+<div class="callout__body">
+<p class="article__p">В ассемблере первым идёт регистр-приёмник; в машинном коде порядок полей другой: rs, rt, rd.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Поле</th><th class="table__cell table__cell--head table__cell--center">op</th><th class="table__cell table__cell--head table__cell--center">rs ($s4)</th><th class="table__cell table__cell--head table__cell--center">rt ($s5)</th><th class="table__cell table__cell--head table__cell--center">rd ($t0)</th><th class="table__cell table__cell--head table__cell--center">shamt</th><th class="table__cell table__cell--head table__cell--center">funct (add)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">В десятичной</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">20</td><td class="table__cell table__cell--center">21</td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">32</td></tr>
+<tr class="table__row"><td class="table__cell">В двоичной</td><td class="table__cell table__cell--center">000000</td><td class="table__cell table__cell--center">10100</td><td class="table__cell table__cell--center">10101</td><td class="table__cell table__cell--center">01000</td><td class="table__cell table__cell--center">00000</td><td class="table__cell table__cell--center">100000</td></tr>
+</tbody></table></div>
+<p class="article__p">Вместе: <code class="inline-code">0000 0010 1001 0101 0100 0000 0010 0000</code> = <strong>0x02954020</strong>. Проще всего сначала записать в двоичном виде, а потом группировать по 4 бита в шестнадцатеричные цифры.</p>
+</div>
+</div>
+<h3 class="article__h3">Тип I</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p14.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p14.webp" alt="Формат команды типа I" width="1100" height="240" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Формат команды типа I <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции: lw $s3, −24($s4)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Поле</th><th class="table__cell table__cell--head table__cell--center">op (lw)</th><th class="table__cell table__cell--head table__cell--center">rs ($s4)</th><th class="table__cell table__cell--head table__cell--center">rt ($s3)</th><th class="table__cell table__cell--head table__cell--center">imm</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">В десятичной</td><td class="table__cell table__cell--center">35</td><td class="table__cell table__cell--center">20</td><td class="table__cell table__cell--center">19</td><td class="table__cell table__cell--center">−24</td></tr>
+<tr class="table__row"><td class="table__cell">В двоичной</td><td class="table__cell table__cell--center">100011</td><td class="table__cell table__cell--center">10100</td><td class="table__cell table__cell--center">10011</td><td class="table__cell table__cell--center">1111 1111 1110 1000</td></tr>
+</tbody></table></div>
+<p class="article__p">Вместе: <strong>0x8E93FFE8</strong>. Число −24 записано в дополнительном коде на 16 битах (<a class="link" href="../lectures/08.html">лекция 8</a>).</p>
+</div>
+</div>
+<h3 class="article__h3">Тип J</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p16.webp" alt="Формат команды типа J" width="1100" height="256" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Формат команды типа J <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Используется только для переходов: 6 бит кода операции и 26 бит адреса.</p>
+<h3 class="article__h3">В обратную сторону: из машинного кода в ассемблер</h3>
+<p class="article__p">Первые <strong>6 бит — это opcode</strong>: он говорит, как читать остальное.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции</p>
+<div class="callout__body">
+<p class="article__p"><strong>0x2237FFF1</strong> = <code class="inline-code">001000 10001 10111 1111111111110001</code> → op = 8 (<code class="inline-code">addi</code>), rs = 17 (<code class="inline-code">$s1</code>), rt = 23 (<code class="inline-code">$s7</code>), imm = −15 → <strong><code class="inline-code">addi $s7, $s1, -15</code></strong></p>
+<p class="article__p"><strong>0x02F34022</strong> = <code class="inline-code">000000 10111 10011 01000 00000 100010</code> → op = 0 (тип R), rs = 23 (<code class="inline-code">$s7</code>), rt = 19 (<code class="inline-code">$s3</code>), rd = 8 (<code class="inline-code">$t0</code>), funct = 34 (<code class="inline-code">sub</code>) → <strong><code class="inline-code">sub $t0, $s7, $s3</code></strong></p>
+</div>
+</div>
+<h3 class="article__h3">Программа в памяти</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w15-p18.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p18.webp" alt="Программа как последовательность чисел в памяти; PC указывает на текущую команду" width="1100" height="479" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Программа как последовательность чисел в памяти; PC указывает на текущую команду <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Программа на машинном языке — это просто <strong>последовательность двоичных чисел, хранящаяся в памяти</strong>, так же как данные. Счётчик команд PC указывает на команду, которая сейчас выполняется.</p>
+<h2 class="article__h2" id="s5">Логические команды и сдвиги</h2>
+<ul class="list">
+<li class="list__item"><strong>Логические:</strong> <code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code> — работают побитно с двумя регистрами. Варианты с константой: <code class="inline-code">andi</code>, <code class="inline-code">ori</code>.</li>
+<li class="list__item"><strong>Сдвиги:</strong> <code class="inline-code">sll</code> (логический влево), <code class="inline-code">srl</code> (логический вправо), <code class="inline-code">sra</code> (арифметический вправо).</li>
+<li class="list__item">Сдвиг на <span class="math">n</span> бит — это <strong>умножение или деление на</strong> <span class="math">2<sup class="math__sup">n</sup></span>: <code class="inline-code">sll $t0, $t0, 3</code> умножает на 8.</li>
+</ul>
+<h2 class="article__h2" id="s6">Переходы и ветвления</h2>
+<p class="article__p">Сила компьютера в том, что он умеет принимать решения.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Команда</th><th class="table__cell table__cell--head">Значение</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, метка</code></td><td class="table__cell">перейти, если регистры <strong>равны</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">bne rs, rt, метка</code></td><td class="table__cell">перейти, если <strong>не равны</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j метка</code></td><td class="table__cell">безусловный переход</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">jal метка</code></td><td class="table__cell">перейти и запомнить адрес возврата (вызов функции)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">jr $ra</code></td><td class="table__cell">перейти по адресу из регистра (возврат из функции)</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Метка</strong> — это имя места в программе; она заканчивается двоеточием.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Ветвление beq (из лекции)</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">4</span>        <span class="code__tok code__tok--comment"># $s0 = 0 + 4 = 4</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">1</span>        <span class="code__tok code__tok--comment"># $s1 = 0 + 1 = 1</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">2</span>       <span class="code__tok code__tok--comment"># $s1 = 1 &lt;&lt; 2 = 4</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, target  <span class="code__tok code__tok--comment"># $s0 == $s1, so branch is taken</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># not executed</span>
+<span class="code__tok code__tok--keyword">sub</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># not executed</span>
+<span class="code__tok code__tok--meta">target:</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># $s1 = 4 + 4 = 8</span></code></pre>
+</figure>
+<h3 class="article__h3">if / else</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Условный оператор</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># if (i == j) f = g + h; else f = f - i;</span>
+<span class="code__tok code__tok--comment"># $s0 = f, $s1 = g, $s2 = h, $s3 = i, $s4 = j</span>
+<span class="code__tok code__tok--keyword">bne</span> <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--builtin">$s4</span>, else     <span class="code__tok code__tok--comment"># if i != j, branch to else</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s2</span>      <span class="code__tok code__tok--comment"># if block: f = g + h</span>
+<span class="code__tok code__tok--keyword">j</span>   L2                 <span class="code__tok code__tok--comment"># skip past the else block</span>
+<span class="code__tok code__tok--meta">else:</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s3</span>      <span class="code__tok code__tok--comment"># else block: f = f - i</span>
+<span class="code__tok code__tok--meta">L2:</span></code></pre>
+</figure>
+<p class="article__p">Обрати внимание: в ассемблере проверяется <strong>обратное</strong> условие (<code class="inline-code">bne</code> — «если не равны, перепрыгни к else»).</p>
+<h3 class="article__h3">Цикл while</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Цикл while: сколько раз нужно умножить на 2, чтобы получить 128</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int pow = 1; int x = 0;</span>
+<span class="code__tok code__tok--comment"># while (pow != 128) { pow = pow * 2; x = x + 1; }</span>
+<span class="code__tok code__tok--comment"># $s0 = pow, $s1 = x</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">1</span>        <span class="code__tok code__tok--comment"># pow = 1</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">0</span>        <span class="code__tok code__tok--comment"># x = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">128</span>      <span class="code__tok code__tok--comment"># $t0 = 128 for comparison</span>
+<span class="code__tok code__tok--meta">while:</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, done    <span class="code__tok code__tok--comment"># if pow == 128, exit the loop</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># pow = pow * 2</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># x = x + 1</span>
+<span class="code__tok code__tok--keyword">j</span>    while
+<span class="code__tok code__tok--meta">done:</span></code></pre>
+</figure>
+<h3 class="article__h3">Цикл for</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Цикл for: сумма чисел от 0 до 9</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int sum = 0;</span>
+<span class="code__tok code__tok--comment"># for (i = 0; i != 10; i = i + 1) sum = sum + i;</span>
+<span class="code__tok code__tok--comment"># $s0 = i, $s1 = sum</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--builtin">$0</span>       <span class="code__tok code__tok--comment"># sum = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">0</span>        <span class="code__tok code__tok--comment"># i = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">10</span>       <span class="code__tok code__tok--comment"># $t0 = 10</span>
+<span class="code__tok code__tok--meta">for:</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, done    <span class="code__tok code__tok--comment"># if i == 10, branch to done</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># sum = sum + i</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># increment i</span>
+<span class="code__tok code__tok--keyword">j</span>    for
+<span class="code__tok code__tok--meta">done:</span></code></pre>
+</figure>
+<p class="article__p">У любого цикла один и тот же скелет: метка → проверка условия выхода (<code class="inline-code">beq … done</code>) → тело цикла → <code class="inline-code">j</code> обратно к метке.</p>
+<h2 class="article__h2" id="s7">Массивы</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p25.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p25.webp" alt="Массив из пяти элементов в памяти, начиная с базового адреса 0x10007000" width="1100" height="803" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Массив из пяти элементов в памяти, начиная с базового адреса 0x10007000 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Массив — это соседние ячейки памяти. <strong>Базовый адрес</strong> — адрес элемента <code class="inline-code">array[0]</code>. Каждый элемент (слово) занимает 4 байта, поэтому <code class="inline-code">array[1]</code> лежит на 4 байта дальше, <code class="inline-code">array[2]</code> — на 8 байт дальше и т. д.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Доступ к массиву</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int array[5];</span>
+<span class="code__tok code__tok--comment"># array[0] = array[0] * 8;  array[1] = array[1] * 8;</span>
+<span class="code__tok code__tok--comment"># $s0 = base address of array</span>
+<span class="code__tok code__tok--keyword">lui</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">0x1000</span>       <span class="code__tok code__tok--comment"># $s0 = 0x10000000</span>
+<span class="code__tok code__tok--keyword">ori</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">0x7000</span>  <span class="code__tok code__tok--comment"># $s0 = 0x10007000</span>
+<span class="code__tok code__tok--keyword">lw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">0</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># $t1 = array[0]</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">3</span>       <span class="code__tok code__tok--comment"># $t1 = $t1 &lt;&lt; 3 = $t1 * 8</span>
+<span class="code__tok code__tok--keyword">sw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">0</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># array[0] = $t1</span>
+<span class="code__tok code__tok--keyword">lw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># $t1 = array[1]</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">3</span>       <span class="code__tok code__tok--comment"># $t1 = $t1 * 8</span>
+<span class="code__tok code__tok--keyword">sw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># array[1] = $t1</span></code></pre>
+</figure>
+<p class="article__p">32-битный адрес не помещается в одну команду, поэтому его загружают в два шага: <code class="inline-code">lui</code> записывает старшие 16 бит, <code class="inline-code">ori</code> — младшие.</p>
+<h2 class="article__h2" id="s8">Функции и стек</h2>
+<p class="article__p">Функции позволяют многократно использовать один и тот же код. Соглашение в MIPS:</p>
+<ul class="list">
+<li class="list__item"><strong>аргументы</strong> передаются в регистрах <code class="inline-code">$a0</code>–<code class="inline-code">$a3</code>,</li>
+<li class="list__item"><strong>результат</strong> возвращается в регистре <code class="inline-code">$v0</code>,</li>
+<li class="list__item"><code class="inline-code">jal</code> переходит к функции и сохраняет адрес возврата в <code class="inline-code">$ra</code>; <code class="inline-code">jr $ra</code> возвращается.</li>
+</ul>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Функция с аргументами и возвращаемым значением</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># y = diffofsums(2, 3, 4, 5);</span>
+<span class="code__tok code__tok--comment"># int diffofsums(int f, int g, int h, int i) { return (f + g) - (h + i); }</span>
+<span class="code__tok code__tok--meta">main:</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">2</span>      <span class="code__tok code__tok--comment"># argument 0 = 2</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">3</span>      <span class="code__tok code__tok--comment"># argument 1 = 3</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a2</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">4</span>      <span class="code__tok code__tok--comment"># argument 2 = 4</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a3</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">5</span>      <span class="code__tok code__tok--comment"># argument 3 = 5</span>
+<span class="code__tok code__tok--keyword">  jal</span>  diffofsums      <span class="code__tok code__tok--comment"># call function ($ra = return address)</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$v0</span>, <span class="code__tok code__tok--builtin">$0</span>    <span class="code__tok code__tok--comment"># y = returned value</span>
+
+<span class="code__tok code__tok--meta">diffofsums:</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$a0</span>, <span class="code__tok code__tok--builtin">$a1</span>   <span class="code__tok code__tok--comment"># $t0 = f + g</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$a2</span>, <span class="code__tok code__tok--builtin">$a3</span>   <span class="code__tok code__tok--comment"># $t1 = h + i</span>
+<span class="code__tok code__tok--keyword">  sub</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$t1</span>   <span class="code__tok code__tok--comment"># result = (f + g) - (h + i)</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$v0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>    <span class="code__tok code__tok--comment"># put return value in $v0</span>
+<span class="code__tok code__tok--keyword">  jr</span>   <span class="code__tok code__tok--builtin">$ra</span>             <span class="code__tok code__tok--comment"># return to caller</span></code></pre>
+</figure>
+<p class="article__p"><strong>Стек</strong> — область памяти для локальных переменных функции (и дополнительных аргументов). Работает по принципу <strong>LIFO</strong> — последний положенный элемент снимается первым. Указатель стека <code class="inline-code">$sp</code> показывает вершину; стек начинается с большого адреса и <strong>растёт вниз</strong>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Стек — это стопка тарелок: кладёшь сверху и снимаешь сверху. Функция кладёт на него то, что должна сохранить, а перед возвратом снимает — в обратном порядке.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Остальные темы</h2>
+<ul class="list">
+<li class="list__item"><strong>Числа с плавающей точкой:</strong> в MIPS есть 32 отдельных регистра <code class="inline-code">$f0</code>–<code class="inline-code">$f31</code> и поддержка стандарта IEEE (одинарная и двойная точность).</li>
+<li class="list__item"><strong>Режимы адресации</strong> — их пять:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Режим</th><th class="table__cell table__cell--head">Где операнды</th><th class="table__cell table__cell--head">Пример</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><em>register-only</em></td><td class="table__cell">всё в регистрах</td><td class="table__cell">команды типа R</td></tr>
+<tr class="table__row"><td class="table__cell"><em>immediate</em></td><td class="table__cell">регистры + 16-битная константа</td><td class="table__cell"><code class="inline-code">addi</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>base</em></td><td class="table__cell">адрес = базовый регистр + смещение</td><td class="table__cell"><code class="inline-code">lw</code>, <code class="inline-code">sw</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>PC-relative</em></td><td class="table__cell">адрес относительно счётчика команд</td><td class="table__cell"><code class="inline-code">beq</code>, <code class="inline-code">bne</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>pseudo-direct</em></td><td class="table__cell">адрес задан (почти) прямо в команде</td><td class="table__cell"><code class="inline-code">j</code>, <code class="inline-code">jal</code></td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s10">От исходного кода до работающей программы</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p32.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p32.webp" alt="Компилятор → ассемблер → компоновщик → загрузчик" width="688" height="1155" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Компилятор → ассемблер → компоновщик → загрузчик <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Компиляция</strong> — компилятор переводит код высокого уровня в ассемблер.</li>
+<li class="steps__item"><strong>Ассемблирование</strong> — ассемблер превращает код в <strong>объектный файл</strong> с машинным языком; назначает адреса командам и меткам.</li>
+<li class="steps__item"><strong>Компоновка</strong> (<em>linking</em>) — компоновщик объединяет объектные файлы (в том числе из библиотек) в один <strong>исполняемый файл</strong>.</li>
+<li class="steps__item"><strong>Загрузка</strong> — операционная система считывает исполняемый файл с диска в память и запускает программу.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s11">MIPS и x86</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w15-p34.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w15-p34.webp" alt="Сравнение архитектур MIPS и x86" width="1100" height="367" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Сравнение архитектур MIPS и x86 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Свойство</th><th class="table__cell table__cell--head">MIPS (RISC)</th><th class="table__cell table__cell--head">x86 (CISC)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Регистры</td><td class="table__cell">32 общего назначения</td><td class="table__cell">8, часть с ограничениями</td></tr>
+<tr class="table__row"><td class="table__cell">Операнды</td><td class="table__cell">3 (2 источника, 1 приёмник)</td><td class="table__cell">2 (один — и источник, и приёмник)</td></tr>
+<tr class="table__row"><td class="table__cell">Где могут быть операнды</td><td class="table__cell">регистры или константы</td><td class="table__cell">регистры, константы <strong>или память</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Размер операндов</td><td class="table__cell">32 бита</td><td class="table__cell">8, 16 или 32 бита</td></tr>
+<tr class="table__row"><td class="table__cell">Флаги условий</td><td class="table__cell">нет</td><td class="table__cell">да (регистр EFLAGS)</td></tr>
+<tr class="table__row"><td class="table__cell">Команды</td><td class="table__cell">простые</td><td class="table__cell">простые и сложные</td></tr>
+<tr class="table__row"><td class="table__cell">Кодирование</td><td class="table__cell">фиксированное, 4 байта</td><td class="table__cell">переменное, 1–15 байт</td></tr>
+</tbody></table></div>
+<p class="article__p">Почти все персональные компьютеры используют процессоры архитектуры x86 — пример CISC.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Регистры MIPS</h3>
+<p class="article__p"><code class="inline-code">$0</code> = ноль · <code class="inline-code">$t0–$t7</code> временные (8–15) · <code class="inline-code">$s0–$s7</code> переменные (16–23) · <code class="inline-code">$a0–$a3</code> аргументы · <code class="inline-code">$v0</code> результат · <code class="inline-code">$sp</code> стек · <code class="inline-code">$ra</code> адрес возврата</p>
+<h3 class="article__h3">Команды</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Команда</th><th class="table__cell table__cell--head">Значение</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">add rd, rs, rt</code> / <code class="inline-code">sub</code></td><td class="table__cell">rd = rs ± rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">addi rt, rs, imm</code></td><td class="table__cell">rt = rs + константа</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code>, <code class="inline-code">andi</code>, <code class="inline-code">ori</code></td><td class="table__cell">логические, побитно</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sll</code>, <code class="inline-code">srl</code>, <code class="inline-code">sra</code></td><td class="table__cell">сдвиги (× или ÷ на 2ⁿ)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw rt, imm(rs)</code></td><td class="table__cell">rt = память[rs + imm]</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw rt, imm(rs)</code></td><td class="table__cell">память[rs + imm] = rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, L</code> / <code class="inline-code">bne</code></td><td class="table__cell">переход, если равны / не равны</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j L</code>, <code class="inline-code">jal L</code>, <code class="inline-code">jr $ra</code></td><td class="table__cell">переход, вызов функции, возврат</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Форматы (32 бита)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Поля</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong></td><td class="table__cell">op(6)=0 · rs(5) · rt(5) · rd(5) · shamt(5) · funct(6)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong></td><td class="table__cell">op(6) · rs(5) · rt(5) · imm(16)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong></td><td class="table__cell">op(6) · addr(26)</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">funct: add = 32, sub = 34, and = 36, or = 37, slt = 42. op: addi = 8, lw = 35, sw = 43, beq = 4.</li>
+<li class="list__item">Декодирование: hex → двоичный вид → первые 6 бит (opcode) → разбивка на поля.</li>
+</ul>
+<h3 class="article__h3">Память</h3>
+<ul class="list">
+<li class="list__item"><strong>Байтовая</strong> адресация; слово = 4 байта → адреса слов: 0, 4, 8… <code class="inline-code">array[i]</code> = база + 4·i.</li>
+<li class="list__item">Стек: LIFO, <code class="inline-code">$sp</code>, растёт вниз. Функция: аргументы <code class="inline-code">$a0–$a3</code>, результат <code class="inline-code">$v0</code>, <code class="inline-code">jal</code> / <code class="inline-code">jr $ra</code>.</li>
+<li class="list__item">Компилятор → ассемблер → компоновщик → загрузчик.</li>
+<li class="list__item">MIPS = RISC (простые, 3 операнда, 4 байта); x86 = CISC (2 операнда, переменная длина).</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/14.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 14: Архитектура компьютеров: процессор MIPS изнутри</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

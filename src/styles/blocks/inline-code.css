@@ -1,0 +1,9 @@
+/* inline-code — short code inside a sentence */
+.inline-code {
+  padding: 0.1em 0.35em;
+  border-radius: 5px;
+  background: var(--color-surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+}

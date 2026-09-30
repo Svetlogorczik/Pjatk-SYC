@@ -1,0 +1,44 @@
+/* nav — main navigation */
+.nav__list {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__link {
+  display: block;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-small);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.nav__link:hover {
+  background: var(--color-surface-2);
+}
+
+.nav__link--active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+@media (max-width: 60rem) {
+  .nav {
+    display: none;
+    order: 4;
+    width: 100%;
+  }
+
+  .nav--open {
+    display: block;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    padding-bottom: 0.5rem;
+  }
+}

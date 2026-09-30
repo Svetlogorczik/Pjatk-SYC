@@ -1,0 +1,49 @@
+/* layout — page grid: optional sidebar + main column */
+.layout {
+  flex: 1;
+  width: 100%;
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.layout--with-sidebar {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.layout__main {
+  min-width: 0;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+.layout--with-sidebar .layout__main {
+  margin: 0;
+}
+
+@media (max-width: 60rem) {
+  .layout--with-sidebar {
+    display: block;
+  }
+
+  .layout--with-sidebar .layout__main {
+    margin: 0 auto;
+  }
+}
+
+@media print {
+  .layout,
+  .layout--with-sidebar {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  .layout__main {
+    max-width: none;
+  }
+}

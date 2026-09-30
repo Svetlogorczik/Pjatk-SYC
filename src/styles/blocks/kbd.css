@@ -1,0 +1,11 @@
+/* kbd — a key or a menu path; mark — highlighted text */
+.kbd {
+  padding: 0.05em 0.45em;
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--color-surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  white-space: nowrap;
+}

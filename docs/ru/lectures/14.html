@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 14. Архитектура компьютеров: процессор MIPS изнутри — SYC</title>
+<meta name="description" content="Собираем процессор из кирпичиков, которые уже знаем: регистров, памяти, мультиплексоров и АЛУ. Сначала однотактный вариант, потом многотактный и конвейерный.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/14.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/14.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/14.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/14.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/14.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/14.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Архитектура и микроархитектура</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Две части проекта</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Четыре главных элемента</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Три микроархитектуры</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Однотактный процессор — собираем тракт данных</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Многотактный процессор</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Конвейерный процессор</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/14.html" aria-current="page"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 14</p>
+<h1 class="article__title">Архитектура компьютеров: процессор MIPS изнутри</h1>
+<p class="article__lead">Собираем процессор из кирпичиков, которые уже знаем: регистров, памяти, мультиплексоров и АЛУ. Сначала однотактный вариант, потом многотактный и конвейерный.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Архитектура и микроархитектура</h2>
+<ul class="list">
+<li class="list__item"><strong>Архитектура</strong> — это компьютер глазами программиста: <strong>набор команд</strong> и <strong>состояние</strong> (регистры, память). Примеры: MIPS, x86.</li>
+<li class="list__item"><strong>Микроархитектура</strong> — конкретный способ построить аппаратуру, которая эту архитектуру реализует. У одной архитектуры может быть много микроархитектур, различающихся производительностью, стоимостью и сложностью.</li>
+</ul>
+<p class="article__p">На лекции рассматривается только небольшое подмножество команд MIPS:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Группа</th><th class="table__cell table__cell--head">Команды</th><th class="table__cell table__cell--head">Что делают</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">арифметико-логические (тип R)</td><td class="table__cell"><code class="inline-code">add</code>, <code class="inline-code">sub</code>, <code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">slt</code></td><td class="table__cell">операция над двумя регистрами, результат — в третий</td></tr>
+<tr class="table__row"><td class="table__cell">работа с памятью</td><td class="table__cell"><code class="inline-code">lw</code>, <code class="inline-code">sw</code></td><td class="table__cell">чтение слова из памяти / запись слова в память</td></tr>
+<tr class="table__row"><td class="table__cell">условные</td><td class="table__cell"><code class="inline-code">beq</code></td><td class="table__cell">переход, если два регистра равны</td></tr>
+</tbody></table></div>
+<p class="article__p">Сами команды и их запись разобраны в <a class="link" href="../lectures/15.html">лекции 15</a> — если не знаешь, что такое <code class="inline-code">lw</code> или «поле rt», сначала загляни туда.</p>
+<h2 class="article__h2" id="s2">Две части проекта</h2>
+<ul class="list">
+<li class="list__item"><strong>Тракт данных</strong> (<em>datapath</em>, <em>ścieżka danych</em>) — то, через что идут данные: памяти, регистры, АЛУ, мультиплексоры. В MIPS он 32-битный.</li>
+<li class="list__item"><strong>Устройство управления</strong> (<em>control</em>, <em>jednostka sterująca</em>) — смотрит на текущую команду и вырабатывает управляющие сигналы: что выбрать каждому мультиплексору, какой регистр записать, писать ли в память.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Тракт данных — это рельсы и стрелки, устройство управления — диспетчер, который для каждого поезда (команды) переводит стрелки так, чтобы данные приехали куда нужно.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Четыре главных элемента</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p04.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p04.webp" alt="Счётчик команд, память команд, регистровый файл и память данных" width="1100" height="297" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Счётчик команд, память команд, регистровый файл и память данных <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Элемент</th><th class="table__cell table__cell--head">Что делает</th><th class="table__cell table__cell--head">Входы / выходы</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Program Counter (PC)</strong></td><td class="table__cell">обычный 32-битный регистр; указывает на текущую команду</td><td class="table__cell">—</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Instruction Memory</strong></td><td class="table__cell">память команд; по адресу A выдаёт 32-битную команду</td><td class="table__cell">A → RD</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Register File</strong></td><td class="table__cell">32 регистра; <strong>два порта чтения</strong> и <strong>один порт записи</strong></td><td class="table__cell">адреса A1, A2 (5 бит) → RD1, RD2; запись: адрес A3, данные WD3, разрешение WE3</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Data Memory</strong></td><td class="table__cell">память данных</td><td class="table__cell">адрес A; WE = 1: запись WD по фронту; WE = 0: чтение на RD</td></tr>
+</tbody></table></div>
+<p class="article__p">Чтение из памяти команд, регистрового файла и памяти данных — <strong>комбинационное</strong> (мгновенное); запись происходит по нарастающему фронту тактового сигнала.</p>
+<h2 class="article__h2" id="s4">Три микроархитектуры</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Как выполняет команду</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Однотактная</strong> (<em>single-cycle</em>)</td><td class="table__cell">всю команду за <strong>один такт</strong>; простое устройство управления</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Многотактная</strong> (<em>multicycle</em>)</td><td class="table__cell">за серию более коротких тактов; простые команды занимают меньше тактов</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Конвейерная</strong> (<em>pipelined</em>)</td><td class="table__cell">как однотактная, разделённая на ступени; <strong>несколько команд выполняются одновременно</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">Мера производительности — время выполнения программы:</p>
+<div class="formula"><span class="math">время = (число команд) × <span class="math__frac"><span class="math__num">такты</span><span class="math__den">команда</span></span> × <span class="math__frac"><span class="math__num">секунды</span><span class="math__den">такт</span></span></span></div>
+<h2 class="article__h2" id="s5">Однотактный процессор — собираем тракт данных</h2>
+<p class="article__p">Строим тракт постепенно, на примере команды <code class="inline-code">lw</code> (загрузить слово из памяти в регистр).</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Команда lw по шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Выборка</strong> (<em>fetch</em>): PC выдаёт адрес, память команд выставляет 32-битную команду <em>Instr</em>.</li>
+<li class="steps__item"><strong>Чтение базового регистра:</strong> поле <code class="inline-code">rs</code> (биты 25:21) идёт на адрес A1 регистрового файла; на RD1 появляется базовый адрес.</li>
+<li class="steps__item"><strong>Расширение знака:</strong> 16-битное поле <em>immediate</em> (смещение) нужно расширить до 32 бит с сохранением знака — получается <em>SignImm</em>.</li>
+<li class="steps__item"><strong>Вычисление адреса:</strong> АЛУ складывает базовый адрес (SrcA) и смещение (SrcB). Результат <em>ALUResult</em> — адрес в памяти данных.</li>
+<li class="steps__item"><strong>Чтение из памяти и запись в регистр:</strong> данные из памяти (<em>ReadData</em>) возвращаются в регистровый файл и в конце такта записываются в регистр, заданный полем <code class="inline-code">rt</code> (сигнал <em>RegWrite</em>).</li>
+<li class="steps__item"><strong>Следующая команда:</strong> команды занимают 32 бита = 4 байта, поэтому новое значение счётчика — <strong>PC + 4</strong> (отдельный сумматор).</li>
+</ol>
+</div>
+</div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p08.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p08.webp" alt="Выборка команды и чтение базового регистра" width="1100" height="905" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Выборка команды и чтение базового регистра <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p11.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p11.webp" alt="Вычисление PC + 4" width="1100" height="469" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Вычисление PC + 4 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Добавляем следующие команды</h3>
+<p class="article__p"><strong><code class="inline-code">sw</code></strong> (запись в память): кроме адреса нужно значение для записи. Второй регистр (поле <code class="inline-code">rt</code>, биты 20:16) читаем через порт A2; с RD2 оно попадает на вход <em>WriteData</em> памяти данных. Сигнал <em>MemWrite</em> разрешает запись.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p12.webp" alt="Тракт данных для команды sw" width="1100" height="484" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Тракт данных для команды sw <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p"><strong>Тип R</strong> (<code class="inline-code">add</code>, <code class="inline-code">sub</code>…): АЛУ работает с <strong>двумя регистрами</strong>, а результат возвращается в регистр — не из памяти. Нужны мультиплексоры:</p>
+<ul class="list">
+<li class="list__item"><strong>ALUSrc</strong> — второй аргумент АЛУ: регистр (0) или расширенная константа (1),</li>
+<li class="list__item"><strong>MemtoReg</strong> — что записать в регистр: результат АЛУ (0) или данные из памяти (1),</li>
+<li class="list__item"><strong>RegDst</strong> — какой регистр является приёмником: поле <code class="inline-code">rt</code> (для <code class="inline-code">lw</code>) или поле <code class="inline-code">rd</code> (для типа R).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p13.webp" alt="Тракт данных с мультиплексорами для команд типа R" width="1100" height="451" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Тракт данных с мультиплексорами для команд типа R <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p"><strong><code class="inline-code">beq</code></strong> (условный переход): АЛУ <strong>вычитает</strong> два регистра; если результат равен нулю, устанавливает флаг <em>Zero</em>. Адрес перехода: <span class="math">PCBranch = PC + 4 + SignImm × 4</span> (сдвиг влево на 2 бита — это умножение на 4). Мультиплексор, управляемый сигналом <em>PCSrc</em>, выбирает, что попадёт в PC: PC + 4 или PCBranch.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p15.webp" alt="Тракт данных для команды beq" width="1100" height="479" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Тракт данных для команды beq <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Полный однотактный процессор</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p16.webp" alt="Полный однотактный процессор MIPS с устройством управления" width="1100" height="589" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Полный однотактный процессор MIPS с устройством управления <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Устройство управления вычисляет управляющие сигналы по полям <strong>opcode</strong> и <strong>funct</strong> команды. Оно состоит из двух частей.</p>
+<p class="article__p"><strong>Главный дешифратор</strong> — по opcode:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Команда</th><th class="table__cell table__cell--head table__cell--center">Opcode</th><th class="table__cell table__cell--head table__cell--center">RegWrite</th><th class="table__cell table__cell--head table__cell--center">RegDst</th><th class="table__cell table__cell--head table__cell--center">ALUSrc</th><th class="table__cell table__cell--head table__cell--center">Branch</th><th class="table__cell table__cell--head table__cell--center">MemWrite</th><th class="table__cell table__cell--head table__cell--center">MemtoReg</th><th class="table__cell table__cell--head table__cell--center">ALUOp</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">тип R</td><td class="table__cell table__cell--center">000000</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">10</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw</code></td><td class="table__cell table__cell--center">100011</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw</code></td><td class="table__cell table__cell--center">101011</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">00</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq</code></td><td class="table__cell table__cell--center">000100</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">01</td></tr>
+</tbody></table></div>
+<p class="article__p">X = «всё равно» (например, <code class="inline-code">sw</code> ничего не записывает в регистр, поэтому неважно, что выберет RegDst).</p>
+<p class="article__p"><strong>Дешифратор АЛУ</strong> — по ALUOp (и при необходимости по полю funct):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">ALUOp</th><th class="table__cell table__cell--head table__cell--center">Funct</th><th class="table__cell table__cell--head table__cell--center">ALUControl</th><th class="table__cell table__cell--head">Действие</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">00</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">010</td><td class="table__cell">сложить (для <code class="inline-code">lw</code>, <code class="inline-code">sw</code>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">01</td><td class="table__cell table__cell--center">X</td><td class="table__cell table__cell--center">110</td><td class="table__cell">вычесть (для <code class="inline-code">beq</code>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100000</td><td class="table__cell table__cell--center">010</td><td class="table__cell"><code class="inline-code">add</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100010</td><td class="table__cell table__cell--center">110</td><td class="table__cell"><code class="inline-code">sub</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100100</td><td class="table__cell table__cell--center">000</td><td class="table__cell"><code class="inline-code">and</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">100101</td><td class="table__cell table__cell--center">001</td><td class="table__cell"><code class="inline-code">or</code></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">10</td><td class="table__cell table__cell--center">101010</td><td class="table__cell table__cell--center">111</td><td class="table__cell"><code class="inline-code">slt</code> (установить, если меньше)</td></tr>
+</tbody></table></div>
+<p class="article__p">Устройство управления однотактного процессора — <strong>комбинационная схема</strong>: эти две таблицы — просто таблицы истинности.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции: команда or</p>
+<div class="callout__body">
+<p class="article__p">Регистровый файл читает два регистра-источника (поля 25:21 и 20:16). Второй аргумент АЛУ берётся из регистра (ALUSrc = 0). Это команда типа R, поэтому ALUOp = 10, а дешифратор АЛУ по полю funct задаёт ALUControl = 001 (OR). Результат берём из АЛУ (MemtoReg = 0) и записываем в регистр (RegWrite = 1, RegDst = 1). Это не переход (Branch = 0), поэтому в PC попадает PC + 4.</p>
+</div>
+</div>
+<h3 class="article__h3">Недостатки однотактного процессора</h3>
+<ol class="list list--ordered">
+<li class="list__item">Такт должен быть настолько длинным, чтобы успела выполниться <strong>самая медленная команда</strong> (<code class="inline-code">lw</code>) — хотя большинство команд быстрее.</li>
+<li class="list__item">Нужны <strong>три сумматора</strong> (АЛУ и два для вычисления PC), а быстрые сумматоры дороги.</li>
+<li class="list__item">У него <strong>отдельные памяти</strong> команд и данных, а у большинства компьютеров одна общая.</li>
+</ol>
+<h2 class="article__h2" id="s6">Многотактный процессор</h2>
+<p class="article__p">Команда делится на <strong>несколько более коротких шагов</strong>. На каждом шаге процессор делает что-то одно: читает или записывает память либо регистр или использует АЛУ.</p>
+<ul class="list">
+<li class="list__item"><strong>Одно АЛУ</strong> используется многократно — в том числе для вычисления PC + 4 и адреса перехода (отдельные сумматоры не нужны).</li>
+<li class="list__item"><strong>Одна общая память</strong> для команд и данных: на одном шаге читаем команду, на другом — данные.</li>
+<li class="list__item">Промежуточные результаты нужно где-то хранить между шагами — отсюда дополнительные <strong>неархитектурные</strong> регистры (невидимые программисту): <em>Instruction Register</em> (с сигналом IRWrite), регистры <strong>A</strong> и <strong>B</strong> (прочитанные значения регистров), <strong>ALUOut</strong>, <strong>Data</strong>.</li>
+<li class="list__item">Появляются новые мультиплексоры: <strong>IorD</strong> (адрес памяти: из PC или из ALUOut), <strong>ALUSrcA</strong> (PC или регистр A), <strong>ALUSrcB</strong> (регистр B, константа 4, SignImm…).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p24.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p24.webp" alt="Элементы многотактного процессора: общая память команд и данных" width="1100" height="396" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Элементы многотактного процессора: общая память команд и данных <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Устройство управления теперь — последовательностная схема</h3>
+<p class="article__p">Порядок управляющих сигналов зависит от команды и меняется от шага к шагу — поэтому устройство управления — это <strong>конечный автомат</strong> (точно такой, как в <a class="link" href="../lectures/10.html">лекции 10</a>). Каждое состояние — это набор значений управляющих сигналов.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w14-p37.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p37.webp" alt="Граф состояний устройства управления многотактного процессора" width="1100" height="1075" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Граф состояний устройства управления многотактного процессора <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Граф всегда начинается с состояний <strong>Fetch</strong> (выборка) и <strong>Decode</strong> (декодирование); дальнейший путь зависит от вида команды.</p>
+<h2 class="article__h2" id="s7">Конвейерный процессор</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w14-p38.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w14-p38.webp" alt="Однотактный и конвейерный процессор: в конвейере соседние команды перекрываются во времени" width="1100" height="498" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Однотактный и конвейерный процессор: в конвейере соседние команды перекрываются во времени <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Выполнение команды делится на ступени: <strong>Fetch → Decode → Execute → Memory → Writeback</strong>. Когда первая команда переходит на вторую ступень, на первую уже входит следующая. Отдельная команда не выполняется быстрее, но за то же время завершается гораздо больше команд.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Прачечная. Однотактно: стираешь, сушишь и складываешь одну загрузку и только потом берёшь следующую. Конвейерно: пока первая загрузка сушится, вторая уже стирается. Одна стирка длится столько же, но прачечная выдаёт их гораздо чаще.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Задания на лабораторную (со слайда)</p>
+<div class="callout__body">
+<p class="article__p">Задания в конце этой лекции относятся к последней лабораторной с Arduino: подсчёт нажатий кнопки с помощью <strong>прерывания INT0</strong>, то же методом <strong>опроса</strong> и генератор 1 Гц, частоту которого меняет кнопка. По шагам: <a class="link" href="../labs/15.html">Лабораторная 15</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Понятия</h3>
+<ul class="list">
+<li class="list__item"><strong>Архитектура</strong> = набор команд + состояние (регистры, память). <strong>Микроархитектура</strong> = способ аппаратной реализации.</li>
+<li class="list__item"><strong>Тракт данных</strong> (PC, памяти, регистровый файл, АЛУ, мультиплексоры) + <strong>устройство управления</strong> (сигналы для тракта).</li>
+<li class="list__item">Время программы = число команд × тактов/команду × секунд/такт.</li>
+</ul>
+<h3 class="article__h3">Три микроархитектуры</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Такт</th><th class="table__cell table__cell--head">Управление</th><th class="table__cell table__cell--head">Примечания</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Однотактная</strong></td><td class="table__cell">1 длинный такт на команду</td><td class="table__cell"><strong>комбинационное</strong></td><td class="table__cell">такт под самую медленную (<code class="inline-code">lw</code>); 3 сумматора; отдельные памяти</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Многотактная</strong></td><td class="table__cell">несколько коротких шагов</td><td class="table__cell"><strong>последовательностное</strong> (автомат: Fetch → Decode → …)</td><td class="table__cell">одно АЛУ, одна память, дополнительные регистры (IR, A, B, ALUOut, Data)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Конвейерная</strong></td><td class="table__cell">ступени: Fetch, Decode, Execute, Memory, Writeback</td><td class="table__cell">—</td><td class="table__cell">несколько команд одновременно на разных ступенях</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Управляющие сигналы (однотактный)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Сигнал</th><th class="table__cell table__cell--head">0</th><th class="table__cell table__cell--head">1</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RegWrite</strong></td><td class="table__cell">—</td><td class="table__cell">запись в регистровый файл</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RegDst</strong></td><td class="table__cell">регистр-приёмник = <code class="inline-code">rt</code></td><td class="table__cell">регистр-приёмник = <code class="inline-code">rd</code></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>ALUSrc</strong></td><td class="table__cell">второй аргумент АЛУ из регистра</td><td class="table__cell">из расширенной константы</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemWrite</strong></td><td class="table__cell">—</td><td class="table__cell">запись в память данных</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>MemtoReg</strong></td><td class="table__cell">в регистр — результат АЛУ</td><td class="table__cell">в регистр — данные из памяти</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Branch</strong></td><td class="table__cell">—</td><td class="table__cell">команда <code class="inline-code">beq</code>; переход при флаге Zero = 1</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">ALUOp: 00 → сложить (<code class="inline-code">lw</code>, <code class="inline-code">sw</code>); 01 → вычесть (<code class="inline-code">beq</code>); 10 → смотри поле funct (тип R).</li>
+<li class="list__item">Следующая команда: <strong>PC + 4</strong>; переход: PC + 4 + SignImm × 4.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/13.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 13: Периферия микроконтроллеров и обработка событий</span></a>
+<a class="pager__link pager__link--next" href="../lectures/15.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 15: Ассемблер и архитектура компьютеров (MIPS)</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

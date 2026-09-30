@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 11. Компьютерные системы, микропроцессоры и микроконтроллеры — SYC</title>
+<meta name="description" content="Из чего состоит компьютер, как процессор выполняет команду и что такое микроконтроллер — на примере ATmega328, «сердца» платы Arduino UNO.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/11.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/11.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/11.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/11.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/11.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/11.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Немного истории</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Машина Тьюринга</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Архитектура фон Неймана и гарвардская</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Что внутри процессора</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">CISC и RISC</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Микроконтроллер</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">ATmega328 — микроконтроллер из Arduino UNO</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/11.html" aria-current="page"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 11</p>
+<h1 class="article__title">Компьютерные системы, микропроцессоры и микроконтроллеры</h1>
+<p class="article__lead">Из чего состоит компьютер, как процессор выполняет команду и что такое микроконтроллер — на примере ATmega328, «сердца» платы Arduino UNO.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Немного истории</h2>
+<p class="article__p">Лекция начинается с длинного списка дат. Коротко:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Когда</th><th class="table__cell table__cell--head">Что</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">ок. 500 до н. э.</td><td class="table__cell">абак — первые счёты</td></tr>
+<tr class="table__row"><td class="table__cell">1617–1642</td><td class="table__cell">палочки Непера, логарифмическая линейка, «Паскалина» — первая счётная машина</td></tr>
+<tr class="table__row"><td class="table__cell">1822–1842</td><td class="table__cell">машина Бэббиджа; Ада Лавлейс — первая программистка</td></tr>
+<tr class="table__row"><td class="table__cell">1854</td><td class="table__cell">Джордж Буль — логическое исчисление</td></tr>
+<tr class="table__row"><td class="table__cell">1937</td><td class="table__cell">Алан Тьюринг — теория универсальной машины</td></tr>
+<tr class="table__row"><td class="table__cell">1945</td><td class="table__cell">Джон фон Нейман — идея компьютера с программой в памяти</td></tr>
+<tr class="table__row"><td class="table__cell">1943–1946</td><td class="table__cell">ENIAC — первый компьютер на лампах</td></tr>
+<tr class="table__row"><td class="table__cell">1971</td><td class="table__cell"><strong>Intel 4004 — первый микропроцессор</strong></td></tr>
+<tr class="table__row"><td class="table__cell">1981</td><td class="table__cell">IBM PC — начало эры персональных компьютеров</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s2">Машина Тьюринга</h2>
+<p class="article__p">Теоретическая модель «машины, которая выполняет алгоритм»: лента с символами, головка чтения-записи и таблица правил.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p07.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p07.webp" alt="Машина Тьюринга: лента, головка, состояние q и функция перехода δ" width="1060" height="450" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Машина Тьюринга: лента, головка, состояние q и функция перехода δ <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Формально: <span class="math">{Q, Σ, δ, q<sub class="math__sub">0</sub>, F}</span> — множество состояний <span class="math">Q</span>, алфавит ленты <span class="math">Σ</span>, функция перехода <span class="math">δ</span> (для данного состояния и прочитанного символа говорит: новое состояние, что записать и куда сдвинуть головку — вправо R, влево L или остаться N), начальное состояние <span class="math">q<sub class="math__sub">0</sub></span> и множество конечных состояний <span class="math">F</span>.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">Обрати внимание на сходство с <a class="link" href="../lectures/10.html">лекцией 10</a>: машина Тьюринга — это автомат с состояниями и функцией переходов, только с дополнительной бесконечной лентой в качестве памяти.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Архитектура фон Неймана и гарвардская</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w11-p09.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p09.webp" alt="Компьютер фон Неймана: процессор, память, ввод/вывод" width="872" height="1060" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Компьютер фон Неймана: процессор, память, ввод/вывод <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p"><strong>Компьютер фон Неймана (1945)</strong> состоит из трёх частей:</p>
+<ul class="list">
+<li class="list__item"><strong>процессор</strong> с арифметико-логическим устройством (АЛУ),</li>
+<li class="list__item"><strong>память</strong> — содержит <strong>и данные, и программу</strong>,</li>
+<li class="list__item"><strong>устройства ввода-вывода</strong>.</li>
+</ul>
+<p class="article__p">Свойства: конечный список команд; программу можно ввести и хранить в памяти так же, как данные; команды читаются из памяти и выполняются <strong>по очереди</strong>.</p>
+<p class="article__p"><strong>Гарвардская архитектура:</strong> память программы <strong>отделена</strong> от памяти данных. Она проще и быстрее; её применяют в сигнальных процессорах и повсеместно в <strong>микроконтроллерах</strong> (программа в ROM/Flash, данные в RAM).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Процессор — это повар, память — шкаф. У фон Неймана кулинарная книга (программа) и продукты (данные) лежат в одном шкафу. В гарвардской архитектуре два отдельных шкафа — повар может одной рукой читать рецепт, а другой брать продукты.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Что внутри процессора</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p10.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p10.webp" alt="Процессор: АЛУ, устройство управления, регистры и шины" width="1100" height="813" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Процессор: АЛУ, устройство управления, регистры и шины <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>АЛУ</strong> — комбинационная схема, выполняющая арифметические (сумма, разность) и логические (AND, OR) операции над данными из регистров (<a class="link" href="../lectures/08.html">лекция 8</a>).</li>
+<li class="list__item"><strong>Устройство управления</strong> — декодирует команды и управляет их выполнением.</li>
+<li class="list__item"><strong>Регистры</strong> — маленькая, очень быстрая память внутри процессора:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Регистр</th><th class="table__cell table__cell--head">Для чего</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Аккумулятор</strong> (A, ACC)</td><td class="table__cell">работает непосредственно с АЛУ</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Счётчик команд PC</strong></td><td class="table__cell">адрес <strong>следующей</strong> команды</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Регистр команд</strong></td><td class="table__cell">код команды, которая выполняется сейчас</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Указатель стека SP</strong></td><td class="table__cell">указывает на конец (вершину) стека</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Регистр флагов</strong></td><td class="table__cell">биты, устанавливаемые после операции: ноль, перенос/переполнение, чётность…</td></tr>
+<tr class="table__row"><td class="table__cell">Регистры общего назначения</td><td class="table__cell">рабочие</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Шины</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p13.webp" alt="Три шины соединяют процессор с памятью и портами" width="1100" height="871" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Три шины соединяют процессор с памятью и портами <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>шина адреса</strong> — по ней процессор выдаёт адрес ячейки памяти или устройства,</li>
+<li class="list__item"><strong>шина данных</strong> — передаёт данные между процессором и памятью или устройством,</li>
+<li class="list__item"><strong>шина управления</strong> — управляющие сигналы (чтение/запись и т. д.).</li>
+</ul>
+<h3 class="article__h3">Командный цикл</h3>
+<p class="article__p">Команда имеет формат: <strong>код команды + аргументы</strong>. Процессор по кругу делает три вещи:</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>По шагам</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Выборка</strong> (<em>fetch</em>) — код команды считывается из памяти в регистр команд.</li>
+<li class="steps__item"><strong>Декодирование</strong> (<em>decode</em>) — процессор распознаёт, какая это команда из его списка.</li>
+<li class="steps__item"><strong>Выполнение</strong> (<em>execute</em>) — чтение аргументов, выполнение операции, запись результата в регистр или память.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s5">CISC и RISC</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"><strong>CISC</strong> (<em>Complex Instruction Set</em>)</th><th class="table__cell table__cell--head"><strong>RISC</strong> (<em>Reduced Instruction Set</em>)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Команды</td><td class="table__cell">много, сложные, специализированные</td><td class="table__cell">мало, простые</td></tr>
+<tr class="table__row"><td class="table__cell">Время выполнения</td><td class="table__cell">от нескольких до десятка с лишним циклов, по-разному</td><td class="table__cell">обычно один цикл</td></tr>
+<tr class="table__row"><td class="table__cell">Режимы адресации</td><td class="table__cell">много (сложный дешифратор)</td><td class="table__cell">немного</td></tr>
+<tr class="table__row"><td class="table__cell">Прочее</td><td class="table__cell">часть команд используется редко; много времени на пересылки память ↔ регистры</td><td class="table__cell">конвейерная обработка (<em>pipelining</em>)</td></tr>
+</tbody></table></div>
+<p class="article__p">Современные процессоры ПК снаружи выглядят как CISC, но внутри разбивают команды на микрокоманды, которые выполняет ядро RISC.</p>
+<h2 class="article__h2" id="s6">Микроконтроллер</h2>
+<p class="article__p"><strong>Микроконтроллер (µC)</strong> — это целый компьютер в <strong>одной микросхеме</strong>: процессор, память RAM, память программы и схемы ввода-вывода. Название — от основного применения: управления (<em>control</em>) устройствами.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w11-p20.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p20.webp" alt="Микроконтроллер = микропроцессор + ROM + RAM + ввод/вывод" width="1100" height="565" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Микроконтроллер = микропроцессор + ROM + RAM + ввод/вывод <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Типичный микроконтроллер содержит:</p>
+<ul class="list">
+<li class="list__item">вычислительное ядро (часто 8-битное), память данных (RAM) и память программы,</li>
+<li class="list__item"><strong>универсальные порты</strong> ввода-вывода (выводы, которые могут выполнять и другие функции),</li>
+<li class="list__item">контроллеры связи: <strong>UART, SPI, I²C</strong>, USB, CAN,</li>
+<li class="list__item"><strong>аналого-цифровые</strong> преобразователи (АЦП), иногда цифро-аналоговые,</li>
+<li class="list__item"><strong>таймеры</strong>, <strong>сторожевой таймер</strong> (watchdog — следит, не зависла ли программа), иногда датчики.</li>
+</ul>
+<p class="article__p"><strong>Встраиваемая система</strong> (<em>embedded system</em>) — компьютер специального назначения, являющийся частью устройства, которым он управляет (стиральная машина, автомобиль, термостат). Обычно она построена на микроконтроллере.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из материалов к занятиям</p>
+<div class="callout__body">
+<p class="article__p"><strong>Микропроцессор</strong> — только вычислительное ядро. <strong>Микроконтроллер</strong> = микропроцессор + память + контроллеры + порты. <strong>Отладочная плата</strong> (например, Arduino UNO R3) — микроконтроллер с готовым питанием, USB и выведенными контактами. <strong>Одноплатный компьютер</strong> (например, Raspberry Pi) — полноценный компьютер с операционной системой. Arduino подходит для простых повторяющихся задач (датчик → реакция); Raspberry Pi — для сложных (сеть, видео).</p>
+</div>
+</div>
+<h3 class="article__h3">Тактирование и программирование</h3>
+<p class="article__p">Тактовый сигнал микроконтроллера может приходить: от внешнего сигнала, от собственного генератора с <strong>кварцевым резонатором</strong> (кварц + два конденсатора) или от встроенного RC-генератора.</p>
+<p class="article__p">Программы пишут на языках высокого уровня (например, C) или на ассемблере. В память программы они попадают тремя способами:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>высоковольтным программатором</strong> (12 В) — самый старый способ,</li>
+<li class="list__item"><strong>ISP</strong> (<em>In-System Programming</em>) — не вынимая микросхему из устройства,</li>
+<li class="list__item">через <strong>загрузчик</strong> (<em>bootloader</em>) — маленькую программу, которая после сброса принимает новую программу по последовательному каналу и сама записывает её в память. <strong>Так работает Arduino</strong> (через USB).</li>
+</ol>
+<p class="article__p">Популярные семейства: Intel <strong>8051</strong>, <strong>AVR</strong> фирмы Atmel (на них идут занятия), <strong>PIC</strong> фирмы Microchip.</p>
+<h2 class="article__h2" id="s7">ATmega328 — микроконтроллер из Arduino UNO</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p27.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p27.webp" alt="Структурная схема ATmega328" width="1100" height="859" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Структурная схема ATmega328 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Характеристика</th><th class="table__cell table__cell--head">Значение</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Архитектура</td><td class="table__cell"><strong>RISC</strong>, 131 команда, 32 восьмибитных регистра</td></tr>
+<tr class="table__row"><td class="table__cell">Память программы (Flash)</td><td class="table__cell"><strong>32 кБ</strong>, около 10 000 циклов записи</td></tr>
+<tr class="table__row"><td class="table__cell">Память данных (SRAM)</td><td class="table__cell"><strong>2 кБ</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Энергонезависимая память (EEPROM)</td><td class="table__cell"><strong>1024 байта</strong>, около 100 000 циклов записи</td></tr>
+<tr class="table__row"><td class="table__cell">Таймеры</td><td class="table__cell">8-битные и 16-битный, с предделителем; каналы ШИМ (PWM)</td></tr>
+<tr class="table__row"><td class="table__cell">АЦП</td><td class="table__cell"><strong>10-битный</strong>, 8 каналов (мультиплексируемых)</td></tr>
+<tr class="table__row"><td class="table__cell">Интерфейсы</td><td class="table__cell">USART, SPI, Two-Wire (I²C)</td></tr>
+<tr class="table__row"><td class="table__cell">Прочее</td><td class="table__cell">сторожевой таймер, аналоговый компаратор, внешние и внутренние прерывания</td></tr>
+<tr class="table__row"><td class="table__cell">Тактовая частота</td><td class="table__cell">до <strong>16 МГц</strong></td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p28.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p28.webp" alt="Выводы ATmega328" width="1032" height="623" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Выводы ATmega328 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Выводы: <strong>VCC</strong> (питание), <strong>GND</strong> (масса), <strong>Port B</strong>, <strong>Port C</strong> (также входы АЦП и сброс), <strong>Port D</strong> — двунаправленные порты с внутренними подтягивающими резисторами; <strong>XTAL1/XTAL2</strong> — кварц; <strong>AREF</strong> — опорное напряжение АЦП.</p>
+<h3 class="article__h3">Память</h3>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w11-p30.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p30.webp" alt="Память программы: секция приложения и секция загрузчика" width="523" height="867" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Память программы: секция приложения и секция загрузчика <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w11-p31.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p31.webp" alt="Память данных: регистры, регистры ввода-вывода и SRAM" width="438" height="738" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Память данных: регистры, регистры ввода-вывода и SRAM <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item"><strong>Flash (программа):</strong> 32 кБ, организованы как 16k шестнадцатибитных слов; счётчик команд PC — 14-битный. Делится на <strong>секцию приложения</strong> и <strong>секцию загрузчика</strong>.</li>
+<li class="list__item"><strong>SRAM (данные):</strong> в начале адресного пространства лежат 32 регистра общего назначения и регистры ввода-вывода, дальше — 2048 ячеек памяти. Адресация: прямая и косвенная (через регистры X, Y, Z — также со смещением и с инкрементом).</li>
+<li class="list__item"><strong>EEPROM:</strong> хранит данные без питания; доступ через регистры EEAR (адрес), EEDR (данные), EECR (управление).</li>
+<li class="list__item"><strong>Периферия</strong> обслуживается через <strong>регистры ввода-вывода</strong>, лежащие в том же адресном пространстве.</li>
+</ul>
+<h3 class="article__h3">Тактирование и сброс</h3>
+<p class="article__p">Источники тактового сигнала: внутренний генератор (1, 2, 4 или 8 МГц — без дополнительных деталей), внешний кварц (до 16 МГц), часовой кварц 32,768 кГц, внешняя RC-цепь, внешний тактовый сигнал.</p>
+<p class="article__p">Источники сброса: <strong>Power-on</strong> (включение питания), <strong>External</strong> (низкий уровень на выводе RESET), <strong>Watchdog</strong> (программа зависла), <strong>Brown-out</strong> (питание упало ниже порога).</p>
+<h3 class="article__h3">Периферия вкратце</h3>
+<ul class="list">
+<li class="list__item"><strong>Внешние прерывания</strong> (INT0, INT1) — реакция на фронт или уровень на выводе. Подробнее: <a class="link" href="../lectures/13.html">лекция 13</a>.</li>
+<li class="list__item"><strong>Таймеры/счётчики</strong> — отсчёт времени, подсчёт событий, генерация частоты и ШИМ; переполнение счётчика вызывает прерывание.</li>
+<li class="list__item"><strong>SPI</strong> — быстрый, синхронный, полнодуплексный; режим Master или Slave.</li>
+<li class="list__item"><strong>USART</strong> — последовательный канал (через него работает <code class="inline-code">Serial</code> в Arduino); 5–9 бит данных, 1–2 стоповых бита, бит чётности.</li>
+<li class="list__item"><strong>Two-Wire (I²C)</strong> — 7-битный адрес (128 адресов), до 400 кГц, Master/Slave.</li>
+<li class="list__item"><strong>АЦП</strong> — 10 бит (значения 0…1023), диапазон 0…VCC, время преобразования 65–260 мкс, прерывание по окончании преобразования.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p39.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w11-p39.webp" alt="Интерфейс SPI: два сдвиговых регистра, соединённых в кольцо" width="1100" height="640" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Интерфейс SPI: два сдвиговых регистра, соединённых в кольцо <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Интерфейсы подробнее разобраны в <a class="link" href="../lectures/12.html">лекции 12</a>.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Задания на лабораторную (со слайда)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Программа, которая после сброса отправляет по последовательному каналу сообщение «Hello world».</li>
+<li class="list__item">Калькулятор, выполняющий основные действия над двумя числами в инфиксной записи (каждое данное подтверждается клавишей Enter).</li>
+<li class="list__item">Калькулятор, который считывает всё выражение целиком и разбирает его.</li>
+</ol>
+<p class="article__p">По шагам: <a class="link" href="../labs/12.html">Лабораторная 12</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Компьютер</h3>
+<ul class="list">
+<li class="list__item"><strong>Фон Нейман:</strong> процессор (с АЛУ) + память (данные <strong>и</strong> программа вместе) + ввод/вывод; команды выполняются по очереди.</li>
+<li class="list__item"><strong>Гарвард:</strong> отдельная память программы и данных (микроконтроллеры: Flash + RAM).</li>
+<li class="list__item"><strong>Командный цикл:</strong> выборка → декодирование → выполнение.</li>
+<li class="list__item"><strong>Регистры:</strong> PC (адрес следующей команды), регистр команд, аккумулятор, SP (стек), регистр флагов.</li>
+<li class="list__item"><strong>Шины:</strong> адреса, данных, управления.</li>
+<li class="list__item"><strong>CISC:</strong> много сложных команд, разное время. <strong>RISC:</strong> мало простых команд, один цикл, конвейер.</li>
+</ul>
+<h3 class="article__h3">Микроконтроллер</h3>
+<p class="article__p">µC = процессор + RAM + память программы + порты ввода-вывода + периферия (UART, SPI, I²C, АЦП, таймеры, watchdog) в одной микросхеме.</p>
+<p class="article__p">Программирование: высоковольтный программатор / ISP / <strong>загрузчик</strong> (Arduino).</p>
+<h3 class="article__h3">ATmega328 (Arduino UNO)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Ядро</td><td class="table__cell">8-бит RISC, 131 команда, 32 регистра</td></tr>
+<tr class="table__row"><td class="table__cell">Flash</td><td class="table__cell">32 кБ (программа; приложение + загрузчик)</td></tr>
+<tr class="table__row"><td class="table__cell">SRAM</td><td class="table__cell">2 кБ (данные, пропадают при выключении)</td></tr>
+<tr class="table__row"><td class="table__cell">EEPROM</td><td class="table__cell">1 кБ (постоянные данные)</td></tr>
+<tr class="table__row"><td class="table__cell">АЦП</td><td class="table__cell">10 бит → 0…1023, 8 каналов</td></tr>
+<tr class="table__row"><td class="table__cell">Тактовая частота</td><td class="table__cell">до 16 МГц</td></tr>
+<tr class="table__row"><td class="table__cell">Интерфейсы</td><td class="table__cell">USART, SPI, I²C (TWI)</td></tr>
+<tr class="table__row"><td class="table__cell">Порты</td><td class="table__cell">B, C (аналоговые), D</td></tr>
+<tr class="table__row"><td class="table__cell">Сброс</td><td class="table__cell">power-on, внешний, watchdog, brown-out</td></tr>
+</tbody></table></div>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/10.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 10: Проектирование синхронных последовательностных схем</span></a>
+<a class="pager__link pager__link--next" href="../lectures/12.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 12: Способы связи: порты, UART, SPI, I²C</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

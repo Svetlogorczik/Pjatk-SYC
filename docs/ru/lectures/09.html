@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 9. Последовательностные схемы: триггеры, регистры, счётчики — SYC</title>
+<meta name="description" content="Схема, которая помнит. Откуда берётся память, чем отличаются триггеры RS, D, JK и T, зачем нужен тактовый сигнал и как из нескольких триггеров сделать сдвиговый регистр или счётчик.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/09.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/09.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/09.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/09.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/09.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/09.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Схема, которая помнит</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">RS-триггер</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Тактовый сигнал</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Триггеры D, JK и T</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Регистры</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Счётчики</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/09.html" aria-current="page"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 9</p>
+<h1 class="article__title">Последовательностные схемы: триггеры, регистры, счётчики</h1>
+<p class="article__lead">Схема, которая помнит. Откуда берётся память, чем отличаются триггеры RS, D, JK и T, зачем нужен тактовый сигнал и как из нескольких триггеров сделать сдвиговый регистр или счётчик.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Схема, которая помнит</h2>
+<p class="article__p">В <strong>комбинационной схеме</strong> выход зависит только от текущих входов: <span class="math">y = f(u)</span>. Те же входы — всегда тот же результат.</p>
+<p class="article__p">Но если выход схемы подать обратно на её вход (<strong>обратная связь</strong>), выход начинает зависеть ещё и от того, <strong>что было раньше</strong>. У схемы появляется <strong>память</strong>.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p04.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p04.webp" alt="Два вентиля NAND, соединённые «крест-накрест»: чему равно Q?" width="1100" height="670" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Два вентиля NAND, соединённые «крест-накрест»: чему равно Q? <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p06.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p06.webp" alt="Комбинационная схема y = f(u) и последовательностная y = f(x, u)" width="1100" height="605" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Комбинационная схема y = f(u) и последовательностная y = f(x, u) <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+</div>
+<p class="article__p">На вопрос с рисунка («R = 1, S = 1 — чему равно Q?») ответ такой: <strong>неизвестно</strong> — зависит от того, что было раньше. Это и есть эффект памяти.</p>
+<p class="article__p">В <strong>последовательностной схеме</strong> (<em>układ sekwencyjny</em>) появляется <strong>внутреннее состояние</strong> <span class="math">x</span>:</p>
+<div class="formula"><span class="math">x(k+1) = δ(x(k), u(k))  — уравнение состояния (функция возбуждения)</span></div>
+<div class="formula"><span class="math">y(k) = λ(x(k), u(k))  — уравнение выхода (функция выходов)</span></div>
+<ul class="list">
+<li class="list__item">Новое состояние зависит от <strong>старого состояния</strong> и от <strong>входов</strong>.</li>
+<li class="list__item">Состояние может быть не видно на выходе — поэтому оно «внутреннее».</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Комбинационная схема — это калькулятор: вводишь 2 + 2, получаешь 4, всегда. Последовательностная схема — это автоматическая ручка с кнопкой: одно и то же нажатие то выдвигает стержень, то прячет его, потому что ручка «помнит», в каком она состоянии.</p>
+</div>
+</div>
+<h3 class="article__h3">Автоматы Мура и Мили</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w09-p08.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p08.webp" alt="Блок δ реализует память, блок λ — функцию выходов" width="776" height="1005" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Блок δ реализует память, блок λ — функцию выходов <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Блок <strong>δ</strong> (с памятью) определяет следующее состояние.</li>
+<li class="list__item">Блок <strong>λ</strong> — обычная комбинационная схема, вычисляющая выход.</li>
+<li class="list__item"><strong>Автомат Мура:</strong> выход зависит <strong>только от состояния</strong>.</li>
+<li class="list__item"><strong>Автомат Мили:</strong> выход зависит от <strong>состояния и входов</strong>.</li>
+</ul>
+<h2 class="article__h2" id="s2">RS-триггер</h2>
+<p class="article__p">Триггеры (<em>przerzutniki</em>) — основные элементы, из которых строят последовательностные схемы. Каждый помнит <strong>один бит</strong>. Самый простой — RS из двух вентилей NAND:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p09.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p09.webp" alt="RS-триггер на вентилях NAND и его таблица" width="1100" height="496" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">RS-триггер на вентилях NAND и его таблица <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head">Что происходит</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">—</td><td class="table__cell"><strong>запрещённая комбинация</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">установка (<em>set</em>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">сброс (<em>reset</em>)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">хранение — без изменений</td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub> · R<sub class="math__sub">t</sub> + <span class="math__bar">S<sub class="math__sub">t</sub></span></span></div>
+<p class="article__p">Этот вариант <strong>активен низким уровнем</strong>: «нажатие» — это подача нуля. S = 0 устанавливает Q в 1, R = 0 сбрасывает Q, а когда на обоих входах единицы — триггер помнит.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">RS-триггер, собранный из вентилей <strong>NOR</strong>, работает наоборот — он активен <strong>высоким</strong> уровнем (S = 1 устанавливает, R = 1 сбрасывает, 00 хранит, 11 запрещено). Оба варианта есть в шаблоне к <a class="link" href="../labs/10.html">лабораторной 10</a>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Тактовый сигнал</h2>
+<p class="article__p">В последовательностных схемах важен <strong>порядок</strong> изменений. Чтобы всё менялось в одни и те же, строго определённые моменты, добавляют <strong>тактовый</strong> вход (<em>zegar</em>, C, CLK).</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w09-p10.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p10.webp" alt="Срабатывание по уровню и по фронту" width="923" height="681" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Срабатывание по уровню и по фронту <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Срабатывание по уровню:</strong> схема реагирует, пока тактовый сигнал равен 1 (или 0).</li>
+<li class="list__item"><strong>Срабатывание по фронту:</strong> схема реагирует только в момент <strong>изменения</strong> тактового сигнала, обычно с 0 на 1 (нарастающий фронт, <em>zbocze narastające</em>). На символе это обозначается треугольничком у тактового входа.</li>
+</ul>
+<h3 class="article__h3">Защёлка (RS-триггер с тактовым входом)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p11.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p11.webp" alt="RS-триггер с тактовым входом C" width="1100" height="396" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">RS-триггер с тактовым входом C <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span> (при C = 1)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span> — без изменений</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">запрещено</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">При <strong>C = 0</strong> изменения на S и R ни на что не влияют.</li>
+<li class="list__item">При <strong>C = 1</strong> выход меняется по таблице.</li>
+<li class="list__item">Переход C с 1 на 0 «защёлкивает» состояние — отсюда название <strong>защёлка</strong> (<em>zatrzask</em>, <em>latch</em>).</li>
+</ul>
+<h2 class="article__h2" id="s4">Триггеры D, JK и T</h2>
+<h3 class="article__h3">Тип D</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p12.webp" alt="D-триггер: символ, таблица и граф состояний" width="1100" height="582" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">D-триггер: символ, таблица и граф состояний <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = D<sub class="math__sub">t</sub></span></div>
+<p class="article__p">Самый простой и самый распространённый: в момент фронта тактового сигнала он <strong>запоминает то, что на входе D</strong>, и держит до следующего фронта. У него есть ещё <strong>асинхронные</strong> входы (действуют сразу, независимо от тактового сигнала): <strong>SET</strong> (установить Q = 1) и <strong>CLR</strong> (сбросить Q = 0).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">D-триггер — это фотоаппарат. Вход D — сцена, фронт тактового сигнала — нажатие на спуск, а Q — снимок: он показывает то, что было в момент «щёлк», и не меняется, пока не сделаешь следующий.</p>
+</div>
+</div>
+<h3 class="article__h3">Тип JK</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p13.webp" alt="JK-триггер" width="1100" height="528" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">JK-триггер <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">J</th><th class="table__cell table__cell--head table__cell--center">K</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">хранить</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">сбросить</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">установить</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">Q<sub class="math__sub">t</sub></span></span></td><td class="table__cell"><strong>переключить на противоположное</strong></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = J<sub class="math__sub">t</sub> · <span class="math__bar">Q<sub class="math__sub">t</sub></span> + <span class="math__bar">K<sub class="math__sub">t</sub></span> · Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">Как RS, но без запрещённой комбинации — при 11 триггер переключается.</p>
+<h3 class="article__h3">Тип T</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p14.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p14.webp" alt="T-триггер" width="1100" height="508" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">T-триггер <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = T<sub class="math__sub">t</sub> ⊕ Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">T = 1 → по фронту состояние меняется на противоположное; T = 0 → без изменений. (<em>T</em> от <em>toggle/trigger</em>.)</p>
+<h3 class="article__h3">Делитель частоты на 2</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p21.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p21.webp" alt="Триггер, меняющий состояние на каждом тактовом импульсе" width="1100" height="302" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Триггер, меняющий состояние на каждом тактовом импульсе <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">JK-триггер с J = K = 1 (или D-триггер, у которого на вход D подан его собственный <span class="math"><span class="math__bar">Q</span></span>) меняет состояние на <strong>каждом</strong> фронте. На выходе получается сигнал <strong>вдвое меньшей частоты</strong>. На этом основаны счётчики.</p>
+<h2 class="article__h2" id="s5">Регистры</h2>
+<h3 class="article__h3">Сдвиговый регистр</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p15.webp" alt="Четырёхбитный сдвиговый регистр на D-триггерах" width="1100" height="537" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Четырёхбитный сдвиговый регистр на D-триггерах <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Несколько D-триггеров, соединённых в цепочку: выход Q одного идёт на вход D следующего, а тактовый сигнал общий. На каждом фронте содержимое <strong>сдвигается на одну позицию</strong>.</p>
+<p class="article__p">Если на вход постоянно подавать единицу, регистр заполняется так: 0000 → 1000 → 1100 → 1110 → 1111.</p>
+<h3 class="article__h3">Кольцевой счётчик</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p16.webp" alt="Кольцевой счётчик: выход последнего триггера возвращается на вход первого" width="1100" height="531" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Кольцевой счётчик: выход последнего триггера возвращается на вход первого <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Сдвиговый регистр, замкнутый в кольцо. Одна единица бегает по кругу: 1000 → 0100 → 0010 → 0001 → 1000… Сначала нужно задать начальное состояние (входы SET/CLR). Четыре триггера дают 4 состояния — код «1 из N».</p>
+<h3 class="article__h3">Счётчик Джонсона</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p17.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p17.webp" alt="Счётчик Джонсона: на вход возвращается инвертированный выход последнего триггера" width="1100" height="701" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Счётчик Джонсона: на вход возвращается инвертированный выход последнего триггера <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Кольцо с <strong>инверсией</strong>: на вход первого триггера идёт <span class="math"><span class="math__bar">Q</span></span> последнего. Регистр сначала заполняется единицами, потом нулями:</p>
+<div class="formula"><span class="math">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000 → 0000</span></div>
+<p class="article__p">Четыре триггера дают <strong>8 состояний</strong> (вдвое больше, чем в кольцевом). В коде Джонсона соседние состояния отличаются одним битом.</p>
+<h3 class="article__h3">Генератор псевдослучайных чисел (PRBS)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p18.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p18.webp" alt="Сдвиговый регистр с обратной связью через вентиль XOR" width="1100" height="652" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Сдвиговый регистр с обратной связью через вентиль XOR <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">На вход регистра подаём <strong>XOR выбранных выходов</strong>. Получается последовательность, которая выглядит случайной (<em>Pseudo-Random Binary Sequence</em>), хотя на самом деле она периодична. Для 8-битного регистра с отводами 2, 3, 4, 8 период равен 255; для 10-битного с отводами 7, 10 — 1023.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">Для <strong>4-битного</strong> регистра самую длинную последовательность (15 состояний) даёт XOR выходов триггеров 3 и 4. Состояние 0000 — ловушка: XOR одних нулей равен нулю, поэтому регистр из него никогда не выйдет — генератор нужно запускать с ненулевого состояния (в шаблоне с занятий: 0001).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Счётчики</h2>
+<h3 class="article__h3">Асинхронный двоичный счётчик</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p22.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p22.webp" alt="Четырёхбитный асинхронный двоичный счётчик" width="1100" height="386" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Четырёхбитный асинхронный двоичный счётчик <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Несколько делителей на 2 один за другим: первый триггер тактируется тактовым сигналом, каждый следующий — <strong>выходом предыдущего</strong>. Первый меняется каждый импульс, второй — каждые два, третий — каждые четыре… Выходы A, B, C, D образуют двоичное число 0…15.</p>
+<p class="article__p">«Асинхронный» значит, что у триггеров <strong>нет общего тактового сигнала</strong> — изменение «прокатывается» через ступени.</p>
+<h3 class="article__h3">Счётчик по модулю N</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p23.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p23.webp" alt="Асинхронный счётчик по модулю 10" width="1100" height="507" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Асинхронный счётчик по модулю 10 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Счётчик mod 10 должен считать 0, 1, …, 9 и возвращаться к 0. Способ: вентиль обнаруживает состояние <strong>10</strong> (двоичное 1010 — единицы на B и D) и сразу подаёт сигнал на входы сброса <strong>CLR</strong> всех триггеров.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Рецепт счётчика mod N</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Запиши число <span class="math">N</span> в двоичном виде.</li>
+<li class="list__item">Вентилем AND (или NAND — смотря на что реагирует CLR, на 1 или на 0) обнаружь <strong>единицы</strong> этой записи.</li>
+<li class="list__item">Выход вентиля подключи к CLR всех триггеров.</li>
+</ol>
+<p class="article__p">Счётчик mod 6: <span class="math">6 = 0110</span> → AND выходов B и C. Состояние 6 появляется лишь на мгновение и сразу превращается в 0.</p>
+</div>
+</div>
+<h3 class="article__h3">Счётчик от X до Y</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p24.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w09-p24.webp" alt="Счётчик, генерирующий последовательность 3–4–5–6–7–8" width="1100" height="692" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Счётчик, генерирующий последовательность 3–4–5–6–7–8 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Чтобы счётчик начинал не с нуля, используют входы <strong>SET</strong>. Для последовательности 3…8: вентиль обнаруживает состояние <strong>9</strong> (1001), и тогда триггеры, у которых в числе 3 (0011) стоит единица, <strong>устанавливаются</strong> (SET), а остальные <strong>сбрасываются</strong> (CLR).</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Задания на лабораторную (со слайда)</p>
+<div class="callout__body">
+<p class="article__p">На D-триггерах: сдвиговый регистр, кольцевой счётчик, счётчик Джонсона, счётчик mod 9, счётчик от 3 до 9, псевдослучайный генератор с XOR; кроме того — 1-битная защёлка из RS-триггеров на NAND и последовательный регистр с параллельным выходом.</p>
+<p class="article__p">По шагам: <a class="link" href="../labs/10.html">Лабораторная 10</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Триггеры</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Тип</th><th class="table__cell table__cell--head">Уравнение</th><th class="table__cell table__cell--head">Таблица</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS (NAND)</strong>, активен нулём</td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub>·R + <span class="math__bar">S</span></span></td><td class="table__cell">S=0 → 1; R=0 → 0; 11 → хранит; 00 запрещено</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>RS с тактом</strong> (защёлка)</td><td class="table__cell">—</td><td class="table__cell">C=1: 00 хранит, 01 → 0, 10 → 1, 11 запрещено; C=0: ничего</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>D</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = D</span></td><td class="table__cell">по фронту Q := D</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>JK</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = J<span class="math__bar">Q</span> + <span class="math__bar">K</span>Q</span></td><td class="table__cell">00 хранит, 01 → 0, 10 → 1, 11 → переключение</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>T</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = T ⊕ Q</span></td><td class="table__cell">T=1 → переключение, T=0 → хранит</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>SET / CLR</strong> — асинхронные (сразу, без такта): Q = 1 / Q = 0.</li>
+<li class="list__item">D с <span class="math"><span class="math__bar">Q</span></span> на входе D (или JK с J=K=1) = <strong>делитель частоты на 2</strong>.</li>
+<li class="list__item">Мур: выход = f(состояние). Мили: выход = f(состояние, вход).</li>
+</ul>
+<h3 class="article__h3">Регистры (4 D-триггера, общий такт)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Схема</th><th class="table__cell table__cell--head">На вход первого D</th><th class="table__cell table__cell--head">Последовательность</th><th class="table__cell table__cell--head table__cell--center">Состояний</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Сдвиговый регистр</td><td class="table__cell">внешний сигнал</td><td class="table__cell">0000 → 1000 → 1100 → 1110 → 1111 (для «1»)</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Кольцевой счётчик</td><td class="table__cell">Q последнего</td><td class="table__cell">1000 → 0100 → 0010 → 0001</td><td class="table__cell table__cell--center">4</td></tr>
+<tr class="table__row"><td class="table__cell">Счётчик Джонсона</td><td class="table__cell"><span class="math"><span class="math__bar">Q</span></span> последнего</td><td class="table__cell">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000</td><td class="table__cell table__cell--center">8</td></tr>
+<tr class="table__row"><td class="table__cell">PRBS</td><td class="table__cell">XOR двух выходов (3 и 4) <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span></td><td class="table__cell">псевдослучайная, старт ≠ 0000</td><td class="table__cell table__cell--center">15 <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Счётчики</h3>
+<ul class="list">
+<li class="list__item"><strong>Асинхронный двоичный:</strong> каждый триггер — делитель на 2, тактируется выходом предыдущего.</li>
+<li class="list__item"><strong>Mod N:</strong> обнаружь состояние N вентилем → CLR всех. (mod 10: 1010; mod 9: 1001; mod 6: 0110)</li>
+<li class="list__item"><strong>От X до Y:</strong> обнаружь состояние Y+1 → SET там, где у X единицы, CLR там, где нули.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/08.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 8: Комбинационные функциональные блоки: мультиплексор, дополнительный код, сумматор, АЛУ</span></a>
+<a class="pager__link pager__link--next" href="../lectures/10.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 10: Проектирование синхронных последовательностных схем</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

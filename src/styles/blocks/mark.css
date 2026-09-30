@@ -1,0 +1,7 @@
+/* mark — highlighted text */
+.mark {
+  padding: 0.05em 0.25em;
+  border-radius: 4px;
+  background: var(--color-mark);
+  color: inherit;
+}

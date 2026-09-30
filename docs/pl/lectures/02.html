@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 2. Elementy pasywne: rezystor, kondensator, cewka i impedancja — SYC</title>
+<meta name="description" content="Trzy podstawowe „klocki” elektroniki i jedno pojęcie, które je łączy — impedancja, czyli opór zapisany liczbą zespoloną.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/02.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/02.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/02.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/02.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/02.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/02.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Przedrostki — żeby nie pisać tylu zer</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Przewodniki, izolatory, półprzewodniki</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Prąd stały (DC) i przemienny (AC)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Elementy pasywne i aktywne</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Rezystor (opornik)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Kondensator</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Cewka indukcyjna</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Symbole na schematach</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Transformata Laplace'a — po co informatykowi taki potwór</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Impedancja — „opór” dla prądu zmiennego</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">Amplituda i przesunięcie fazowe</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/02.html" aria-current="page"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 2</p>
+<h1 class="article__title">Elementy pasywne: rezystor, kondensator, cewka i impedancja</h1>
+<p class="article__lead">Trzy podstawowe „klocki” elektroniki i jedno pojęcie, które je łączy — impedancja, czyli opór zapisany liczbą zespoloną.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Przedrostki — żeby nie pisać tylu zer</h2>
+<p class="article__p">W elektronice liczby bywają bardzo duże albo bardzo małe, więc zapisuje się je jako <span class="math">A × 10<sup class="math__sup">n</sup></span> i używa przedrostków.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Przedrostek</th><th class="table__cell table__cell--head table__cell--center">Symbol</th><th class="table__cell table__cell--head table__cell--center">Potęga 10</th><th class="table__cell table__cell--head">Mnożnik</th><th class="table__cell table__cell--head">Przykład</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">giga</td><td class="table__cell table__cell--center">G</td><td class="table__cell table__cell--center">9</td><td class="table__cell">1 000 000 000</td><td class="table__cell">1 GHz</td></tr>
+<tr class="table__row"><td class="table__cell">mega</td><td class="table__cell table__cell--center">M</td><td class="table__cell table__cell--center">6</td><td class="table__cell">1 000 000</td><td class="table__cell">1 MΩ = 1 000 000 Ω</td></tr>
+<tr class="table__row"><td class="table__cell">kilo</td><td class="table__cell table__cell--center">k</td><td class="table__cell table__cell--center">3</td><td class="table__cell">1 000</td><td class="table__cell">1 kΩ = 1000 Ω</td></tr>
+<tr class="table__row"><td class="table__cell">mili</td><td class="table__cell table__cell--center">m</td><td class="table__cell table__cell--center">−3</td><td class="table__cell">0,001</td><td class="table__cell">20 mA = 0,02 A</td></tr>
+<tr class="table__row"><td class="table__cell">mikro</td><td class="table__cell table__cell--center">µ</td><td class="table__cell table__cell--center">−6</td><td class="table__cell">0,000 001</td><td class="table__cell">1 µs</td></tr>
+<tr class="table__row"><td class="table__cell">nano</td><td class="table__cell table__cell--center">n</td><td class="table__cell table__cell--center">−9</td><td class="table__cell">0,000 000 001</td><td class="table__cell">10 nF = 0,000 000 01 F</td></tr>
+<tr class="table__row"><td class="table__cell">piko</td><td class="table__cell table__cell--center">p</td><td class="table__cell table__cell--center">−12</td><td class="table__cell">0,000 000 000 001</td><td class="table__cell">36 pF</td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Rada od autora strony</p>
+<div class="callout__body">
+<p class="article__p">Na kalkulatorze wpisuj przedrostki jako potęgi: 10 nF to <code class="inline-code">10E-9</code>, 100 kHz to <code class="inline-code">100E3</code>. Najwięcej błędów na ćwiczeniach 3 i 4 bierze się z pomylenia „n” z „µ”.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Przewodniki, izolatory, półprzewodniki</h2>
+<ul class="list">
+<li class="list__item"><strong>Przewodnik</strong> — napięcie z zewnątrz powoduje przepływ prądu (metale).</li>
+<li class="list__item"><strong>Izolator</strong> — elektrony są mocno związane z jądrami atomów i pole elektryczne ich nie „wyrwie”; prąd nie płynie.</li>
+<li class="list__item"><strong>Półprzewodnik</strong> — przewodzi albo nie, zależnie od warunków. O nich jest <a class="link" href="../lectures/04.html">wykład 4</a>.</li>
+</ul>
+<h2 class="article__h2" id="s3">Prąd stały (DC) i przemienny (AC)</h2>
+<ul class="list">
+<li class="list__item"><strong>DC</strong> (<em>direct current</em>) — prąd płynie w jedną stronę i ma stałą wartość. Bateria, zasilacz.</li>
+<li class="list__item"><strong>AC</strong> (<em>alternating current</em>) — kierunek prądu zmienia się okresowo; średnia wartość za okres wynosi zero. Gniazdko, sygnał z generatora.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">DC to rzeka — woda płynie ciągle w jedną stronę. AC to fala morska przy brzegu — woda raz idzie w przód, raz w tył, a „średnio” stoi w miejscu.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Elementy pasywne i aktywne</h2>
+<ul class="list">
+<li class="list__item"><strong>Pasywne</strong> — nie potrzebują zasilania, żeby działać. Energia na wyjściu nie może być większa niż na wejściu. To rezystor, kondensator, cewka.</li>
+<li class="list__item"><strong>Aktywne</strong> — potrzebują zasilania; dzięki niemu energia na wyjściu może być większa niż na wejściu (tranzystor, wzmacniacz).</li>
+</ul>
+<h2 class="article__h2" id="s5">Rezystor (opornik)</h2>
+<p class="article__p">Rezystancja to stosunek napięcia na końcach elementu do prądu, który przez niego płynie:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span>  [Ω]</span></div>
+<p class="article__p">Zależy od materiału i wymiarów:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">ρ · L</span><span class="math__den">A</span></span></span></div>
+<p class="article__p">gdzie <span class="math">ρ</span> — rezystywność materiału, <span class="math">L</span> — długość, <span class="math">A</span> — pole przekroju. Dłuższy i cieńszy drut = większy opór.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p07.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p07.webp" alt="Charakterystyki prąd–napięcie: rezystor to linia prosta, dioda i żarówka — nie" width="1100" height="325" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Charakterystyki prąd–napięcie: rezystor to linia prosta, dioda i żarówka — nie <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Rezystor jest elementem <strong>liniowym</strong>: dwa razy większe napięcie daje dwa razy większy prąd (prosta na wykresie). Dioda i żarówka już tak się nie zachowują.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p09.webp" alt="Różne rodzaje rezystorów" width="1100" height="483" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Różne rodzaje rezystorów <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s6">Kondensator</h2>
+<p class="article__p">Dwie metalowe okładziny oddzielone izolatorem. Gromadzi <strong>ładunek</strong> <span class="math">Q</span> (w kulombach [C]); im więcej ładunku, tym większe napięcie między okładzinami.</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span>  [F]</span></div>
+<p class="article__p">Pojemność <span class="math">C</span> mierzymy w faradach. Dla dwóch równoległych płytek o powierzchni <span class="math">A</span> w odległości <span class="math">d</span>:</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">ε<sub class="math__sub">r</sub> · ε<sub class="math__sub">0</sub> · A</span><span class="math__den">d</span></span></span></div>
+<p class="article__p">(<span class="math">ε<sub class="math__sub">0</sub> = 8,84 × 10<sup class="math__sup">−12</sup></span> F/m — przenikalność próżni, <span class="math">ε<sub class="math__sub">r</sub></span> — względna przenikalność izolatora.) Większe płytki i mniejszy odstęp = większa pojemność.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p12.webp" alt="Rodzaje kondensatorów: ceramiczne, foliowe, elektrolityczne, tantalowe" width="1100" height="484" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Rodzaje kondensatorów: ceramiczne, foliowe, elektrolityczne, tantalowe <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Kondensator to wiaderko na ładunek. Prąd stały napełnia je i koniec — dalej nic nie płynie. Przy prądzie zmiennym wiaderko jest na zmianę napełniane i opróżniane, więc w obwodzie cały czas coś płynie. Dlatego kondensator <strong>nie przepuszcza DC, a przepuszcza AC</strong> — i to tym chętniej, im szybsze są zmiany.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Cewka indukcyjna</h2>
+<p class="article__p">Zwój drutu. Płynący prąd wytwarza pole magnetyczne, w którym gromadzi się energia.</p>
+<div class="formula"><span class="math">L = <span class="math__frac"><span class="math__num">µ · n<sup class="math__sup">2</sup> · A</span><span class="math__den">l</span></span>  [H]</span></div>
+<p class="article__p">Indukcyjność <span class="math">L</span> (w henrach) rośnie z <strong>kwadratem liczby zwojów</strong> <span class="math">n</span>, z polem przekroju <span class="math">A</span> i przenikalnością magnetyczną <span class="math">µ</span>, a maleje z długością cewki <span class="math">l</span>.</p>
+<p class="article__p">Gdy prąd się zmienia, cewka wytwarza napięcie, które tej zmianie <strong>przeciwdziała</strong> (siła elektromotoryczna, SEM):</p>
+<div class="formula"><span class="math">E = −<span class="math__frac"><span class="math__num">dΦ</span><span class="math__den">dt</span></span> = −L · <span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p13.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p13.webp" alt="Cewka: n zwojów, długość l, pole przekroju A" width="1100" height="553" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Cewka: n zwojów, długość l, pole przekroju A <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Cewka to ciężkie koło zamachowe: trudno je rozpędzić i trudno zatrzymać. Prąd stały przepływa przez nią bez przeszkód (koło kręci się równo), ale szybkim zmianom prądu cewka się stawia — tym mocniej, im są szybsze.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s8">Symbole na schematach</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p15.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p15.webp" alt="Symbole: rezystor, potencjometr, kondensator, kondensator spolaryzowany, cewka" width="1100" height="1030" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Symbole: rezystor, potencjometr, kondensator, kondensator spolaryzowany, cewka <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s9">Transformata Laplace'a — po co informatykowi taki potwór</h2>
+<p class="article__p">Równania cewki i kondensatora zawierają pochodne i całki. Transformata Laplace'a to „tłumacz”, który zamienia opis w czasie <span class="math">x(t)</span> na opis w zmiennej zespolonej <span class="math">s</span> — i wtedy zamiast różniczkować i całkować, wystarczy <strong>mnożyć i dzielić</strong>.</p>
+<div class="formula"><span class="math">X(s) = ∫ x(t) · e<sup class="math__sup">−st</sup> dt ,  s = σ + jω</span></div>
+<p class="article__p">Z całego wykładu o transformacie trzeba zapamiętać trzy rzeczy:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">W dziedzinie czasu</th><th class="table__cell table__cell--head">W dziedzinie Laplace'a</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">pochodna <span class="math"><span class="math__frac"><span class="math__num">d</span><span class="math__den">dt</span></span></span></td><td class="table__cell">mnożenie przez <span class="math">s</span></td></tr>
+<tr class="table__row"><td class="table__cell">całka <span class="math">∫ … dt</span></td><td class="table__cell">mnożenie przez <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">sygnał sinusoidalny o pulsacji <span class="math">ω</span></td><td class="table__cell">podstawiamy <span class="math">s = jω</span> (to już transformata Fouriera)</td></tr>
+</tbody></table></div>
+<p class="article__p">Tu <span class="math">ω = 2πf</span> to <strong>pulsacja</strong> (rad/s), <span class="math">f</span> — częstotliwość (Hz), a <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span> — jednostka urojona. Elektronicy piszą <span class="math">j</span>, a nie <span class="math">i</span>, bo <span class="math">i</span> to prąd.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p22.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p22.webp" alt="Różniczkowanie w czasie = mnożenie przez s" width="1100" height="141" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Różniczkowanie w czasie = mnożenie przez s <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Liczby zespolone w 30 sekund</p>
+<div class="callout__body">
+<p class="article__p">Liczba zespolona to punkt na płaszczyźnie: <span class="math">Z = a + jb</span>. Część <span class="math">a</span> odkładamy w poziomie (rzeczywista), <span class="math">b</span> w pionie (urojona).</p>
+<ul class="list">
+<li class="list__item">Długość strzałki od zera do punktu: <span class="math">|Z| = <span class="math__sqrt">√<span class="math__bar">a<sup class="math__sup">2</sup> + b<sup class="math__sup">2</sup></span></span></span> — to <strong>moduł</strong>.</li>
+<li class="list__item">Kąt strzałki względem osi poziomej: <span class="math">φ</span> — to <strong>faza</strong> (argument).</li>
+<li class="list__item">Zapis biegunowy: <span class="math">Z = |Z| · e<sup class="math__sup">jφ</sup></span>, przy czym <span class="math">a = |Z| · cos φ</span>, <span class="math">b = |Z| · sin φ</span>.</li>
+<li class="list__item"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span> (przydaje się przy kondensatorze).</li>
+</ul>
+<p class="article__p">Na tablicach wzorów jest jeszcze długa lista gotowych transformat (sin, cos, eksponenta…). Na ćwiczeniach z tego przedmiotu nie są potrzebne.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s10">Impedancja — „opór” dla prądu zmiennego</h2>
+<p class="article__p">Prawo Ohma działa także dla cewek i kondensatorów, jeśli zamiast rezystancji <span class="math">R</span> wstawimy <strong>impedancję</strong> <span class="math">Z</span>:</p>
+<div class="formula"><span class="math">Z = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span> = R + jX</span></div>
+<ul class="list">
+<li class="list__item">część rzeczywista <span class="math">R</span> — <strong>rezystancja</strong> (zwykły opór),</li>
+<li class="list__item">część urojona <span class="math">X</span> — <strong>reaktancja</strong> (opór cewki albo kondensatora; <strong>zależy od częstotliwości</strong>).</li>
+</ul>
+<h3 class="article__h3">Cewka</h3>
+<p class="article__p">Z równania <span class="math">v<sub class="math__sub">L</sub>(t) = L · <span class="math__frac"><span class="math__num">di<sub class="math__sub">L</sub></span><span class="math__den">dt</span></span></span> po przejściu na Laplace'a (pochodna → mnożenie przez <span class="math">s</span>): <span class="math">V<sub class="math__sub">L</sub>(s) = sL · I<sub class="math__sub">L</sub>(s)</span>, więc</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">L</sub> = sL = jωL</span></div>
+<h3 class="article__h3">Kondensator</h3>
+<p class="article__p">Z równania <span class="math">v<sub class="math__sub">C</sub>(t) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">C</span></span> ∫ i<sub class="math__sub">C</sub> dt</span> (całka → mnożenie przez <span class="math">1/s</span>): <span class="math">V<sub class="math__sub">C</sub>(s) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> · I<sub class="math__sub">C</sub>(s)</span>, więc</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">C</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j · <span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></div>
+<h3 class="article__h3">Co z tego wynika</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head">Impedancja</th><th class="table__cell table__cell--head">Moduł <span class="math">|Z|</span></th><th class="table__cell table__cell--head">Reaktancja</th><th class="table__cell table__cell--head">Charakter</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Rezystor</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math">R</span></td><td class="table__cell">0</td><td class="table__cell">czynny — nie zależy od częstotliwości</td></tr>
+<tr class="table__row"><td class="table__cell">Kondensator</td><td class="table__cell"><span class="math">−j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">ujemna</td><td class="table__cell"><strong>pojemnościowy</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Cewka</td><td class="table__cell"><span class="math">jωL</span></td><td class="table__cell"><span class="math">2πfL</span></td><td class="table__cell">dodatnia</td><td class="table__cell"><strong>indukcyjny</strong></td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p32.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p32.webp" alt="Jak reaktancja zależy od częstotliwości" width="1100" height="387" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Jak reaktancja zależy od częstotliwości <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Dla <span class="math">ω = 0</span> (prąd stały): kondensator ma opór <strong>nieskończony</strong> (przerwa), cewka — <strong>zerowy</strong> (zwarcie).</li>
+<li class="list__item">Dla <span class="math">ω → ∞</span>: kondensator to zwarcie, cewka to przerwa.</li>
+<li class="list__item">Częstotliwość rośnie → <span class="math">X<sub class="math__sub">C</sub></span> maleje, <span class="math">X<sub class="math__sub">L</sub></span> rośnie.</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Przykład własny: ile „omów” ma kondensator?</p>
+<div class="callout__body">
+<p class="article__p">Kondensator 22 nF przy częstotliwości 50 kHz:</p>
+<p class="article__p"><span class="math">|Z<sub class="math__sub">C</sub>| = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 50 000 · 22 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">0,00691</span></span> ≈ 145 Ω</span></p>
+<p class="article__p">Ten sam kondensator przy 5 kHz ma 10 razy więcej: ok. 1447 Ω. Przy 500 kHz — 10 razy mniej: ok. 14,5 Ω.</p>
+<p class="article__p">Cewka 330 µH przy 50 kHz: <span class="math">|Z<sub class="math__sub">L</sub>| = 2π · 50 000 · 330 × 10<sup class="math__sup">−6</sup> ≈ 104 Ω</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s11">Amplituda i przesunięcie fazowe</h2>
+<p class="article__p">Impedancja jako liczba zespolona niesie <strong>dwie</strong> informacje:</p>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Moduł</strong> <span class="math">|Z| = <span class="math__frac"><span class="math__num">amplituda napięcia</span><span class="math__den">amplituda prądu</span></span></span> — ile woltów przypada na jeden amper.</li>
+<li class="list__item"><strong>Faza</strong> <span class="math">φ</span> — o ile sinusoida prądu jest <strong>przesunięta w czasie</strong> względem sinusoidy napięcia (w stopniach lub radianach).</li>
+</ol>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p33.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w02-p33.webp" alt="Dwie sinusoidy przesunięte w czasie: napięcie i prąd" width="1100" height="835" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Dwie sinusoidy przesunięte w czasie: napięcie i prąd <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Element</th><th class="table__cell table__cell--head table__cell--center">Faza <span class="math">φ</span> impedancji</th><th class="table__cell table__cell--head">Co widać na oscyloskopie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Rezystor</td><td class="table__cell table__cell--center">0°</td><td class="table__cell">szczyt prądu dokładnie pod szczytem napięcia</td></tr>
+<tr class="table__row"><td class="table__cell">Kondensator</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell">prąd <strong>wyprzedza</strong> napięcie o ćwierć okresu</td></tr>
+<tr class="table__row"><td class="table__cell">Cewka</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell">prąd <strong>spóźnia się</strong> za napięciem o ćwierć okresu</td></tr>
+</tbody></table></div>
+<p class="article__p">Przesunięcie odczytane z ekranu przelicza się na stopnie tak:</p>
+<div class="formula"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></div>
+<p class="article__p">gdzie <span class="math">t<sub class="math__sub">p</sub></span> — przesunięcie między szczytami (w działkach), <span class="math">T</span> — okres (w działkach). Ćwierć okresu to 90°.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Z wykładu</p>
+<div class="callout__body">
+<p class="article__p">Na wykładzie 1 (2026/27) wykładowca zapowiedział to ćwiczenie tak: impedancję zapiszecie jako liczbę zespoloną i zobaczycie, że „nie jest to tylko abstrakcja matematyczna, ale ma przełożenie w świecie fizycznym” — da się ją „dotknąć” na oscyloskopie.</p>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Jak zapamiętać, co wyprzedza</p>
+<div class="callout__body">
+<p class="article__p">Kondensator najpierw musi dostać prąd, żeby pojawiło się na nim napięcie → <strong>prąd jest pierwszy</strong>. Cewka opiera się zmianom prądu → <strong>napięcie jest pierwsze</strong>, prąd dochodzi później. Po angielsku: „ELI the ICE man” (w cewce L: E przed I; w kondensatorze C: I przed E).</p>
+</div>
+</div>
+<p class="article__p">Praktyczne wykonanie pomiaru: <a class="link" href="../labs/03.html">Ćwiczenie 3</a>.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Przedrostki</h3>
+<p class="article__p">G = 10⁹, M = 10⁶, k = 10³, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹, p = 10⁻¹²</p>
+<h3 class="article__h3">Trzy elementy</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Rezystor</th><th class="table__cell table__cell--head">Kondensator</th><th class="table__cell table__cell--head">Cewka</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Wielkość</td><td class="table__cell">R [Ω]</td><td class="table__cell">C [F]</td><td class="table__cell">L [H]</td></tr>
+<tr class="table__row"><td class="table__cell">Definicja</td><td class="table__cell"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td><td class="table__cell"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span></span></td><td class="table__cell"><span class="math">E = −L<span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Impedancja</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math">jωL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Moduł</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell"><span class="math">2πfL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Faza Z</td><td class="table__cell">0°</td><td class="table__cell">−90°</td><td class="table__cell">+90°</td></tr>
+<tr class="table__row"><td class="table__cell">DC (f = 0)</td><td class="table__cell">R</td><td class="table__cell">przerwa (∞)</td><td class="table__cell">zwarcie (0)</td></tr>
+<tr class="table__row"><td class="table__cell">f → ∞</td><td class="table__cell">R</td><td class="table__cell">zwarcie (0)</td><td class="table__cell">przerwa (∞)</td></tr>
+<tr class="table__row"><td class="table__cell">f rośnie</td><td class="table__cell">bez zmian</td><td class="table__cell">opór maleje</td><td class="table__cell">opór rośnie</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Wzory</h3>
+<ul class="list">
+<li class="list__item"><span class="math">ω = 2πf</span>,   <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span>,   <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span></li>
+<li class="list__item"><span class="math">Z = R + jX = |Z| · e<sup class="math__sup">jφ</sup></span>;   <span class="math">R = |Z| cos φ</span>,   <span class="math">X = |Z| sin φ</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span> (amplituda napięcia przez amplitudę prądu)</li>
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span> (przesunięcie i okres w działkach)</li>
+<li class="list__item">Laplace: pochodna → <span class="math">·s</span>, całka → <span class="math">·<span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span>, sinus → <span class="math">s = jω</span></li>
+<li class="list__item">X ujemne → charakter pojemnościowy; X dodatnie → indukcyjny</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/01.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 1: Wprowadzenie, fizyczne podstawy elektroniki i pomiary</span></a>
+<a class="pager__link pager__link--next" href="../lectures/03.html"><span class="pager__dir">Następny →</span><span class="pager__title">Wykład 3: Pasywne układy elektroniczne: dzielniki i filtry RC</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

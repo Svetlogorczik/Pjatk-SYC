@@ -1,0 +1,72 @@
+/* figure — picture with a caption (click to enlarge) */
+.figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.figure__link {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: #fff;
+  cursor: zoom-in;
+  line-height: 0;
+}
+
+.figure__img {
+  display: block;
+  max-height: 34rem;
+  width: auto;
+  border-radius: 4px;
+}
+
+.figure__caption {
+  margin-top: 0.5rem;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+  line-height: 1.45;
+}
+
+.figure__source {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.figure--small .figure__img {
+  max-height: 14rem;
+}
+
+.figure--medium .figure__img {
+  max-height: 22rem;
+}
+
+.figure--tile .figure__img {
+  max-height: 20rem;
+}
+
+.figure--photo .figure__link {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.figure--photo .figure__img {
+  border-radius: var(--radius-small);
+}
+
+[data-theme="dark"] .figure__img {
+  filter: brightness(0.92);
+}
+
+@media print {
+  .figure {
+    break-inside: avoid;
+  }
+
+  .figure__img {
+    max-height: 12cm;
+  }
+}

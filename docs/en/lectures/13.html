@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 13. Microcontroller peripherals and event handling — SYC</title>
+<meta name="description" content="How a microcontroller controls something bigger than itself (PWM, a transistor as a switch, the H-bridge), how it turns a voltage into a number and back — and two ways of reacting to events: polling and interrupts.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/13.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/13.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/13.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/13.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/13.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/13.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">The microcontroller in a control system</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Input/output pins</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">PWM — pulse-width modulation</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">The transistor as a switch</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">D/A and A/D converters</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Event handling: polling and interrupts</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">An external interrupt on Arduino</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/13.html" aria-current="page"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 13</p>
+<h1 class="article__title">Microcontroller peripherals and event handling</h1>
+<p class="article__lead">How a microcontroller controls something bigger than itself (PWM, a transistor as a switch, the H-bridge), how it turns a voltage into a number and back — and two ways of reacting to events: polling and interrupts.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">The microcontroller in a control system</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w13-p03.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p03.webp" alt="Sensors → microcontroller → actuators" width="1100" height="193" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Sensors → microcontroller → actuators <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">The program in the microcontroller implements the <strong>control algorithm</strong> — it is easy to change.</li>
+<li class="list__item">Signals from <strong>sensors</strong> must be matched to the microcontroller, and the microcontroller's digital signal must be turned into something that moves an <strong>actuator</strong> (a motor, a heater, a valve).</li>
+<li class="list__item">Adding a new sensor or actuator is usually harder than changing the program.</li>
+</ul>
+<h2 class="article__h2" id="s2">Input/output pins</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p04.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p04.webp" alt="Pin structure: output buffer, input buffer, pull-up resistor" width="1100" height="849" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pin structure: output buffer, input buffer, pull-up resistor <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Every pin has to be configured in the program:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">CPP</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">pinMode</span>(<span class="code__tok code__tok--number">13</span>, <span class="code__tok code__tok--keyword">OUTPUT</span>);  <span class="code__tok code__tok--comment">// pin 13 as an output</span>
+<span class="code__tok code__tok--builtin">pinMode</span>(<span class="code__tok code__tok--number">14</span>, <span class="code__tok code__tok--keyword">INPUT</span>);   <span class="code__tok code__tok--comment">// pin 14 as an input</span></code></pre>
+</figure>
+<ul class="list">
+<li class="list__item">A pin has <strong>one role at a time</strong> — either input or output.</li>
+<li class="list__item">An output has two states: low and high. An input can have the pull-up resistor enabled.</li>
+<li class="list__item">One pin can supply or sink <strong>40 mA</strong>.</li>
+<li class="list__item">A pin set as an output <strong>must not be connected directly</strong> to ground or to the supply.</li>
+</ul>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">40 mA is the absolute maximum; about 20 mA is a safe design value. That is enough for an LED (with a resistor!), but not for a motor, a relay or a speaker — those need a transistor as a switch (below).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">PWM — pulse-width modulation</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p07.webp" alt="A PWM signal: period T, pulse duration τ" width="748" height="728" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A PWM signal: period T, pulse duration τ <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A digital signal has only 0 V and 5 V. To "fake" values in between, we switch it on and off very quickly. The <strong>duty cycle</strong> is the ratio of the pulse duration to the period:</p>
+<div class="formula"><span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span></div>
+<ul class="list">
+<li class="list__item">The average voltage is proportional to the duty cycle: 50% of 5 V gives 2.5 V "on average".</li>
+<li class="list__item">Passed through a <strong>low-pass filter</strong> (integration), PWM becomes an analog signal.</li>
+<li class="list__item">Uses: controlling motor speed, LED brightness.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Switching a light on and off very fast. The eye cannot keep up and simply sees a dimmer bulb: the longer it is on in each cycle, the brighter it looks.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lab materials</p>
+<div class="callout__body">
+<p class="article__p">On the Arduino UNO the PWM signal has a frequency of about <strong>490 Hz</strong> (period 2.04 ms). The function <code class="inline-code">analogWrite(pin, value)</code> takes a value 0–255 (0 = always low, 255 = always high).</p>
+</div>
+</div>
+<p class="article__p">Other control-signal standards mentioned in the lecture: PCM, <strong>PPM</strong> (several channels on one wire), SBUS, IBUS, MSP.</p>
+<h3 class="article__h3">The hobby servo</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w13-p08.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p08.webp" alt="A hobby servo" width="583" height="640" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A hobby servo <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Three wires: <strong>ground</strong>, <strong>supply</strong> and <strong>control</strong>. It is driven by pulses repeated every <strong>20 ms (50 Hz)</strong>; the <strong>pulse width</strong> (in the 1–2 ms range) sets the angle:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Pulse width</th><th class="table__cell table__cell--head table__cell--center">Position</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">1.25 ms</td><td class="table__cell table__cell--center">0°</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1.5 ms</td><td class="table__cell table__cell--center">90° (neutral)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1.75 ms</td><td class="table__cell table__cell--center">180°</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s4">The transistor as a switch</h2>
+<p class="article__p">A microcontroller supplies little current, so larger loads are switched through a transistor working as a <strong>switch</strong>.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p10.webp" alt="Ideal switch: a short or an open circuit" width="1100" height="773" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ideal switch: a short or an open circuit <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p11.webp" alt="Real switch: small R_F when on, large R_R when off" width="1100" height="711" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Real switch: small R_F when on, large R_R when off <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item"><strong>Ideal switch:</strong> zero resistance when on, infinite when off.</li>
+<li class="list__item"><strong>Real switch:</strong> a small resistance <span class="math">R<sub class="math__sub">F</sub></span> (and a small voltage drop) when on, a large but finite <span class="math">R<sub class="math__sub">R</sub></span> when off.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p12.webp" alt="Bipolar transistor as a switch: R_B in the base, the load R_C in the collector" width="1100" height="824" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Bipolar transistor as a switch: R_B in the base, the load R_C in the collector <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A bipolar transistor is driven with a "strong" signal so that it moves between two extreme states:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">State</th><th class="table__cell table__cell--head">Drive</th><th class="table__cell table__cell--head">Collector–emitter</th><th class="table__cell table__cell--head">Load</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Cut-off</strong></td><td class="table__cell">no base current (<span class="math">U<sub class="math__sub">BE</sub></span> &lt; 0.6 V)</td><td class="table__cell">like an open circuit</td><td class="table__cell">off</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Saturation</strong></td><td class="table__cell">large base current</td><td class="table__cell">almost a short</td><td class="table__cell">on</td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p13.webp" alt="A transistor as a switch driven from a microcontroller" width="1100" height="952" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A transistor as a switch driven from a microcontroller <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A <strong>MOSFET</strong>, controlled by its gate voltage, does the same — it is the most common choice in digital circuits.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p14.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p14.webp" alt="A MOSFET as a switch" width="1100" height="816" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A MOSFET as a switch <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">Motors</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p15.webp" alt="H-bridge: four switches around a motor" width="1100" height="514" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">H-bridge: four switches around a motor <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">The <strong>speed</strong> of a DC motor is controlled by the <strong>PWM duty cycle</strong>.</li>
+<li class="list__item">The <strong>direction</strong> is chosen by an <strong>H-bridge</strong> — four switches: closing <strong>S1 and S4</strong> gives one direction, <strong>S2 and S3</strong> the opposite one.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p16.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p16.webp" alt="An H-bridge built from bipolar transistors" width="1100" height="806" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">An H-bridge built from bipolar transistors <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">Two switches on the same side of the bridge (e.g. S1 and S2) are never closed at the same time — that would short the supply to ground.</p>
+</div>
+</div>
+<p class="article__p"><strong>Brushless motors</strong> are miniature three-phase motors; they are driven by a separate controller (ESC) whose input takes the same signal as a servo.</p>
+<h2 class="article__h2" id="s5">D/A and A/D converters</h2>
+<h3 class="article__h3">Digital-to-analog (DAC)</h3>
+<p class="article__p">Turns a binary number into a voltage proportional to that number. It has <span class="math">n</span> inputs and one output.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p19.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p19.webp" alt="A D/A converter with weighted resistors and an op-amp as a summing amplifier" width="1100" height="808" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A D/A converter with weighted resistors and an op-amp as a summing amplifier <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p"><strong>With weighted resistors:</strong> each bit switches a current through its own resistor (<span class="math">R</span>, <span class="math">2R</span>, <span class="math">4R</span>…), and an op-amp <strong>sums</strong> the currents (<a class="link" href="../lectures/05.html">the summing amplifier from lecture 5</a>). The more significant the bit, the smaller the resistor and the larger the current.</p>
+<h3 class="article__h3">Analog-to-digital (ADC)</h3>
+<p class="article__p">Turns a voltage into a number. Methods: direct comparison, successive approximation, dual-slope integration, frequency. A/D converters are often built using a D/A converter.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p21.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p21.webp" alt="Direct comparison: a resistor ladder and comparators" width="936" height="758" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Direct comparison: a resistor ladder and comparators <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p22.webp" alt="Successive approximation" width="1100" height="424" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Successive approximation <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Method</th><th class="table__cell table__cell--head">How it works</th><th class="table__cell table__cell--head">Pro</th><th class="table__cell table__cell--head">Con</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Direct comparison</strong> (<em>flash</em>)</td><td class="table__cell">the voltage is compared by <span class="math">2<sup class="math__sup">n</sup> − 1</span> comparators at once</td><td class="table__cell">very fast (10–20 ns)</td><td class="table__cell">a huge number of comparators; only 6–8 bits</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Successive approximation</strong></td><td class="table__cell">compare first with half the range, then a quarter… — <span class="math">n</span> comparisons for <span class="math">n</span> bits</td><td class="table__cell">many bits are possible</td><td class="table__cell">slower</td></tr>
+</tbody></table></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Successive approximation is a "guess the number" game: "more than half? yes. More than three quarters? no…" — every question gives one bit of the result.</p>
+</div>
+</div>
+<h3 class="article__h3">In a microcontroller</h3>
+<ul class="list">
+<li class="list__item"><strong>The ADC is built in.</strong> Several pins can be analog inputs; they are switched (multiplexed) to a single converter. The voltage must not exceed the supply.</li>
+<li class="list__item"><strong>There is no true analog output.</strong> An analog voltage is obtained by <strong>integrating a PWM signal</strong> — with a low-pass filter or simply in the controlled object (a motor "averages" PWM by itself).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w13-p24.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p24.webp" alt="An integrated PWM signal gives a voltage proportional to the duty cycle" width="1100" height="217" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">An integrated PWM signal gives a voltage proportional to the duty cycle <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Converting an ADC reading to a voltage</p>
+<div class="callout__body">
+<p class="article__p">The ATmega328 converter is 10-bit: <code class="inline-code">analogRead()</code> returns a number <strong>0…1023</strong> for voltages 0…5 V.</p>
+<p class="article__p"><span class="math">U = <span class="math__frac"><span class="math__num">reading · 5 V</span><span class="math__den">1023</span></span></span> — e.g. a reading of 512 is about 2.50 V and a reading of 205 about 1.00 V. One converter "step" is about 4.9 mV.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Event handling: polling and interrupts</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"><strong>Polling</strong></th><th class="table__cell table__cell--head"><strong>Interrupt</strong></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Idea</td><td class="table__cell">the program itself periodically <strong>checks</strong> the device's state</td><td class="table__cell">the device <strong>signals</strong> the event; the processor suspends the program and runs a handler</td></tr>
+<tr class="table__row"><td class="table__cell">Pro</td><td class="table__cell">simple</td><td class="table__cell">no time wasted on checking; fast reaction</td></tr>
+<tr class="table__row"><td class="table__cell">Con</td><td class="table__cell">most of the time goes on checking; a short event can be missed</td><td class="table__cell">harder to program</td></tr>
+<tr class="table__row"><td class="table__cell">When</td><td class="table__cell">one simple task; a device that cannot signal an event itself</td><td class="table__cell">many tasks at once</td></tr>
+</tbody></table></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">You are waiting for a courier. <strong>Polling:</strong> every minute you walk to the door and check whether someone is there. <strong>Interrupt:</strong> you get on with your things, and when the bell rings you put the book down (remembering the page), open the door and go back to reading.</p>
+</div>
+</div>
+<h3 class="article__h3">Kinds of interrupts</h3>
+<ol class="list list--ordered">
+<li class="list__item"><p class="article__p"><strong>Hardware:</strong></p>
+<ul class="list">
+<li class="list__item"><strong>external</strong> — a signal from an external source (e.g. a button on the INT0 pin),</li>
+<li class="list__item"><strong>internal</strong> — from a timer,</li>
+<li class="list__item"><strong>exceptions</strong> — raised by the processor in exceptional situations (e.g. division by zero).</li>
+</ul></li>
+<li class="list__item"><strong>Software</strong> — called from program code (e.g. to talk to the operating system).</li>
+</ol>
+<p class="article__p"><strong>Maskable</strong> interrupts can be disabled and enabled by software; <strong>non-maskable</strong> ones cannot be disabled (e.g. reset).</p>
+<h3 class="article__h3">The interrupt vector</h3>
+<p class="article__p">An <strong>interrupt vector</strong> is the address where the handler starts. The addresses of all handlers are stored in the <strong>interrupt vector table</strong>. When an interrupt occurs, the current program counter PC is pushed on the <strong>stack</strong> and the vector is loaded into PC.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p29.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p29.webp" alt="The ATmega328 interrupt vector table" width="1100" height="747" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The ATmega328 interrupt vector table <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">What the handler does</h3>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>The course of interrupt handling</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Identify the cause of the interrupt.</li>
+<li class="steps__item">Clear the cause of the interrupt.</li>
+<li class="steps__item">Disable interrupts.</li>
+<li class="steps__item">Push the working registers on the stack.</li>
+<li class="steps__item"><strong>The actual handling of the interrupt.</strong></li>
+<li class="steps__item">Restore the registers from the stack.</li>
+<li class="steps__item">Enable interrupts.</li>
+<li class="steps__item">Return to the interrupted program.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">The rule: <strong>an interrupt handler must not change anything in the main program</strong> (apart from what it deliberately passes to it) — after returning, the program must carry on as if nothing had happened.</p>
+<h3 class="article__h3">Priorities and delays</h3>
+<p class="article__p">Interrupts from different sources arrive at arbitrary, independent moments — several may occur "at once".</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p36.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w13-p36.webp" alt="Interrupts raised during one instruction cycle look simultaneous to the processor" width="1100" height="575" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Interrupts raised during one instruction cycle look simultaneous to the processor <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Without priorities:</strong> interrupts wait in a queue; there are delays, and an interrupt may even be lost. The longest wait = the sum of the handling times of the other interrupts.</li>
+<li class="list__item"><strong>With priorities:</strong> a more important interrupt can interrupt the handling of a less important one; low-priority ones wait longer.</li>
+<li class="list__item">In <strong>AVR</strong> the interrupt system is <strong>flat</strong> — no hierarchy; all interrupts are equally important.</li>
+</ul>
+<p class="article__p">The choice of interrupt can be made by hardware (an interrupt controller) or by software (a common routine that decides the order itself).</p>
+<h2 class="article__h2" id="s7">An external interrupt on Arduino</h2>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">The lecture example: an interrupt on pin 2 toggles the LED</span><button class="code__copy" type="button" data-copy>Copy</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> ledPin = <span class="code__tok code__tok--number">13</span>;
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> interruptPin = <span class="code__tok code__tok--number">2</span>;
+<span class="code__tok code__tok--keyword">volatile</span> <span class="code__tok code__tok--keyword">byte</span> state = <span class="code__tok code__tok--keyword">LOW</span>;
+
+<span class="code__tok code__tok--keyword">void</span> <span class="code__tok code__tok--builtin">setup</span>() {
+  <span class="code__tok code__tok--builtin">pinMode</span>(ledPin, <span class="code__tok code__tok--keyword">OUTPUT</span>);
+  <span class="code__tok code__tok--builtin">pinMode</span>(interruptPin, <span class="code__tok code__tok--keyword">INPUT_PULLUP</span>);
+  <span class="code__tok code__tok--builtin">attachInterrupt</span>(<span class="code__tok code__tok--builtin">digitalPinToInterrupt</span>(interruptPin), blink, <span class="code__tok code__tok--keyword">CHANGE</span>);
+}
+
+<span class="code__tok code__tok--keyword">void</span> <span class="code__tok code__tok--builtin">loop</span>() {
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(ledPin, state);
+}
+
+<span class="code__tok code__tok--keyword">void</span> blink() {
+  state = !state;
+}</code></pre>
+</figure>
+<p class="article__p">What happens here:</p>
+<ul class="list">
+<li class="list__item"><code class="inline-code">attachInterrupt(number, function, mode)</code> — "when something changes on pin 2, call <code class="inline-code">blink</code>". Modes: <code class="inline-code">CHANGE</code> (any change), <code class="inline-code">RISING</code>, <code class="inline-code">FALLING</code>, <code class="inline-code">LOW</code>.</li>
+<li class="list__item"><code class="inline-code">digitalPinToInterrupt(2)</code> converts a pin number into an interrupt number (pin 2 = INT0, pin 3 = INT1).</li>
+<li class="list__item"><code class="inline-code">INPUT_PULLUP</code> enables the internal pull-up resistor — a released button gives a high level.</li>
+<li class="list__item"><code class="inline-code">volatile</code> tells the compiler that the variable may change "out of order" (in the interrupt).</li>
+<li class="list__item">The <code class="inline-code">loop()</code> does not check the button — it only outputs the current state.</li>
+</ul>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Good habits with interrupts</p>
+<div class="callout__body">
+<p class="article__p">A handler should be <strong>short</strong>: set a flag or increment a counter and leave. Do not use <code class="inline-code">delay()</code> or <code class="inline-code">Serial.print()</code> in it. Declare variables shared with the main program as <code class="inline-code">volatile</code>. Remember that a mechanical button "bounces" — one press can trigger several interrupts.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Show the scrolling text "hello world" on the LCD.</li>
+<li class="list__item">Show the voltage from pin A0 (in volts) on the top LCD line and the logic value read from that pin on the bottom line.</li>
+<li class="list__item">Display data arriving over the serial link on the LCD; send back the ASCII codes of the characters read, separated by spaces.</li>
+</ol>
+<p class="article__p">Step by step: <a class="link" href="../labs/14.html">Lab 14</a>. Interrupts and polling in practice: <a class="link" href="../labs/15.html">Lab 15</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Pins and PWM</h3>
+<ul class="list">
+<li class="list__item"><code class="inline-code">pinMode(pin, OUTPUT / INPUT / INPUT_PULLUP)</code>; max <strong>40 mA</strong> per pin; never short an output to ground or supply.</li>
+<li class="list__item"><strong>PWM:</strong> duty cycle <span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span>; average voltage = duty × 5 V. Arduino: <code class="inline-code">analogWrite(pin, 0…255)</code>, about 490 Hz.</li>
+<li class="list__item"><strong>Servo:</strong> a pulse every 20 ms (50 Hz); 1.5 ms = neutral position (90°).</li>
+<li class="list__item"><strong>ADC:</strong> 10 bits → 0…1023;   <span class="math">U = <span class="math__frac"><span class="math__num">reading · 5</span><span class="math__den">1023</span></span></span> <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span>.  "Analog" output = PWM + filter.</li>
+</ul>
+<h3 class="article__h3">The transistor as a switch</h3>
+<ul class="list">
+<li class="list__item"><strong>Cut-off</strong> (no base current) = off; <strong>saturation</strong> (large base current) = on.</li>
+<li class="list__item"><strong>H-bridge:</strong> S1+S4 → one direction, S2+S3 → the other; speed — PWM.</li>
+</ul>
+<h3 class="article__h3">Converters</h3>
+<ul class="list">
+<li class="list__item"><strong>DAC</strong> with weighted resistors: an op-amp as a current summer.</li>
+<li class="list__item"><strong>Flash ADC:</strong> <span class="math">2<sup class="math__sup">n</sup> − 1</span> comparators, very fast, few bits.</li>
+<li class="list__item"><strong>Successive-approximation ADC:</strong> <span class="math">n</span> comparisons for <span class="math">n</span> bits (first with half the range).</li>
+</ul>
+<h3 class="article__h3">Events</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Polling</th><th class="table__cell table__cell--head">Interrupt</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">the program checks in a loop</td><td class="table__cell">hardware signals, the program is suspended</td></tr>
+<tr class="table__row"><td class="table__cell">simple but wastes time</td><td class="table__cell">fast but harder</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Interrupts: hardware (external, timer, exceptions) and software; maskable / non-maskable (reset).</li>
+<li class="list__item">Interrupt vector = the handler's address; PC goes onto the <strong>stack</strong>.</li>
+<li class="list__item">Handling: identify → clear the cause → disable → push registers → <strong>handle</strong> → pop registers → enable → return.</li>
+<li class="list__item">AVR: no priorities (a flat system).</li>
+<li class="list__item">Arduino: <code class="inline-code">attachInterrupt(digitalPinToInterrupt(2), function, CHANGE | RISING | FALLING);</code> shared variables: <code class="inline-code">volatile</code>.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/12.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 12: Communication methods: ports, UART, SPI, I²C</span></a>
+<a class="pager__link pager__link--next" href="../lectures/14.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 14: Computer architecture: the MIPS processor from the inside</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

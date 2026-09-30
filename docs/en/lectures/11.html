@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 11. Computer systems, microprocessors and microcontrollers — SYC</title>
+<meta name="description" content="What a computer consists of, how a processor executes an instruction, and what a microcontroller is — using the ATmega328, the "heart" of the Arduino UNO board.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/11.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/11.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/11.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/11.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/11.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/11.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">A bit of history</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The Turing machine</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Von Neumann and Harvard architecture</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Inside the processor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">CISC and RISC</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">The microcontroller</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">ATmega328 — the microcontroller of the Arduino UNO</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/11.html" aria-current="page"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 11</p>
+<h1 class="article__title">Computer systems, microprocessors and microcontrollers</h1>
+<p class="article__lead">What a computer consists of, how a processor executes an instruction, and what a microcontroller is — using the ATmega328, the "heart" of the Arduino UNO board.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">A bit of history</h2>
+<p class="article__p">The lecture starts with a long list of dates. In short:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">When</th><th class="table__cell table__cell--head">What</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">c. 500 BC</td><td class="table__cell">the abacus — the first counting frame</td></tr>
+<tr class="table__row"><td class="table__cell">1617–1642</td><td class="table__cell">Napier's bones, the slide rule, the <em>Pascaline</em> — the first calculating machine</td></tr>
+<tr class="table__row"><td class="table__cell">1822–1842</td><td class="table__cell">Babbage's engine; Ada Lovelace — the first programmer</td></tr>
+<tr class="table__row"><td class="table__cell">1854</td><td class="table__cell">George Boole — the calculus of logic</td></tr>
+<tr class="table__row"><td class="table__cell">1937</td><td class="table__cell">Alan Turing — the theory of a universal machine</td></tr>
+<tr class="table__row"><td class="table__cell">1945</td><td class="table__cell">John von Neumann — the idea of a stored-program computer</td></tr>
+<tr class="table__row"><td class="table__cell">1943–1946</td><td class="table__cell">ENIAC — the first vacuum-tube computer</td></tr>
+<tr class="table__row"><td class="table__cell">1971</td><td class="table__cell"><strong>Intel 4004 — the first microprocessor</strong></td></tr>
+<tr class="table__row"><td class="table__cell">1981</td><td class="table__cell">IBM PC — the start of the personal-computer era</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s2">The Turing machine</h2>
+<p class="article__p">A theoretical model of "a machine that executes an algorithm": a tape with symbols, a read/write head and a table of rules.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p07.webp" alt="Turing machine: tape, head, state q and transition function δ" width="1060" height="450" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Turing machine: tape, head, state q and transition function δ <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Formally: <span class="math">{Q, Σ, δ, q<sub class="math__sub">0</sub>, F}</span> — the set of states <span class="math">Q</span>, the tape alphabet <span class="math">Σ</span>, the transition function <span class="math">δ</span> (for a given state and symbol read it says: the new state, what to write and whether to move the head right R, left L or stay N), the initial state <span class="math">q<sub class="math__sub">0</sub></span> and the set of final states <span class="math">F</span>.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">Note the similarity to <a class="link" href="../lectures/10.html">lecture 10</a>: a Turing machine is a state machine with a transition function, just with an extra, infinite tape as memory.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Von Neumann and Harvard architecture</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w11-p09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p09.webp" alt="Von Neumann computer: processor, memory, input/output" width="872" height="1060" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Von Neumann computer: processor, memory, input/output <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A <strong>von Neumann computer (1945)</strong> has three parts:</p>
+<ul class="list">
+<li class="list__item">a <strong>processor</strong> with an arithmetic logic unit (ALU),</li>
+<li class="list__item"><strong>memory</strong> — holding <strong>both data and the program</strong>,</li>
+<li class="list__item"><strong>input/output devices</strong>.</li>
+</ul>
+<p class="article__p">Features: a finite list of instructions; a program can be entered and stored in memory just like data; instructions are read from memory and executed <strong>one after another</strong>.</p>
+<p class="article__p"><strong>Harvard architecture:</strong> the program memory is <strong>separate</strong> from the data memory. It is simpler and faster; it is used in signal processors and widely in <strong>microcontrollers</strong> (program in ROM/Flash, data in RAM).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">The processor is a cook, the memory is a cupboard. With von Neumann the cookbook (program) and the ingredients (data) are in the same cupboard. In the Harvard architecture there are two separate cupboards — the cook can read the recipe with one hand and reach for ingredients with the other.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Inside the processor</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p10.webp" alt="Processor: ALU, control unit, registers and buses" width="1100" height="813" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Processor: ALU, control unit, registers and buses <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>ALU</strong> — a combinational circuit performing arithmetic (add, subtract) and logic (AND, OR) operations on data from the registers (<a class="link" href="../lectures/08.html">lecture 8</a>).</li>
+<li class="list__item"><strong>Control unit</strong> — decodes instructions and controls their execution.</li>
+<li class="list__item"><strong>Registers</strong> — small, very fast memory inside the processor:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Register</th><th class="table__cell table__cell--head">What for</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Accumulator</strong> (A, ACC)</td><td class="table__cell">works directly with the ALU</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Program counter PC</strong></td><td class="table__cell">the address of the <strong>next</strong> instruction to execute</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Instruction register</strong></td><td class="table__cell">the code of the instruction being executed</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Stack pointer SP</strong></td><td class="table__cell">points to the end (top) of the stack</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Flag register</strong></td><td class="table__cell">bits set after an operation: zero, carry/overflow, parity…</td></tr>
+<tr class="table__row"><td class="table__cell">General-purpose registers</td><td class="table__cell">working registers</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Buses</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p13.webp" alt="Three buses connect the processor with memory and ports" width="1100" height="871" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Three buses connect the processor with memory and ports <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>address bus</strong> — the processor puts the address of a memory cell or device on it,</li>
+<li class="list__item"><strong>data bus</strong> — carries data between the processor and memory or a device,</li>
+<li class="list__item"><strong>control bus</strong> — control signals (read/write etc.).</li>
+</ul>
+<h3 class="article__h3">The instruction cycle</h3>
+<p class="article__p">An instruction has the format: <strong>opcode + arguments</strong>. The processor keeps doing three things:</p>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Step by step</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Fetch</strong> — the instruction code is fetched from memory into the instruction register.</li>
+<li class="steps__item"><strong>Decode</strong> — the processor recognises which instruction from its list this is.</li>
+<li class="steps__item"><strong>Execute</strong> — read the arguments, perform the operation, store the result in a register or in memory.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s5">CISC and RISC</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"><strong>CISC</strong> (<em>Complex Instruction Set</em>)</th><th class="table__cell table__cell--head"><strong>RISC</strong> (<em>Reduced Instruction Set</em>)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Instructions</td><td class="table__cell">many, complex, specialised</td><td class="table__cell">few, simple</td></tr>
+<tr class="table__row"><td class="table__cell">Execution time</td><td class="table__cell">from a few to a dozen or so cycles, varying</td><td class="table__cell">usually one cycle</td></tr>
+<tr class="table__row"><td class="table__cell">Addressing modes</td><td class="table__cell">many (complicated decoder)</td><td class="table__cell">few</td></tr>
+<tr class="table__row"><td class="table__cell">Other</td><td class="table__cell">some instructions rarely used; much time spent moving memory ↔ registers</td><td class="table__cell">pipelining</td></tr>
+</tbody></table></div>
+<p class="article__p">Modern PC processors look like CISC from the outside, but inside they split instructions into micro-operations executed by a RISC core.</p>
+<h2 class="article__h2" id="s6">The microcontroller</h2>
+<p class="article__p">A <strong>microcontroller (µC)</strong> is a whole computer in a <strong>single integrated circuit</strong>: processor, RAM, program memory and input/output circuits. The name comes from its main use — controlling devices.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w11-p20.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p20.webp" alt="Microcontroller = microprocessor + ROM + RAM + input/output" width="1100" height="565" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Microcontroller = microprocessor + ROM + RAM + input/output <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A typical microcontroller contains:</p>
+<ul class="list">
+<li class="list__item">a processing unit (often 8-bit), data memory (RAM) and program memory,</li>
+<li class="list__item"><strong>general-purpose</strong> input/output <strong>ports</strong> (pins that can also serve other functions),</li>
+<li class="list__item">communication controllers: <strong>UART, SPI, I²C</strong>, USB, CAN,</li>
+<li class="list__item"><strong>analog-to-digital</strong> converters (ADC), sometimes digital-to-analog,</li>
+<li class="list__item"><strong>timers</strong>, a <strong>watchdog</strong> (checks that the program has not hung), sometimes sensors.</li>
+</ul>
+<p class="article__p">An <strong>embedded system</strong> is a special-purpose computer that is part of the device it controls (a washing machine, a car, a thermostat). It is usually based on a microcontroller.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lab materials</p>
+<div class="callout__body">
+<p class="article__p">A <strong>microprocessor</strong> — just the processing unit. A <strong>microcontroller</strong> = microprocessor + memory + controllers + ports. A <strong>development board</strong> (e.g. Arduino UNO R3) — a microcontroller with ready power supply, USB and pins brought out. A <strong>single-board computer</strong> (e.g. Raspberry Pi) — a full computer with an operating system. Arduino suits simple, repetitive tasks (sensor → reaction); Raspberry Pi suits complex ones (network, video).</p>
+</div>
+</div>
+<h3 class="article__h3">Clocking and programming</h3>
+<p class="article__p">A microcontroller's clock can come from: an external signal, its own oscillator with a <strong>quartz crystal</strong> (crystal + two capacitors), or a built-in RC oscillator.</p>
+<p class="article__p">Programs are written in high-level languages (e.g. C) or in assembly. They get into the program memory in three ways:</p>
+<ol class="list list--ordered">
+<li class="list__item">with a <strong>high-voltage programmer</strong> (12 V) — the oldest way,</li>
+<li class="list__item"><strong>ISP</strong> (<em>In-System Programming</em>) — without removing the chip from the device,</li>
+<li class="list__item">through a <strong>bootloader</strong> — a small program that, after reset, receives the new program over a serial link and writes it to memory itself. <strong>This is how Arduino works</strong> (over USB).</li>
+</ol>
+<p class="article__p">Popular families: Intel <strong>8051</strong>, Atmel <strong>AVR</strong> (used in the labs), Microchip <strong>PIC</strong>.</p>
+<h2 class="article__h2" id="s7">ATmega328 — the microcontroller of the Arduino UNO</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p27.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p27.webp" alt="Block diagram of the ATmega328" width="1100" height="859" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Block diagram of the ATmega328 <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Feature</th><th class="table__cell table__cell--head">Value</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Architecture</td><td class="table__cell"><strong>RISC</strong>, 131 instructions, 32 eight-bit registers</td></tr>
+<tr class="table__row"><td class="table__cell">Program memory (Flash)</td><td class="table__cell"><strong>32 kB</strong>, about 10,000 write cycles</td></tr>
+<tr class="table__row"><td class="table__cell">Data memory (SRAM)</td><td class="table__cell"><strong>2 kB</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Non-volatile memory (EEPROM)</td><td class="table__cell"><strong>1024 bytes</strong>, about 100,000 write cycles</td></tr>
+<tr class="table__row"><td class="table__cell">Timers</td><td class="table__cell">8-bit and 16-bit, with prescaler; PWM channels</td></tr>
+<tr class="table__row"><td class="table__cell">A/D converter</td><td class="table__cell"><strong>10-bit</strong>, 8 (multiplexed) channels</td></tr>
+<tr class="table__row"><td class="table__cell">Interfaces</td><td class="table__cell">USART, SPI, Two-Wire (I²C)</td></tr>
+<tr class="table__row"><td class="table__cell">Other</td><td class="table__cell">watchdog, analog comparator, external and internal interrupts</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">up to <strong>16 MHz</strong></td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p28.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p28.webp" alt="ATmega328 pinout" width="1032" height="623" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">ATmega328 pinout <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Pins: <strong>VCC</strong> (supply), <strong>GND</strong> (ground), <strong>Port B</strong>, <strong>Port C</strong> (also A/D inputs and reset), <strong>Port D</strong> — bidirectional ports with internal pull-up resistors; <strong>XTAL1/XTAL2</strong> — crystal; <strong>AREF</strong> — the converter's reference voltage.</p>
+<h3 class="article__h3">Memories</h3>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w11-p30.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p30.webp" alt="Program memory: application section and bootloader section" width="523" height="867" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Program memory: application section and bootloader section <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w11-p31.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p31.webp" alt="Data memory: registers, I/O registers and SRAM" width="438" height="738" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Data memory: registers, I/O registers and SRAM <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item"><strong>Flash (program):</strong> 32 kB organised as 16k sixteen-bit words; the program counter PC is 14 bits wide. Split into an <strong>application section</strong> and a <strong>bootloader section</strong>.</li>
+<li class="list__item"><strong>SRAM (data):</strong> the address space starts with the 32 general-purpose registers and the I/O registers, followed by 2048 memory cells. Addressing: direct and indirect (through registers X, Y, Z — also with displacement and with increment).</li>
+<li class="list__item"><strong>EEPROM:</strong> keeps data without power; accessed through registers EEAR (address), EEDR (data), EECR (control).</li>
+<li class="list__item"><strong>Peripherals</strong> are handled through <strong>I/O registers</strong> located in the same address space.</li>
+</ul>
+<h3 class="article__h3">Clock and reset</h3>
+<p class="article__p">Clock sources: internal oscillator (1, 2, 4 or 8 MHz — no extra parts), external crystal (up to 16 MHz), a 32.768 kHz watch crystal, an external RC circuit, an external clock signal.</p>
+<p class="article__p">Reset sources: <strong>Power-on</strong>, <strong>External</strong> (low level on the RESET pin), <strong>Watchdog</strong> (the program hung), <strong>Brown-out</strong> (the supply dropped below a threshold).</p>
+<h3 class="article__h3">Peripherals in a nutshell</h3>
+<ul class="list">
+<li class="list__item"><strong>External interrupts</strong> (INT0, INT1) — reaction to an edge or a level on a pin. Details: <a class="link" href="../lectures/13.html">lecture 13</a>.</li>
+<li class="list__item"><strong>Timers/counters</strong> — measuring time, counting events, generating frequencies and PWM; a counter overflow raises an interrupt.</li>
+<li class="list__item"><strong>SPI</strong> — fast, synchronous, full duplex; Master or Slave mode.</li>
+<li class="list__item"><strong>USART</strong> — the serial link (this is what <code class="inline-code">Serial</code> in Arduino uses); 5–9 data bits, 1–2 stop bits, a parity bit.</li>
+<li class="list__item"><strong>Two-Wire (I²C)</strong> — 7-bit address (128 addresses), up to 400 kHz, Master/Slave.</li>
+<li class="list__item"><strong>ADC</strong> — 10 bits (values 0…1023), range 0…VCC, conversion time 65–260 µs, an interrupt when the conversion is complete.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w11-p39.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w11-p39.webp" alt="SPI interface: two shift registers connected in a loop" width="1100" height="640" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">SPI interface: two shift registers connected in a loop <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">The interfaces are covered in more detail in <a class="link" href="../lectures/12.html">lecture 12</a>.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">A program that sends "Hello world" over the serial link after reset.</li>
+<li class="list__item">A calculator performing basic operations on two numbers in infix notation (each item is confirmed with Enter).</li>
+<li class="list__item">A calculator that reads the whole expression at once and parses it.</li>
+</ol>
+<p class="article__p">Step by step: <a class="link" href="../labs/12.html">Lab 12</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">The computer</h3>
+<ul class="list">
+<li class="list__item"><strong>Von Neumann:</strong> processor (with ALU) + memory (data <strong>and</strong> program together) + input/output; instructions executed one after another.</li>
+<li class="list__item"><strong>Harvard:</strong> separate program and data memory (microcontrollers: Flash + RAM).</li>
+<li class="list__item"><strong>Instruction cycle:</strong> fetch → decode → execute.</li>
+<li class="list__item"><strong>Registers:</strong> PC (address of the next instruction), instruction register, accumulator, SP (stack), flag register.</li>
+<li class="list__item"><strong>Buses:</strong> address, data, control.</li>
+<li class="list__item"><strong>CISC:</strong> many complex instructions, variable time. <strong>RISC:</strong> few simple instructions, one cycle, pipelining.</li>
+</ul>
+<h3 class="article__h3">The microcontroller</h3>
+<p class="article__p">µC = processor + RAM + program memory + I/O ports + peripherals (UART, SPI, I²C, ADC, timers, watchdog) in one chip.</p>
+<p class="article__p">Programming: high-voltage programmer / ISP / <strong>bootloader</strong> (Arduino).</p>
+<h3 class="article__h3">ATmega328 (Arduino UNO)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Core</td><td class="table__cell">8-bit RISC, 131 instructions, 32 registers</td></tr>
+<tr class="table__row"><td class="table__cell">Flash</td><td class="table__cell">32 kB (program; application + bootloader)</td></tr>
+<tr class="table__row"><td class="table__cell">SRAM</td><td class="table__cell">2 kB (data, lost at power-off)</td></tr>
+<tr class="table__row"><td class="table__cell">EEPROM</td><td class="table__cell">1 kB (persistent data)</td></tr>
+<tr class="table__row"><td class="table__cell">ADC</td><td class="table__cell">10 bits → 0…1023, 8 channels</td></tr>
+<tr class="table__row"><td class="table__cell">Clock</td><td class="table__cell">up to 16 MHz</td></tr>
+<tr class="table__row"><td class="table__cell">Interfaces</td><td class="table__cell">USART, SPI, I²C (TWI)</td></tr>
+<tr class="table__row"><td class="table__cell">Ports</td><td class="table__cell">B, C (analog), D</td></tr>
+<tr class="table__row"><td class="table__cell">Reset</td><td class="table__cell">power-on, external, watchdog, brown-out</td></tr>
+</tbody></table></div>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/10.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 10: Designing synchronous sequential circuits</span></a>
+<a class="pager__link pager__link--next" href="../lectures/12.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 12: Communication methods: ports, UART, SPI, I²C</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

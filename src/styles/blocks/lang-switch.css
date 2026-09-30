@@ -1,0 +1,30 @@
+/* lang-switch — PL / EN / RU links */
+.lang-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+
+.lang-switch__link {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lang-switch__link:hover {
+  color: var(--color-text);
+}
+
+.lang-switch__link--active {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.lang-switch__link--active:hover {
+  color: var(--color-accent-contrast);
+}

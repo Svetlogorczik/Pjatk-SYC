@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 13. Периферия микроконтроллеров и обработка событий — SYC</title>
+<meta name="description" content="Как микроконтроллер управляет чем-то большим, чем он сам (ШИМ, транзистор как ключ, H-мост), как превращает напряжение в число и обратно — и два способа реагировать на события: опрос и прерывания.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/13.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/13.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/13.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/13.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/13.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/13.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Микроконтроллер в системе управления</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Выводы ввода-вывода</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">ШИМ — широтно-импульсная модуляция (PWM)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Транзистор как ключ</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">ЦАП и АЦП</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Обработка событий: опрос и прерывания</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Внешнее прерывание в Arduino</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/13.html" aria-current="page"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 13</p>
+<h1 class="article__title">Периферия микроконтроллеров и обработка событий</h1>
+<p class="article__lead">Как микроконтроллер управляет чем-то большим, чем он сам (ШИМ, транзистор как ключ, H-мост), как превращает напряжение в число и обратно — и два способа реагировать на события: опрос и прерывания.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Микроконтроллер в системе управления</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w13-p03.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p03.webp" alt="Датчики → микроконтроллер → исполнительные устройства" width="1100" height="193" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Датчики → микроконтроллер → исполнительные устройства <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Программа в микроконтроллере реализует <strong>алгоритм управления</strong> — его легко изменить.</li>
+<li class="list__item">Сигналы с <strong>датчиков</strong> нужно согласовать с микроконтроллером, а цифровой сигнал микроконтроллера — превратить в то, что приведёт в действие <strong>исполнительное устройство</strong> (мотор, нагреватель, клапан).</li>
+<li class="list__item">Добавить новый датчик или исполнительное устройство обычно труднее, чем изменить программу.</li>
+</ul>
+<h2 class="article__h2" id="s2">Выводы ввода-вывода</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p04.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p04.webp" alt="Устройство вывода: выходной буфер, входной буфер, подтягивающий резистор" width="1100" height="849" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Устройство вывода: выходной буфер, входной буфер, подтягивающий резистор <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Каждый вывод нужно настроить в программе:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">CPP</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--builtin">pinMode</span>(<span class="code__tok code__tok--number">13</span>, <span class="code__tok code__tok--keyword">OUTPUT</span>);  <span class="code__tok code__tok--comment">// вывод 13 как выход</span>
+<span class="code__tok code__tok--builtin">pinMode</span>(<span class="code__tok code__tok--number">14</span>, <span class="code__tok code__tok--keyword">INPUT</span>);   <span class="code__tok code__tok--comment">// вывод 14 как вход</span></code></pre>
+</figure>
+<ul class="list">
+<li class="list__item">Вывод выполняет <strong>одну роль одновременно</strong> — либо вход, либо выход.</li>
+<li class="list__item">У выхода два состояния: низкое и высокое. У входа можно включить подтягивающий резистор (PULL-UP).</li>
+<li class="list__item">Нагрузочная способность одного вывода — <strong>40 мА</strong> (в обе стороны).</li>
+<li class="list__item">Вывод, настроенный как выход, <strong>нельзя соединять напрямую</strong> с массой или с питанием.</li>
+</ul>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">40 мА — это предельное значение; безопасно рассчитывать примерно на 20 мА. Этого хватает для светодиода (с резистором!), но не для мотора, реле или динамика — для них нужен транзистор в роли ключа (ниже).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">ШИМ — широтно-импульсная модуляция (PWM)</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p07.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p07.webp" alt="Сигнал ШИМ: период T, длительность импульса τ" width="748" height="728" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Сигнал ШИМ: период T, длительность импульса τ <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">У цифрового сигнала только 0 В и 5 В. Чтобы «изобразить» промежуточные значения, его очень быстро включают и выключают. <strong>Коэффициент заполнения</strong> (<em>współczynnik wypełnienia</em>) — это отношение длительности импульса к периоду:</p>
+<div class="formula"><span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span></div>
+<ul class="list">
+<li class="list__item">Среднее напряжение пропорционально заполнению: 50% от 5 В дают «в среднем» 2,5 В.</li>
+<li class="list__item">После <strong>фильтра нижних частот</strong> (интегрирования) из ШИМ получается аналоговый сигнал.</li>
+<li class="list__item">Применения: регулировка скорости моторов, яркости светодиодов.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Очень быстрое включение и выключение света. Глаз не успевает и видит просто более тусклую лампочку: чем дольше в каждом цикле она включена, тем ярче светит.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из материалов к занятиям</p>
+<div class="callout__body">
+<p class="article__p">В Arduino UNO сигнал ШИМ имеет частоту около <strong>490 Гц</strong> (период 2,04 мс). Функция <code class="inline-code">analogWrite(pin, значение)</code> принимает значение 0–255 (0 = всегда низкий уровень, 255 = всегда высокий).</p>
+</div>
+</div>
+<p class="article__p">Другие стандарты управляющих сигналов, названные на лекции: PCM, <strong>PPM</strong> (несколько каналов по одному проводу), SBUS, IBUS, MSP.</p>
+<h3 class="article__h3">Модельная сервомашинка</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w13-p08.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p08.webp" alt="Модельная сервомашинка" width="583" height="640" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Модельная сервомашинка <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Три провода: <strong>масса</strong>, <strong>питание</strong> и <strong>управление</strong>. Управляется импульсами, повторяющимися каждые <strong>20 мс (50 Гц)</strong>; угол поворота задаёт <strong>ширина импульса</strong> (в диапазоне 1–2 мс):</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Ширина импульса</th><th class="table__cell table__cell--head table__cell--center">Положение</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">1,25 мс</td><td class="table__cell table__cell--center">0°</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1,5 мс</td><td class="table__cell table__cell--center">90° (нейтральное)</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1,75 мс</td><td class="table__cell table__cell--center">180°</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s4">Транзистор как ключ</h2>
+<p class="article__p">Микроконтроллер даёт маленький ток, поэтому более мощные нагрузки включают через транзистор, работающий как <strong>переключатель</strong>.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p10.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p10.webp" alt="Идеальный ключ: замыкание или разрыв" width="1100" height="773" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Идеальный ключ: замыкание или разрыв <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p11.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p11.webp" alt="Реальный ключ: малое R_F во включённом состоянии, большое R_R в выключенном" width="1100" height="711" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Реальный ключ: малое R_F во включённом состоянии, большое R_R в выключенном <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+</div>
+<ul class="list">
+<li class="list__item"><strong>Идеальный ключ:</strong> включён — нулевое сопротивление, выключен — бесконечное.</li>
+<li class="list__item"><strong>Реальный ключ:</strong> включён — малое сопротивление <span class="math">R<sub class="math__sub">F</sub></span> (и небольшое падение напряжения), выключен — большое, но конечное <span class="math">R<sub class="math__sub">R</sub></span>.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p12.webp" alt="Биполярный транзистор как ключ: R_B в базе, нагрузка R_C в коллекторе" width="1100" height="824" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Биполярный транзистор как ключ: R_B в базе, нагрузка R_C в коллекторе <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Биполярным транзистором управляют «сильным» сигналом так, чтобы он переходил между двумя крайними состояниями:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Состояние</th><th class="table__cell table__cell--head">Управление</th><th class="table__cell table__cell--head">Коллектор–эмиттер</th><th class="table__cell table__cell--head">Нагрузка</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Отсечка</strong> (<em>zatkanie</em>)</td><td class="table__cell">нет тока базы (<span class="math">U<sub class="math__sub">BE</sub></span> &lt; 0,6 В)</td><td class="table__cell">как разрыв</td><td class="table__cell">выключена</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Насыщение</strong> (<em>nasycenie</em>)</td><td class="table__cell">большой ток базы</td><td class="table__cell">почти замыкание</td><td class="table__cell">включена</td></tr>
+</tbody></table></div>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p13.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p13.webp" alt="Транзистор как переключатель, управляемый микроконтроллером" width="1100" height="952" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Транзистор как переключатель, управляемый микроконтроллером <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">То же делает транзистор <strong>MOSFET</strong>, управляемый напряжением затвора, — в цифровых схемах он встречается чаще всего.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p14.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p14.webp" alt="Транзистор MOSFET как ключ" width="1100" height="816" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Транзистор MOSFET как ключ <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Моторы</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p15.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p15.webp" alt="H-мост: четыре переключателя вокруг мотора" width="1100" height="514" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">H-мост: четыре переключателя вокруг мотора <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Скорость</strong> мотора постоянного тока регулируют <strong>заполнением ШИМ</strong>.</li>
+<li class="list__item"><strong>Направление</strong> вращения выбирает <strong>H-мост</strong> — четыре переключателя: замкнуты <strong>S1 и S4</strong> — одно направление, <strong>S2 и S3</strong> — противоположное.</li>
+</ul>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p16.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p16.webp" alt="H-мост на биполярных транзисторах" width="1100" height="806" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">H-мост на биполярных транзисторах <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">Никогда не замыкают одновременно два переключателя с одной стороны моста (например, S1 и S2) — это короткое замыкание питания на массу.</p>
+</div>
+</div>
+<p class="article__p"><strong>Бесколлекторные моторы</strong> — это миниатюрные трёхфазные моторы; ими управляет отдельный регулятор (ESC), который на входе принимает такой же сигнал, как сервомашинка.</p>
+<h2 class="article__h2" id="s5">ЦАП и АЦП</h2>
+<h3 class="article__h3">Цифро-аналоговый преобразователь (ЦАП, DAC)</h3>
+<p class="article__p">Превращает двоичное число в напряжение, пропорциональное этому числу. У него <span class="math">n</span> входов и один выход.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p19.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p19.webp" alt="ЦАП с взвешенными резисторами и усилителем в роли сумматора" width="1100" height="808" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">ЦАП с взвешенными резисторами и усилителем в роли сумматора <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p"><strong>С взвешенными резисторами:</strong> каждый бит включает ток через свой резистор (<span class="math">R</span>, <span class="math">2R</span>, <span class="math">4R</span>…), а операционный усилитель <strong>суммирует</strong> эти токи (<a class="link" href="../lectures/05.html">сумматор из лекции 5</a>). Чем старше бит, тем меньше резистор и больше ток.</p>
+<h3 class="article__h3">Аналого-цифровой преобразователь (АЦП, ADC)</h3>
+<p class="article__p">Превращает напряжение в число. Методы: прямого сравнения, поразрядного уравновешивания, двойного интегрирования, частотный. Для построения АЦП часто используют ЦАП.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p21.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p21.webp" alt="Метод прямого сравнения: резистивная лесенка и компараторы" width="936" height="758" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Метод прямого сравнения: резистивная лесенка и компараторы <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w13-p22.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p22.webp" alt="Метод поразрядного уравновешивания: последовательные приближения" width="1100" height="424" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Метод поразрядного уравновешивания: последовательные приближения <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+</div>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Метод</th><th class="table__cell table__cell--head">Как работает</th><th class="table__cell table__cell--head">Плюс</th><th class="table__cell table__cell--head">Минус</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Прямого сравнения</strong> (<em>flash</em>)</td><td class="table__cell">напряжение одновременно сравнивают <span class="math">2<sup class="math__sup">n</sup> − 1</span> компараторов</td><td class="table__cell">очень быстрый (10–20 нс)</td><td class="table__cell">огромное число компараторов; только 6–8 бит</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Поразрядного уравновешивания</strong> (последовательных приближений)</td><td class="table__cell">сравнение сначала с половиной диапазона, потом с четвертью… — <span class="math">n</span> сравнений для <span class="math">n</span> бит</td><td class="table__cell">можно получить много бит</td><td class="table__cell">медленнее</td></tr>
+</tbody></table></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Последовательные приближения — это игра «угадай число»: «больше половины? да. Больше трёх четвертей? нет…» — каждый вопрос даёт один бит результата.</p>
+</div>
+</div>
+<h3 class="article__h3">В микроконтроллере</h3>
+<ul class="list">
+<li class="list__item"><strong>АЦП встроен.</strong> Несколько выводов могут быть аналоговыми входами; они переключаются (мультиплексируются) на один преобразователь. Напряжение не должно превышать питание.</li>
+<li class="list__item"><strong>Настоящего аналогового выхода нет.</strong> Аналоговое напряжение получают <strong>интегрированием сигнала ШИМ</strong> — фильтром нижних частот или просто в управляемом объекте (мотор сам «усредняет» ШИМ).</li>
+</ul>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w13-p24.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p24.webp" alt="Проинтегрированный сигнал ШИМ даёт напряжение, пропорциональное заполнению" width="1100" height="217" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Проинтегрированный сигнал ШИМ даёт напряжение, пропорциональное заполнению <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Пересчёт показаний АЦП в напряжение</p>
+<div class="callout__body">
+<p class="article__p">АЦП у ATmega328 — 10-битный: <code class="inline-code">analogRead()</code> возвращает число <strong>0…1023</strong> для напряжений 0…5 В.</p>
+<p class="article__p"><span class="math">U = <span class="math__frac"><span class="math__num">показание · 5 В</span><span class="math__den">1023</span></span></span> — например, показание 512 — это около 2,50 В, а 205 — около 1,00 В. Один «шаг» преобразователя — около 4,9 мВ.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Обработка событий: опрос и прерывания</h2>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head"><strong>Опрос</strong> (<em>polling</em>, <em>odpytywanie</em>)</th><th class="table__cell table__cell--head"><strong>Прерывание</strong> (<em>interrupt</em>, <em>przerwanie</em>)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Идея</td><td class="table__cell">программа сама периодически <strong>проверяет</strong> состояние устройства</td><td class="table__cell">устройство само <strong>сообщает</strong> о событии; процессор прерывает программу и выполняет обработчик</td></tr>
+<tr class="table__row"><td class="table__cell">Плюс</td><td class="table__cell">просто</td><td class="table__cell">процессор не тратит время на проверки; быстрая реакция</td></tr>
+<tr class="table__row"><td class="table__cell">Минус</td><td class="table__cell">большая часть времени уходит на проверки; можно пропустить короткое событие</td><td class="table__cell">сложнее программировать</td></tr>
+<tr class="table__row"><td class="table__cell">Когда</td><td class="table__cell">одна простая задача; устройство, которое само не умеет сообщать о событии</td><td class="table__cell">много задач одновременно</td></tr>
+</tbody></table></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Ты ждёшь курьера. <strong>Опрос:</strong> каждую минуту подходишь к двери и смотришь, не стоит ли кто. <strong>Прерывание:</strong> занимаешься своими делами, а когда звонит звонок — откладываешь книгу (запомнив страницу), открываешь дверь и возвращаешься к чтению.</p>
+</div>
+</div>
+<h3 class="article__h3">Виды прерываний</h3>
+<ol class="list list--ordered">
+<li class="list__item"><p class="article__p"><strong>Аппаратные:</strong></p>
+<ul class="list">
+<li class="list__item"><strong>внешние</strong> — сигнал от внешнего источника (например, кнопка на выводе INT0),</li>
+<li class="list__item"><strong>внутренние</strong> — от таймера,</li>
+<li class="list__item"><strong>исключения</strong> — генерируются процессором в исключительных ситуациях (например, деление на ноль).</li>
+</ul></li>
+<li class="list__item"><strong>Программные</strong> — вызываются из кода программы (например, для обращения к операционной системе).</li>
+</ol>
+<p class="article__p"><strong>Маскируемые</strong> прерывания можно программно запретить и разрешить; <strong>немаскируемые</strong> запретить нельзя (например, сброс).</p>
+<h3 class="article__h3">Вектор прерывания</h3>
+<p class="article__p"><strong>Вектор прерывания</strong> — это адрес начала обработчика. Адреса всех обработчиков записаны в <strong>таблице векторов прерываний</strong>. Когда возникает прерывание, текущее содержимое счётчика команд PC кладётся в <strong>стек</strong>, а в PC загружается вектор прерывания.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p29.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p29.webp" alt="Таблица векторов прерываний ATmega328" width="1100" height="747" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Таблица векторов прерываний ATmega328 <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<h3 class="article__h3">Что делает обработчик</h3>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Ход обработки прерывания</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item">Определение причины прерывания.</li>
+<li class="steps__item">Сброс причины прерывания.</li>
+<li class="steps__item">Запрет прерываний.</li>
+<li class="steps__item">Сохранение рабочих регистров в стеке.</li>
+<li class="steps__item"><strong>Собственно обработка прерывания.</strong></li>
+<li class="steps__item">Восстановление регистров из стека.</li>
+<li class="steps__item">Разрешение прерываний.</li>
+<li class="steps__item">Возврат в прерванную программу.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">Правило: <strong>обработчик прерывания не должен ничего менять в основной программе</strong> (кроме того, что он намеренно ей передаёт) — после возврата программа должна работать так, будто ничего не случилось.</p>
+<h3 class="article__h3">Приоритеты и задержки</h3>
+<p class="article__p">Прерывания от разных источников приходят в произвольные, независимые моменты — несколько могут возникнуть «одновременно».</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w13-p36.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w13-p36.webp" alt="Прерывания, пришедшие в течение одного командного цикла, процессор видит как одновременные" width="1100" height="575" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Прерывания, пришедшие в течение одного командного цикла, процессор видит как одновременные <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Без приоритетов:</strong> прерывания ждут в очереди; появляются задержки, а прерывание можно даже потерять. Самое долгое ожидание = сумма времён обработки остальных прерываний.</li>
+<li class="list__item"><strong>С приоритетами:</strong> более важное прерывание может прервать обработку менее важного; низкоприоритетные ждут дольше.</li>
+<li class="list__item">В <strong>AVR</strong> система прерываний <strong>плоская</strong> — без иерархии; все прерывания одинаково важны.</li>
+</ul>
+<p class="article__p">Выбор прерывания может делать аппаратура (контроллер прерываний) или программа (общая процедура, которая сама определяет порядок).</p>
+<h2 class="article__h2" id="s7">Внешнее прерывание в Arduino</h2>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Пример из лекции: прерывание на выводе 2 переключает светодиод</span><button class="code__copy" type="button" data-copy>Копировать</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--cpp"><span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> ledPin = <span class="code__tok code__tok--number">13</span>;
+<span class="code__tok code__tok--keyword">const</span> <span class="code__tok code__tok--keyword">byte</span> interruptPin = <span class="code__tok code__tok--number">2</span>;
+<span class="code__tok code__tok--keyword">volatile</span> <span class="code__tok code__tok--keyword">byte</span> state = <span class="code__tok code__tok--keyword">LOW</span>;
+
+<span class="code__tok code__tok--keyword">void</span> <span class="code__tok code__tok--builtin">setup</span>() {
+  <span class="code__tok code__tok--builtin">pinMode</span>(ledPin, <span class="code__tok code__tok--keyword">OUTPUT</span>);
+  <span class="code__tok code__tok--builtin">pinMode</span>(interruptPin, <span class="code__tok code__tok--keyword">INPUT_PULLUP</span>);
+  <span class="code__tok code__tok--builtin">attachInterrupt</span>(<span class="code__tok code__tok--builtin">digitalPinToInterrupt</span>(interruptPin), blink, <span class="code__tok code__tok--keyword">CHANGE</span>);
+}
+
+<span class="code__tok code__tok--keyword">void</span> <span class="code__tok code__tok--builtin">loop</span>() {
+  <span class="code__tok code__tok--builtin">digitalWrite</span>(ledPin, state);
+}
+
+<span class="code__tok code__tok--keyword">void</span> blink() {
+  state = !state;
+}</code></pre>
+</figure>
+<p class="article__p">Что здесь происходит:</p>
+<ul class="list">
+<li class="list__item"><code class="inline-code">attachInterrupt(номер, функция, режим)</code> — «когда на выводе 2 что-то изменится, вызови <code class="inline-code">blink</code>». Режимы: <code class="inline-code">CHANGE</code> (любое изменение), <code class="inline-code">RISING</code> (нарастающий фронт), <code class="inline-code">FALLING</code> (спадающий), <code class="inline-code">LOW</code>.</li>
+<li class="list__item"><code class="inline-code">digitalPinToInterrupt(2)</code> переводит номер вывода в номер прерывания (вывод 2 = INT0, вывод 3 = INT1).</li>
+<li class="list__item"><code class="inline-code">INPUT_PULLUP</code> включает внутренний подтягивающий резистор — ненажатая кнопка даёт высокий уровень.</li>
+<li class="list__item"><code class="inline-code">volatile</code> сообщает компилятору, что переменная может измениться «вне очереди» (в прерывании).</li>
+<li class="list__item">Цикл <code class="inline-code">loop()</code> не проверяет кнопку — он только выводит текущее состояние.</li>
+</ul>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Хорошие привычки при работе с прерываниями</p>
+<div class="callout__body">
+<p class="article__p">Обработчик должен быть <strong>коротким</strong>: установи флаг или увеличь счётчик и выйди. Не используй в нём <code class="inline-code">delay()</code> и <code class="inline-code">Serial.print()</code>. Переменные, общие с основной программой, объявляй как <code class="inline-code">volatile</code>. Помни, что механическая кнопка «дребезжит» — одно нажатие может вызвать несколько прерываний.</p>
+</div>
+</div>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Задания на лабораторную (со слайда)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Вывести на LCD-дисплей бегущую надпись «hello world».</li>
+<li class="list__item">На верхней строке LCD показать напряжение с вывода A0 (в вольтах), а на нижней — считанное логическое значение этого вывода.</li>
+<li class="list__item">Выводить на LCD данные, приходящие по последовательному каналу; отправить обратно ASCII-коды прочитанных символов через пробел.</li>
+</ol>
+<p class="article__p">По шагам: <a class="link" href="../labs/14.html">Лабораторная 14</a>. Прерывания и опрос на практике: <a class="link" href="../labs/15.html">Лабораторная 15</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Выводы и ШИМ</h3>
+<ul class="list">
+<li class="list__item"><code class="inline-code">pinMode(pin, OUTPUT / INPUT / INPUT_PULLUP)</code>; максимум <strong>40 мА</strong> на вывод; выход нельзя замыкать на массу или питание.</li>
+<li class="list__item"><strong>ШИМ:</strong> заполнение <span class="math">ω = <span class="math__frac"><span class="math__num">τ</span><span class="math__den">T</span></span></span>; среднее напряжение = заполнение × 5 В. Arduino: <code class="inline-code">analogWrite(pin, 0…255)</code>, около 490 Гц.</li>
+<li class="list__item"><strong>Серво:</strong> импульс каждые 20 мс (50 Гц); 1,5 мс = нейтральное положение (90°).</li>
+<li class="list__item"><strong>АЦП:</strong> 10 бит → 0…1023;   <span class="math">U = <span class="math__frac"><span class="math__num">показание · 5</span><span class="math__den">1023</span></span></span> <span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span>.  «Аналоговый» выход = ШИМ + фильтр.</li>
+</ul>
+<h3 class="article__h3">Транзистор как ключ</h3>
+<ul class="list">
+<li class="list__item"><strong>Отсечка</strong> (нет тока базы) = выключен; <strong>насыщение</strong> (большой ток базы) = включён.</li>
+<li class="list__item"><strong>H-мост:</strong> S1+S4 → одно направление, S2+S3 → противоположное; скорость — ШИМ.</li>
+</ul>
+<h3 class="article__h3">Преобразователи</h3>
+<ul class="list">
+<li class="list__item"><strong>ЦАП</strong> с взвешенными резисторами: операционный усилитель как сумматор токов.</li>
+<li class="list__item"><strong>АЦП flash:</strong> <span class="math">2<sup class="math__sup">n</sup> − 1</span> компараторов, очень быстрый, мало бит.</li>
+<li class="list__item"><strong>АЦП последовательных приближений:</strong> <span class="math">n</span> сравнений для <span class="math">n</span> бит (сначала с половиной диапазона).</li>
+</ul>
+<h3 class="article__h3">События</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Опрос</th><th class="table__cell table__cell--head">Прерывание</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">программа сама проверяет в цикле</td><td class="table__cell">аппаратура сообщает, программа прерывается</td></tr>
+<tr class="table__row"><td class="table__cell">просто, но тратит время</td><td class="table__cell">быстро, но сложнее</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">Прерывания: аппаратные (внешние, от таймера, исключения) и программные; маскируемые / немаскируемые (сброс).</li>
+<li class="list__item">Вектор прерывания = адрес обработчика; PC кладётся в <strong>стек</strong>.</li>
+<li class="list__item">Обработка: определи → сбрось причину → запрети → регистры в стек → <strong>обработай</strong> → регистры из стека → разреши → вернись.</li>
+<li class="list__item">AVR: приоритетов нет (плоская система).</li>
+<li class="list__item">Arduino: <code class="inline-code">attachInterrupt(digitalPinToInterrupt(2), функция, CHANGE | RISING | FALLING);</code> общие переменные: <code class="inline-code">volatile</code>.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<a class="pager__link pager__link--prev" href="../lectures/12.html"><span class="pager__dir">← Назад</span><span class="pager__title">Лекция 12: Способы связи: порты, UART, SPI, I²C</span></a>
+<a class="pager__link pager__link--next" href="../lectures/14.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 14: Архитектура компьютеров: процессор MIPS изнутри</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

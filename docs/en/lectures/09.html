@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 9. Sequential circuits: flip-flops, registers, counters — SYC</title>
+<meta name="description" content="A circuit that remembers. Where memory comes from, how RS, D, JK and T flip-flops differ, what the clock is for, and how a few flip-flops make a shift register or a counter.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/09.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/09.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/09.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/09.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/09.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/09.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">A circuit that remembers</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">The RS flip-flop</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">The clock</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">D, JK and T flip-flops</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Registers</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Counters</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/09.html" aria-current="page"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 9</p>
+<h1 class="article__title">Sequential circuits: flip-flops, registers, counters</h1>
+<p class="article__lead">A circuit that remembers. Where memory comes from, how RS, D, JK and T flip-flops differ, what the clock is for, and how a few flip-flops make a shift register or a counter.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">A circuit that remembers</h2>
+<p class="article__p">In a <strong>combinational circuit</strong> the output depends only on the current inputs: <span class="math">y = f(u)</span>. The same inputs — always the same result.</p>
+<p class="article__p">But if we route the output of a circuit back to its input (<strong>feedback</strong>), the output starts to depend also on <strong>what happened before</strong>. The circuit has <strong>memory</strong>.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p04.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p04.webp" alt="Two NAND gates connected crosswise: what is the value of Q?" width="1100" height="670" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Two NAND gates connected crosswise: what is the value of Q? <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w09-p06.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p06.webp" alt="A combinational circuit y = f(u) and a sequential one y = f(x, u)" width="1100" height="605" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A combinational circuit y = f(u) and a sequential one y = f(x, u) <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<p class="article__p">The answer to the question in the figure ("R = 1, S = 1 — what is Q?") is: <strong>we cannot tell</strong> — it depends on what happened earlier. That is the memory effect.</p>
+<p class="article__p">A <strong>sequential circuit</strong> has an <strong>internal state</strong> <span class="math">x</span>:</p>
+<div class="formula"><span class="math">x(k+1) = δ(x(k), u(k))  — state equation (excitation function)</span></div>
+<div class="formula"><span class="math">y(k) = λ(x(k), u(k))  — output equation (output function)</span></div>
+<ul class="list">
+<li class="list__item">The new state depends on the <strong>old state</strong> and on the <strong>inputs</strong>.</li>
+<li class="list__item">The state may not be visible at the output — that is why it is "internal".</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A combinational circuit is a calculator: type 2 + 2, get 4, always. A sequential circuit is a click pen: the same click once pushes the tip out and once pulls it in — because the pen "remembers" which state it is in.</p>
+</div>
+</div>
+<h3 class="article__h3">Moore and Mealy machines</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w09-p08.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p08.webp" alt="Block δ implements the memory, block λ the output function" width="776" height="1005" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Block δ implements the memory, block λ the output function <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Block <strong>δ</strong> (with memory) determines the next state.</li>
+<li class="list__item">Block <strong>λ</strong> is an ordinary combinational circuit computing the output.</li>
+<li class="list__item"><strong>Moore machine:</strong> the output depends <strong>only on the state</strong>.</li>
+<li class="list__item"><strong>Mealy machine:</strong> the output depends on the <strong>state and the inputs</strong>.</li>
+</ul>
+<h2 class="article__h2" id="s2">The RS flip-flop</h2>
+<p class="article__p">Flip-flops are the basic elements from which sequential circuits are built. Each remembers <strong>one bit</strong>. The simplest is the RS flip-flop made of two NAND gates:</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p09.webp" alt="RS flip-flop on NAND gates and its table" width="1100" height="496" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">RS flip-flop on NAND gates and its table <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head">What happens</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">—</td><td class="table__cell"><strong>forbidden combination</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell">set</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell">reset</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">hold — no change</td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub> · R<sub class="math__sub">t</sub> + <span class="math__bar">S<sub class="math__sub">t</sub></span></span></div>
+<p class="article__p">This version is <strong>active low</strong>: "pressing" means applying a zero. S = 0 sets Q to 1, R = 0 resets Q, and when both inputs are ones the flip-flop remembers.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">An RS flip-flop built from <strong>NOR</strong> gates works the other way round — it is active <strong>high</strong> (S = 1 sets, R = 1 resets, 00 holds, 11 forbidden). Both variants are in the template for <a class="link" href="../labs/10.html">lab 10</a>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">The clock</h2>
+<p class="article__p">In sequential circuits the <strong>order</strong> of changes matters. To make everything change at the same, strictly defined moments, a <strong>clock</strong> input (C, CLK) is added.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w09-p10.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p10.webp" alt="Level triggering and edge triggering" width="923" height="681" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Level triggering and edge triggering <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Level triggering:</strong> the circuit reacts as long as the clock is 1 (or 0).</li>
+<li class="list__item"><strong>Edge triggering:</strong> the circuit reacts only at the moment the clock <strong>changes</strong>, usually from 0 to 1 (the rising edge). On a symbol this is marked by a small triangle at the clock input.</li>
+</ul>
+<h3 class="article__h3">Latch (RS flip-flop with a clock)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p11.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p11.webp" alt="RS flip-flop with a clock input C" width="1100" height="396" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">RS flip-flop with a clock input C <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">S</th><th class="table__cell table__cell--head table__cell--center">R</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span> (when C = 1)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span> — no change</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">forbidden</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">When <strong>C = 0</strong>, changes on S and R have no effect at all.</li>
+<li class="list__item">When <strong>C = 1</strong>, the output changes according to the table.</li>
+<li class="list__item">The transition of C from 1 to 0 "latches" the state — hence the name <strong>latch</strong>.</li>
+</ul>
+<h2 class="article__h2" id="s4">D, JK and T flip-flops</h2>
+<h3 class="article__h3">D type</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p12.webp" alt="D flip-flop: symbol, table and state graph" width="1100" height="582" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">D flip-flop: symbol, table and state graph <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = D<sub class="math__sub">t</sub></span></div>
+<p class="article__p">The simplest and most widely used: at the clock edge it <strong>stores whatever is on the D input</strong> and holds it until the next edge. It also has <strong>asynchronous</strong> inputs (acting immediately, independently of the clock): <strong>SET</strong> (make Q = 1) and <strong>CLR</strong> (make Q = 0).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A D flip-flop is a camera. The D input is the scene, the clock edge is pressing the shutter, and Q is the photo: it shows what was there at the moment of the "click" and does not change until you take the next one.</p>
+</div>
+</div>
+<h3 class="article__h3">JK type</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p13.webp" alt="JK flip-flop" width="1100" height="528" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">JK flip-flop <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">J</th><th class="table__cell table__cell--head table__cell--center">K</th><th class="table__cell table__cell--head table__cell--center"><span class="math">Q<sub class="math__sub">t+1</sub></span></th><th class="table__cell table__cell--head"></th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center"><span class="math">Q<sub class="math__sub">t</sub></span></td><td class="table__cell">hold</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell">reset</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell">set</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center"><span class="math"><span class="math__bar">Q<sub class="math__sub">t</sub></span></span></td><td class="table__cell"><strong>toggle</strong></td></tr>
+</tbody></table></div>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = J<sub class="math__sub">t</sub> · <span class="math__bar">Q<sub class="math__sub">t</sub></span> + <span class="math__bar">K<sub class="math__sub">t</sub></span> · Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">Like RS but without a forbidden combination — for 11 the flip-flop toggles.</p>
+<h3 class="article__h3">T type</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p14.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p14.webp" alt="T flip-flop" width="1100" height="508" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">T flip-flop <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="formula"><span class="math">Q<sub class="math__sub">t+1</sub> = T<sub class="math__sub">t</sub> ⊕ Q<sub class="math__sub">t</sub></span></div>
+<p class="article__p">T = 1 → at the clock edge the state flips; T = 0 → no change. (<em>T</em> for <em>toggle/trigger</em>.)</p>
+<h3 class="article__h3">Frequency divider by 2</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p21.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p21.webp" alt="A flip-flop that changes state on every clock pulse" width="1100" height="302" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A flip-flop that changes state on every clock pulse <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A JK flip-flop with J = K = 1 (or a D flip-flop with its own <span class="math"><span class="math__bar">Q</span></span> fed to the D input) changes state at <strong>every</strong> clock edge. The output is a waveform of <strong>half the frequency</strong>. Counters are based on this.</p>
+<h2 class="article__h2" id="s5">Registers</h2>
+<h3 class="article__h3">Shift register</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p15.webp" alt="A four-bit shift register made of D flip-flops" width="1100" height="537" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A four-bit shift register made of D flip-flops <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Several D flip-flops in a chain: the Q output of one goes to the D input of the next, and the clock is common. At every clock edge the contents <strong>shift by one position</strong>.</p>
+<p class="article__p">If the input is held at one, the register fills like this: 0000 → 1000 → 1100 → 1110 → 1111.</p>
+<h3 class="article__h3">Ring counter</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p16.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p16.webp" alt="Ring counter: the output of the last flip-flop returns to the input of the first" width="1100" height="531" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Ring counter: the output of the last flip-flop returns to the input of the first <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A shift register closed into a loop. A single one circulates: 1000 → 0100 → 0010 → 0001 → 1000… The initial state has to be set first (SET/CLR inputs). Four flip-flops give 4 states — the "1 of N" code.</p>
+<h3 class="article__h3">Johnson counter</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p17.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p17.webp" alt="Johnson counter: the negated output of the last flip-flop returns to the input" width="1100" height="701" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Johnson counter: the negated output of the last flip-flop returns to the input <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A loop with a <strong>negation</strong>: the first flip-flop receives <span class="math"><span class="math__bar">Q</span></span> of the last one. The register first fills with ones, then with zeros:</p>
+<div class="formula"><span class="math">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000 → 0000</span></div>
+<p class="article__p">Four flip-flops give <strong>8 states</strong> (twice as many as the ring counter). In Johnson code neighbouring states differ in one bit.</p>
+<h3 class="article__h3">Pseudo-random generator (PRBS)</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p18.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p18.webp" alt="A shift register with feedback through an XOR gate" width="1100" height="652" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A shift register with feedback through an XOR gate <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">The register input receives the <strong>XOR of selected outputs</strong>. The result is a sequence that looks random (<em>Pseudo-Random Binary Sequence</em>) although it is in fact periodic. For an 8-bit register with taps 2, 3, 4, 8 the period is 255; for a 10-bit one with taps 7, 10 — 1023.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>From the site author (not in the lecture)</p>
+<div class="callout__body">
+<p class="article__p">For a <strong>4-bit</strong> register the longest sequence (15 states) comes from XOR-ing the outputs of flip-flops 3 and 4. The state 0000 is a trap: the XOR of zeros is zero, so the register never leaves it — the generator must be started from a non-zero state (in the lab template: 0001).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s6">Counters</h2>
+<h3 class="article__h3">Asynchronous binary counter</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p22.webp" alt="A four-bit asynchronous binary counter" width="1100" height="386" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A four-bit asynchronous binary counter <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">Several divide-by-2 stages one after another: the first flip-flop is clocked by the clock, each next one — <strong>by the output of the previous one</strong>. The first changes every pulse, the second every two, the third every four… Outputs A, B, C, D form a binary number 0…15.</p>
+<p class="article__p">"Asynchronous" means the flip-flops <strong>do not share a clock</strong> — the change "ripples" through the stages.</p>
+<h3 class="article__h3">Modulo-N counter</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p23.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p23.webp" alt="An asynchronous modulo-10 counter" width="1100" height="507" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">An asynchronous modulo-10 counter <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A mod-10 counter should count 0, 1, …, 9 and return to 0. The trick: a gate detects state <strong>10</strong> (binary 1010 — ones on B and D) and immediately drives the <strong>CLR</strong> inputs of all the flip-flops.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>A recipe for a mod-N counter</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Write the number <span class="math">N</span> in binary.</li>
+<li class="list__item">With an AND gate (or NAND — depending on whether CLR reacts to 1 or to 0) detect the <strong>ones</strong> of that pattern.</li>
+<li class="list__item">Connect the gate output to CLR of all the flip-flops.</li>
+</ol>
+<p class="article__p">A mod-6 counter: <span class="math">6 = 0110</span> → AND of outputs B and C. State 6 appears only for a split second and turns into 0 at once.</p>
+</div>
+</div>
+<h3 class="article__h3">A counter from X to Y</h3>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w09-p24.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w09-p24.webp" alt="A counter generating the sequence 3–4–5–6–7–8" width="1100" height="692" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A counter generating the sequence 3–4–5–6–7–8 <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">To make a counter start from something other than zero, the <strong>SET</strong> inputs are used. For the sequence 3…8: a gate detects state <strong>9</strong> (1001), and then the flip-flops that have a one in the number 3 (0011) are <strong>set</strong> (SET) and the others are <strong>cleared</strong> (CLR).</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<p class="article__p">From D flip-flops: a shift register, a ring counter, a Johnson counter, a mod-9 counter, a counter from 3 to 9, a pseudo-random generator with XOR; plus a 1-bit latch from RS flip-flops on NAND gates and a serial register with a parallel output.</p>
+<p class="article__p">Step by step: <a class="link" href="../labs/10.html">Lab 10</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Flip-flops</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Type</th><th class="table__cell table__cell--head">Equation</th><th class="table__cell table__cell--head">Table</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>RS (NAND)</strong>, active low</td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = Q<sub class="math__sub">t</sub>·R + <span class="math__bar">S</span></span></td><td class="table__cell">S=0 → 1; R=0 → 0; 11 → hold; 00 forbidden</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Clocked RS</strong> (latch)</td><td class="table__cell">—</td><td class="table__cell">C=1: 00 hold, 01 → 0, 10 → 1, 11 forbidden; C=0: nothing</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>D</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = D</span></td><td class="table__cell">at the clock edge Q := D</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>JK</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = J<span class="math__bar">Q</span> + <span class="math__bar">K</span>Q</span></td><td class="table__cell">00 hold, 01 → 0, 10 → 1, 11 → toggle</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>T</strong></td><td class="table__cell"><span class="math">Q<sub class="math__sub">t+1</sub> = T ⊕ Q</span></td><td class="table__cell">T=1 → toggle, T=0 → hold</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item"><strong>SET / CLR</strong> — asynchronous (immediately, no clock): Q = 1 / Q = 0.</li>
+<li class="list__item">D with <span class="math"><span class="math__bar">Q</span></span> on the D input (or JK with J=K=1) = a <strong>divide-by-2</strong> stage.</li>
+<li class="list__item">Moore: output = f(state). Mealy: output = f(state, input).</li>
+</ul>
+<h3 class="article__h3">Registers (4 D flip-flops, common clock)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Circuit</th><th class="table__cell table__cell--head">Input of the first D</th><th class="table__cell table__cell--head">Sequence</th><th class="table__cell table__cell--head table__cell--center">States</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Shift register</td><td class="table__cell">external signal</td><td class="table__cell">0000 → 1000 → 1100 → 1110 → 1111 (for "1")</td><td class="table__cell table__cell--center">—</td></tr>
+<tr class="table__row"><td class="table__cell">Ring counter</td><td class="table__cell">Q of the last</td><td class="table__cell">1000 → 0100 → 0010 → 0001</td><td class="table__cell table__cell--center">4</td></tr>
+<tr class="table__row"><td class="table__cell">Johnson counter</td><td class="table__cell"><span class="math"><span class="math__bar">Q</span></span> of the last</td><td class="table__cell">0000 → 0001 → 0011 → 0111 → 1111 → 1110 → 1100 → 1000</td><td class="table__cell table__cell--center">8</td></tr>
+<tr class="table__row"><td class="table__cell">PRBS</td><td class="table__cell">XOR of two outputs (3 and 4) <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span></td><td class="table__cell">pseudo-random, start ≠ 0000</td><td class="table__cell table__cell--center">15 <span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Counters</h3>
+<ul class="list">
+<li class="list__item"><strong>Asynchronous binary:</strong> each flip-flop is a divide-by-2 stage clocked by the output of the previous one.</li>
+<li class="list__item"><strong>Mod N:</strong> detect state N with a gate → CLR all. (mod 10: 1010; mod 9: 1001; mod 6: 0110)</li>
+<li class="list__item"><strong>From X to Y:</strong> detect state Y+1 → SET where X has ones, CLR where it has zeros.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/08.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 8: Combinational functional blocks: multiplexer, two's complement, adder, ALU</span></a>
+<a class="pager__link pager__link--next" href="../lectures/10.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 10: Designing synchronous sequential circuits</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

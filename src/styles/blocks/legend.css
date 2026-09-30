@@ -1,0 +1,6 @@
+/* legend — explains the "author's addition" badge */
+.legend {
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+  font-size: var(--size-small);
+}

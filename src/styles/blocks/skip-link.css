@@ -1,0 +1,15 @@
+/* skip-link — keyboard shortcut to the main content */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border-radius: var(--radius-small);
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+}

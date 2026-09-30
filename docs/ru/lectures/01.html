@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лекция 1. Введение, физические основы электроники и измерения — SYC</title>
+<meta name="description" content="Напряжение, ток, закон Ома, законы Кирхгофа — а потом главное для первых лабораторных: как измерять и как посчитать, насколько мы могли ошибиться.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/01.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/01.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/01.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','ru')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Цифровые системы и основы электроники</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Меню</span></button>
+<nav class="nav" id="nav" aria-label="Меню">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Главная</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Лекции</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Лабораторные</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Как сдать</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Конспекты</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Язык"><a class="lang-switch__link" href="../../pl/lectures/01.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link" href="../../en/lectures/01.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link lang-switch__link--active" href="../../ru/lectures/01.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский" aria-current="true">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить светлую / тёмную тему" title="Переключить светлую / тёмную тему"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="На этой странице">
+<p class="toc__title">На этой странице</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Зачем всё это</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Потенциал и напряжение</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Масса — точка 0 В</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Электрический ток</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Закон Ома — самая важная формула</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Законы Кирхгофа</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Измерения: прямые и косвенные</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">У каждого измерения есть погрешность</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Абсолютная и относительная погрешность</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Аналоговый прибор (со стрелкой)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">Цифровой прибор (мультиметр)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s12">Выбор предела — суть первых лабораторных</a></li>
+<li class="toc__item"><a class="toc__link" href="#s13">Погрешность косвенного измерения — метод max–min</a></li>
+<li class="toc__item"><a class="toc__link" href="#s14">Округление результата</a></li>
+<li class="toc__item"><a class="toc__link" href="#s15">Графики по результатам измерений</a></li>
+<li class="toc__item"><a class="toc__link" href="#s16">Литература, названная на лекции</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Все лекции">
+<p class="side-nav__title">Все лекции</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/01.html" aria-current="page"><span class="side-nav__num">1</span><span class="side-nav__text">Введение и измерения</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Пассивные элементы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Делители и фильтры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Диоды и транзисторы</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Операционные усилители</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Вентили и булева алгебра</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Минимизация, карты Карно</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, код U2, сумматор, АЛУ</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Триггеры, регистры, счётчики</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Проектирование последовательностных схем</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Микропроцессоры и микроконтроллеры</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Связь: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Периферия, ШИМ, прерывания</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Архитектура компьютеров (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">Ассемблер MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Лекция 1</p>
+<h1 class="article__title">Введение, физические основы электроники и измерения</h1>
+<p class="article__lead">Напряжение, ток, закон Ома, законы Кирхгофа — а потом главное для первых лабораторных: как измерять и как посчитать, насколько мы могли ошибиться.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Краткий конспект</a>
+<a class="button button--ghost" href="../labs/02.html">Лабораторная к этой лекции: Лабораторная 2 →</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Зачем всё это</h2>
+<p class="article__p">Предмет SYC состоит из трёх частей: <strong>электроника</strong> (лекции 1–5), <strong>цифровые схемы</strong> (6–10) и <strong>микроконтроллеры и архитектура компьютеров</strong> (11–15). Лабораторные сдвинуты на неделю относительно лекций, поэтому то, что здесь написано, вы делаете «руками» на занятии через неделю — см. <a class="link" href="../labs/02.html">Лабораторную 2</a>. Правила сдачи — на отдельной странице: <a class="link" href="../grading.html">Как сдать</a>.</p>
+<p class="article__p">В этой лекции две половины. Первая — быстрое повторение физики (напряжение, ток, два-три закона). Вторая — <strong>метрология</strong>, то есть наука об измерениях, — и именно она нужна на ближайшем занятии.</p>
+<h2 class="article__h2" id="s2">Потенциал и напряжение</h2>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Представь горы. У каждого места есть своя <strong>высота</strong> — это <em>потенциал</em>. Вода сама течёт только тогда, когда между двумя местами есть <strong>разница высот</strong> — это <em>напряжение</em>. У одной точки самой по себе нет «напряжения»; напряжение всегда <strong>между двумя точками</strong>.</p>
+</div>
+</div>
+<p class="article__p">Формально: <strong>электрический потенциал</strong> <span class="math">φ<sub class="math__sub">A</sub></span> в точке A — это работа <span class="math">W</span>, которую нужно совершить, чтобы перенести заряд <span class="math">q</span> из этой точки в бесконечность, делённая на этот заряд:</p>
+<div class="formula"><span class="math">φ<sub class="math__sub">A</sub> = <span class="math__frac"><span class="math__num">W<sub class="math__sub">A→∞</sub></span><span class="math__den">q</span></span></span></div>
+<p class="article__p">Лектор сам говорит, что формула малопрактична — «никто не будет бегать с электроном в бесконечность». Важно другое: <strong>напряжение</strong> <span class="math">U<sub class="math__sub">AB</sub></span> — это <strong>разность потенциалов</strong> между точками A и B:</p>
+<div class="formula"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub> = <span class="math__frac"><span class="math__num">W<sub class="math__sub">A→B</sub></span><span class="math__den">q</span></span></span></div>
+<ul class="list">
+<li class="list__item">Напряжение измеряется в <strong>вольтах [В, V]</strong>.</li>
+<li class="list__item">На схемах напряжение рисуют стрелкой; <strong>остриё стрелки показывает более высокий потенциал</strong> (сторону «+»).</li>
+</ul>
+<h2 class="article__h2" id="s3">Масса — точка 0 В</h2>
+<p class="article__p">Раз важна только разница, удобно выбрать одну точку схемы и сказать: «здесь 0 В». Эта точка называется <strong>массой</strong> (по-польски <em>masa</em>, по-английски <em>ground</em>, сокращённо <strong>GND</strong>, символ ⊥; по-русски часто говорят «земля» или «общий провод»). Все остальные потенциалы в схеме указываются относительно массы.</p>
+<ul class="list">
+<li class="list__item">Никто не проверяет, какой у массы «настоящий» потенциал — мы просто <strong>договариваемся</strong>, что это 0 В.</li>
+<li class="list__item">Обычно масса — это <strong>минус источника питания</strong>.</li>
+<li class="list__item">Металлические части приборов (корпус, экран кабеля BNC) обычно соединены с массой.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Это как «уровень моря» на карте. Никто не измеряет высоту горы от центра Земли — измеряют от уровня, который все договорились считать нулём. В машине масса — это весь металлический кузов, подключённый к минусу аккумулятора.</p>
+</div>
+</div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Масса — это не то же самое, что заземление</p>
+<div class="callout__body">
+<p class="article__p">Заземление (штырь в розетке, <em>earth</em>) соединяет корпус с землёй ради безопасности. Масса — это просто опорная точка 0 В в схеме. Часто они соединены между собой, но это два разных понятия.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Электрический ток</h2>
+<p class="article__p"><strong>Ток</strong> — это упорядоченное движение электрических зарядов. Он течёт, когда между двумя точками есть напряжение и есть путь, по которому можно течь. Ток измеряется в <strong>амперах [А]</strong>.</p>
+<ul class="list">
+<li class="list__item">В проводах движутся <strong>электроны</strong> (отрицательный заряд) — физически от «−» к «+».</li>
+<li class="list__item">Условно (исторически, со времён Фарадея) направление тока рисуют <strong>от «+» к «−»</strong>, как воду, падающую сверху вниз. Это лишь договорённость.</li>
+<li class="list__item">Положительными зарядами могут быть, например, ионы (в аккумуляторах).</li>
+</ul>
+<h2 class="article__h2" id="s5">Закон Ома — самая важная формула</h2>
+<p class="article__p">Лектор: <em>«одна формула, которую действительно стоит помнить — без неё в электронике мало что можно понять»</em>.</p>
+<div class="formula"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span> = G · U</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">I</span> — ток [А], <span class="math">U</span> — напряжение [В], <span class="math">R</span> — <strong>сопротивление</strong> в омах [Ом, Ω].</li>
+<li class="list__item"><span class="math">G = 1/R</span> — <strong>проводимость</strong> в сименсах [См, S] (величина, обратная сопротивлению).</li>
+<li class="list__item">Чем больше напряжение, тем больше ток. Чем больше сопротивление, тем меньше ток.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p10.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w01-p10.webp" alt="Закон Ома: резистор R, напряжение U и ток I" width="1100" height="999" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Закон Ома: резистор R, напряжение U и ток I <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Труба с водой: напряжение — это давление, ток — количество воды в секунду, а резистор — сужение трубы. Давишь сильнее (больше U) — течёт больше. Труба уже (больше R) — течёт меньше.</p>
+</div>
+</div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Собственный пример</p>
+<div class="callout__body">
+<p class="article__p">К батарейке 9 В подключаю резистор 450 Ом. Ток: <span class="math">I = <span class="math__frac"><span class="math__num">9 В</span><span class="math__den">450 Ом</span></span> = 0,02 А = 20 мА</span>.</p>
+<p class="article__p">Наоборот: хочу, чтобы через светодиод шло 10 мА, а на резисторе должно «остаться» 3 В. Нужное сопротивление: <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span> = <span class="math__frac"><span class="math__num">3 В</span><span class="math__den">0,01 А</span></span> = 300 Ом</span>.</p>
+</div>
+</div>
+<p class="article__p">Три вида одной и той же формулы (стоит уметь преобразовывать в уме): <span class="math">I = U/R</span>, <span class="math">U = I·R</span>, <span class="math">R = U/I</span>.</p>
+<h2 class="article__h2" id="s6">Законы Кирхгофа</h2>
+<h3 class="article__h3">Первый закон (о токах в узле)</h3>
+<p class="article__p"><strong>Узел</strong> — место, где соединяются несколько проводов. Сумма токов, втекающих в узел, равна сумме вытекающих. Иначе: если втекающие считать с плюсом, а вытекающие с минусом, сумма равна нулю.</p>
+<div class="formula"><span class="math">i<sub class="math__sub">1</sub> = i<sub class="math__sub">2</sub> + i<sub class="math__sub">3</sub> + i<sub class="math__sub">4</sub>  ⇔  Σ i<sub class="math__sub">k</sub> = 0</span></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p11.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w01-p11.webp" alt="Узел: ток i₁ втекает, токи i₂, i₃, i₄ вытекают" width="989" height="812" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Узел: ток i₁ втекает, токи i₂, i₃, i₄ вытекают <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>По-простому</p>
+<div class="callout__body">
+<p class="article__p">Сантехнический тройник: сколько воды втекло, столько должно вытечь. Току некуда «исчезнуть» и неоткуда «взяться».</p>
+</div>
+</div>
+<h3 class="article__h3">Второй закон (о напряжениях в контуре)</h3>
+<p class="article__p"><strong>Контур</strong> (по-польски <em>oczko</em>) — замкнутая петля в цепи. Если обойти контур по кругу и сложить все напряжения (со знаками: по направлению обхода — с плюсом, против — с минусом), получится <strong>ноль</strong>.</p>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w01-p12.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w01-p12.webp" alt="Контур: сумма напряжений по замкнутой петле равна нулю" width="737" height="757" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Контур: сумма напряжений по замкнутой петле равна нулю <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<p class="article__p">Откуда это: у одной точки только один потенциал. Если выйти из точки, пройти по петле и вернуться — окажешься на той же «высоте», с которой вышел.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции</p>
+<div class="callout__body">
+<p class="article__p">На лекции было сказано, что второй закон Кирхгофа будет использоваться редко, а первый — очень часто.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Измерения: прямые и косвенные</h2>
+<ul class="list">
+<li class="list__item"><strong>Прямое измерение</strong> — результат читаешь прямо с прибора: напряжение вольтметром, массу весами, длину рулеткой.</li>
+<li class="list__item"><strong>Косвенное измерение</strong> — измеряешь что-то другое и <strong>вычисляешь</strong> то, что нужно. Примеры из лекции: ток, вычисленный из напряжения и сопротивления (<span class="math">I = U/R</span>); расстояние по времени пролёта ультразвука (путь = скорость · время).</li>
+</ul>
+<h2 class="article__h2" id="s8">У каждого измерения есть погрешность</h2>
+<p class="article__p">Одного числа мало. Нужно ещё сказать, <strong>насколько ему можно доверять</strong> — это <em>неопределённость измерения</em>. На занятиях упрощаем: неопределённость = погрешность (по-польски <em>błąd pomiaru</em>).</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Вид погрешности</th><th class="table__cell table__cell--head">Что это</th><th class="table__cell table__cell--head">Пример из лекции</th><th class="table__cell table__cell--head">Что с ней делать</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>Систематическая</strong></td><td class="table__cell">всегда одинаковая, из-за недостатка прибора или метода</td><td class="table__cell">рулетка «100 см», которая на самом деле 101 см</td><td class="table__cell">можно исправить (здесь: умножить результат на 100/101)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Случайная</strong></td><td class="table__cell">каждый раз немного другая (температура, шумы…)</td><td class="table__cell">повторные измерения отличаются в последней цифре</td><td class="table__cell">убрать нельзя; можно анализировать статистически</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>Грубая</strong> (промах)</td><td class="table__cell">обычная ошибка</td><td class="table__cell">измерение усилителя, которому забыли включить питание</td><td class="table__cell">отбросить и измерить заново</td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s9">Абсолютная и относительная погрешность</h2>
+<div class="formula"><span class="math">Δx = x − x<sub class="math__sub">0</sub>  δ<sub class="math__sub">x</sub> = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x<sub class="math__sub">0</sub>|</span></span> · 100%</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">x</span> — то, что показал прибор; <span class="math">x<sub class="math__sub">0</sub></span> — истинное значение (на практике <strong>неизвестно</strong>, поэтому в знаменателе используют измеренное значение).</li>
+<li class="list__item"><strong>Абсолютная погрешность</strong> <span class="math">Δx</span> (<em>błąd bezwzględny</em>) имеет ту же единицу, что и измерение (вольты, амперы, омы…).</li>
+<li class="list__item"><strong>Относительная погрешность</strong> <span class="math">δ</span> (<em>błąd względny</em>) — в процентах; показывает, «сколько ошибки в измерении». Именно она говорит о качестве измерения.</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из инструкции к занятиям</p>
+<div class="callout__body">
+<p class="article__p">Мой настоящий рост 183 см. Друг измерил линейкой 180 см. Абсолютная погрешность: 180 − 183 = −3 см. Относительная: 3 / 183 = 0,0164 = <strong>1,64%</strong>.</p>
+</div>
+</div>
+<p class="article__p">Результат записывают как <strong>x ± Δx</strong>, то есть «истинное значение лежит где-то между x − Δx и x + Δx».</p>
+<h2 class="article__h2" id="s10">Аналоговый прибор (со стрелкой)</h2>
+<p class="article__p">У аналогового прибора есть <strong>класс</strong> (<em>kl</em>) — число, описывающее его качество, — и <strong>предел измерения</strong> (<em>zakres</em>, <em>Z</em>), то есть наибольшее значение, которое можно измерить при данной настройке.</p>
+<div class="formula"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span></div>
+<p class="article__p">Обрати внимание: в формуле <strong>нет измеренного значения</strong>. Абсолютная погрешность одинакова в любом месте шкалы.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции (класс 2, предел 20 В)</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">Δx = <span class="math__frac"><span class="math__num">2 · 20</span><span class="math__den">100</span></span> = 0,4 В</span> — в любом месте шкалы.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Показание</th><th class="table__cell table__cell--head table__cell--right">Абсолютная погрешность</th><th class="table__cell table__cell--head table__cell--right">Относительная погрешность</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">20 В</td><td class="table__cell table__cell--right">0,4 В</td><td class="table__cell table__cell--right">0,4 / 20 = <strong>2%</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">10 В</td><td class="table__cell table__cell--right">0,4 В</td><td class="table__cell table__cell--right">0,4 / 10 = <strong>4%</strong></td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">4 В</td><td class="table__cell table__cell--right">0,4 В</td><td class="table__cell table__cell--right">0,4 / 4 = <strong>10%</strong></td></tr>
+</tbody></table></div>
+<p class="article__p">Чем ближе к нулю, тем хуже. Наименьшая возможная относительная погрешность — в конце шкалы, и она равна классу прибора.</p>
+</div>
+</div>
+<p class="article__p">К этому добавляется <strong>погрешность отсчёта</strong> (<em>błąd odczytu</em>): у стрелки (или линии на осциллографе) есть толщина, смотришь под углом (параллакс) — идеально не прочитаешь. Обычно принимают, например, <strong>0,1 деления</strong>. Эта погрешность <strong>прибавляется</strong> к погрешности по классу.</p>
+<h2 class="article__h2" id="s11">Цифровой прибор (мультиметр)</h2>
+<p class="article__p">Здесь погрешность состоит из двух частей:</p>
+<div class="formula"><span class="math">Δ = ±(a% · X + n · Δr)</span></div>
+<ul class="list">
+<li class="list__item"><span class="math">a%</span> — процент <strong>от показания</strong> <span class="math">X</span> (в инструкции пишут, например, <code class="inline-code">0.8%</code>, иногда <code class="inline-code">%rdg</code>);</li>
+<li class="list__item"><span class="math">n</span> — число «цифр» (запись <code class="inline-code">2d</code>, <code class="inline-code">2dgt</code>);</li>
+<li class="list__item"><span class="math">Δr</span> — <strong>разрешение</strong> (<em>rozdzielczość</em>): наименьшее изменение, которое видно на дисплее, то есть цена последней цифры.</li>
+</ul>
+<p class="article__p">Запись из инструкции <code class="inline-code">±(0.1% + 4dgt)</code> читается так: «возьми 0,1% от результата и прибавь 4 цены последней цифры».</p>
+<p class="article__p">Разрешение зависит от предела — нужно посмотреть, где стоит десятичная точка. Для четырёхзначного прибора:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Предел</th><th class="table__cell table__cell--head table__cell--right">Как выглядит результат</th><th class="table__cell table__cell--head table__cell--right">Разрешение Δr</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 В</td><td class="table__cell table__cell--right">1,427</td><td class="table__cell table__cell--right">0,001 В</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 В</td><td class="table__cell table__cell--right">1,43</td><td class="table__cell table__cell--right">0,01 В</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">200 В</td><td class="table__cell table__cell--right">1,4</td><td class="table__cell table__cell--right">0,1 В</td></tr>
+</tbody></table></div>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Пример из лекции: пальчиковая батарейка, точность ±(1% + 2d)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--right">Предел</th><th class="table__cell table__cell--head table__cell--right">Результат</th><th class="table__cell table__cell--head table__cell--right">1% результата</th><th class="table__cell table__cell--head table__cell--right">2 · Δr</th><th class="table__cell table__cell--head table__cell--right">Погрешность Δ</th><th class="table__cell table__cell--head table__cell--right">Относительная</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--right">2 В</td><td class="table__cell table__cell--right">1,427 В</td><td class="table__cell table__cell--right">0,014</td><td class="table__cell table__cell--right">0,002</td><td class="table__cell table__cell--right"><strong>0,016 В</strong></td><td class="table__cell table__cell--right">1,1%</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">20 В</td><td class="table__cell table__cell--right">1,43 В</td><td class="table__cell table__cell--right">0,014</td><td class="table__cell table__cell--right">0,02</td><td class="table__cell table__cell--right"><strong>0,03 В</strong></td><td class="table__cell table__cell--right">2,4%</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--right">200 В</td><td class="table__cell table__cell--right">1,4 В</td><td class="table__cell table__cell--right">0,014</td><td class="table__cell table__cell--right">0,2</td><td class="table__cell table__cell--right"><strong>0,2 В</strong></td><td class="table__cell table__cell--right">15%</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Столбцы с суммой и процентами я посчитал сам — на лекции показали только слагаемые. Вывод тот же: та же батарейка, тот же прибор, а погрешность отличается более чем в десять раз.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s12">Выбор предела — суть первых лабораторных</h2>
+<div class="callout callout--def">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">📖</span>Два правила из лекции</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Измерение тем точнее, чем <strong>ближе измеряемая величина к концу предела</strong>.</li>
+<li class="list__item">Цифровое измерение тем точнее, чем <strong>больше цифр</strong> видно в результате.</li>
+</ol>
+</div>
+</div>
+<p class="article__p">На практике: выбирай <strong>наименьший предел, в который результат ещё помещается</strong>. Для 5 В при пределах 2 / 20 / 200 В это 20 В. Для аналогового прибора: стрелка должна отклоняться как можно дальше.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции</p>
+<div class="callout__body">
+<p class="article__p">На лекции: если берёшь в руки прибор и видишь, что у него много цифр (5–6), можно ожидать, что он хорошего качества; мало цифр — скорее слабый.</p>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Совет от автора сайта</p>
+<div class="callout__body">
+<p class="article__p">Если не знаешь, какое напряжение ожидать, начни с <strong>самого большого</strong> предела и спускайся вниз. Когда на дисплее появится одна «1» слева — предел слишком мал, вернись на шаг выше. (Так советует и инструкция прибора с занятий.)</p>
+</div>
+</div>
+<h2 class="article__h2" id="s13">Погрешность косвенного измерения — метод max–min</h2>
+<p class="article__p">Считаем что-то по формуле, а у каждого числа в формуле своя погрешность. Метод простой: посчитай <strong>худшие случаи</strong>.</p>
+<p class="article__p">Для <span class="math">I = U/R</span>:</p>
+<div class="formula"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U − ΔU</span><span class="math__den">R + ΔR</span></span>  I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U + ΔU</span><span class="math__den">R − ΔR</span></span></span></div>
+<div class="formula"><span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> + I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span>  ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub> − I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></div>
+<p class="article__p">То есть: наибольший ток — когда напряжение «в плюсе», а сопротивление «в минусе»; наименьший — наоборот. Результат — середина, а погрешность — половина разброса.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции" aria-label="добавлено автором сайта — этого нет ни в слайдах, ни в записи лекции">✚</span> Собственный пример</p>
+<div class="callout__body">
+<p class="article__p">Измерено: <span class="math">U = 10,0 ± 0,2 В</span> и <span class="math">R = 100 ± 5 Ом</span>.</p>
+<ul class="list">
+<li class="list__item"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">9,8</span><span class="math__den">105</span></span> = 0,0933 А</span></li>
+<li class="list__item"><span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">10,2</span><span class="math__den">95</span></span> = 0,1074 А</span></li>
+<li class="list__item"><span class="math">Î = <span class="math__frac"><span class="math__num">0,1074 + 0,0933</span><span class="math__den">2</span></span> = 0,1004 А</span>,   <span class="math">ΔI = <span class="math__frac"><span class="math__num">0,1074 − 0,0933</span><span class="math__den">2</span></span> = 0,0070 А</span></li>
+</ul>
+<p class="article__p">Результат: <strong>I = 0,100 ± 0,007 А</strong> (относительная погрешность 7%).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s14">Округление результата</h2>
+<ol class="list list--ordered">
+<li class="list__item"><strong>Погрешность</strong> округляем максимум до <strong>двух значащих цифр</strong>: 0,0084356 → 0,0084.</li>
+<li class="list__item">Погрешность не может быть меньше разрешения прибора.</li>
+<li class="list__item"><strong>Результат</strong> округляем до того же знака после запятой, что и погрешность.</li>
+<li class="list__item">Округляем, а не отбрасываем (цифра 0–4 — вниз, 5–9 — вверх).</li>
+</ol>
+<p class="article__p">Итоговая запись со слайда: <span class="math">X = 0,1264 ± 0,0084</span>.</p>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>От автора сайта (не из лекции)</p>
+<div class="callout__body">
+<p class="article__p">На слайде число 0,12645635… записано как 0,1264. Строгое округление до четырёх знаков даёт 0,1265 (пятая цифра — 5). На занятиях придерживайся правила из пункта 4 — лектор прямо сказал: «округлить, а не обрезать».</p>
+</div>
+</div>
+<h2 class="article__h2" id="s15">Графики по результатам измерений</h2>
+<ul class="list">
+<li class="list__item">Масштаб подбирай так, чтобы кривая занимала почти весь график.</li>
+<li class="list__item">Точки измерений отмечай <strong>крестиками</strong>.</li>
+<li class="list__item">Проведи <strong>гладкую линию</strong> (прямую или кривую) так, чтобы по обе стороны от неё было примерно одинаково точек.</li>
+<li class="list__item"><strong>Не соединяй точки отрезками</strong> — ломаная «от точки к точке» считается ошибкой.</li>
+</ul>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w01-p22.webp" data-zoom aria-label="Увеличить изображение"><img class="figure__img" src="../../assets/img/lectures/w01-p22.webp" alt="Линия проходит «между» точками измерений, а не через каждую из них" width="667" height="352" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Линия проходит «между» точками измерений, а не через каждую из них <span class="figure__source">Источник: слайды лекции</span></figcaption>
+</figure>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Из лекции</p>
+<div class="callout__body">
+<p class="article__p">Это будет важно для фильтров (лабораторная 4): характеристику нужно будет приблизить двумя прямыми.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s16">Литература, названная на лекции</h2>
+<ol class="list list--ordered">
+<li class="list__item">П. Хоровиц, У. Хилл — «Искусство схемотехники» (польское издание: <em>Sztuka elektroniki</em>, WKŁ 2012).</li>
+<li class="list__item">B. Wilkinson — <em>Układy cyfrowe</em>, WKŁ 2001 (лектор: «очень хорошая книга»).</li>
+<li class="list__item">J. Doliński — <em>Mikrokontrolery AVR w praktyce</em>, BTC.</li>
+<li class="list__item">A. Pawluczuk — <em>Sztuka programowania mikrokontrolerów AVR — przykłady</em>, BTC.</li>
+<li class="list__item">R. Baranowski — <em>Mikrokontrolery AVR ATmega w praktyce</em>, BTC.</li>
+</ol>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Краткий конспект (шпаргалка)</h2>
+<p class="cheat__hint">Самое важное по теме — чтобы быстро повторить перед занятием.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Формулы</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Что</th><th class="table__cell table__cell--head">Формула</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Закон Ома</td><td class="table__cell"><span class="math">I = <span class="math__frac"><span class="math__num">U</span><span class="math__den">R</span></span></span>,   <span class="math">U = I·R</span>,   <span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Напряжение</td><td class="table__cell"><span class="math">U<sub class="math__sub">AB</sub> = φ<sub class="math__sub">B</sub> − φ<sub class="math__sub">A</sub></span> (всегда между двумя точками)</td></tr>
+<tr class="table__row"><td class="table__cell">I закон Кирхгофа</td><td class="table__cell">токи, втекающие в узел = токи, вытекающие из него</td></tr>
+<tr class="table__row"><td class="table__cell">II закон Кирхгофа</td><td class="table__cell">сумма напряжений в замкнутом контуре = 0</td></tr>
+<tr class="table__row"><td class="table__cell">Абсолютная погрешность</td><td class="table__cell"><span class="math">Δx = x − x<sub class="math__sub">0</sub></span> (единица как у измерения)</td></tr>
+<tr class="table__row"><td class="table__cell">Относительная погрешность</td><td class="table__cell"><span class="math">δ = <span class="math__frac"><span class="math__num">|Δx|</span><span class="math__den">|x|</span></span> · 100%</span></td></tr>
+<tr class="table__row"><td class="table__cell">Аналоговый прибор</td><td class="table__cell"><span class="math">Δx = <span class="math__frac"><span class="math__num">kl · Z</span><span class="math__den">100</span></span></span>  + погрешность отсчёта (напр. 0,1 деления)</td></tr>
+<tr class="table__row"><td class="table__cell">Цифровой прибор</td><td class="table__cell"><span class="math">Δ = a% · X + n · Δr</span></td></tr>
+<tr class="table__row"><td class="table__cell">Косвенное измерение</td><td class="table__cell"><span class="math">I<sub class="math__sub">min</sub> = <span class="math__frac"><span class="math__num">U−ΔU</span><span class="math__den">R+ΔR</span></span></span>,  <span class="math">I<sub class="math__sub">max</sub> = <span class="math__frac"><span class="math__num">U+ΔU</span><span class="math__den">R−ΔR</span></span></span>,  <span class="math">Î = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>+I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span>,  <span class="math">ΔI = <span class="math__frac"><span class="math__num">I<sub class="math__sub">max</sub>−I<sub class="math__sub">min</sub></span><span class="math__den">2</span></span></span></td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Правила</h3>
+<ul class="list">
+<li class="list__item"><strong>Масса (GND)</strong> = условные 0 В, обычно минус питания.</li>
+<li class="list__item">Условно ток течёт от «+» к «−».</li>
+<li class="list__item"><strong>Предел:</strong> наименьший, в который результат помещается; измеряй ближе к концу предела.</li>
+<li class="list__item"><strong>Разрешение Δr</strong> = цена последней цифры на дисплее (зависит от предела!).</li>
+<li class="list__item">Погрешность → максимум 2 значащие цифры; результат → тот же знак после запятой; запись <strong>x ± Δx</strong>.</li>
+<li class="list__item">График: крестики + гладкая линия, никогда не ломаная.</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Назад / Дальше">
+<span class="pager__link pager__link--empty"></span>
+<a class="pager__link pager__link--next" href="../lectures/02.html"><span class="pager__dir">Дальше →</span><span class="pager__title">Лекция 2: Пассивные элементы: резистор, конденсатор, катушка и импеданс</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Краткий конспект"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Краткий конспект</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Сайт для изучения предмета SYC. Материал составлен по лекциям и инструкциям к занятиям; тренировочные задания — собственные (изменены по сравнению с занятиями).</p>
+<p class="footer__text footer__text--muted">Неофициальный студенческий конспект — при расхождениях действует то, что скажет преподаватель.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Краткий конспект (шпаргалка)">
+<div class="modal__bar"><p class="modal__title">📋 Краткий конспект (шпаргалка)</p><button class="modal__close" type="button" data-modal-close aria-label="Закрыть">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Увеличить изображение">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Закрыть">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Копировать","copied":"Скопировано!","copyFail":"Не удалось скопировать"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

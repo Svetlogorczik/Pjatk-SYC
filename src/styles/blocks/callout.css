@@ -1,0 +1,77 @@
+/* callout — coloured box: plain-words explanation, author's note, tip, warning, task, solution… */
+.callout {
+  --callout-hue: var(--hue-info);
+  margin: 1.25rem 0;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--callout-hue) 30%, var(--color-border));
+  border-left: 5px solid var(--callout-hue);
+  border-radius: var(--radius-small);
+  background: color-mix(in srgb, var(--callout-hue) 7%, var(--color-surface));
+}
+
+.callout__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0 0 0.4rem;
+  color: var(--callout-hue);
+  font-weight: 700;
+}
+
+.callout__icon {
+  flex: none;
+}
+
+.callout__body > :last-child {
+  margin-bottom: 0;
+}
+
+.callout__body > :first-child {
+  margin-top: 0;
+}
+
+.callout--simple { --callout-hue: var(--hue-simple); }
+.callout--own { --callout-hue: var(--hue-own); border-style: dashed; border-left-style: solid; }
+.callout--tip { --callout-hue: var(--hue-tip); border-style: dashed; border-left-style: solid; }
+.callout--warn { --callout-hue: var(--hue-warn); }
+.callout--def { --callout-hue: var(--hue-def); }
+.callout--example { --callout-hue: var(--hue-example); }
+.callout--task { --callout-hue: var(--hue-task); }
+.callout--check { --callout-hue: var(--hue-task); }
+.callout--lecture { --callout-hue: var(--hue-lecture); }
+.callout--info { --callout-hue: var(--hue-info); }
+.callout--steps { --callout-hue: var(--hue-example); }
+
+.callout--solution {
+  --callout-hue: var(--hue-solution);
+}
+
+.callout--solution > .callout__title {
+  margin: 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.callout--solution > .callout__title::-webkit-details-marker {
+  display: none;
+}
+
+.callout--solution > .callout__title::after {
+  content: "▸";
+  margin-left: auto;
+  transition: transform 0.15s;
+}
+
+.callout--solution[open] > .callout__title::after {
+  transform: rotate(90deg);
+}
+
+.callout--solution[open] > .callout__title {
+  margin-bottom: 0.6rem;
+}
+
+@media print {
+  .callout {
+    break-inside: avoid;
+  }
+}

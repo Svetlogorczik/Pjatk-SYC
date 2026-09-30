@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 6. Digital circuits — introduction: signals, gates, Boolean algebra — SYC</title>
+<meta name="description" content="From voltage to zeros and ones. What a logic state is, which gates exist, how to write a logic function, and why NAND gates alone are enough to build anything.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/06.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/06.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/06.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/06.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/06.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/06.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Analog, discrete and digital signals</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Logic levels: TTL and CMOS</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Logic gates</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Boolean algebra</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Boolean function and truth table</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Two canonical forms</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Logic diagram</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">NAND and NOR — universal gates</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/06.html" aria-current="page"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 6</p>
+<h1 class="article__title">Digital circuits — introduction: signals, gates, Boolean algebra</h1>
+<p class="article__lead">From voltage to zeros and ones. What a logic state is, which gates exist, how to write a logic function, and why NAND gates alone are enough to build anything.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Analog, discrete and digital signals</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w06-p03.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p03.webp" alt="A continuous signal (top) and the same signal known only at chosen moments (bottom)" width="1100" height="774" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A continuous signal (top) and the same signal known only at chosen moments (bottom) <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><strong>Analog</strong> — continuous in time; it can take any value.</li>
+<li class="list__item"><strong>Discrete</strong> — its value is known only at fixed time intervals (samples).</li>
+<li class="list__item"><strong>Digital (logic)</strong> — only <strong>two states</strong> matter: 0 and 1. Each state corresponds to a <strong>range of voltages</strong>.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Analog is a light dimmer — any brightness. Digital is an ordinary switch — on or off. That is why small disturbances do no harm: "almost 5 V" is still a one.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Logic levels: TTL and CMOS</h2>
+<h3 class="article__h3">TTL</h3>
+<p class="article__p">TTL circuits are built from <strong>bipolar</strong> transistors and powered from <strong>5 V</strong>.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Voltage (relative to ground)</th><th class="table__cell table__cell--head">State</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">0 V – 0.8 V</td><td class="table__cell"><strong>logic 0</strong> (low)</td></tr>
+<tr class="table__row"><td class="table__cell">0.8 V – 2 V</td><td class="table__cell">undefined — not allowed</td></tr>
+<tr class="table__row"><td class="table__cell">2 V – 5 V</td><td class="table__cell"><strong>logic 1</strong> (high)</td></tr>
+</tbody></table></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w06-p04.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p04.webp" alt="A NAND gate in TTL technology" width="706" height="899" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A NAND gate in TTL technology <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h3 class="article__h3">CMOS</h3>
+<p class="article__p">CMOS circuits consist of pairs of <strong>MOS transistors of opposite type</strong> (n-channel and p-channel) connected so that in a steady state <strong>only one of them conducts</strong>.</p>
+<ul class="list">
+<li class="list__item">Simple and cheap to make, they allow very dense packing.</li>
+<li class="list__item">Supply 3–18 V; newer low-voltage families: 3.3 V, 2.5 V and even 1.8 V.</li>
+<li class="list__item"><strong>They draw almost no power at rest</strong> — only when the state changes.</li>
+<li class="list__item">Logic levels are close to the supply rails: "0" is 0–30% of the supply voltage, "1" is 70–100%.</li>
+</ul>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p05.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p05.webp" alt="CMOS inverter: either the upper or the lower transistor conducts" width="1100" height="627" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">CMOS inverter: either the upper or the lower transistor conducts <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p07.webp" alt="A NAND gate in CMOS technology" width="831" height="1319" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A NAND gate in CMOS technology <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<h3 class="article__h3">The third state: high impedance</h3>
+<p class="article__p">Besides 0 and 1 there is the <strong>high-impedance state</strong> (Hi-Z): a point of the circuit is connected to nothing — it "floats". To give such a point a defined state, it is connected through a resistor to the supply (a <strong>pull-up resistor</strong>) or to ground. Some gates have outputs that can be in the Hi-Z state (e.g. <em>open collector</em> gates).</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">Hi-Z is a phone with the plug pulled out: it says neither "yes" nor "no" — it is simply not on the line. A pull-up resistor is an agreement: "if nobody says anything, we take the answer to be YES". We come back to this with buttons and the I²C bus (<a class="link" href="../lectures/12.html">lecture 12</a>).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s3">Logic gates</h2>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w06-p09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p09.webp" alt="The six basic gates and their truth tables" width="1100" height="789" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">The six basic gates and their truth tables <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Gate</th><th class="table__cell table__cell--head">Notation</th><th class="table__cell table__cell--head">Output is 1 when…</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>NOT</strong> (negation)</td><td class="table__cell"><span class="math"><span class="math__bar">a</span></span></td><td class="table__cell">the input is 0</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>AND</strong> (product)</td><td class="table__cell"><span class="math">a · b</span></td><td class="table__cell"><strong>both</strong> inputs are 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>OR</strong> (sum)</td><td class="table__cell"><span class="math">a + b</span></td><td class="table__cell"><strong>at least one</strong> input is 1</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>XOR</strong> (either–or)</td><td class="table__cell"><span class="math">a ⊕ b</span></td><td class="table__cell">the inputs are <strong>different</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><strong>NAND</strong></td><td class="table__cell"><span class="math"><span class="math__bar">a · b</span></span></td><td class="table__cell"><strong>not</strong> both inputs are 1 (the opposite of AND)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>NOR</strong></td><td class="table__cell"><span class="math"><span class="math__bar">a + b</span></span></td><td class="table__cell"><strong>neither</strong> input is 1 (the opposite of OR)</td></tr>
+</tbody></table></div>
+<p class="article__p">A small circle at the output of a symbol means negation.</p>
+<h2 class="article__h2" id="s4">Boolean algebra</h2>
+<p class="article__p">We work with two values {0, 1} and three operations. Different books use different symbols:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Operation</th><th class="table__cell table__cell--head table__cell--center">Logic</th><th class="table__cell table__cell--head table__cell--center">Sets</th><th class="table__cell table__cell--head table__cell--center">Digital electronics (we use this)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">conjunction (product, AND)</td><td class="table__cell table__cell--center">∧</td><td class="table__cell table__cell--center">∩</td><td class="table__cell table__cell--center"><span class="math">·</span></td></tr>
+<tr class="table__row"><td class="table__cell">disjunction (sum, OR)</td><td class="table__cell table__cell--center">∨</td><td class="table__cell table__cell--center">∪</td><td class="table__cell table__cell--center"><span class="math">+</span></td></tr>
+<tr class="table__row"><td class="table__cell">negation (NOT)</td><td class="table__cell table__cell--center">¬</td><td class="table__cell table__cell--center">∼</td><td class="table__cell table__cell--center">a bar above: <span class="math"><span class="math__bar">a</span></span></td></tr>
+</tbody></table></div>
+<div class="callout callout--warn">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">⚠️</span>Watch out</p>
+<div class="callout__body">
+<p class="article__p">In Boolean algebra "+" is <strong>OR</strong>, not addition: <span class="math">1 + 1 = 1</span>.</p>
+</div>
+</div>
+<h3 class="article__h3">Laws</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Law</th><th class="table__cell table__cell--head">For the product</th><th class="table__cell table__cell--head">For the sum</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">associativity</td><td class="table__cell"><span class="math">(ab)c = a(bc)</span></td><td class="table__cell"><span class="math">(a+b)+c = a+(b+c)</span></td></tr>
+<tr class="table__row"><td class="table__cell">commutativity</td><td class="table__cell"><span class="math">ab = ba</span></td><td class="table__cell"><span class="math">a+b = b+a</span></td></tr>
+<tr class="table__row"><td class="table__cell">distributivity</td><td class="table__cell"><span class="math">a(b+c) = ab + ac</span></td><td class="table__cell"><span class="math">a + bc = (a+b)(a+c)</span></td></tr>
+<tr class="table__row"><td class="table__cell">absorption</td><td class="table__cell"><span class="math">a(a+b) = a</span></td><td class="table__cell"><span class="math">a + ab = a</span></td></tr>
+<tr class="table__row"><td class="table__cell">complement</td><td class="table__cell"><span class="math">a · <span class="math__bar">a</span> = 0</span></td><td class="table__cell"><span class="math">a + <span class="math__bar">a</span> = 1</span></td></tr>
+</tbody></table></div>
+<p class="article__p">Two laws that matter most in digital design:</p>
+<div class="formula"><span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span>  <span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span>  (De Morgan's laws)</span></div>
+<div class="formula"><span class="math">a<span class="math__bar">b</span> + ab = a  (the combining rule)</span></div>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">De Morgan in plain words: "it is not true that (it rains <strong>or</strong> it is windy)" is the same as "it does not rain <strong>and</strong> it is not windy". A bar over the whole thing can be "broken" in half, but then the sign in the middle flips.</p>
+</div>
+</div>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Handy bits that are not on the slide</p>
+<div class="callout__body">
+<p class="article__p"><span class="math">a + 0 = a</span>,  <span class="math">a · 1 = a</span>,  <span class="math">a + 1 = 1</span>,  <span class="math">a · 0 = 0</span>,  <span class="math">a + a = a</span>,  <span class="math">a · a = a</span>,  <span class="math"><span class="math__bar"><span class="math__bar">a</span></span> = a</span> (a double negation disappears).</p>
+</div>
+</div>
+<h2 class="article__h2" id="s5">Boolean function and truth table</h2>
+<p class="article__p">A <strong>Boolean function</strong> of <span class="math">n</span> variables assigns one output value (0 or 1) to every combination of zeros and ones at the inputs: <span class="math">f: B<sup class="math__sup">n</sup> → B</span>. It is the mathematical model of a <strong>combinational circuit</strong> — one whose output depends only on what is at the inputs right now.</p>
+<p class="article__p">Every function can be written as a <strong>truth table</strong>. For <span class="math">n</span> inputs the table has <span class="math">2<sup class="math__sup">n</sup></span> rows. Example — the XOR function:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">Row no.</th><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">f(a,b)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">2</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">3</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<p class="article__p">The row number is the decimal number formed by the input bits (01 = 1, 10 = 2…). This lets us state a function briefly:</p>
+<ul class="list">
+<li class="list__item">the <strong>set of ones:</strong> <span class="math">f<sup class="math__sup">1</sup> = {1, 2}</span> — rows where the result is 1; written <span class="math">f = Σ(1, 2)</span>,</li>
+<li class="list__item">the <strong>set of zeros:</strong> <span class="math">f<sup class="math__sup">0</sup> = {0, 3}</span> — rows where the result is 0; written <span class="math">f = Π(0, 3)</span>.</li>
+</ul>
+<h2 class="article__h2" id="s6">Two canonical forms</h2>
+<h3 class="article__h3">Sum form (DNF) — "sum of products"</h3>
+<p class="article__p">Look at the rows with a <strong>one</strong>. Each such row gives one product of all the variables: a variable equal to 0 in that row enters <strong>negated</strong>, equal to 1 — plain. The products are joined by a sum.</p>
+<p class="article__p">For XOR: row 01 → <span class="math"><span class="math__bar">a</span>b</span>, row 10 → <span class="math">a<span class="math__bar">b</span></span>:</p>
+<div class="formula"><span class="math">f(a,b) = <span class="math__bar">a</span>b + a<span class="math__bar">b</span> = Σ(1, 2)</span></div>
+<h3 class="article__h3">Product form (CNF) — "product of sums"</h3>
+<p class="article__p">Look at the rows with a <strong>zero</strong>. Each gives one sum, but here it is the <strong>other way round</strong>: a variable equal to 0 enters <strong>plain</strong>, equal to 1 — negated. The sums are joined by a product.</p>
+<p class="article__p">For XOR: row 00 → <span class="math">(a + b)</span>, row 11 → <span class="math">(<span class="math__bar">a</span> + <span class="math__bar">b</span>)</span>:</p>
+<div class="formula"><span class="math">f(a,b) = (a + b) · (<span class="math__bar">a</span> + <span class="math__bar">b</span>) = Π(0, 3)</span></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>How not to mix them up</p>
+<div class="callout__body">
+<p class="article__p">A product must give <strong>1</strong> exactly in its own row → all factors must be ones → the zeros have to be negated. A sum must give <strong>0</strong> exactly in its own row → all terms must be zeros → the ones have to be negated.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Logic diagram</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w06-p18.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p18.webp" alt="A diagram implementing y = (a·~b + ~a·b)·(a + ~b + c)" width="1100" height="642" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A diagram implementing y = (a·~b + ~a·b)·(a + ~b + c) <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">A diagram shows the logical structure of a function; information flows from the inputs (left) to the output.</li>
+<li class="list__item">A <strong>dot</strong> where lines cross means a connection; a crossing without a dot means the lines just pass each other.</li>
+<li class="list__item">This diagram implements <span class="math">y = (a<span class="math__bar">b</span> + <span class="math__bar">a</span>b) · (a + <span class="math__bar">b</span> + c)</span>.</li>
+</ul>
+<h2 class="article__h2" id="s8">NAND and NOR — universal gates</h2>
+<p class="article__p">Logic with four operators (∧, ∨, ⇒, ¬) is redundant — some operators can be expressed through the others. Two are enough: negation + conjunction, or negation + disjunction. And a <strong>NAND</strong> (or <strong>NOR</strong>) gate contains both at once, so <strong>one kind of gate is enough</strong> to build any function.</p>
+<div class="gallery">
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p21.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p21.webp" alt="NOT, AND and OR built from NAND gates only" width="1100" height="709" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">NOT, AND and OR built from NAND gates only <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<figure class="gallery__item figure figure--tile">
+<a class="figure__link" href="../../assets/img/lectures/w06-p22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w06-p22.webp" alt="NOT, OR and AND built from NOR gates only" width="1100" height="656" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">NOT, OR and AND built from NOR gates only <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+</div>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">I want</th><th class="table__cell table__cell--head">From NAND gates</th><th class="table__cell table__cell--head">From NOR gates</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">NOT a</td><td class="table__cell"><span class="math"><span class="math__bar">a · a</span></span> — both inputs tied together</td><td class="table__cell"><span class="math"><span class="math__bar">a + a</span></span> — both inputs tied together</td></tr>
+<tr class="table__row"><td class="table__cell">a AND b</td><td class="table__cell">NAND followed by NOT: <span class="math"><span class="math__bar"><span class="math__bar">a · b</span></span></span></td><td class="table__cell">negate the inputs first: <span class="math"><span class="math__bar"><span class="math__bar">a</span> + <span class="math__bar">b</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">a OR b</td><td class="table__cell">negate the inputs first: <span class="math"><span class="math__bar"><span class="math__bar">a</span> · <span class="math__bar">b</span></span></span></td><td class="table__cell">NOR followed by NOT: <span class="math"><span class="math__bar"><span class="math__bar">a + b</span></span></span></td></tr>
+</tbody></table></div>
+<p class="article__p">The second and third rows follow directly from De Morgan's laws.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>Lab tasks (from the slide)</p>
+<div class="callout__body">
+<ol class="list list--ordered">
+<li class="list__item">Get to know Logisim, implement simple functions with gates.</li>
+<li class="list__item">Implement a given function with the available gates (on the slide: <span class="math">y = a · <span class="math__bar">b</span> · c + a ⊕ b + c</span>).</li>
+<li class="list__item">Build NOT, AND and OR from NAND gates — each in a separate circuit.</li>
+<li class="list__item">Use these "bricks" to implement the function from point 2 so that the diagram mirrors the structure of the formula.</li>
+</ol>
+<p class="article__p">Step by step: <a class="link" href="../labs/07.html">Lab 7</a>.</p>
+</div>
+</div>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Logic levels</h3>
+<ul class="list">
+<li class="list__item"><strong>TTL</strong> (5 V, bipolar transistors): 0 → 0–0.8 V; 1 → 2–5 V; in between — undefined.</li>
+<li class="list__item"><strong>CMOS</strong> (3–18 V, MOS pairs): 0 → 0–30% of supply; 1 → 70–100%; power only when switching.</li>
+<li class="list__item"><strong>Hi-Z</strong> — the third state (nothing connected); fixed with a pull-up resistor.</li>
+</ul>
+<h3 class="article__h3">Gates</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head table__cell--center">a</th><th class="table__cell table__cell--head table__cell--center">b</th><th class="table__cell table__cell--head table__cell--center">AND</th><th class="table__cell table__cell--head table__cell--center">OR</th><th class="table__cell table__cell--head table__cell--center">XOR</th><th class="table__cell table__cell--head table__cell--center">NAND</th><th class="table__cell table__cell--head table__cell--center">NOR</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td></tr>
+<tr class="table__row"><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">1</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">0</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Boolean algebra</h3>
+<ul class="list">
+<li class="list__item"><span class="math">a + <span class="math__bar">a</span> = 1</span>,  <span class="math">a · <span class="math__bar">a</span> = 0</span>,  <span class="math">a + ab = a</span>,  <span class="math">a(a+b) = a</span></li>
+<li class="list__item"><span class="math">a(b+c) = ab + ac</span>,  <span class="math">a + bc = (a+b)(a+c)</span></li>
+<li class="list__item"><strong>De Morgan:</strong> <span class="math"><span class="math__bar">a + b</span> = <span class="math__bar">a</span> · <span class="math__bar">b</span></span>,   <span class="math"><span class="math__bar">a · b</span> = <span class="math__bar">a</span> + <span class="math__bar">b</span></span></li>
+<li class="list__item"><strong>Combining:</strong> <span class="math">a<span class="math__bar">b</span> + ab = a</span></li>
+</ul>
+<h3 class="article__h3">Canonical forms</h3>
+<ul class="list">
+<li class="list__item"><strong>Sum form (DNF), Σ:</strong> from rows with <strong>1</strong>; a product of variables, <strong>0 → negated</strong>; products joined by "+".</li>
+<li class="list__item"><strong>Product form (CNF), Π:</strong> from rows with <strong>0</strong>; a sum of variables, <strong>1 → negated</strong>; sums joined by "·".</li>
+<li class="list__item">Row number = decimal value of the input bits.</li>
+</ul>
+<h3 class="article__h3">From NAND only</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a·a</span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a·b</span></span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>·<span class="math__bar">b</span></span></span></p>
+<h3 class="article__h3">From NOR only</h3>
+<p class="article__p">NOT a = <span class="math"><span class="math__bar">a+a</span></span>;   a OR b = <span class="math"><span class="math__bar"><span class="math__bar">a+b</span></span></span>;   a AND b = <span class="math"><span class="math__bar"><span class="math__bar">a</span>+<span class="math__bar">b</span></span></span></p>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/05.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 5: Operational amplifiers</span></a>
+<a class="pager__link pager__link--next" href="../lectures/07.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 7: Minimisation of Boolean functions: Karnaugh maps</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

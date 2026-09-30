@@ -1,0 +1,52 @@
+/* toc — "on this page" list */
+.toc {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.toc__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.toc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: toc;
+}
+
+.toc__item {
+  counter-increment: toc;
+}
+
+.toc__link {
+  display: block;
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.toc__link::before {
+  content: counter(toc) ". ";
+  color: var(--color-muted);
+}
+
+.toc__link:hover {
+  background: var(--color-surface-2);
+}
+
+.toc__link--active {
+  border-left-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 600;
+}

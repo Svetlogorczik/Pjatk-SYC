@@ -1,0 +1,59 @@
+/* pager — previous / next unit */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.pager__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  color: var(--color-text);
+  text-decoration: none;
+  line-height: 1.35;
+}
+
+.pager__link:hover {
+  border-color: var(--color-accent);
+}
+
+.pager__link--next {
+  text-align: right;
+}
+
+.pager__link--empty {
+  border: 0;
+}
+
+.pager__dir {
+  color: var(--color-accent);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.pager__title {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 40rem) {
+  .pager {
+    grid-template-columns: 1fr;
+  }
+
+  .pager__link--empty {
+    display: none;
+  }
+}
+
+@media print {
+  .pager {
+    display: none;
+  }
+}

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 2. Passive components: resistor, capacitor, inductor and impedance — SYC</title>
+<meta name="description" content="The three basic "building blocks" of electronics and one idea that ties them together — impedance, resistance written as a complex number.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/02.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/02.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/02.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','en')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Digital Systems and Basics of Electronics</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Home</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Lectures</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Labs</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Passing the course</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Cheat sheets</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Language"><a class="lang-switch__link" href="../../pl/lectures/02.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski">PL</a><a class="lang-switch__link lang-switch__link--active" href="../../en/lectures/02.html" hreflang="en" lang="en" data-lang="en" title="English" aria-current="true">EN</a><a class="lang-switch__link" href="../../ru/lectures/02.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light / dark theme" title="Toggle light / dark theme"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="On this page">
+<p class="toc__title">On this page</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Prefixes — so we do not write all those zeros</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Conductors, insulators, semiconductors</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Direct (DC) and alternating (AC) current</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Passive and active components</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Resistor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Capacitor</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Inductor (coil)</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Schematic symbols</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">The Laplace transform — why a computer scientist needs such a monster</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Impedance — "resistance" for alternating current</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">Amplitude and phase shift</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="All lectures">
+<p class="side-nav__title">All lectures</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Introduction and measurements</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/02.html" aria-current="page"><span class="side-nav__num">2</span><span class="side-nav__text">Passive components</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dividers and filters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diodes and transistors</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Operational amplifiers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Gates and Boolean algebra</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimisation, Karnaugh maps</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, two's complement, adder, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Flip-flops, registers, counters</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Designing sequential circuits</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Microprocessors and microcontrollers</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Communication: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peripherals, PWM, interrupts</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Computer architecture (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/15.html"><span class="side-nav__num">15</span><span class="side-nav__text">MIPS assembly</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Lecture 2</p>
+<h1 class="article__title">Passive components: resistor, capacitor, inductor and impedance</h1>
+<p class="article__lead">The three basic "building blocks" of electronics and one idea that ties them together — impedance, resistance written as a complex number.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Quick summary</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= added by the site author — not in the slides or the lecture recording</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Prefixes — so we do not write all those zeros</h2>
+<p class="article__p">Numbers in electronics are often very large or very small, so they are written as <span class="math">A × 10<sup class="math__sup">n</sup></span> and used with prefixes.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Prefix</th><th class="table__cell table__cell--head table__cell--center">Symbol</th><th class="table__cell table__cell--head table__cell--center">Power of 10</th><th class="table__cell table__cell--head">Multiplier</th><th class="table__cell table__cell--head">Example</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">giga</td><td class="table__cell table__cell--center">G</td><td class="table__cell table__cell--center">9</td><td class="table__cell">1 000 000 000</td><td class="table__cell">1 GHz</td></tr>
+<tr class="table__row"><td class="table__cell">mega</td><td class="table__cell table__cell--center">M</td><td class="table__cell table__cell--center">6</td><td class="table__cell">1 000 000</td><td class="table__cell">1 MΩ = 1 000 000 Ω</td></tr>
+<tr class="table__row"><td class="table__cell">kilo</td><td class="table__cell table__cell--center">k</td><td class="table__cell table__cell--center">3</td><td class="table__cell">1 000</td><td class="table__cell">1 kΩ = 1000 Ω</td></tr>
+<tr class="table__row"><td class="table__cell">milli</td><td class="table__cell table__cell--center">m</td><td class="table__cell table__cell--center">−3</td><td class="table__cell">0.001</td><td class="table__cell">20 mA = 0.02 A</td></tr>
+<tr class="table__row"><td class="table__cell">micro</td><td class="table__cell table__cell--center">µ</td><td class="table__cell table__cell--center">−6</td><td class="table__cell">0.000 001</td><td class="table__cell">1 µs</td></tr>
+<tr class="table__row"><td class="table__cell">nano</td><td class="table__cell table__cell--center">n</td><td class="table__cell table__cell--center">−9</td><td class="table__cell">0.000 000 001</td><td class="table__cell">10 nF = 0.000 000 01 F</td></tr>
+<tr class="table__row"><td class="table__cell">pico</td><td class="table__cell table__cell--center">p</td><td class="table__cell table__cell--center">−12</td><td class="table__cell">0.000 000 000 001</td><td class="table__cell">36 pF</td></tr>
+</tbody></table></div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>Tip from the site author</p>
+<div class="callout__body">
+<p class="article__p">On a calculator enter prefixes as powers: 10 nF is <code class="inline-code">10E-9</code>, 100 kHz is <code class="inline-code">100E3</code>. Most mistakes in labs 3 and 4 come from mixing up "n" and "µ".</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Conductors, insulators, semiconductors</h2>
+<ul class="list">
+<li class="list__item"><strong>Conductor</strong> — an external voltage makes current flow (metals).</li>
+<li class="list__item"><strong>Insulator</strong> — electrons are tightly bound to the atomic nuclei and the electric field cannot "pull them out"; no current flows.</li>
+<li class="list__item"><strong>Semiconductor</strong> — conducts or not, depending on conditions. <a class="link" href="../lectures/04.html">Lecture 4</a> is about them.</li>
+</ul>
+<h2 class="article__h2" id="s3">Direct (DC) and alternating (AC) current</h2>
+<ul class="list">
+<li class="list__item"><strong>DC</strong> (<em>direct current</em>) — current flows one way and has a constant value. A battery, a power supply.</li>
+<li class="list__item"><strong>AC</strong> (<em>alternating current</em>) — the direction changes periodically; the average over one period is zero. A wall socket, a generator signal.</li>
+</ul>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">DC is a river — water keeps flowing one way. AC is a wave at the shore — water goes forward, then back, and "on average" stays where it was.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s4">Passive and active components</h2>
+<ul class="list">
+<li class="list__item"><strong>Passive</strong> — need no power supply to work. The output energy cannot be larger than the input energy. Resistor, capacitor, inductor.</li>
+<li class="list__item"><strong>Active</strong> — need a supply; thanks to it the output energy can be larger than the input (transistor, amplifier).</li>
+</ul>
+<h2 class="article__h2" id="s5">Resistor</h2>
+<p class="article__p">Resistance is the ratio of the voltage across a component to the current through it:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span>  [Ω]</span></div>
+<p class="article__p">It depends on the material and the dimensions:</p>
+<div class="formula"><span class="math">R = <span class="math__frac"><span class="math__num">ρ · L</span><span class="math__den">A</span></span></span></div>
+<p class="article__p">where <span class="math">ρ</span> is the resistivity of the material, <span class="math">L</span> the length, <span class="math">A</span> the cross-section area. A longer, thinner wire = more resistance.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p07.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p07.webp" alt="Current–voltage characteristics: a resistor is a straight line, a diode and a bulb are not" width="1100" height="325" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Current–voltage characteristics: a resistor is a straight line, a diode and a bulb are not <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<p class="article__p">A resistor is a <strong>linear</strong> component: twice the voltage gives twice the current (a straight line on the graph). A diode and a light bulb do not behave like that.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p09.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p09.webp" alt="Various kinds of resistors" width="1100" height="483" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Various kinds of resistors <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s6">Capacitor</h2>
+<p class="article__p">Two metal plates separated by an insulator. It stores <strong>charge</strong> <span class="math">Q</span> (in coulombs [C]); the more charge, the higher the voltage between the plates.</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span>  [F]</span></div>
+<p class="article__p">Capacitance <span class="math">C</span> is measured in farads. For two parallel plates of area <span class="math">A</span> at distance <span class="math">d</span>:</p>
+<div class="formula"><span class="math">C = <span class="math__frac"><span class="math__num">ε<sub class="math__sub">r</sub> · ε<sub class="math__sub">0</sub> · A</span><span class="math__den">d</span></span></span></div>
+<p class="article__p">(<span class="math">ε<sub class="math__sub">0</sub> = 8.84 × 10<sup class="math__sup">−12</sup></span> F/m — permittivity of vacuum, <span class="math">ε<sub class="math__sub">r</sub></span> — relative permittivity of the insulator.) Bigger plates and a smaller gap = more capacitance.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p12.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p12.webp" alt="Kinds of capacitors: ceramic, film, electrolytic, tantalum" width="1100" height="484" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kinds of capacitors: ceramic, film, electrolytic, tantalum <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">A capacitor is a bucket for charge. Direct current fills it and that is it — nothing flows any more. With alternating current the bucket is filled and emptied in turn, so something keeps flowing in the circuit. That is why a capacitor <strong>blocks DC and passes AC</strong> — the more readily, the faster the changes.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s7">Inductor (coil)</h2>
+<p class="article__p">A coil of wire. The current through it creates a magnetic field in which energy is stored.</p>
+<div class="formula"><span class="math">L = <span class="math__frac"><span class="math__num">µ · n<sup class="math__sup">2</sup> · A</span><span class="math__den">l</span></span>  [H]</span></div>
+<p class="article__p">Inductance <span class="math">L</span> (in henries) grows with the <strong>square of the number of turns</strong> <span class="math">n</span>, with the cross-section area <span class="math">A</span> and the magnetic permeability <span class="math">µ</span>, and falls with the coil length <span class="math">l</span>.</p>
+<p class="article__p">When the current changes, the coil produces a voltage that <strong>opposes</strong> the change (electromotive force, EMF):</p>
+<div class="formula"><span class="math">E = −<span class="math__frac"><span class="math__num">dΦ</span><span class="math__den">dt</span></span> = −L · <span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></div>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w02-p13.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p13.webp" alt="A coil: n turns, length l, cross-section area A" width="1100" height="553" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">A coil: n turns, length l, cross-section area A <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>In plain words</p>
+<div class="callout__body">
+<p class="article__p">An inductor is a heavy flywheel: hard to spin up and hard to stop. Direct current passes through it freely (the wheel turns steadily), but it resists quick changes of current — the quicker, the harder.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s8">Schematic symbols</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p15.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p15.webp" alt="Symbols: resistor, potentiometer, capacitor, polarised capacitor, inductor" width="1100" height="1030" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Symbols: resistor, potentiometer, capacitor, polarised capacitor, inductor <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<h2 class="article__h2" id="s9">The Laplace transform — why a computer scientist needs such a monster</h2>
+<p class="article__p">The equations of an inductor and a capacitor contain derivatives and integrals. The Laplace transform is a "translator" that turns a description in time <span class="math">x(t)</span> into a description in a complex variable <span class="math">s</span> — and then, instead of differentiating and integrating, you just <strong>multiply and divide</strong>.</p>
+<div class="formula"><span class="math">X(s) = ∫ x(t) · e<sup class="math__sup">−st</sup> dt ,  s = σ + jω</span></div>
+<p class="article__p">Out of the whole lecture part on the transform, remember three things:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">In the time domain</th><th class="table__cell table__cell--head">In the Laplace domain</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">derivative <span class="math"><span class="math__frac"><span class="math__num">d</span><span class="math__den">dt</span></span></span></td><td class="table__cell">multiply by <span class="math">s</span></td></tr>
+<tr class="table__row"><td class="table__cell">integral <span class="math">∫ … dt</span></td><td class="table__cell">multiply by <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">a sine wave of angular frequency <span class="math">ω</span></td><td class="table__cell">substitute <span class="math">s = jω</span> (this is already the Fourier transform)</td></tr>
+</tbody></table></div>
+<p class="article__p">Here <span class="math">ω = 2πf</span> is the <strong>angular frequency</strong> (rad/s), <span class="math">f</span> the frequency (Hz) and <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span> the imaginary unit. Electronics people write <span class="math">j</span>, not <span class="math">i</span>, because <span class="math">i</span> is current.</p>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p22.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p22.webp" alt="Differentiation in time = multiplication by s" width="1100" height="141" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Differentiation in time = multiplication by s <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="callout callout--own">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">✚</span>Complex numbers in 30 seconds</p>
+<div class="callout__body">
+<p class="article__p">A complex number is a point on a plane: <span class="math">Z = a + jb</span>. Part <span class="math">a</span> goes horizontally (real), <span class="math">b</span> vertically (imaginary).</p>
+<ul class="list">
+<li class="list__item">The length of the arrow from zero to the point: <span class="math">|Z| = <span class="math__sqrt">√<span class="math__bar">a<sup class="math__sup">2</sup> + b<sup class="math__sup">2</sup></span></span></span> — the <strong>magnitude</strong>.</li>
+<li class="list__item">The angle of the arrow from the horizontal axis: <span class="math">φ</span> — the <strong>phase</strong> (argument).</li>
+<li class="list__item">Polar form: <span class="math">Z = |Z| · e<sup class="math__sup">jφ</sup></span>, where <span class="math">a = |Z| · cos φ</span>, <span class="math">b = |Z| · sin φ</span>.</li>
+<li class="list__item"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span> (handy for the capacitor).</li>
+</ul>
+<p class="article__p">The slides also contain a long list of ready-made transforms (sin, cos, exponential…). You do not need them in the labs of this course.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s10">Impedance — "resistance" for alternating current</h2>
+<p class="article__p">Ohm's law also works for inductors and capacitors if, instead of resistance <span class="math">R</span>, we use <strong>impedance</strong> <span class="math">Z</span>:</p>
+<div class="formula"><span class="math">Z = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span> = R + jX</span></div>
+<ul class="list">
+<li class="list__item">the real part <span class="math">R</span> — <strong>resistance</strong> (ordinary resistance),</li>
+<li class="list__item">the imaginary part <span class="math">X</span> — <strong>reactance</strong> (the opposition of an inductor or a capacitor; <strong>it depends on frequency</strong>).</li>
+</ul>
+<h3 class="article__h3">Inductor</h3>
+<p class="article__p">From <span class="math">v<sub class="math__sub">L</sub>(t) = L · <span class="math__frac"><span class="math__num">di<sub class="math__sub">L</sub></span><span class="math__den">dt</span></span></span>, moving to Laplace (derivative → multiply by <span class="math">s</span>): <span class="math">V<sub class="math__sub">L</sub>(s) = sL · I<sub class="math__sub">L</sub>(s)</span>, so</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">L</sub> = sL = jωL</span></div>
+<h3 class="article__h3">Capacitor</h3>
+<p class="article__p">From <span class="math">v<sub class="math__sub">C</sub>(t) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">C</span></span> ∫ i<sub class="math__sub">C</sub> dt</span> (integral → multiply by <span class="math">1/s</span>): <span class="math">V<sub class="math__sub">C</sub>(s) = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> · I<sub class="math__sub">C</sub>(s)</span>, so</p>
+<div class="formula"><span class="math">Z<sub class="math__sub">C</sub> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">sC</span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j · <span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></div>
+<h3 class="article__h3">What follows from this</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Component</th><th class="table__cell table__cell--head">Impedance</th><th class="table__cell table__cell--head">Magnitude <span class="math">|Z|</span></th><th class="table__cell table__cell--head">Reactance</th><th class="table__cell table__cell--head">Character</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Resistor</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math">R</span></td><td class="table__cell">0</td><td class="table__cell">resistive — independent of frequency</td></tr>
+<tr class="table__row"><td class="table__cell">Capacitor</td><td class="table__cell"><span class="math">−j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell">negative</td><td class="table__cell"><strong>capacitive</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Inductor</td><td class="table__cell"><span class="math">jωL</span></td><td class="table__cell"><span class="math">2πfL</span></td><td class="table__cell">positive</td><td class="table__cell"><strong>inductive</strong></td></tr>
+</tbody></table></div>
+<figure class="figure">
+<a class="figure__link" href="../../assets/img/lectures/w02-p32.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p32.webp" alt="How reactance depends on frequency" width="1100" height="387" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">How reactance depends on frequency <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">For <span class="math">ω = 0</span> (DC): a capacitor has <strong>infinite</strong> opposition (open circuit), an inductor — <strong>zero</strong> (short circuit).</li>
+<li class="list__item">For <span class="math">ω → ∞</span>: a capacitor is a short, an inductor is an open circuit.</li>
+<li class="list__item">Frequency goes up → <span class="math">X<sub class="math__sub">C</sub></span> goes down, <span class="math">X<sub class="math__sub">L</sub></span> goes up.</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span><span class="own-badge" title="added by the site author — not in the slides or the lecture recording" aria-label="added by the site author — not in the slides or the lecture recording">✚</span> My own example: how many "ohms" does a capacitor have?</p>
+<div class="callout__body">
+<p class="article__p">A 22 nF capacitor at 50 kHz:</p>
+<p class="article__p"><span class="math">|Z<sub class="math__sub">C</sub>| = <span class="math__frac"><span class="math__num">1</span><span class="math__den">2π · 50 000 · 22 × 10<sup class="math__sup">−9</sup></span></span> = <span class="math__frac"><span class="math__num">1</span><span class="math__den">0.00691</span></span> ≈ 145 Ω</span></p>
+<p class="article__p">The same capacitor at 5 kHz has 10 times more: about 1447 Ω. At 500 kHz — 10 times less: about 14.5 Ω.</p>
+<p class="article__p">A 330 µH inductor at 50 kHz: <span class="math">|Z<sub class="math__sub">L</sub>| = 2π · 50 000 · 330 × 10<sup class="math__sup">−6</sup> ≈ 104 Ω</span>.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s11">Amplitude and phase shift</h2>
+<p class="article__p">Impedance as a complex number carries <strong>two</strong> pieces of information:</p>
+<ol class="list list--ordered">
+<li class="list__item">The <strong>magnitude</strong> <span class="math">|Z| = <span class="math__frac"><span class="math__num">voltage amplitude</span><span class="math__den">current amplitude</span></span></span> — how many volts per ampere.</li>
+<li class="list__item">The <strong>phase</strong> <span class="math">φ</span> — how much the current sine wave is <strong>shifted in time</strong> relative to the voltage sine wave (in degrees or radians).</li>
+</ol>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w02-p33.webp" data-zoom aria-label="Enlarge image"><img class="figure__img" src="../../assets/img/lectures/w02-p33.webp" alt="Two sine waves shifted in time: voltage and current" width="1100" height="835" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Two sine waves shifted in time: voltage and current <span class="figure__source">Source: lecture slides</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Component</th><th class="table__cell table__cell--head table__cell--center">Phase <span class="math">φ</span> of the impedance</th><th class="table__cell table__cell--head">What you see on the oscilloscope</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Resistor</td><td class="table__cell table__cell--center">0°</td><td class="table__cell">the current peak exactly under the voltage peak</td></tr>
+<tr class="table__row"><td class="table__cell">Capacitor</td><td class="table__cell table__cell--center">−90°</td><td class="table__cell">current <strong>leads</strong> voltage by a quarter of a period</td></tr>
+<tr class="table__row"><td class="table__cell">Inductor</td><td class="table__cell table__cell--center">+90°</td><td class="table__cell">current <strong>lags</strong> voltage by a quarter of a period</td></tr>
+</tbody></table></div>
+<p class="article__p">A shift read from the screen is converted to degrees like this:</p>
+<div class="formula"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span></div>
+<p class="article__p">where <span class="math">t<sub class="math__sub">p</sub></span> is the shift between the peaks (in divisions) and <span class="math">T</span> the period (in divisions). A quarter of a period is 90°.</p>
+<div class="callout callout--lecture">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🎓</span>From the lecture</p>
+<div class="callout__body">
+<p class="article__p">In lecture 1 (2026/27) the lecturer announced this lab as follows: you will write impedance as a complex number and see that "it is not just a mathematical abstraction but has a counterpart in the physical world" — you can "touch" it on the oscilloscope.</p>
+</div>
+</div>
+<div class="callout callout--tip">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">💡</span>How to remember which one leads</p>
+<div class="callout__body">
+<p class="article__p">A capacitor must first receive current before a voltage appears across it → <strong>current comes first</strong>. An inductor resists changes of current → <strong>voltage comes first</strong>, the current arrives later. The classic mnemonic: "ELI the ICE man" (in an inductor L: E before I; in a capacitor C: I before E).</p>
+</div>
+</div>
+<p class="article__p">The practical measurement: <a class="link" href="../labs/03.html">Lab 3</a>.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Quick summary (cheat sheet)</h2>
+<p class="cheat__hint">The essentials of this topic — for a fast recap before the lab.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Prefixes</h3>
+<p class="article__p">G = 10⁹, M = 10⁶, k = 10³, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹, p = 10⁻¹²</p>
+<h3 class="article__h3">The three components</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Resistor</th><th class="table__cell table__cell--head">Capacitor</th><th class="table__cell table__cell--head">Inductor</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Quantity</td><td class="table__cell">R [Ω]</td><td class="table__cell">C [F]</td><td class="table__cell">L [H]</td></tr>
+<tr class="table__row"><td class="table__cell">Definition</td><td class="table__cell"><span class="math">R = <span class="math__frac"><span class="math__num">U</span><span class="math__den">I</span></span></span></td><td class="table__cell"><span class="math">C = <span class="math__frac"><span class="math__num">Q</span><span class="math__den">U</span></span></span></td><td class="table__cell"><span class="math">E = −L<span class="math__frac"><span class="math__num">dI</span><span class="math__den">dt</span></span></span></td></tr>
+<tr class="table__row"><td class="table__cell">Impedance</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">jωC</span></span> = −j<span class="math__frac"><span class="math__num">1</span><span class="math__den">ωC</span></span></span></td><td class="table__cell"><span class="math">jωL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Magnitude</td><td class="table__cell"><span class="math">R</span></td><td class="table__cell"><span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">2πfC</span></span></span></td><td class="table__cell"><span class="math">2πfL</span></td></tr>
+<tr class="table__row"><td class="table__cell">Phase of Z</td><td class="table__cell">0°</td><td class="table__cell">−90°</td><td class="table__cell">+90°</td></tr>
+<tr class="table__row"><td class="table__cell">DC (f = 0)</td><td class="table__cell">R</td><td class="table__cell">open (∞)</td><td class="table__cell">short (0)</td></tr>
+<tr class="table__row"><td class="table__cell">f → ∞</td><td class="table__cell">R</td><td class="table__cell">short (0)</td><td class="table__cell">open (∞)</td></tr>
+<tr class="table__row"><td class="table__cell">f rises</td><td class="table__cell">no change</td><td class="table__cell">opposition falls</td><td class="table__cell">opposition rises</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Formulas</h3>
+<ul class="list">
+<li class="list__item"><span class="math">ω = 2πf</span>,   <span class="math">j = <span class="math__sqrt">√<span class="math__bar">−1</span></span></span>,   <span class="math"><span class="math__frac"><span class="math__num">1</span><span class="math__den">j</span></span> = −j</span></li>
+<li class="list__item"><span class="math">Z = R + jX = |Z| · e<sup class="math__sup">jφ</sup></span>;   <span class="math">R = |Z| cos φ</span>,   <span class="math">X = |Z| sin φ</span></li>
+<li class="list__item"><span class="math">|Z| = <span class="math__frac"><span class="math__num">U<sub class="math__sub">pp</sub></span><span class="math__den">I<sub class="math__sub">pp</sub></span></span></span> (voltage amplitude over current amplitude)</li>
+<li class="list__item"><span class="math">φ = <span class="math__frac"><span class="math__num">t<sub class="math__sub">p</sub></span><span class="math__den">T</span></span> · 360°</span> (shift and period in divisions)</li>
+<li class="list__item">Laplace: derivative → <span class="math">·s</span>, integral → <span class="math">·<span class="math__frac"><span class="math__num">1</span><span class="math__den">s</span></span></span>, sine wave → <span class="math">s = jω</span></li>
+<li class="list__item">X negative → capacitive character; X positive → inductive</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Previous / Next">
+<a class="pager__link pager__link--prev" href="../lectures/01.html"><span class="pager__dir">← Previous</span><span class="pager__title">Lecture 1: Introduction, physical basics of electronics and measurements</span></a>
+<a class="pager__link pager__link--next" href="../lectures/03.html"><span class="pager__dir">Next →</span><span class="pager__title">Lecture 3: Passive electronic circuits: dividers and RC filters</span></a>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Quick summary"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Quick summary</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">A study site for the SYC course. Based on the lectures and lab instructions; the practice tasks are original (changed compared with the classes).</p>
+<p class="footer__text footer__text--muted">Unofficial student notes — if anything differs, what the instructor says applies.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Quick summary (cheat sheet)">
+<div class="modal__bar"><p class="modal__title">📋 Quick summary (cheat sheet)</p><button class="modal__close" type="button" data-modal-close aria-label="Close">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Enlarge image">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Close">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Copy","copied":"Copied!","copyFail":"Copy failed"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wykład 15. Asembler i architektura komputerów (MIPS) — SYC</title>
+<meta name="description" content="Język, w którym naprawdę „mówi” procesor. Instrukcje, rejestry, pamięć, skoki i pętle w asemblerze MIPS — oraz jak taka instrukcja wygląda jako 32 zera i jedynki.">
+<link rel="alternate" hreflang="pl" href="../../pl/lectures/15.html">
+<link rel="alternate" hreflang="en" href="../../en/lectures/15.html">
+<link rel="alternate" hreflang="ru" href="../../ru/lectures/15.html">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('syc-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t);localStorage.setItem('syc-lang','pl')}catch(e){}})();</script>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="page page--with-sidebar">
+<a class="skip-link" href="#main">Przejdź do treści</a>
+<header class="header">
+<div class="header__inner">
+<a class="logo" href="../index.html"><span class="logo__mark">SYC</span><span class="logo__text">Systemy cyfrowe i podstawy elektroniki</span></a>
+<button class="header__burger" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle><span class="header__burger-box" aria-hidden="true"></span><span class="header__burger-label">Menu</span></button>
+<nav class="nav" id="nav" aria-label="Menu">
+<ul class="nav__list">
+<li class="nav__item"><a class="nav__link" href="../index.html">Start</a></li>
+<li class="nav__item"><a class="nav__link nav__link--active" href="../lectures/index.html" aria-current="page">Wykłady</a></li>
+<li class="nav__item"><a class="nav__link" href="../labs/index.html">Ćwiczenia</a></li>
+<li class="nav__item"><a class="nav__link" href="../grading.html">Zaliczenie</a></li>
+<li class="nav__item"><a class="nav__link" href="../cheatsheets.html">Ściągi</a></li>
+</ul>
+</nav>
+<div class="header__tools">
+<div class="lang-switch" role="group" aria-label="Język"><a class="lang-switch__link lang-switch__link--active" href="../../pl/lectures/15.html" hreflang="pl" lang="pl" data-lang="pl" title="Polski" aria-current="true">PL</a><a class="lang-switch__link" href="../../en/lectures/15.html" hreflang="en" lang="en" data-lang="en" title="English">EN</a><a class="lang-switch__link" href="../../ru/lectures/15.html" hreflang="ru" lang="ru" data-lang="ru" title="Русский">RU</a></div>
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Przełącz motyw jasny / ciemny" title="Przełącz motyw jasny / ciemny"><span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span><span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span></button>
+</div>
+</div>
+</header>
+<div class="layout layout--with-sidebar">
+<aside class="sidebar" data-sidebar>
+<nav class="toc" aria-label="Na tej stronie">
+<p class="toc__title">Na tej stronie</p>
+<ol class="toc__list">
+<li class="toc__item"><a class="toc__link" href="#s1">Język komputera</a></li>
+<li class="toc__item"><a class="toc__link" href="#s2">Rejestry</a></li>
+<li class="toc__item"><a class="toc__link" href="#s3">Pamięć</a></li>
+<li class="toc__item"><a class="toc__link" href="#s4">Język maszynowy: trzy formaty</a></li>
+<li class="toc__item"><a class="toc__link" href="#s5">Instrukcje logiczne i przesunięcia</a></li>
+<li class="toc__item"><a class="toc__link" href="#s6">Skoki i rozgałęzienia</a></li>
+<li class="toc__item"><a class="toc__link" href="#s7">Tablice</a></li>
+<li class="toc__item"><a class="toc__link" href="#s8">Funkcje i stos</a></li>
+<li class="toc__item"><a class="toc__link" href="#s9">Pozostałe tematy</a></li>
+<li class="toc__item"><a class="toc__link" href="#s10">Od kodu źródłowego do działającego programu</a></li>
+<li class="toc__item"><a class="toc__link" href="#s11">MIPS a x86</a></li>
+</ol>
+</nav>
+<nav class="side-nav" aria-label="Wszystkie wykłady">
+<p class="side-nav__title">Wszystkie wykłady</p>
+<ol class="side-nav__list">
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/01.html"><span class="side-nav__num">1</span><span class="side-nav__text">Wprowadzenie i pomiary</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/02.html"><span class="side-nav__num">2</span><span class="side-nav__text">Elementy pasywne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/03.html"><span class="side-nav__num">3</span><span class="side-nav__text">Dzielniki i filtry</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/04.html"><span class="side-nav__num">4</span><span class="side-nav__text">Diody i tranzystory</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/05.html"><span class="side-nav__num">5</span><span class="side-nav__text">Wzmacniacze operacyjne</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/06.html"><span class="side-nav__num">6</span><span class="side-nav__text">Bramki i algebra Boole'a</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/07.html"><span class="side-nav__num">7</span><span class="side-nav__text">Minimalizacja, mapy Karnaugha</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/08.html"><span class="side-nav__num">8</span><span class="side-nav__text">MUX, kod U2, sumator, ALU</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/09.html"><span class="side-nav__num">9</span><span class="side-nav__text">Przerzutniki, rejestry, liczniki</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/10.html"><span class="side-nav__num">10</span><span class="side-nav__text">Projektowanie układów sekwencyjnych</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/11.html"><span class="side-nav__num">11</span><span class="side-nav__text">Mikroprocesory i mikrokontrolery</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/12.html"><span class="side-nav__num">12</span><span class="side-nav__text">Komunikacja: UART, SPI, I²C</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/13.html"><span class="side-nav__num">13</span><span class="side-nav__text">Peryferia, PWM, przerwania</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link" href="../lectures/14.html"><span class="side-nav__num">14</span><span class="side-nav__text">Architektura komputerów (MIPS)</span></a></li>
+<li class="side-nav__item"><a class="side-nav__link side-nav__link--active" href="../lectures/15.html" aria-current="page"><span class="side-nav__num">15</span><span class="side-nav__text">Asembler MIPS</span></a></li>
+</ol>
+</nav>
+</aside>
+<main class="layout__main" id="main">
+<article class="article article--lecture">
+<header class="article__header">
+<p class="article__kicker">Wykład 15</p>
+<h1 class="article__title">Asembler i architektura komputerów (MIPS)</h1>
+<p class="article__lead">Język, w którym naprawdę „mówi” procesor. Instrukcje, rejestry, pamięć, skoki i pętle w asemblerze MIPS — oraz jak taka instrukcja wygląda jako 32 zera i jedynki.</p>
+<div class="article__actions"><a class="button button--primary" href="#cheat" data-cheat-open>📋 Krótki konspekt</a></div>
+<p class="legend"><span class="own-badge" aria-hidden="true">✚</span> <span class="legend__text">= dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu</span></p>
+</header>
+<div class="article__body">
+<h2 class="article__h2" id="s1">Język komputera</h2>
+<ul class="list">
+<li class="list__item">Słowa w języku komputera to <strong>instrukcje</strong>, a jego słownik to <strong>zestaw instrukcji</strong>.</li>
+<li class="list__item">Wszystkie programy uruchamiane na danym komputerze używają tego samego zestawu instrukcji.</li>
+<li class="list__item">Instrukcje są zakodowane jako liczby binarne — to <strong>język maszynowy</strong>.</li>
+<li class="list__item">Wygodniej zapisywać je symbolicznie — to <strong>asembler</strong> (<em>assembly</em>).</li>
+</ul>
+<p class="article__p">Jedna linijka kodu wysokiego poziomu i jej odpowiednik w MIPS:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">ASM</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">add</span> a, b, c      <span class="code__tok code__tok--comment"># a = b + c</span></code></pre>
+</figure>
+<ul class="list">
+<li class="list__item"><code class="inline-code">add</code> to <strong>mnemonik</strong> — mówi, jaką operację wykonać,</li>
+<li class="list__item"><code class="inline-code">b</code> i <code class="inline-code">c</code> to <strong>operandy źródłowe</strong>, <code class="inline-code">a</code> to <strong>operand docelowy</strong> (wynik).</li>
+<li class="list__item">Komentarz zaczyna się od <code class="inline-code">#</code> i trwa do końca linii.</li>
+</ul>
+<p class="article__p">Bardziej złożone wyrażenie trzeba rozbić na kilka instrukcji: <code class="inline-code">a = b + c − d</code> to <code class="inline-code">sub t, c, d</code> i <code class="inline-code">add a, b, t</code>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Asembler to przepis rozpisany na najmniejsze możliwe kroki: „weź jajko”, „rozbij jajko”, „wlej do miski”. Żadnego „zrób omlet” — procesor zna tylko takie pojedyncze ruchy.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s2">Rejestry</h2>
+<p class="article__p">Instrukcje działają na <strong>rejestrach</strong> — szybkich komórkach wewnątrz procesora. MIPS ma ich <strong>32</strong> (<em>Register File</em>). Nazwy zaczynają się od <code class="inline-code">$</code>.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Rejestry</th><th class="table__cell table__cell--head table__cell--center">Numery</th><th class="table__cell table__cell--head">Do czego</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$0</code></td><td class="table__cell table__cell--center">0</td><td class="table__cell">zawsze zawiera zero</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$v0</code>–<code class="inline-code">$v1</code></td><td class="table__cell table__cell--center">2–3</td><td class="table__cell">wartość zwracana przez funkcję</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$a0</code>–<code class="inline-code">$a3</code></td><td class="table__cell table__cell--center">4–7</td><td class="table__cell">argumenty funkcji</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$t0</code>–<code class="inline-code">$t7</code></td><td class="table__cell table__cell--center">8–15</td><td class="table__cell"><strong>tymczasowe</strong> (<em>temporary</em>) — pośrednie wyniki</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$s0</code>–<code class="inline-code">$s7</code></td><td class="table__cell table__cell--center">16–23</td><td class="table__cell"><strong>zachowywane</strong> (<em>saved</em>) — zmienne programu</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$sp</code></td><td class="table__cell table__cell--center">29</td><td class="table__cell">wskaźnik stosu</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">$ra</code></td><td class="table__cell table__cell--center">31</td><td class="table__cell">adres powrotu z funkcji</td></tr>
+</tbody></table></div>
+<p class="article__p"><span class="own-badge" title="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu" aria-label="dodane przez autora strony — tego nie ma w slajdach ani w nagraniu wykładu">✚</span> Numery rejestrów uzupełniłem z dokumentacji MIPS; na slajdach padają tylko niektóre ($t0 = 8, $s3 = 19, $s4 = 20, $s5 = 21) — są zgodne z tą tabelą.</p>
+<p class="article__p">Przykład z wykładu — dwie linijki C zamienione na cztery instrukcje:</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">C</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--c">a = b - c;
+f = (g + h) - (i + j);</code></pre>
+</figure>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">To samo w asemblerze MIPS</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># $s0 = a, $s1 = b, $s2 = c, $s3 = f, $s4 = g, $s5 = h, $s6 = i, $s7 = j</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s2</span>    <span class="code__tok code__tok--comment"># a = b - c</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$s4</span>, <span class="code__tok code__tok--builtin">$s5</span>    <span class="code__tok code__tok--comment"># $t0 = g + h</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$s6</span>, <span class="code__tok code__tok--builtin">$s7</span>    <span class="code__tok code__tok--comment"># $t1 = i + j</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$t1</span>    <span class="code__tok code__tok--comment"># f = (g + h) - (i + j)</span></code></pre>
+</figure>
+<h2 class="article__h2" id="s3">Pamięć</h2>
+<p class="article__p">Rejestrów jest tylko 32, więc większość danych leży w <strong>pamięci</strong>. Do przenoszenia danych służą dwie instrukcje:</p>
+<ul class="list">
+<li class="list__item"><code class="inline-code">lw</code> (<em>load word</em>) — wczytaj słowo z pamięci do rejestru,</li>
+<li class="list__item"><code class="inline-code">sw</code> (<em>store word</em>) — zapisz słowo z rejestru do pamięci.</li>
+</ul>
+<p class="article__p">Adres podaje się jako <strong>przesunięcie(rejestr bazowy)</strong>: <code class="inline-code">lw $s3, 8($t0)</code> znaczy „weź słowo spod adresu $t0 + 8”.</p>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p07.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p07.webp" alt="Pamięć adresowana bajtami: słowo to 4 bajty" width="1100" height="795" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Pamięć adresowana bajtami: słowo to 4 bajty <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item">Pamięć MIPS jest adresowana <strong>bajtami</strong>: każdy bajt ma własny adres.</li>
+<li class="list__item"><strong>Słowo</strong> ma 32 bity = 4 bajty, więc adresy kolejnych słów to wielokrotności 4: 0, 4, 8, 12…</li>
+</ul>
+<h3 class="article__h3">Big-endian i little-endian</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p09.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p09.webp" alt="Kolejność bajtów w słowie: Big-Endian i Little-Endian" width="1024" height="738" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kolejność bajtów w słowie: Big-Endian i Little-Endian <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">To dwa sposoby numerowania bajtów w słowie. W <strong>big-endian</strong> bajt numer 0 jest na „dużym” (najbardziej znaczącym) końcu; w <strong>little-endian</strong> — na „małym” (najmniej znaczącym).</p>
+<h3 class="article__h3">Stałe (wartości natychmiastowe)</h3>
+<p class="article__p">Stała zapisana wprost w instrukcji nazywa się <strong>natychmiastową</strong> (<em>immediate</em>) — nie trzeba po nią sięgać do rejestru ani pamięci. Służy do tego <code class="inline-code">addi</code> (dodaj stałą).</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Pamięć i stałe</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">lw</span>  <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$0</span>)       <span class="code__tok code__tok--comment"># $s3 = memory word at address 4</span>
+<span class="code__tok code__tok--keyword">sw</span>  <span class="code__tok code__tok--builtin">$s7</span>, <span class="code__tok code__tok--number">20</span>(<span class="code__tok code__tok--builtin">$0</span>)      <span class="code__tok code__tok--comment"># memory word at address 20 = $s7</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">4</span>     <span class="code__tok code__tok--comment"># a = a + 4   (constant inside the instruction)</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">-12</span>   <span class="code__tok code__tok--comment"># b = a - 12</span></code></pre>
+</figure>
+<h2 class="article__h2" id="s4">Język maszynowy: trzy formaty</h2>
+<p class="article__p">Każda instrukcja MIPS ma dokładnie <strong>32 bity</strong>. Są trzy formaty:</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Format</th><th class="table__cell table__cell--head">Pola (liczba bitów)</th><th class="table__cell table__cell--head">Do czego</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong> (<em>register</em>)</td><td class="table__cell">op (6) · rs (5) · rt (5) · rd (5) · shamt (5) · funct (6)</td><td class="table__cell">działania na trzech rejestrach</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong> (<em>immediate</em>)</td><td class="table__cell">op (6) · rs (5) · rt (5) · imm (16)</td><td class="table__cell">dwa rejestry i 16-bitowa stała</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong> (<em>jump</em>)</td><td class="table__cell">op (6) · addr (26)</td><td class="table__cell">skoki</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Typ R</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p12.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p12.webp" alt="Format instrukcji typu R" width="1100" height="243" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Format instrukcji typu R <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<ul class="list">
+<li class="list__item"><code class="inline-code">rs</code>, <code class="inline-code">rt</code> — rejestry źródłowe, <code class="inline-code">rd</code> — rejestr docelowy,</li>
+<li class="list__item">wszystkie instrukcje typu R mają <strong>op = 0</strong>; o tym, jaka to operacja, decyduje pole <strong>funct</strong>,</li>
+<li class="list__item"><code class="inline-code">shamt</code> — o ile bitów przesunąć (tylko w instrukcjach przesuwania).</li>
+</ul>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z wykładu: add $t0, $s4, $s5</p>
+<div class="callout__body">
+<p class="article__p">W asemblerze najpierw jest rejestr docelowy; w kodzie maszynowym kolejność pól jest inna: rs, rt, rd.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Pole</th><th class="table__cell table__cell--head table__cell--center">op</th><th class="table__cell table__cell--head table__cell--center">rs ($s4)</th><th class="table__cell table__cell--head table__cell--center">rt ($s5)</th><th class="table__cell table__cell--head table__cell--center">rd ($t0)</th><th class="table__cell table__cell--head table__cell--center">shamt</th><th class="table__cell table__cell--head table__cell--center">funct (add)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Dziesiętnie</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">20</td><td class="table__cell table__cell--center">21</td><td class="table__cell table__cell--center">8</td><td class="table__cell table__cell--center">0</td><td class="table__cell table__cell--center">32</td></tr>
+<tr class="table__row"><td class="table__cell">Binarnie</td><td class="table__cell table__cell--center">000000</td><td class="table__cell table__cell--center">10100</td><td class="table__cell table__cell--center">10101</td><td class="table__cell table__cell--center">01000</td><td class="table__cell table__cell--center">00000</td><td class="table__cell table__cell--center">100000</td></tr>
+</tbody></table></div>
+<p class="article__p">Razem: <code class="inline-code">0000 0010 1001 0101 0100 0000 0010 0000</code> = <strong>0x02954020</strong>. Najłatwiej zapisać najpierw binarnie, a potem grupować po 4 bity na cyfry szesnastkowe.</p>
+</div>
+</div>
+<h3 class="article__h3">Typ I</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p14.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p14.webp" alt="Format instrukcji typu I" width="1100" height="240" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Format instrukcji typu I <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z wykładu: lw $s3, −24($s4)</p>
+<div class="callout__body">
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Pole</th><th class="table__cell table__cell--head table__cell--center">op (lw)</th><th class="table__cell table__cell--head table__cell--center">rs ($s4)</th><th class="table__cell table__cell--head table__cell--center">rt ($s3)</th><th class="table__cell table__cell--head table__cell--center">imm</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Dziesiętnie</td><td class="table__cell table__cell--center">35</td><td class="table__cell table__cell--center">20</td><td class="table__cell table__cell--center">19</td><td class="table__cell table__cell--center">−24</td></tr>
+<tr class="table__row"><td class="table__cell">Binarnie</td><td class="table__cell table__cell--center">100011</td><td class="table__cell table__cell--center">10100</td><td class="table__cell table__cell--center">10011</td><td class="table__cell table__cell--center">1111 1111 1110 1000</td></tr>
+</tbody></table></div>
+<p class="article__p">Razem: <strong>0x8E93FFE8</strong>. Liczba −24 jest zapisana w kodzie U2 na 16 bitach (<a class="link" href="../lectures/08.html">wykład 8</a>).</p>
+</div>
+</div>
+<h3 class="article__h3">Typ J</h3>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p16.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p16.webp" alt="Format instrukcji typu J" width="1100" height="256" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Format instrukcji typu J <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Używany tylko w skokach: 6 bitów kodu operacji i 26 bitów adresu.</p>
+<h3 class="article__h3">W drugą stronę: z kodu maszynowego na asembler</h3>
+<p class="article__p">Pierwsze <strong>6 bitów to opcode</strong> — on mówi, jak czytać resztę.</p>
+<div class="callout callout--example">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🔎</span>Przykład z wykładu</p>
+<div class="callout__body">
+<p class="article__p"><strong>0x2237FFF1</strong> = <code class="inline-code">001000 10001 10111 1111111111110001</code> → op = 8 (<code class="inline-code">addi</code>), rs = 17 (<code class="inline-code">$s1</code>), rt = 23 (<code class="inline-code">$s7</code>), imm = −15 → <strong><code class="inline-code">addi $s7, $s1, -15</code></strong></p>
+<p class="article__p"><strong>0x02F34022</strong> = <code class="inline-code">000000 10111 10011 01000 00000 100010</code> → op = 0 (typ R), rs = 23 (<code class="inline-code">$s7</code>), rt = 19 (<code class="inline-code">$s3</code>), rd = 8 (<code class="inline-code">$t0</code>), funct = 34 (<code class="inline-code">sub</code>) → <strong><code class="inline-code">sub $t0, $s7, $s3</code></strong></p>
+</div>
+</div>
+<h3 class="article__h3">Program w pamięci</h3>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w15-p18.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p18.webp" alt="Program jako ciąg liczb w pamięci; PC wskazuje aktualną instrukcję" width="1100" height="479" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Program jako ciąg liczb w pamięci; PC wskazuje aktualną instrukcję <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Program w języku maszynowym to po prostu <strong>ciąg liczb binarnych przechowywany w pamięci</strong> — tak samo jak dane. Licznik rozkazów PC wskazuje instrukcję, która jest właśnie wykonywana.</p>
+<h2 class="article__h2" id="s5">Instrukcje logiczne i przesunięcia</h2>
+<ul class="list">
+<li class="list__item"><strong>Logiczne:</strong> <code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code> — działają bit po bicie na dwóch rejestrach. Wersje ze stałą: <code class="inline-code">andi</code>, <code class="inline-code">ori</code>.</li>
+<li class="list__item"><strong>Przesunięcia:</strong> <code class="inline-code">sll</code> (logiczne w lewo), <code class="inline-code">srl</code> (logiczne w prawo), <code class="inline-code">sra</code> (arytmetyczne w prawo).</li>
+<li class="list__item">Przesunięcie o <span class="math">n</span> bitów to <strong>mnożenie lub dzielenie przez</strong> <span class="math">2<sup class="math__sup">n</sup></span>: <code class="inline-code">sll $t0, $t0, 3</code> mnoży przez 8.</li>
+</ul>
+<h2 class="article__h2" id="s6">Skoki i rozgałęzienia</h2>
+<p class="article__p">Siła komputera polega na tym, że potrafi podejmować decyzje.</p>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Instrukcja</th><th class="table__cell table__cell--head">Znaczenie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, etykieta</code></td><td class="table__cell">skocz, jeśli rejestry są <strong>równe</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">bne rs, rt, etykieta</code></td><td class="table__cell">skocz, jeśli są <strong>różne</strong></td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j etykieta</code></td><td class="table__cell">skocz bezwarunkowo</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">jal etykieta</code></td><td class="table__cell">skocz i zapamiętaj adres powrotu (wywołanie funkcji)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">jr $ra</code></td><td class="table__cell">skocz pod adres z rejestru (powrót z funkcji)</td></tr>
+</tbody></table></div>
+<p class="article__p"><strong>Etykieta</strong> to nazwa miejsca w programie; kończy się dwukropkiem.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Rozgałęzienie beq (z wykładu)</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">4</span>        <span class="code__tok code__tok--comment"># $s0 = 0 + 4 = 4</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">1</span>        <span class="code__tok code__tok--comment"># $s1 = 0 + 1 = 1</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">2</span>       <span class="code__tok code__tok--comment"># $s1 = 1 &lt;&lt; 2 = 4</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, target  <span class="code__tok code__tok--comment"># $s0 == $s1, so branch is taken</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># not executed</span>
+<span class="code__tok code__tok--keyword">sub</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># not executed</span>
+<span class="code__tok code__tok--meta">target:</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># $s1 = 4 + 4 = 8</span></code></pre>
+</figure>
+<h3 class="article__h3">if / else</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Instrukcja warunkowa</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># if (i == j) f = g + h; else f = f - i;</span>
+<span class="code__tok code__tok--comment"># $s0 = f, $s1 = g, $s2 = h, $s3 = i, $s4 = j</span>
+<span class="code__tok code__tok--keyword">bne</span> <span class="code__tok code__tok--builtin">$s3</span>, <span class="code__tok code__tok--builtin">$s4</span>, else     <span class="code__tok code__tok--comment"># if i != j, branch to else</span>
+<span class="code__tok code__tok--keyword">add</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s2</span>      <span class="code__tok code__tok--comment"># if block: f = g + h</span>
+<span class="code__tok code__tok--keyword">j</span>   L2                 <span class="code__tok code__tok--comment"># skip past the else block</span>
+<span class="code__tok code__tok--meta">else:</span>
+<span class="code__tok code__tok--keyword">sub</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s3</span>      <span class="code__tok code__tok--comment"># else block: f = f - i</span>
+<span class="code__tok code__tok--meta">L2:</span></code></pre>
+</figure>
+<p class="article__p">Zwróć uwagę: w asemblerze sprawdza się warunek <strong>odwrotny</strong> (<code class="inline-code">bne</code> — „jeśli różne, przeskocz do else”).</p>
+<h3 class="article__h3">Pętla while</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Pętla while: ile razy trzeba pomnożyć przez 2, żeby dostać 128</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int pow = 1; int x = 0;</span>
+<span class="code__tok code__tok--comment"># while (pow != 128) { pow = pow * 2; x = x + 1; }</span>
+<span class="code__tok code__tok--comment"># $s0 = pow, $s1 = x</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">1</span>        <span class="code__tok code__tok--comment"># pow = 1</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">0</span>        <span class="code__tok code__tok--comment"># x = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">128</span>      <span class="code__tok code__tok--comment"># $t0 = 128 for comparison</span>
+<span class="code__tok code__tok--meta">while:</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, done    <span class="code__tok code__tok--comment"># if pow == 128, exit the loop</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># pow = pow * 2</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># x = x + 1</span>
+<span class="code__tok code__tok--keyword">j</span>    while
+<span class="code__tok code__tok--meta">done:</span></code></pre>
+</figure>
+<h3 class="article__h3">Pętla for</h3>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Pętla for: suma liczb od 0 do 9</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int sum = 0;</span>
+<span class="code__tok code__tok--comment"># for (i = 0; i != 10; i = i + 1) sum = sum + i;</span>
+<span class="code__tok code__tok--comment"># $s0 = i, $s1 = sum</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--builtin">$0</span>       <span class="code__tok code__tok--comment"># sum = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">0</span>        <span class="code__tok code__tok--comment"># i = 0</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">10</span>       <span class="code__tok code__tok--comment"># $t0 = 10</span>
+<span class="code__tok code__tok--meta">for:</span>
+<span class="code__tok code__tok--keyword">beq</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, done    <span class="code__tok code__tok--comment"># if i == 10, branch to done</span>
+<span class="code__tok code__tok--keyword">add</span>  <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s1</span>, <span class="code__tok code__tok--builtin">$s0</span>     <span class="code__tok code__tok--comment"># sum = sum + i</span>
+<span class="code__tok code__tok--keyword">addi</span> <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">1</span>       <span class="code__tok code__tok--comment"># increment i</span>
+<span class="code__tok code__tok--keyword">j</span>    for
+<span class="code__tok code__tok--meta">done:</span></code></pre>
+</figure>
+<p class="article__p">Każda pętla ma ten sam szkielet: etykieta → sprawdzenie warunku wyjścia (<code class="inline-code">beq … done</code>) → ciało pętli → <code class="inline-code">j</code> z powrotem do etykiety.</p>
+<h2 class="article__h2" id="s7">Tablice</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p25.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p25.webp" alt="Tablica pięciu elementów w pamięci, od adresu bazowego 0x10007000" width="1100" height="803" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Tablica pięciu elementów w pamięci, od adresu bazowego 0x10007000 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<p class="article__p">Tablica to kolejne komórki pamięci. <strong>Adres bazowy</strong> to adres elementu <code class="inline-code">array[0]</code>. Każdy element (słowo) zajmuje 4 bajty, więc <code class="inline-code">array[1]</code> leży 4 bajty dalej, <code class="inline-code">array[2]</code> — 8 bajtów dalej itd.</p>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Dostęp do tablicy</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># int array[5];</span>
+<span class="code__tok code__tok--comment"># array[0] = array[0] * 8;  array[1] = array[1] * 8;</span>
+<span class="code__tok code__tok--comment"># $s0 = base address of array</span>
+<span class="code__tok code__tok--keyword">lui</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">0x1000</span>       <span class="code__tok code__tok--comment"># $s0 = 0x10000000</span>
+<span class="code__tok code__tok--keyword">ori</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--number">0x7000</span>  <span class="code__tok code__tok--comment"># $s0 = 0x10007000</span>
+<span class="code__tok code__tok--keyword">lw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">0</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># $t1 = array[0]</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">3</span>       <span class="code__tok code__tok--comment"># $t1 = $t1 &lt;&lt; 3 = $t1 * 8</span>
+<span class="code__tok code__tok--keyword">sw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">0</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># array[0] = $t1</span>
+<span class="code__tok code__tok--keyword">lw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># $t1 = array[1]</span>
+<span class="code__tok code__tok--keyword">sll</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">3</span>       <span class="code__tok code__tok--comment"># $t1 = $t1 * 8</span>
+<span class="code__tok code__tok--keyword">sw</span>   <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--number">4</span>(<span class="code__tok code__tok--builtin">$s0</span>)       <span class="code__tok code__tok--comment"># array[1] = $t1</span></code></pre>
+</figure>
+<p class="article__p">32-bitowy adres nie mieści się w jednej instrukcji, więc ładuje się go w dwóch krokach: <code class="inline-code">lui</code> wpisuje górne 16 bitów, <code class="inline-code">ori</code> — dolne.</p>
+<h2 class="article__h2" id="s8">Funkcje i stos</h2>
+<p class="article__p">Funkcje pozwalają wielokrotnie używać tego samego kodu. Umowa w MIPS:</p>
+<ul class="list">
+<li class="list__item"><strong>argumenty</strong> przekazuje się w rejestrach <code class="inline-code">$a0</code>–<code class="inline-code">$a3</code>,</li>
+<li class="list__item"><strong>wynik</strong> wraca w rejestrze <code class="inline-code">$v0</code>,</li>
+<li class="list__item"><code class="inline-code">jal</code> skacze do funkcji i zapisuje adres powrotu w <code class="inline-code">$ra</code>; <code class="inline-code">jr $ra</code> wraca.</li>
+</ul>
+<figure class="code">
+<figcaption class="code__bar"><span class="code__title">Funkcja z argumentami i wartością zwracaną</span><button class="code__copy" type="button" data-copy>Kopiuj</button></figcaption>
+<pre class="code__pre" tabindex="0"><code class="code__body code__body--asm"><span class="code__tok code__tok--comment"># y = diffofsums(2, 3, 4, 5);</span>
+<span class="code__tok code__tok--comment"># int diffofsums(int f, int g, int h, int i) { return (f + g) - (h + i); }</span>
+<span class="code__tok code__tok--meta">main:</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a0</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">2</span>      <span class="code__tok code__tok--comment"># argument 0 = 2</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a1</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">3</span>      <span class="code__tok code__tok--comment"># argument 1 = 3</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a2</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">4</span>      <span class="code__tok code__tok--comment"># argument 2 = 4</span>
+<span class="code__tok code__tok--keyword">  addi</span> <span class="code__tok code__tok--builtin">$a3</span>, <span class="code__tok code__tok--builtin">$0</span>, <span class="code__tok code__tok--number">5</span>      <span class="code__tok code__tok--comment"># argument 3 = 5</span>
+<span class="code__tok code__tok--keyword">  jal</span>  diffofsums      <span class="code__tok code__tok--comment"># call function ($ra = return address)</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$v0</span>, <span class="code__tok code__tok--builtin">$0</span>    <span class="code__tok code__tok--comment"># y = returned value</span>
+
+<span class="code__tok code__tok--meta">diffofsums:</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$a0</span>, <span class="code__tok code__tok--builtin">$a1</span>   <span class="code__tok code__tok--comment"># $t0 = f + g</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$t1</span>, <span class="code__tok code__tok--builtin">$a2</span>, <span class="code__tok code__tok--builtin">$a3</span>   <span class="code__tok code__tok--comment"># $t1 = h + i</span>
+<span class="code__tok code__tok--keyword">  sub</span>  <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$t0</span>, <span class="code__tok code__tok--builtin">$t1</span>   <span class="code__tok code__tok--comment"># result = (f + g) - (h + i)</span>
+<span class="code__tok code__tok--keyword">  add</span>  <span class="code__tok code__tok--builtin">$v0</span>, <span class="code__tok code__tok--builtin">$s0</span>, <span class="code__tok code__tok--builtin">$0</span>    <span class="code__tok code__tok--comment"># put return value in $v0</span>
+<span class="code__tok code__tok--keyword">  jr</span>   <span class="code__tok code__tok--builtin">$ra</span>             <span class="code__tok code__tok--comment"># return to caller</span></code></pre>
+</figure>
+<p class="article__p"><strong>Stos</strong> to obszar pamięci na zmienne lokalne funkcji (i dodatkowe argumenty). Działa na zasadzie <strong>LIFO</strong> — ostatni odłożony element jest zdejmowany jako pierwszy. Wskaźnik stosu <code class="inline-code">$sp</code> pokazuje wierzchołek; stos zaczyna się pod wysokim adresem i <strong>rośnie w dół</strong>.</p>
+<div class="callout callout--simple">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🧒</span>Po ludzku</p>
+<div class="callout__body">
+<p class="article__p">Stos to stos talerzy: kładziesz na wierzch i zdejmujesz z wierzchu. Funkcja odkłada na niego to, co musi zachować, a przed powrotem zdejmuje — w odwrotnej kolejności.</p>
+</div>
+</div>
+<h2 class="article__h2" id="s9">Pozostałe tematy</h2>
+<ul class="list">
+<li class="list__item"><strong>Liczby zmiennoprzecinkowe:</strong> MIPS ma 32 osobne rejestry <code class="inline-code">$f0</code>–<code class="inline-code">$f31</code> i obsługuje standard IEEE (pojedyncza i podwójna precyzja).</li>
+<li class="list__item"><strong>Tryby adresowania</strong> — jest ich pięć:</li>
+</ul>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Tryb</th><th class="table__cell table__cell--head">Gdzie są operandy</th><th class="table__cell table__cell--head">Przykład</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><em>register-only</em></td><td class="table__cell">wszystko w rejestrach</td><td class="table__cell">instrukcje typu R</td></tr>
+<tr class="table__row"><td class="table__cell"><em>immediate</em></td><td class="table__cell">rejestry + 16-bitowa stała</td><td class="table__cell"><code class="inline-code">addi</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>base</em></td><td class="table__cell">adres = rejestr bazowy + przesunięcie</td><td class="table__cell"><code class="inline-code">lw</code>, <code class="inline-code">sw</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>PC-relative</em></td><td class="table__cell">adres względem licznika rozkazów</td><td class="table__cell"><code class="inline-code">beq</code>, <code class="inline-code">bne</code></td></tr>
+<tr class="table__row"><td class="table__cell"><em>pseudo-direct</em></td><td class="table__cell">adres podany (prawie) wprost w instrukcji</td><td class="table__cell"><code class="inline-code">j</code>, <code class="inline-code">jal</code></td></tr>
+</tbody></table></div>
+<h2 class="article__h2" id="s10">Od kodu źródłowego do działającego programu</h2>
+<figure class="figure figure--small">
+<a class="figure__link" href="../../assets/img/lectures/w15-p32.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p32.webp" alt="Kompilator → asembler → linker → loader" width="688" height="1155" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Kompilator → asembler → linker → loader <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="callout callout--steps">
+<p class="callout__title"><span class="callout__icon" aria-hidden="true">🪜</span>Krok po kroku</p>
+<div class="callout__body">
+<ol class="steps">
+<li class="steps__item"><strong>Kompilacja</strong> — kompilator tłumaczy kod wysokiego poziomu na asembler.</li>
+<li class="steps__item"><strong>Asemblacja</strong> — asembler zamienia kod na <strong>plik obiektowy</strong> z językiem maszynowym; przydziela adresy instrukcjom i etykietom.</li>
+<li class="steps__item"><strong>Linkowanie</strong> — linker łączy pliki obiektowe (także z bibliotek) w jeden <strong>plik wykonywalny</strong>.</li>
+<li class="steps__item"><strong>Ładowanie</strong> — system operacyjny wczytuje plik wykonywalny z dysku do pamięci i uruchamia program.</li>
+</ol>
+</div>
+</div>
+<h2 class="article__h2" id="s11">MIPS a x86</h2>
+<figure class="figure figure--medium">
+<a class="figure__link" href="../../assets/img/lectures/w15-p34.webp" data-zoom aria-label="Powiększ obraz"><img class="figure__img" src="../../assets/img/lectures/w15-p34.webp" alt="Porównanie architektur MIPS i x86" width="1100" height="367" loading="lazy" decoding="async"></a>
+<figcaption class="figure__caption">Porównanie architektur MIPS i x86 <span class="figure__source">Źródło: slajdy wykładu</span></figcaption>
+</figure>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Cecha</th><th class="table__cell table__cell--head">MIPS (RISC)</th><th class="table__cell table__cell--head">x86 (CISC)</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell">Rejestry</td><td class="table__cell">32 ogólnego przeznaczenia</td><td class="table__cell">8, część z ograniczeniami</td></tr>
+<tr class="table__row"><td class="table__cell">Operandy</td><td class="table__cell">3 (2 źródła, 1 cel)</td><td class="table__cell">2 (jeden jest zarazem źródłem i celem)</td></tr>
+<tr class="table__row"><td class="table__cell">Gdzie mogą być operandy</td><td class="table__cell">rejestry lub stałe</td><td class="table__cell">rejestry, stałe <strong>lub pamięć</strong></td></tr>
+<tr class="table__row"><td class="table__cell">Rozmiar operandów</td><td class="table__cell">32 bity</td><td class="table__cell">8, 16 lub 32 bity</td></tr>
+<tr class="table__row"><td class="table__cell">Znaczniki warunków (flagi)</td><td class="table__cell">nie</td><td class="table__cell">tak (rejestr EFLAGS)</td></tr>
+<tr class="table__row"><td class="table__cell">Instrukcje</td><td class="table__cell">proste</td><td class="table__cell">proste i złożone</td></tr>
+<tr class="table__row"><td class="table__cell">Kodowanie</td><td class="table__cell">stałe, 4 bajty</td><td class="table__cell">zmienne, 1–15 bajtów</td></tr>
+</tbody></table></div>
+<p class="article__p">Prawie wszystkie komputery osobiste używają procesorów o architekturze x86 — przykład CISC.</p>
+</div>
+<section class="cheat" id="cheat" data-cheat>
+<h2 class="cheat__title">📋 Krótki konspekt (ściąga)</h2>
+<p class="cheat__hint">Najważniejsze rzeczy z tego tematu — do szybkiej powtórki przed ćwiczeniami.</p>
+<div class="cheat__body">
+<h3 class="article__h3">Rejestry MIPS</h3>
+<p class="article__p"><code class="inline-code">$0</code> = zero · <code class="inline-code">$t0–$t7</code> tymczasowe (8–15) · <code class="inline-code">$s0–$s7</code> zmienne (16–23) · <code class="inline-code">$a0–$a3</code> argumenty · <code class="inline-code">$v0</code> wynik · <code class="inline-code">$sp</code> stos · <code class="inline-code">$ra</code> adres powrotu</p>
+<h3 class="article__h3">Instrukcje</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head">Instrukcja</th><th class="table__cell table__cell--head">Znaczenie</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><code class="inline-code">add rd, rs, rt</code> / <code class="inline-code">sub</code></td><td class="table__cell">rd = rs ± rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">addi rt, rs, imm</code></td><td class="table__cell">rt = rs + stała</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">and</code>, <code class="inline-code">or</code>, <code class="inline-code">xor</code>, <code class="inline-code">nor</code>, <code class="inline-code">andi</code>, <code class="inline-code">ori</code></td><td class="table__cell">logiczne, bit po bicie</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sll</code>, <code class="inline-code">srl</code>, <code class="inline-code">sra</code></td><td class="table__cell">przesunięcia (× lub ÷ przez 2ⁿ)</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">lw rt, imm(rs)</code></td><td class="table__cell">rt = pamięć[rs + imm]</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">sw rt, imm(rs)</code></td><td class="table__cell">pamięć[rs + imm] = rt</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">beq rs, rt, L</code> / <code class="inline-code">bne</code></td><td class="table__cell">skok, gdy równe / różne</td></tr>
+<tr class="table__row"><td class="table__cell"><code class="inline-code">j L</code>, <code class="inline-code">jal L</code>, <code class="inline-code">jr $ra</code></td><td class="table__cell">skok, wywołanie funkcji, powrót</td></tr>
+</tbody></table></div>
+<h3 class="article__h3">Formaty (32 bity)</h3>
+<div class="table-wrap"><table class="table">
+<thead class="table__head"><tr class="table__row"><th class="table__cell table__cell--head"></th><th class="table__cell table__cell--head">Pola</th></tr></thead>
+<tbody class="table__body">
+<tr class="table__row"><td class="table__cell"><strong>R</strong></td><td class="table__cell">op(6)=0 · rs(5) · rt(5) · rd(5) · shamt(5) · funct(6)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>I</strong></td><td class="table__cell">op(6) · rs(5) · rt(5) · imm(16)</td></tr>
+<tr class="table__row"><td class="table__cell"><strong>J</strong></td><td class="table__cell">op(6) · addr(26)</td></tr>
+</tbody></table></div>
+<ul class="list">
+<li class="list__item">funct: add = 32, sub = 34, and = 36, or = 37, slt = 42. op: addi = 8, lw = 35, sw = 43, beq = 4.</li>
+<li class="list__item">Dekodowanie: hex → binarnie → pierwsze 6 bitów (opcode) → podział na pola.</li>
+</ul>
+<h3 class="article__h3">Pamięć</h3>
+<ul class="list">
+<li class="list__item">Adresowanie <strong>bajtowe</strong>; słowo = 4 bajty → adresy słów: 0, 4, 8… <code class="inline-code">array[i]</code> = baza + 4·i.</li>
+<li class="list__item">Stos: LIFO, <code class="inline-code">$sp</code>, rośnie w dół. Funkcja: argumenty <code class="inline-code">$a0–$a3</code>, wynik <code class="inline-code">$v0</code>, <code class="inline-code">jal</code> / <code class="inline-code">jr $ra</code>.</li>
+<li class="list__item">Kompilator → asembler → linker → loader.</li>
+<li class="list__item">MIPS = RISC (proste, 3 operandy, 4 bajty); x86 = CISC (2 operandy, zmienna długość).</li>
+</ul>
+</div>
+</section>
+<nav class="pager" aria-label="Poprzedni / Następny">
+<a class="pager__link pager__link--prev" href="../lectures/14.html"><span class="pager__dir">← Poprzedni</span><span class="pager__title">Wykład 14: Architektura komputerów: procesor MIPS od środka</span></a>
+<span class="pager__link pager__link--empty"></span>
+</nav>
+</article>
+<a class="fab" href="#cheat" data-cheat-open title="Krótki konspekt"><span class="fab__icon" aria-hidden="true">📋</span><span class="fab__label">Krótki konspekt</span></a>
+</main>
+</div>
+<footer class="footer">
+<div class="footer__inner">
+<p class="footer__text">Strona do nauki przedmiotu SYC. Materiał opracowany na podstawie wykładów i instrukcji do ćwiczeń; zadania treningowe są własne (zmienione względem zajęć).</p>
+<p class="footer__text footer__text--muted">Nieoficjalne opracowanie studenckie — w razie różnic obowiązuje to, co powie prowadzący.</p>
+</div>
+</footer>
+<dialog class="modal" data-modal aria-label="Krótki konspekt (ściąga)">
+<div class="modal__bar"><p class="modal__title">📋 Krótki konspekt (ściąga)</p><button class="modal__close" type="button" data-modal-close aria-label="Zamknij">✕</button></div>
+<div class="modal__body" data-modal-body></div>
+</dialog>
+<dialog class="lightbox" data-lightbox aria-label="Powiększ obraz">
+<button class="lightbox__close" type="button" data-lightbox-close aria-label="Zamknij">✕</button>
+<img class="lightbox__img" alt="" data-lightbox-img>
+<p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+<script>window.SYC_UI={"copy":"Kopiuj","copied":"Skopiowano!","copyFail":"Błąd kopiowania"};</script>
+<script src="../../assets/js/app.js" defer></script>
+</body>
+</html>
